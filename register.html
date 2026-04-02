@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新規登録 | 実習生管理システム</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>実習生管理システム</h1>
+      <nav>
+        <a href="index.html">一覧</a>
+        <a href="register.html" class="active">新規登録</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="card">
+        <h2>実習生 新規登録</h2>
+
+        <form id="registerForm">
+          <section class="form-section">
+            <h3>基本情報</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="nameRomaji">名前（ローマ字） <span class="required">*</span></label>
+                <input type="text" id="nameRomaji" placeholder="NGUYEN THI MAI" required>
+              </div>
+              <div class="form-group">
+                <label for="nameKatakana">名前（カタカナ）</label>
+                <input type="text" id="nameKatakana" placeholder="グエン ティ マイ">
+              </div>
+              <div class="form-group">
+                <label for="company">会社名 <span class="required">*</span></label>
+                <input type="text" id="company" placeholder="株式会社〇〇" required>
+              </div>
+              <div class="form-group">
+                <label for="classGroup">クラス</label>
+                <input type="text" id="classGroup" placeholder="GR1">
+              </div>
+              <div class="form-group">
+                <label for="arrivalDate">入国日</label>
+                <input type="date" id="arrivalDate">
+              </div>
+              <div class="form-group">
+                <label for="stayPeriod">在留期間</label>
+                <input type="text" id="stayPeriod" placeholder="3年">
+              </div>
+            </div>
+          </section>
+
+          <section class="form-section">
+            <h3>テスト結果（任意）</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="testName">テスト名</label>
+                <input type="text" id="testName" placeholder="第1-4課 月間テスト" value="第1-4課 月間テスト">
+              </div>
+              <div class="form-group">
+                <label for="testDate">実施日</label>
+                <input type="date" id="testDate">
+              </div>
+              <div class="form-group">
+                <label for="scoreVocab">文字・語彙</label>
+                <input type="number" id="scoreVocab" placeholder="0" min="0" max="100">
+              </div>
+              <div class="form-group">
+                <label for="scoreGrammar">文法</label>
+                <input type="number" id="scoreGrammar" placeholder="0" min="0" max="100">
+              </div>
+              <div class="form-group">
+                <label for="scoreListening">聴解</label>
+                <input type="number" id="scoreListening" placeholder="0" min="0" max="100">
+              </div>
+              <div class="form-group">
+                <label for="scoreConversation">会話</label>
+                <input type="number" id="scoreConversation" placeholder="0" min="0" max="100">
+              </div>
+            </div>
+          </section>
+
+          <div id="formMsg" class="hidden"></div>
+
+          <div class="form-actions">
+            <a href="index.html" class="btn btn-secondary">キャンセル</a>
+            <button type="submit" class="btn btn-primary" id="submitBtn">登録する</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      await registerTrainee();
+    });
+  </script>
+</body>
+</html>

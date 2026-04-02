@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>実習生管理システム</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>実習生管理システム</h1>
+      <nav>
+        <a href="index.html" class="active">一覧</a>
+        <a href="register.html">新規登録</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="toolbar">
+        <input type="text" id="searchInput" placeholder="名前・会社名で検索..." class="search-box">
+        <a href="register.html" class="btn btn-primary">+ 新規登録</a>
+      </div>
+
+      <div id="loadingMsg" class="loading">読み込み中...</div>
+      <div id="errorMsg" class="error hidden"></div>
+
+      <table id="traineeTable" class="hidden">
+        <thead>
+          <tr>
+            <th>学生ID</th>
+            <th>名前（ローマ字）</th>
+            <th>名前（カタカナ）</th>
+            <th>会社名</th>
+            <th>クラス</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="traineeList"></tbody>
+      </table>
+
+      <div id="emptyMsg" class="empty hidden">
+        <p>実習生が登録されていません。</p>
+        <a href="register.html" class="btn btn-primary">最初の実習生を登録する</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+  <script>
+    loadTrainees();
+
+    document.getElementById('searchInput').addEventListener('input', function() {
+      filterTrainees(this.value);
+    });
+  </script>
+</body>
+</html>
