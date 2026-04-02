@@ -167,6 +167,7 @@ function renderTraineeDetail(t, results) {
         <p class="katakana">${t.name_katakana || ''}</p>
       </div>
       <div class="detail-actions">
+        <a href="report.html?id=${t.id}" class="btn btn-primary">報告書を作成</a>
         <a href="register.html?edit=${t.id}" class="btn btn-secondary">編集</a>
       </div>
     </div>
@@ -226,6 +227,178 @@ function renderTraineeDetail(t, results) {
         </table>`
     }
   `;
+}
+
+// ===== 教育報告書 =====
+async function loadReport() {
+  const id = new URLSearchParams(location.search).get('id');
+  if (!id) { window.location.href = 'index.html'; return; }
+
+  try {
+    // 対象実習生 + テスト結果を取得
+    const [{ data: trainee, error: tErr }, { data: results, error: rErr }] = await Promise.all([
+      supabase.from('trainees').select('*').eq('id', id).single(),
+      supabase.from('test_results').select('*').eq('trainee_id', id).order('test_date', { ascending: true }),
+    ]);
+    if (tErr) throw tErr;
+
+    // 同クラスの全員のテスト結果を取得（偏差値・順位計算用）
+    let classResults = [];
+    if (trainee.class_group) {
+      const { data: classTrainees } = await supabase
+        .from('trainees').select('id').eq('class_group', trainee.class_group);
+      if (classTrainees && classTrainees.length > 0) {
+        const ids = classTrainees.map(t => t.id);
+        const { data: allResults } = await supabase
+          .from('test_results').select('*').in('trainee_id', ids);
+        classResults = allResults || [];
+      }
+    }
+
+    renderReport(trainee, results || [], classResults);
+  } catch (err) {
+    document.getElementById('reportPage').innerHTML =
+      '<p style="color:red;padding:20px">読み込みに失敗しました: ' + err.message + '</p>';
+  }
+}
+
+function renderReport(t, results, classResults) {
+  // 基本情報
+  document.getElementById('rCompany').textContent = t.company || '-';
+  document.getElementById('rNameKata').textContent = t.name_katakana || '-';
+  document.getElementById('rNameRomaji').textContent = t.name_romaji || '-';
+  document.getElementById('rStudentId').textContent = t.student_id || '-';
+  document.getElementById('rClass').textContent = t.class_group || '-';
+  document.getElementById('rArrival').textContent = t.arrival_date ? formatDate(t.arrival_date) : '-';
+
+  // 最新テスト結果
+  const latest = results.length > 0 ? results[results.length - 1] : null;
+  if (latest) {
+    const v = latest.score_vocab ?? 0;
+    const g = latest.score_grammar ?? 0;
+    const l = latest.score_listening ?? 0;
+    const c = latest.score_conversation ?? 0;
+    const total = v + g + l + c;
+
+    document.getElementById('sVocab').textContent = v;
+    document.getElementById('sGrammar').textContent = g;
+    document.getElementById('sListen').textContent = l;
+    document.getElementById('sConv').textContent = c;
+    document.getElementById('sTotal').textContent = total + '/400';
+
+    // 同テスト名の全結果で統計計算
+    const sameTest = classResults.filter(r => r.test_name === latest.test_name);
+    const stats = calcStats(sameTest, latest);
+    document.getElementById('avgVocab').textContent = stats.avg.vocab;
+    document.getElementById('avgGrammar').textContent = stats.avg.grammar;
+    document.getElementById('avgListen').textContent = stats.avg.listen;
+    document.getElementById('avgConv').textContent = stats.avg.conv;
+    document.getElementById('avgTotal').textContent = stats.avg.total;
+
+    document.getElementById('devVocab').textContent = stats.dev.vocab;
+    document.getElementById('devGrammar').textContent = stats.dev.grammar;
+    document.getElementById('devListen').textContent = stats.dev.listen;
+    document.getElementById('devConv').textContent = stats.dev.conv;
+    document.getElementById('devTotal').textContent = stats.dev.total;
+
+    document.getElementById('rankVocab').textContent = stats.rank.vocab;
+    document.getElementById('rankGrammar').textContent = stats.rank.grammar;
+    document.getElementById('rankListen').textContent = stats.rank.listen;
+    document.getElementById('rankConv').textContent = stats.rank.conv;
+    document.getElementById('rankTotal').textContent = stats.rank.total;
+
+    document.getElementById('examCount').textContent = sameTest.length + '名';
+
+    // 評価
+    const grade = getGrade(total);
+    document.getElementById('evalJapanese').textContent = grade.label;
+    document.getElementById('evalJapaneseDesc').textContent = grade.desc;
+  }
+
+  // 態度評価の説明を初期設定
+  document.getElementById('evalAttitudeDesc').textContent =
+    getAttitudeDesc(document.getElementById('evalAttitude').value);
+
+  // 成績推移テーブル
+  if (results.length > 0) {
+    const tbody = document.getElementById('trendBody');
+    tbody.innerHTML = results.map(r => {
+      const tot = (r.score_vocab ?? 0) + (r.score_grammar ?? 0) +
+                  (r.score_listening ?? 0) + (r.score_conversation ?? 0);
+      return `<tr>
+        <td>${r.test_name || '-'}</td>
+        <td>${r.score_vocab ?? '-'}</td>
+        <td>${r.score_grammar ?? '-'}</td>
+        <td>${r.score_listening ?? '-'}</td>
+        <td>${r.score_conversation ?? '-'}</td>
+        <td><strong>${tot}</strong></td>
+      </tr>`;
+    }).join('');
+  }
+}
+
+function calcStats(sameTest, latest) {
+  const n = sameTest.length;
+  const getScores = (key) => sameTest.map(r => r[key] ?? 0);
+  const avg = (arr) => arr.length ? (arr.reduce((a, b) => a + b, 0) / arr.length) : 0;
+  const stddev = (arr) => {
+    const m = avg(arr);
+    return Math.sqrt(arr.reduce((s, x) => s + (x - m) ** 2, 0) / (arr.length || 1));
+  };
+  const deviation = (val, arr) => {
+    const sd = stddev(arr);
+    return sd === 0 ? 50 : ((val - avg(arr)) / sd * 10 + 50);
+  };
+  const rank = (val, arr) => {
+    const sorted = [...arr].sort((a, b) => b - a);
+    return sorted.indexOf(val) + 1 || '-';
+  };
+
+  const keys = [
+    { field: 'score_vocab', name: 'vocab' },
+    { field: 'score_grammar', name: 'grammar' },
+    { field: 'score_listening', name: 'listen' },
+    { field: 'score_conversation', name: 'conv' },
+  ];
+
+  const result = { avg: {}, dev: {}, rank: {} };
+  keys.forEach(k => {
+    const scores = getScores(k.field);
+    const val = latest[k.field] ?? 0;
+    result.avg[k.name] = avg(scores).toFixed(1);
+    result.dev[k.name] = deviation(val, scores).toFixed(1);
+    result.rank[k.name] = rank(val, scores);
+  });
+
+  const totals = sameTest.map(r =>
+    (r.score_vocab ?? 0) + (r.score_grammar ?? 0) + (r.score_listening ?? 0) + (r.score_conversation ?? 0)
+  );
+  const myTotal = (latest.score_vocab ?? 0) + (latest.score_grammar ?? 0) +
+                  (latest.score_listening ?? 0) + (latest.score_conversation ?? 0);
+  result.avg.total = avg(totals).toFixed(1);
+  result.dev.total = deviation(myTotal, totals).toFixed(1);
+  result.rank.total = rank(myTotal, totals);
+
+  return result;
+}
+
+function getGrade(total) {
+  if (total >= 340) return { label: '秀', desc: '最高ランクの成績です' };
+  if (total >= 320) return { label: '優', desc: '優秀な成績です' };
+  if (total >= 300) return { label: '良', desc: '良好な成績です' };
+  if (total >= 280) return { label: '可', desc: '合格水準の成績です' };
+  return { label: '不可', desc: '更なる努力が必要です' };
+}
+
+function getAttitudeDesc(grade) {
+  const map = {
+    '秀': '模範的な態度で生活しています',
+    '優': '良好な態度で生活しています',
+    '良': '概ね良好な態度です',
+    '可': '改善の余地があります',
+    '不可': '態度の改善が必要です',
+  };
+  return map[grade] || '';
 }
 
 // ===== ユーティリティ =====

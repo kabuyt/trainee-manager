@@ -1,0 +1,294 @@
+/* ===== 報告書スタイル ===== */
+@page { size: A4 portrait; margin: 10mm 12mm; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Meiryo UI', 'Hiragino Kaku Gothic ProN', sans-serif;
+  background: #e8e8e8;
+  color: #333;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+/* ===== ツールバー ===== */
+.toolbar-top {
+  max-width: 210mm;
+  margin: 12px auto 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+}
+.toolbar-top a { color: #1a56db; text-decoration: none; font-size: 14px; }
+.btn-print {
+  background: #1a56db;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-print:hover { background: #1648c0; }
+
+/* ===== レポートページ ===== */
+.report-page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 20px;
+  background: white;
+  padding: 10mm 12mm;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+
+/* ===== ヘッダー ===== */
+.report-header { margin-bottom: 8px; }
+.title-area {
+  background: #fdeada;
+  border: 2px solid #c77a30;
+  padding: 8px 16px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+.title-area h1 { font-size: 20px; font-family: 'MS PMincho', serif; }
+
+.info-row {
+  display: flex;
+  border: 1px solid #999;
+  font-size: 11px;
+}
+.info-cell {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  border-right: 1px solid #ccc;
+  padding: 4px 6px;
+}
+.info-cell:last-child { border-right: none; }
+.info-cell .label {
+  background: #f0f0f0;
+  padding: 2px 6px;
+  font-weight: bold;
+  font-size: 10px;
+  margin-right: 6px;
+  white-space: nowrap;
+}
+.info-cell .value { font-weight: 500; }
+.info-cell .value small { color: #666; font-size: 10px; }
+
+/* ===== セクション ===== */
+.section-header {
+  background: #2c3e50;
+  color: white;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: bold;
+  margin: 10px 0 6px;
+  border-radius: 2px;
+}
+.section-sub {
+  background: #ecf0f1;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: bold;
+  margin: 8px 0 4px;
+  border-left: 4px solid #2c3e50;
+}
+
+/* ===== テスト成績テーブル ===== */
+.score-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 6px;
+  font-size: 11px;
+}
+.score-table th, .score-table td {
+  border: 1px solid #999;
+  padding: 5px 8px;
+  text-align: center;
+}
+.score-table th {
+  font-size: 11px;
+  font-weight: bold;
+}
+.col-label { width: 100px; background: #f9f9f9; }
+.col-vocab { background: #fef2e8; }
+.col-grammar { background: #e8f4fd; }
+.col-listen { background: #e8fde8; }
+.col-conv { background: #fffdd9; }
+.col-total { background: #f2f2f2; font-weight: bold; }
+.row-label { background: #f9f9f9; font-weight: bold; text-align: left !important; font-size: 10px; }
+.total-cell { font-weight: bold; }
+.row-avg td { color: #555; }
+.row-dev td { font-weight: bold; font-size: 13px; color: #1a5276; }
+
+/* ===== 評価 ===== */
+.eval-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.eval-box {
+  flex: 1;
+  border: 1px solid #999;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.eval-label {
+  background: #f9af5d;
+  color: white;
+  padding: 2px 10px;
+  font-weight: bold;
+  font-size: 11px;
+  border-radius: 2px;
+}
+.eval-grade {
+  font-size: 18px;
+  font-weight: bold;
+  color: #1a5276;
+  min-width: 30px;
+}
+.eval-desc { font-size: 10px; color: #555; }
+
+/* ===== 成績推移 ===== */
+.trend-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  margin-bottom: 6px;
+}
+.trend-table th, .trend-table td {
+  border: 1px solid #ccc;
+  padding: 4px 8px;
+  text-align: center;
+}
+.trend-table th {
+  background: #f2f2f2;
+  font-weight: bold;
+  border-bottom: 3px double #999;
+}
+
+/* ===== コメント欄 ===== */
+.comment-grid {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.comment-block {
+  flex: 1;
+  border: 1px solid #ccc;
+  padding: 0;
+}
+.comment-label {
+  padding: 2px 8px;
+  font-weight: bold;
+  font-size: 11px;
+  background: #f0f0f0;
+  border-bottom: 1px solid #ccc;
+}
+.comment-block.good .comment-label { background: #d4edda; color: #155724; }
+.comment-block.bad .comment-label { background: #f8d7da; color: #721c24; }
+.comment-block textarea {
+  width: 100%;
+  border: none;
+  padding: 6px 8px;
+  font-size: 10px;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 50px;
+  outline: none;
+}
+
+/* ===== 週別活動 ===== */
+.weekly-log { margin-bottom: 6px; }
+.week-row {
+  display: flex;
+  border: 1px solid #ccc;
+  margin-bottom: -1px;
+}
+.week-label {
+  width: 60px;
+  background: #f0f0f0;
+  padding: 4px 6px;
+  font-weight: bold;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  border-right: 1px solid #ccc;
+}
+.week-row textarea {
+  flex: 1;
+  border: none;
+  padding: 4px 8px;
+  font-size: 10px;
+  font-family: inherit;
+  resize: none;
+  outline: none;
+}
+
+/* ===== 学習情報行 ===== */
+.learn-info { margin-bottom: 6px; }
+.input-sm {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 3px 6px;
+  font-size: 11px;
+  font-family: inherit;
+}
+
+/* ===== ドロップダウン ===== */
+select.no-print-select {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: inherit;
+  font-family: inherit;
+  background: white;
+}
+
+/* 印刷時に表示するテキスト（画面では非表示） */
+.month-print, .scope-print, .attitude-print, .env-print { display: none; }
+
+/* ===== 印刷用スタイル ===== */
+@media print {
+  body { background: white; }
+  .no-print { display: none !important; }
+  .report-page {
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+
+  /* ドロップダウンを非表示、テキスト表示 */
+  select.no-print-select { display: none; }
+  .month-print, .scope-print, .attitude-print, .env-print {
+    display: inline;
+    font-weight: bold;
+  }
+
+  /* テキストエリアをテキスト表示 */
+  textarea {
+    border: none !important;
+    resize: none;
+    overflow: visible;
+    background: transparent;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  input[type="text"], input[type="date"] {
+    border: none !important;
+    background: transparent;
+  }
+
+  .comment-block { break-inside: avoid; }
+  .score-table, .trend-table { break-inside: avoid; }
+
+  /* 色の印刷 */
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

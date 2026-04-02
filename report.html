@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>教育報告書</title>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+<div class="no-print toolbar-top">
+  <a href="index.html">&larr; 一覧に戻る</a>
+  <button onclick="window.print()" class="btn-print">PDF保存 / 印刷</button>
+</div>
+
+<div class="report-page" id="reportPage">
+
+  <!-- ===== ヘッダー ===== -->
+  <div class="report-header">
+    <div class="title-area">
+      <h1>教育課程
+        <select id="monthSelect" class="no-print-select">
+          <option>1</option><option>2</option><option>3</option><option>4</option>
+          <option>5</option><option>6</option><option>7</option><option>8</option>
+          <option>9</option><option>10</option>
+        </select>
+        <span class="month-print" id="monthPrint">1</span>ヶ月目　個人成績書
+      </h1>
+    </div>
+    <div class="info-row">
+      <div class="info-cell"><span class="label">社名</span><span class="value" id="rCompany">-</span></div>
+      <div class="info-cell"><span class="label">氏名</span>
+        <span class="value">
+          <span id="rNameKata">-</span><br>
+          <small id="rNameRomaji">-</small>
+        </span>
+      </div>
+      <div class="info-cell"><span class="label">学生ID</span><span class="value" id="rStudentId">-</span></div>
+      <div class="info-cell"><span class="label">クラス</span><span class="value" id="rClass">-</span></div>
+      <div class="info-cell"><span class="label">入国日</span><span class="value" id="rArrival">-</span></div>
+    </div>
+  </div>
+
+  <!-- ===== テスト成績 ===== -->
+  <div class="section-header">テスト成績</div>
+  <table class="score-table">
+    <thead>
+      <tr>
+        <th class="col-label">試験範囲</th>
+        <th class="col-score col-vocab">語彙</th>
+        <th class="col-score col-grammar">文法</th>
+        <th class="col-score col-listen">聴解</th>
+        <th class="col-score col-conv">会話</th>
+        <th class="col-score col-total">合計</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="row-label">
+          <select id="examScope" class="no-print-select">
+            <option>第4課迄</option><option>第11課迄</option><option>第18課迄</option>
+            <option>第25課迄</option><option>第33課迄</option><option>第40課迄</option>
+            <option>第45課迄</option><option>第50課迄</option>
+          </select>
+          <span class="scope-print" id="scopePrint">第4課迄</span>
+        </td>
+        <td id="sVocab">-</td>
+        <td id="sGrammar">-</td>
+        <td id="sListen">-</td>
+        <td id="sConv">-</td>
+        <td id="sTotal" class="total-cell">-</td>
+      </tr>
+      <tr class="row-avg">
+        <td class="row-label">平均点</td>
+        <td id="avgVocab">-</td>
+        <td id="avgGrammar">-</td>
+        <td id="avgListen">-</td>
+        <td id="avgConv">-</td>
+        <td id="avgTotal" class="total-cell">-</td>
+      </tr>
+      <tr class="row-dev">
+        <td class="row-label">偏差値</td>
+        <td id="devVocab">-</td>
+        <td id="devGrammar">-</td>
+        <td id="devListen">-</td>
+        <td id="devConv">-</td>
+        <td id="devTotal" class="total-cell">-</td>
+      </tr>
+      <tr>
+        <td class="row-label">順位</td>
+        <td id="rankVocab">-</td>
+        <td id="rankGrammar">-</td>
+        <td id="rankListen">-</td>
+        <td id="rankConv">-</td>
+        <td id="rankTotal" class="total-cell">-</td>
+      </tr>
+      <tr>
+        <td class="row-label">受験者数</td>
+        <td id="examCount" colspan="5">-</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ===== 評価 ===== -->
+  <div class="eval-row">
+    <div class="eval-box">
+      <span class="eval-label">日本語</span>
+      <span class="eval-grade" id="evalJapanese">-</span>
+      <span class="eval-desc" id="evalJapaneseDesc">-</span>
+    </div>
+    <div class="eval-box">
+      <span class="eval-label">態度</span>
+      <select id="evalAttitude" class="no-print-select">
+        <option>秀</option><option>優</option><option>良</option><option>可</option><option>不可</option>
+      </select>
+      <span class="attitude-print" id="attitudePrint">秀</span>
+      <span class="eval-desc" id="evalAttitudeDesc">-</span>
+    </div>
+  </div>
+
+  <!-- ===== 成績推移 ===== -->
+  <div class="section-header">成績推移</div>
+  <table class="trend-table">
+    <thead>
+      <tr>
+        <th>試験範囲</th><th>語彙</th><th>文法</th><th>聴解</th><th>会話</th><th>合計</th>
+      </tr>
+    </thead>
+    <tbody id="trendBody">
+      <tr><td colspan="6" style="color:#999;text-align:center">データなし</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ===== 生活態度詳細 ===== -->
+  <div class="section-header">生活状況・態度詳細</div>
+  <div class="comment-grid">
+    <div class="comment-block good">
+      <div class="comment-label">Good</div>
+      <textarea id="lifeGood" rows="4" placeholder="良い点を入力..."></textarea>
+    </div>
+    <div class="comment-block bad">
+      <div class="comment-label">Bad</div>
+      <textarea id="lifeBad" rows="4" placeholder="改善が必要な点を入力..."></textarea>
+    </div>
+  </div>
+  <div class="comment-grid">
+    <div class="comment-block">
+      <div class="comment-label">対策</div>
+      <textarea id="lifeMeasure" rows="3" placeholder="対策を入力..."></textarea>
+    </div>
+    <div class="comment-block">
+      <div class="comment-label">改善点</div>
+      <textarea id="lifeImprove" rows="3" placeholder="改善点を入力..."></textarea>
+    </div>
+  </div>
+
+  <!-- ===== 学習状況 ===== -->
+  <div class="section-header">学習状況</div>
+  <div class="info-row learn-info">
+    <div class="info-cell">
+      <span class="label">学習進捗</span>
+      <input type="text" id="learnProgress" placeholder="例：第18課" class="input-sm">
+    </div>
+    <div class="info-cell">
+      <span class="label">事前教育開始日</span>
+      <input type="date" id="learnStart" class="input-sm">
+    </div>
+    <div class="info-cell">
+      <span class="label">出国予定日</span>
+      <input type="date" id="learnDepart" class="input-sm">
+    </div>
+    <div class="info-cell">
+      <span class="label">生活環境</span>
+      <select id="learnEnv" class="input-sm no-print-select">
+        <option>寮生活</option><option>自宅通学</option>
+      </select>
+      <span class="env-print" id="envPrint">寮生活</span>
+    </div>
+  </div>
+
+  <div class="section-sub">週別活動</div>
+  <div class="weekly-log">
+    <div class="week-row" id="week1">
+      <div class="week-label">第1週</div>
+      <textarea rows="3" placeholder="授業内容・活動を入力..."></textarea>
+    </div>
+    <div class="week-row" id="week2">
+      <div class="week-label">第2週</div>
+      <textarea rows="3" placeholder="授業内容・活動を入力..."></textarea>
+    </div>
+    <div class="week-row" id="week3">
+      <div class="week-label">第3週</div>
+      <textarea rows="3" placeholder="授業内容・活動を入力..."></textarea>
+    </div>
+    <div class="week-row" id="week4">
+      <div class="week-label">第4週</div>
+      <textarea rows="3" placeholder="授業内容・活動を入力..."></textarea>
+    </div>
+  </div>
+
+  <div class="section-sub">学習状況詳細</div>
+  <div class="comment-grid">
+    <div class="comment-block good">
+      <div class="comment-label">Good</div>
+      <textarea id="learnGood" rows="3" placeholder="学習面の良い点..."></textarea>
+    </div>
+    <div class="comment-block bad">
+      <div class="comment-label">Bad</div>
+      <textarea id="learnBad" rows="3" placeholder="学習面の課題..."></textarea>
+    </div>
+  </div>
+  <div class="comment-grid">
+    <div class="comment-block">
+      <div class="comment-label">対策</div>
+      <textarea id="learnMeasure" rows="3" placeholder="対策を入力..."></textarea>
+    </div>
+    <div class="comment-block">
+      <div class="comment-label">改善点</div>
+      <textarea id="learnImprove" rows="3" placeholder="改善点を入力..."></textarea>
+    </div>
+  </div>
+
+</div><!-- /report-page -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+<script>
+  loadReport();
+
+  document.getElementById('monthSelect').addEventListener('change', function() {
+    document.getElementById('monthPrint').textContent = this.value;
+  });
+  document.getElementById('examScope').addEventListener('change', function() {
+    document.getElementById('scopePrint').textContent = this.value;
+  });
+  document.getElementById('evalAttitude').addEventListener('change', function() {
+    document.getElementById('attitudePrint').textContent = this.value;
+    document.getElementById('evalAttitudeDesc').textContent = getAttitudeDesc(this.value);
+  });
+  document.getElementById('learnEnv').addEventListener('change', function() {
+    document.getElementById('envPrint').textContent = this.value;
+  });
+</script>
+</body>
+</html>
