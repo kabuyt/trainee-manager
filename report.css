@@ -172,6 +172,19 @@ body {
   border-bottom: 3px double #999;
 }
 
+/* ===== グラフ ===== */
+.chart-container {
+  margin: 8px 0 12px;
+  padding: 8px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  max-height: 250px;
+}
+.chart-container canvas {
+  max-height: 230px;
+}
+
 /* ===== コメント欄 ===== */
 .comment-grid {
   display: flex;
@@ -287,7 +300,7 @@ select.no-print-select {
   }
 
   .comment-block { break-inside: avoid; }
-  .score-table, .trend-table { break-inside: avoid; }
+  .score-table, .trend-table, .chart-container { break-inside: avoid; }
 
   /* 色の印刷 */
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }

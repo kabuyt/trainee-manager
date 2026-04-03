@@ -319,7 +319,7 @@ function renderReport(t, results, classResults) {
   document.getElementById('evalAttitudeDesc').textContent =
     getAttitudeDesc(document.getElementById('evalAttitude').value);
 
-  // 成績推移テーブル
+  // 成績推移テーブル + グラフ
   if (results.length > 0) {
     const tbody = document.getElementById('trendBody');
     tbody.innerHTML = results.map(r => {
@@ -334,7 +334,50 @@ function renderReport(t, results, classResults) {
         <td><strong>${tot}</strong></td>
       </tr>`;
     }).join('');
+
+    // 折れ線グラフ
+    renderTrendChart(results);
   }
+}
+
+function renderTrendChart(results) {
+  const ctx = document.getElementById('trendChart');
+  if (!ctx) return;
+
+  const labels = results.map(r => r.test_name || r.test_date || '-');
+  const vocabData = results.map(r => r.score_vocab ?? 0);
+  const grammarData = results.map(r => r.score_grammar ?? 0);
+  const listenData = results.map(r => r.score_listening ?? 0);
+  const convData = results.map(r => r.score_conversation ?? 0);
+  const totalData = results.map(r =>
+    (r.score_vocab ?? 0) + (r.score_grammar ?? 0) +
+    (r.score_listening ?? 0) + (r.score_conversation ?? 0)
+  );
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label: '語彙', data: vocabData, borderColor: '#e67e22', backgroundColor: '#e67e2233', tension: 0.3 },
+        { label: '文法', data: grammarData, borderColor: '#2980b9', backgroundColor: '#2980b933', tension: 0.3 },
+        { label: '聴解', data: listenData, borderColor: '#27ae60', backgroundColor: '#27ae6033', tension: 0.3 },
+        { label: '会話', data: convData, borderColor: '#8e44ad', backgroundColor: '#8e44ad33', tension: 0.3 },
+        { label: '合計', data: totalData, borderColor: '#c0392b', backgroundColor: '#c0392b33', borderWidth: 3, tension: 0.3 },
+      ],
+    },
+    options: {
+      responsive: true,
+      animation: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 11 } } },
+        title: { display: false },
+      },
+      scales: {
+        y: { beginAtZero: true, title: { display: true, text: '点数' } },
+      },
+    },
+  });
 }
 
 function calcStats(sameTest, latest) {
