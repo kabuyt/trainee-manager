@@ -75,12 +75,6 @@ function setupAuthUI() {
     ? '管理者'
     : (_currentProfile.organizations?.name || _currentProfile.display_name || '');
 
-  // タイトルを「〇〇用管理画面」に変更（送り出し機関のみ）
-  const h1 = document.querySelector('header h1');
-  if (h1 && !isAdmin()) {
-    h1.textContent = orgName + ' 用管理画面';
-  }
-
   authDiv.innerHTML = `
     <span class="auth-user-label">${orgName}</span>
     <button onclick="logout()" class="btn btn-sm btn-logout">ログアウト</button>
