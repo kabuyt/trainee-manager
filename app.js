@@ -137,6 +137,7 @@ async function registerTrainee() {
     class_group: document.getElementById('classGroup').value.trim(),
     birth_date: document.getElementById('birthDate').value || null,
     gender: document.getElementById('gender').value || null,
+    supervising_org: document.getElementById('supervisingOrg').value || null,
     training_start_date: document.getElementById('trainingStartDate').value || null,
     arrival_date: document.getElementById('arrivalDate').value || null,
     stay_period: document.getElementById('stayPeriod').value.trim(),
@@ -247,6 +248,10 @@ function renderTraineeDetail(t, results) {
       <div class="info-item">
         <span class="info-label">会社名</span>
         <span class="info-value">${t.company || '-'}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">監理団体</span>
+        <span class="info-value">${t.supervising_org || '-'}</span>
       </div>
       <div class="info-item">
         <span class="info-label">期</span>

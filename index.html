@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>実習生管理システム</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
   <header>
@@ -23,7 +23,7 @@
         <div class="toolbar-left">
           <input type="text" id="searchInput" placeholder="名前・会社名で検索..." class="search-box">
           <select id="orgFilter" class="org-filter hidden">
-            <option value="">全教育機関</option>
+            <option value="">全送り出し機関</option>
           </select>
         </div>
         <a href="register.html" class="btn btn-primary">+ 新規登録</a>
@@ -40,7 +40,7 @@
             <th>名前（カタカナ）</th>
             <th>会社名</th>
             <th>期</th>
-            <th id="thOrg" class="hidden">教育機関</th>
+            <th id="thOrg" class="hidden">送り出し機関</th>
             <th>操作</th>
           </tr>
         </thead>
