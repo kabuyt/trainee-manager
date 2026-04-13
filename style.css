@@ -118,7 +118,7 @@ td {
 tr:last-child td { border-bottom: none; }
 tr:hover td { background: #f9fafb; }
 
-td a { color: #00a8ab; text-decoration: none; font-weight: 500; }
+td a { color: #333; text-decoration: none; font-weight: 500; }
 td a:hover { text-decoration: underline; }
 
 /* ===== ボタン ===== */
