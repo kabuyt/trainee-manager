@@ -231,7 +231,9 @@ function renderTraineeDetail(t, results) {
   el.innerHTML = `
     <div class="detail-header">
       <div class="detail-header-left">
-        ${t.photo_url ? `<img src="${t.photo_url}" alt="写真" class="detail-photo">` : ''}
+        ${t.photo_url
+          ? `<img src="${t.photo_url}" alt="写真" class="detail-photo">`
+          : `<div class="detail-photo detail-photo-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>`}
         <div>
           ${t.student_id ? `<span class="student-id-large">${t.student_id}</span>` : ''}
           <h2>${t.name_romaji}</h2>
