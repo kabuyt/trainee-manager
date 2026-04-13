@@ -414,6 +414,13 @@ input[type="password"]:focus {
   grid-column: 1 / -1;
 }
 
+.form-note {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #9ca3af;
+  text-align: right;
+}
+
 /* ===== select要素 ===== */
 select {
   padding: 9px 12px;
