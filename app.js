@@ -179,32 +179,6 @@ async function registerTrainee() {
       }
     }
 
-    // テスト結果があれば登録
-    const testName = document.getElementById('testName').value.trim();
-    const testDate = document.getElementById('testDate').value;
-    const scoreVocab = document.getElementById('scoreVocab').value;
-    const scoreGrammar = document.getElementById('scoreGrammar').value;
-    const scoreListening = document.getElementById('scoreListening').value;
-    const scoreConversation = document.getElementById('scoreConversation').value;
-
-    const hasScore = scoreVocab || scoreGrammar || scoreListening || scoreConversation;
-
-    if (hasScore && testDate) {
-      const { error: scoreError } = await supabase
-        .from('test_results')
-        .insert([{
-          trainee_id: trainee.id,
-          test_name: testName,
-          test_date: testDate,
-          score_vocab: scoreVocab ? Number(scoreVocab) : null,
-          score_grammar: scoreGrammar ? Number(scoreGrammar) : null,
-          score_listening: scoreListening ? Number(scoreListening) : null,
-          score_conversation: scoreConversation ? Number(scoreConversation) : null,
-        }]);
-
-      if (scoreError) throw scoreError;
-    }
-
     showMsg(msgEl, '登録しました！', 'success');
     setTimeout(() => {
       window.location.href = 'trainee.html?id=' + trainee.id;
