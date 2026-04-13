@@ -274,7 +274,7 @@ function renderTraineeDetail(t, results) {
         <span class="info-value">${t.company || '-'}</span>
       </div>
       <div class="info-item">
-        <span class="info-label">クラス</span>
+        <span class="info-label">期</span>
         <span class="info-value">${t.class_group || '-'}</span>
       </div>
       <div class="info-item">
