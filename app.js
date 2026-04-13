@@ -137,6 +137,7 @@ async function registerTrainee() {
     class_group: document.getElementById('classGroup').value.trim(),
     birth_date: document.getElementById('birthDate').value || null,
     gender: document.getElementById('gender').value || null,
+    training_start_date: document.getElementById('trainingStartDate').value || null,
     arrival_date: document.getElementById('arrivalDate').value || null,
     stay_period: document.getElementById('stayPeriod').value.trim(),
   };
@@ -260,7 +261,11 @@ function renderTraineeDetail(t, results) {
         <span class="info-value">${t.gender || '-'}</span>
       </div>
       <div class="info-item">
-        <span class="info-label">入国日</span>
+        <span class="info-label">事前教育開始日</span>
+        <span class="info-value">${t.training_start_date ? formatDate(t.training_start_date) : '-'}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">入国予定日</span>
         <span class="info-value">${t.arrival_date ? formatDate(t.arrival_date) : '-'}</span>
       </div>
     </div>

@@ -79,13 +79,18 @@
                 </select>
               </div>
               <div class="form-group">
-                <label for="arrivalDate">入国日</label>
+                <label for="trainingStartDate">事前教育開始日</label>
+                <input type="date" id="trainingStartDate">
+              </div>
+              <div class="form-group">
+                <label for="arrivalDate">入国予定日</label>
                 <input type="date" id="arrivalDate">
               </div>
               <div class="form-group form-group-full">
                 <label for="photo">顔写真</label>
                 <input type="file" id="photo" accept="image/*" class="file-input">
                 <div id="photoPreview" class="photo-preview"></div>
+                <p class="form-note" style="text-align:left;margin-top:4px">※ 推奨サイズ：240×320px（3:4比率）、JPEG、2MB以下</p>
               </div>
             </div>
           </section>
@@ -97,7 +102,6 @@
             <a href="index.html" class="btn btn-secondary">キャンセル</a>
             <button type="submit" class="btn btn-primary" id="submitBtn">登録する</button>
           </div>
-          <p class="form-note">※ 顔写真の推奨サイズ：240×320px（3:4比率）、JPEG、2MB以下</p>
         </form>
       </div>
     </div>
