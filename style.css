@@ -47,6 +47,17 @@ nav a:hover, nav a.active {
   color: white;
 }
 
+/* ===== サブバー（送り出し機関名） ===== */
+.org-sub-bar {
+  background: #e5e7eb;
+  color: #374151;
+  text-align: center;
+  padding: 6px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
 /* ===== メイン ===== */
 main { padding: 32px 24px; }
 

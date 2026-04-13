@@ -81,4 +81,13 @@ function setupAuthUI() {
   `;
 
   nav.appendChild(authDiv);
+
+  // ヘッダーの下にサブバー「〇〇用管理画面」を表示（送り出し機関のみ）
+  if (!isAdmin() && !document.getElementById('orgSubBar')) {
+    const subBar = document.createElement('div');
+    subBar.id = 'orgSubBar';
+    subBar.className = 'org-sub-bar';
+    subBar.textContent = orgName + ' 用管理画面';
+    document.querySelector('header').after(subBar);
+  }
 }
