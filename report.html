@@ -7,13 +7,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="report.css?v=16">
+<link rel="stylesheet" href="report.css?v=17">
 </head>
 <body>
 
 <div class="no-print toolbar-top">
   <a href="index.html">&larr; 一覧に戻る</a>
-  <button onclick="window.print()" class="btn-print">PDF保存 / 印刷</button>
+  <div class="toolbar-actions">
+    <span id="saveStatus"></span>
+    <button onclick="saveReport()" class="btn-save">保存</button>
+    <button onclick="window.print()" class="btn-print">PDF保存 / 印刷</button>
+  </div>
 </div>
 
 <div class="report-page" id="reportPage">
@@ -28,7 +32,6 @@
         <select id="monthSelect" class="no-print-select">
           <option>1</option><option>2</option><option>3</option><option>4</option>
           <option>5</option><option>6</option><option>7</option><option>8</option>
-          <option>9</option><option>10</option>
         </select>
         <span class="month-print" id="monthPrint">1</span>ヶ月目　個人成績書
       </h1>
@@ -71,14 +74,7 @@
     </thead>
     <tbody>
       <tr>
-        <td class="row-label">
-          <select id="examScope" class="no-print-select">
-            <option>第4課迄</option><option>第11課迄</option><option>第18課迄</option>
-            <option>第25課迄</option><option>第33課迄</option><option>第40課迄</option>
-            <option>第45課迄</option><option>第50課迄</option>
-          </select>
-          <span class="scope-print" id="scopePrint">第4課迄</span>
-        </td>
+        <td class="row-label" id="scopeLabel">第4課迄</td>
         <td id="sVocab">-</td>
         <td id="sGrammar">-</td>
         <td id="sListen">-</td>
@@ -240,7 +236,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="auth.js?v=4"></script>
-<script src="app.js?v=5"></script>
+<script src="app.js?v=6"></script>
 <script>
   (async function() {
     const auth = await checkAuth();
@@ -250,9 +246,7 @@
 
   document.getElementById('monthSelect').addEventListener('change', function() {
     document.getElementById('monthPrint').textContent = this.value;
-  });
-  document.getElementById('examScope').addEventListener('change', function() {
-    document.getElementById('scopePrint').textContent = this.value;
+    switchMonth(parseInt(this.value));
   });
   document.getElementById('evalAttitude').addEventListener('change', function() {
     document.getElementById('attitudePrint').textContent = this.value;

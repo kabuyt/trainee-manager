@@ -316,15 +316,34 @@ function renderTraineeDetail(t, results) {
 }
 
 // ===== 教育報告書 =====
+const MONTH_TEST_MAP = [
+  { month: 1, test: '第1-4課',   scope: '第4課迄' },
+  { month: 2, test: '第5-11課',  scope: '第11課迄' },
+  { month: 3, test: '第12-18課', scope: '第18課迄' },
+  { month: 4, test: '第19-25課', scope: '第25課迄' },
+  { month: 5, test: '第26-33課', scope: '第33課迄' },
+  { month: 6, test: '第34-40課', scope: '第40課迄' },
+  { month: 7, test: '第41-45課', scope: '第45課迄' },
+  { month: 8, test: '第46-50課', scope: '第50課迄' },
+];
+
+// 報告書のグローバル状態
+let _reportTrainee = null;
+let _reportResults = [];
+let _reportClassResults = [];
+let _reportMonthly = {};  // { month: row }
+let _currentMonth = 1;
+
 async function loadReport() {
   const id = new URLSearchParams(location.search).get('id');
   if (!id) { window.location.href = 'index.html'; return; }
 
   try {
-    // 対象実習生 + テスト結果を取得
-    const [{ data: trainee, error: tErr }, { data: results, error: rErr }] = await Promise.all([
+    // 対象実習生 + テスト結果 + 月別報告書を取得
+    const [{ data: trainee, error: tErr }, { data: results, error: rErr }, { data: monthly }] = await Promise.all([
       supabase.from('trainees').select('*').eq('id', id).single(),
       supabase.from('test_results').select('*').eq('trainee_id', id).order('test_date', { ascending: true }),
+      supabase.from('monthly_reports').select('*').eq('trainee_id', id),
     ]);
     if (tErr) throw tErr;
 
@@ -341,10 +360,206 @@ async function loadReport() {
       }
     }
 
-    renderReport(trainee, results || [], classResults);
+    // グローバル状態に保存
+    _reportTrainee = trainee;
+    _reportResults = results || [];
+    _reportClassResults = classResults;
+    _reportMonthly = {};
+    (monthly || []).forEach(r => { _reportMonthly[r.month] = r; });
+
+    // 最新テスト結果の月を自動選択
+    let initMonth = 1;
+    if (_reportResults.length > 0) {
+      const latestTest = _reportResults[_reportResults.length - 1].test_name;
+      const found = MONTH_TEST_MAP.find(m => m.test === latestTest);
+      if (found) initMonth = found.month;
+    }
+
+    renderReport(trainee, _reportResults, classResults);
+    // 月を設定して切替
+    document.getElementById('monthSelect').value = String(initMonth);
+    document.getElementById('monthPrint').textContent = String(initMonth);
+    switchMonth(initMonth);
   } catch (err) {
     document.getElementById('reportPage').innerHTML =
       '<p style="color:red;padding:20px">読み込みに失敗しました: ' + err.message + '</p>';
+  }
+}
+
+function switchMonth(month) {
+  _currentMonth = month;
+  const map = MONTH_TEST_MAP.find(m => m.month === month);
+  if (!map) return;
+
+  // 試験範囲ラベル更新
+  document.getElementById('scopeLabel').textContent = map.scope;
+
+  // 該当月のテスト結果を表示
+  const result = _reportResults.find(r => r.test_name === map.test);
+  renderMonthScores(result);
+
+  // 該当月のコメントを表示
+  renderMonthComments(_reportMonthly[month]);
+}
+
+function renderMonthScores(result) {
+  if (result) {
+    const v = result.score_vocab ?? 0;
+    const g = result.score_grammar ?? 0;
+    const l = result.score_listening ?? 0;
+    const c = result.score_conversation ?? 0;
+    const total = v + g + l + c;
+
+    document.getElementById('sVocab').textContent = v;
+    document.getElementById('sGrammar').textContent = g;
+    document.getElementById('sListen').textContent = l;
+    document.getElementById('sConv').textContent = c;
+    document.getElementById('sTotal').textContent = total + '/400';
+
+    // 統計
+    const sameTest = _reportClassResults.filter(r => r.test_name === result.test_name);
+    const stats = calcStats(sameTest, result);
+    document.getElementById('avgVocab').textContent = stats.avg.vocab;
+    document.getElementById('avgGrammar').textContent = stats.avg.grammar;
+    document.getElementById('avgListen').textContent = stats.avg.listen;
+    document.getElementById('avgConv').textContent = stats.avg.conv;
+    document.getElementById('avgTotal').textContent = stats.avg.total;
+    document.getElementById('devVocab').textContent = stats.dev.vocab;
+    document.getElementById('devGrammar').textContent = stats.dev.grammar;
+    document.getElementById('devListen').textContent = stats.dev.listen;
+    document.getElementById('devConv').textContent = stats.dev.conv;
+    document.getElementById('devTotal').textContent = stats.dev.total;
+    document.getElementById('rankVocab').textContent = stats.rank.vocab;
+    document.getElementById('rankGrammar').textContent = stats.rank.grammar;
+    document.getElementById('rankListen').textContent = stats.rank.listen;
+    document.getElementById('rankConv').textContent = stats.rank.conv;
+    document.getElementById('rankTotal').textContent = stats.rank.total;
+    document.getElementById('examCount').textContent = sameTest.length + '名';
+
+    // 受験日
+    document.getElementById('rExamDate').textContent = result.test_date ? formatDate(result.test_date) : '-';
+
+    // 評価
+    const grade = getGrade(total);
+    document.getElementById('evalJapanese').textContent = grade.label;
+    document.getElementById('evalJapaneseDesc').textContent = grade.desc;
+  } else {
+    // データなし
+    ['sVocab','sGrammar','sListen','sConv','sTotal',
+     'avgVocab','avgGrammar','avgListen','avgConv','avgTotal',
+     'devVocab','devGrammar','devListen','devConv','devTotal',
+     'rankVocab','rankGrammar','rankListen','rankConv','rankTotal'].forEach(id => {
+      document.getElementById(id).textContent = '-';
+    });
+    document.getElementById('examCount').textContent = '-';
+    document.getElementById('rExamDate').textContent = '-';
+    document.getElementById('evalJapanese').textContent = '-';
+    document.getElementById('evalJapaneseDesc').textContent = '-';
+  }
+}
+
+function renderMonthComments(report) {
+  const fields = ['lifeGood','lifeBad','lifeMeasure','lifeImprove',
+                  'learnGood','learnBad','learnMeasure','learnImprove'];
+  const dbFields = ['life_good','life_bad','life_measure','life_improve',
+                    'learn_good','learn_bad','learn_measure','learn_improve'];
+
+  fields.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = (report && report[dbFields[i]]) || '';
+  });
+
+  // 週別活動
+  for (let w = 1; w <= 4; w++) {
+    const weekEl = document.getElementById('week' + w);
+    if (weekEl) {
+      const textEl = weekEl.querySelector('.comment-text');
+      if (textEl) textEl.innerHTML = (report && report['week' + w]) || '';
+    }
+  }
+
+  // 学習進捗
+  const progEl = document.getElementById('learnProgress');
+  if (progEl) progEl.textContent = (report && report.learn_progress) || '-';
+
+  // 態度評価
+  const attEl = document.getElementById('evalAttitude');
+  if (report && report.attitude_eval) {
+    attEl.value = report.attitude_eval;
+    document.getElementById('attitudePrint').textContent = report.attitude_eval;
+    document.getElementById('evalAttitudeDesc').textContent = getAttitudeDesc(report.attitude_eval);
+  } else {
+    attEl.value = '秀';
+    document.getElementById('attitudePrint').textContent = '秀';
+    document.getElementById('evalAttitudeDesc').textContent = getAttitudeDesc('秀');
+  }
+
+  // 生活環境
+  const envEl = document.getElementById('learnEnv');
+  if (report && report.living_env) {
+    envEl.value = report.living_env;
+    document.getElementById('envPrint').textContent = report.living_env;
+  }
+}
+
+async function saveReport() {
+  if (!_reportTrainee) return;
+  const btn = document.querySelector('.btn-save');
+  const status = document.getElementById('saveStatus');
+  btn.disabled = true;
+  btn.textContent = '保存中...';
+
+  // コメント収集
+  const getHtml = (id) => {
+    const el = document.getElementById(id);
+    return el ? el.innerHTML.trim() : '';
+  };
+  const getWeek = (n) => {
+    const row = document.getElementById('week' + n);
+    if (!row) return '';
+    const t = row.querySelector('.comment-text');
+    return t ? t.innerHTML.trim() : '';
+  };
+
+  const data = {
+    trainee_id: _reportTrainee.id,
+    month: _currentMonth,
+    attitude_eval: document.getElementById('evalAttitude').value,
+    living_env: document.getElementById('learnEnv').value,
+    learn_progress: document.getElementById('learnProgress').textContent.trim(),
+    life_good: getHtml('lifeGood'),
+    life_bad: getHtml('lifeBad'),
+    life_measure: getHtml('lifeMeasure'),
+    life_improve: getHtml('lifeImprove'),
+    learn_good: getHtml('learnGood'),
+    learn_bad: getHtml('learnBad'),
+    learn_measure: getHtml('learnMeasure'),
+    learn_improve: getHtml('learnImprove'),
+    week1: getWeek(1),
+    week2: getWeek(2),
+    week3: getWeek(3),
+    week4: getWeek(4),
+    updated_at: new Date().toISOString(),
+  };
+
+  try {
+    const { error } = await supabase.from('monthly_reports').upsert(data, {
+      onConflict: 'trainee_id,month',
+    });
+    if (error) throw error;
+
+    // ローカルキャッシュ更新
+    _reportMonthly[_currentMonth] = { ..._reportMonthly[_currentMonth], ...data };
+
+    status.textContent = '✓ 保存しました';
+    status.style.color = '#16a34a';
+    setTimeout(() => { status.textContent = ''; }, 3000);
+  } catch (err) {
+    status.textContent = '✗ 保存失敗: ' + err.message;
+    status.style.color = '#dc2626';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '保存';
   }
 }
 
@@ -364,8 +579,6 @@ function renderReport(t, results, classResults) {
   } else {
     ageEl.textContent = '-';
   }
-  // 受験日: 最新テスト結果の日付を使用（loadReportから渡される）
-  // arrival_date は学習状況セクションで使用
 
   // 顔写真
   const photoArea = document.getElementById('photoArea');
@@ -373,78 +586,25 @@ function renderReport(t, results, classResults) {
     photoArea.innerHTML = `<img src="${t.photo_url}" alt="写真" style="width:100%;height:100%;object-fit:cover;">`;
   }
 
-  // 最新テスト結果
-  const latest = results.length > 0 ? results[results.length - 1] : null;
-  if (latest) {
-    const v = latest.score_vocab ?? 0;
-    const g = latest.score_grammar ?? 0;
-    const l = latest.score_listening ?? 0;
-    const c = latest.score_conversation ?? 0;
-    const total = v + g + l + c;
-
-    document.getElementById('sVocab').textContent = v;
-    document.getElementById('sGrammar').textContent = g;
-    document.getElementById('sListen').textContent = l;
-    document.getElementById('sConv').textContent = c;
-    document.getElementById('sTotal').textContent = total + '/400';
-
-    // 同テスト名の全結果で統計計算
-    const sameTest = classResults.filter(r => r.test_name === latest.test_name);
-    const stats = calcStats(sameTest, latest);
-    document.getElementById('avgVocab').textContent = stats.avg.vocab;
-    document.getElementById('avgGrammar').textContent = stats.avg.grammar;
-    document.getElementById('avgListen').textContent = stats.avg.listen;
-    document.getElementById('avgConv').textContent = stats.avg.conv;
-    document.getElementById('avgTotal').textContent = stats.avg.total;
-
-    document.getElementById('devVocab').textContent = stats.dev.vocab;
-    document.getElementById('devGrammar').textContent = stats.dev.grammar;
-    document.getElementById('devListen').textContent = stats.dev.listen;
-    document.getElementById('devConv').textContent = stats.dev.conv;
-    document.getElementById('devTotal').textContent = stats.dev.total;
-
-    document.getElementById('rankVocab').textContent = stats.rank.vocab;
-    document.getElementById('rankGrammar').textContent = stats.rank.grammar;
-    document.getElementById('rankListen').textContent = stats.rank.listen;
-    document.getElementById('rankConv').textContent = stats.rank.conv;
-    document.getElementById('rankTotal').textContent = stats.rank.total;
-
-    document.getElementById('examCount').textContent = sameTest.length + '名';
-
-    // 受験日
-    document.getElementById('rExamDate').textContent = latest.test_date ? formatDate(latest.test_date) : '-';
-
-    // 評価
-    const grade = getGrade(total);
-    document.getElementById('evalJapanese').textContent = grade.label;
-    document.getElementById('evalJapaneseDesc').textContent = grade.desc;
-  }
-
-  // 態度評価の説明を初期設定
-  document.getElementById('evalAttitudeDesc').textContent =
-    getAttitudeDesc(document.getElementById('evalAttitude').value);
-
-  // 成績推移テーブル + グラフ
+  // 成績推移テーブル + グラフ（全月分）
   if (results.length > 0) {
     const tbody = document.getElementById('trendBody');
     tbody.innerHTML = results.map(r => {
       const tot = (r.score_vocab ?? 0) + (r.score_grammar ?? 0) +
                   (r.score_listening ?? 0) + (r.score_conversation ?? 0);
       return `<tr>
-        <td>${r.test_name || '-'}</td>
+        <td class="row-label">${r.test_name || '-'}</td>
         <td>${r.score_vocab ?? '-'}</td>
         <td>${r.score_grammar ?? '-'}</td>
         <td>${r.score_listening ?? '-'}</td>
         <td>${r.score_conversation ?? '-'}</td>
-        <td><strong>${tot}</strong></td>
+        <td class="total-cell">${tot}</td>
       </tr>`;
     }).join('');
-
-    // 折れ線グラフ
     renderTrendChart(results);
   }
 
-  // 学習状況セクション
+  // 学習状況セクション（固定情報）
   const learnStartEl = document.getElementById('learnStart');
   if (learnStartEl) learnStartEl.textContent = t.training_start_date ? formatDate(t.training_start_date) : '-';
   const learnDepartEl = document.getElementById('learnDepart');
