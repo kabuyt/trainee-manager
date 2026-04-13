@@ -10,7 +10,7 @@ body {
 
 /* ===== ヘッダー ===== */
 header {
-  background: #0047AB;
+  background: #00a8ab;
   color: white;
   padding: 0 24px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
@@ -86,7 +86,7 @@ main { padding: 32px 24px; }
   transition: border 0.2s;
 }
 
-.search-box:focus { border-color: #0047AB; box-shadow: 0 0 0 3px rgba(0,71,171,0.12); }
+.search-box:focus { border-color: #00a8ab; box-shadow: 0 0 0 3px rgba(0,168,171,0.12); }
 
 /* ===== テーブル ===== */
 table {
@@ -118,7 +118,7 @@ td {
 tr:last-child td { border-bottom: none; }
 tr:hover td { background: #f9fafb; }
 
-td a { color: #0047AB; text-decoration: none; font-weight: 500; }
+td a { color: #00a8ab; text-decoration: none; font-weight: 500; }
 td a:hover { text-decoration: underline; }
 
 /* ===== ボタン ===== */
@@ -136,8 +136,8 @@ td a:hover { text-decoration: underline; }
   transition: all 0.2s;
 }
 
-.btn-primary { background: #0047AB; color: white; }
-.btn-primary:hover { background: #003d91; }
+.btn-primary { background: #00a8ab; color: white; }
+.btn-primary:hover { background: #008f92; }
 
 .btn-secondary { background: white; color: #374151; border: 1px solid #d1d5db; }
 .btn-secondary:hover { background: #f9fafb; }
@@ -208,8 +208,8 @@ input[type="date"] {
 }
 
 input:focus {
-  border-color: #0047AB;
-  box-shadow: 0 0 0 3px rgba(0,71,171,0.12);
+  border-color: #00a8ab;
+  box-shadow: 0 0 0 3px rgba(0,168,171,0.12);
 }
 
 .form-actions {
@@ -270,9 +270,9 @@ input:focus {
 /* ===== 学生IDバッジ ===== */
 .student-id-badge {
   display: inline-block;
-  background: #e8f0fe;
-  color: #0047AB;
-  border: 1px solid #9dc2f7;
+  background: #e0f7f7;
+  color: #00a8ab;
+  border: 1px solid #80d4d6;
   border-radius: 6px;
   padding: 2px 8px;
   font-size: 13px;
@@ -283,7 +283,7 @@ input:focus {
 
 .student-id-large {
   display: inline-block;
-  background: #0047AB;
+  background: #00a8ab;
   color: white;
   border-radius: 8px;
   padding: 6px 16px;
@@ -353,8 +353,8 @@ input[type="password"] {
 
 input[type="email"]:focus,
 input[type="password"]:focus {
-  border-color: #0047AB;
-  box-shadow: 0 0 0 3px rgba(0,71,171,0.12);
+  border-color: #00a8ab;
+  box-shadow: 0 0 0 3px rgba(0,168,171,0.12);
 }
 
 /* ===== 認証UI ===== */
@@ -398,7 +398,7 @@ input[type="password"]:focus {
   min-width: 160px;
 }
 
-.org-filter:focus { border-color: #0047AB; }
+.org-filter:focus { border-color: #00a8ab; }
 
 /* ===== 写真プレビュー ===== */
 .file-input {
@@ -445,8 +445,8 @@ select {
 }
 
 select:focus {
-  border-color: #0047AB;
-  box-shadow: 0 0 0 3px rgba(0,71,171,0.12);
+  border-color: #00a8ab;
+  box-shadow: 0 0 0 3px rgba(0,168,171,0.12);
 }
 
 /* ===== 詳細ページ写真 ===== */
