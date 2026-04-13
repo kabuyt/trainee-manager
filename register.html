@@ -43,12 +43,29 @@
                 <input type="text" id="classGroup" placeholder="GR1">
               </div>
               <div class="form-group">
+                <label for="birthDate">生年月日</label>
+                <input type="date" id="birthDate">
+              </div>
+              <div class="form-group">
+                <label for="gender">性別</label>
+                <select id="gender">
+                  <option value="">-- 選択 --</option>
+                  <option value="男">男</option>
+                  <option value="女">女</option>
+                </select>
+              </div>
+              <div class="form-group">
                 <label for="arrivalDate">入国日</label>
                 <input type="date" id="arrivalDate">
               </div>
               <div class="form-group">
                 <label for="stayPeriod">在留期間</label>
                 <input type="text" id="stayPeriod" placeholder="3年">
+              </div>
+              <div class="form-group form-group-full">
+                <label for="photo">顔写真</label>
+                <input type="file" id="photo" accept="image/*" class="file-input">
+                <div id="photoPreview" class="photo-preview"></div>
               </div>
             </div>
           </section>
@@ -96,11 +113,36 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
+  <script src="auth.js"></script>
   <script src="app.js"></script>
   <script>
+    (async function() {
+      const auth = await checkAuth();
+      if (!auth) return;
+      setupAuthUI();
+    })();
+
     document.getElementById('registerForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       await registerTrainee();
+    });
+
+    // 写真プレビュー
+    document.getElementById('photo').addEventListener('change', function(e) {
+      const preview = document.getElementById('photoPreview');
+      preview.innerHTML = '';
+      const file = e.target.files[0];
+      if (file) {
+        if (file.size > 2 * 1024 * 1024) {
+          preview.innerHTML = '<span class="msg-error">ファイルサイズは2MB以下にしてください</span>';
+          e.target.value = '';
+          return;
+        }
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        img.onload = () => URL.revokeObjectURL(img.src);
+        preview.appendChild(img);
+      }
     });
   </script>
 </body>

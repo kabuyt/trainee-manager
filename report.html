@@ -4,7 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>教育報告書</title>
-<link rel="stylesheet" href="report.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="report.css?v=10">
 </head>
 <body>
 
@@ -17,6 +20,9 @@
 
   <!-- ===== ヘッダー ===== -->
   <div class="report-header">
+    <div class="logo-bar">
+      <img src="logo.png" alt="GROP VIETNAM" class="report-logo">
+    </div>
     <div class="title-area">
       <h1>教育課程
         <select id="monthSelect" class="no-print-select">
@@ -27,17 +33,26 @@
         <span class="month-print" id="monthPrint">1</span>ヶ月目　個人成績書
       </h1>
     </div>
-    <div class="info-row">
-      <div class="info-cell"><span class="label">社名</span><span class="value" id="rCompany">-</span></div>
-      <div class="info-cell"><span class="label">氏名</span>
-        <span class="value">
-          <span id="rNameKata">-</span><br>
-          <small id="rNameRomaji">-</small>
-        </span>
+    <div class="header-body">
+      <div class="header-main">
+        <div class="info-row">
+          <div class="info-cell info-cell--fixed"><span class="label">社名</span><span class="value" id="rCompany">-</span></div>
+          <div class="info-cell"><span class="label">氏名</span>
+            <span class="value">
+              <span id="rNameKata">-</span><br>
+              <small id="rNameRomaji">-</small>
+            </span>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-cell info-cell--fixed"><span class="label">生年月日</span><span class="value" id="rBirthDate">-</span></div>
+          <div class="info-cell info-cell--narrow"><span class="label">年齢</span><span class="value" id="rAge">-</span></div>
+          <div class="info-cell"><span class="label">入国日</span><span class="value" id="rArrival">-</span></div>
+        </div>
       </div>
-      <div class="info-cell"><span class="label">学生ID</span><span class="value" id="rStudentId">-</span></div>
-      <div class="info-cell"><span class="label">クラス</span><span class="value" id="rClass">-</span></div>
-      <div class="info-cell"><span class="label">入国日</span><span class="value" id="rArrival">-</span></div>
+      <div class="photo-area" id="photoArea">
+        <div class="photo-placeholder">写真</div>
+      </div>
     </div>
   </div>
 
@@ -158,7 +173,7 @@
   </div>
 
   <!-- ===== 学習状況 ===== -->
-  <div class="section-header">学習状況</div>
+  <div class="section-header page-break-before">学習状況</div>
   <div class="info-row learn-info">
     <div class="info-cell">
       <span class="label">学習進捗</span>
@@ -223,14 +238,25 @@
     </div>
   </div>
 
+  <!-- ===== 診断コメント ===== -->
+  <div class="section-header">診断コメント</div>
+  <div id="diagnosisArea" style="padding:8px 12px;font-size:11px;color:#1e293b;min-height:40px">
+    <span style="color:#aaa">回答データがある場合、自動で診断コメントを表示します。</span>
+  </div>
+
 </div><!-- /report-page -->
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
-<script src="app.js"></script>
+<script src="auth.js"></script>
+<script src="app.js?v=3"></script>
 <script>
-  loadReport();
+  (async function() {
+    const auth = await checkAuth();
+    if (!auth) return;
+    await loadReport();
+  })();
 
   document.getElementById('monthSelect').addEventListener('change', function() {
     document.getElementById('monthPrint').textContent = this.value;

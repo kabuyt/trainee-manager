@@ -1,61 +1,74 @@
 -- ============================================================
--- 実習生管理システム スキーマ（Supabase SQL Editorで実行）
+-- 差分マイグレーション（既存DBに対して実行）
+-- Supabase SQL Editor に貼り付けて実行してください
 -- ============================================================
 
--- ===== 1. 教育機関マスタ =====
-CREATE TABLE organizations (
+-- ===== STEP 1: 新テーブル作成 =====
+
+-- 教育機関マスタ
+CREATE TABLE IF NOT EXISTS organizations (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   name VARCHAR NOT NULL,
   slug VARCHAR UNIQUE NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- ===== 2. ユーザープロファイル（Auth連携） =====
-CREATE TABLE user_profiles (
+-- ユーザープロファイル
+CREATE TABLE IF NOT EXISTS user_profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   organization_id UUID REFERENCES organizations(id),
-  role VARCHAR NOT NULL DEFAULT 'org',  -- 'admin' or 'org'
+  role VARCHAR NOT NULL DEFAULT 'org',
   display_name VARCHAR,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- ===== 3. 実習生テーブル =====
-CREATE TABLE trainees (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  organization_id UUID NOT NULL REFERENCES organizations(id),
-  name_romaji VARCHAR NOT NULL,
-  name_katakana VARCHAR,
-  company VARCHAR,
-  class_group VARCHAR,
-  arrival_date DATE,
-  stay_period VARCHAR,
-  birth_date DATE,
-  gender VARCHAR,
-  photo_url VARCHAR,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
+-- ===== STEP 2: traineesテーブルにカラム追加 =====
+-- （既にあるカラムはエラーになるので、DO ブロックで安全に実行）
 
--- ===== 4. テスト結果テーブル =====
-CREATE TABLE test_results (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  trainee_id UUID REFERENCES trainees(id) ON DELETE CASCADE,
-  test_name VARCHAR,
-  test_date DATE,
-  score_vocab NUMERIC,
-  score_grammar NUMERIC,
-  score_listening NUMERIC,
-  score_conversation NUMERIC,
-  answers_json JSONB,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
+DO $$
+BEGIN
+  -- organization_id
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='trainees' AND column_name='organization_id') THEN
+    ALTER TABLE trainees ADD COLUMN organization_id UUID REFERENCES organizations(id);
+  END IF;
+  -- birth_date（既にある可能性あり）
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='trainees' AND column_name='birth_date') THEN
+    ALTER TABLE trainees ADD COLUMN birth_date DATE;
+  END IF;
+  -- gender
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='trainees' AND column_name='gender') THEN
+    ALTER TABLE trainees ADD COLUMN gender VARCHAR;
+  END IF;
+  -- photo_url
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='trainees' AND column_name='photo_url') THEN
+    ALTER TABLE trainees ADD COLUMN photo_url VARCHAR;
+  END IF;
+END $$;
 
--- ===== 5. 初期データ：教育機関を登録 =====
+-- ===== STEP 3: 教育機関を登録 =====
+
 INSERT INTO organizations (name, slug) VALUES
   ('教育機関A', 'org-a'),
   ('教育機関B', 'org-b'),
-  ('教育機関C', 'org-c');
+  ('教育機関C', 'org-c')
+ON CONFLICT (slug) DO NOTHING;
 
--- ===== 6. RLS（Row Level Security） =====
+-- ===== STEP 4: 既存の実習生にデフォルト教育機関を紐付け =====
+-- （organization_id が NULL の行を「教育機関A」に紐付け）
+
+UPDATE trainees
+SET organization_id = (SELECT id FROM organizations WHERE slug = 'org-a')
+WHERE organization_id IS NULL;
+
+-- ※ 全件紐付け後、NOT NULLにしたい場合は以下を実行:
+-- ALTER TABLE trainees ALTER COLUMN organization_id SET NOT NULL;
+
+-- ===== STEP 5: 旧RLSポリシーを削除 =====
+
+DROP POLICY IF EXISTS "allow all" ON trainees;
+DROP POLICY IF EXISTS "allow all" ON test_results;
+
+-- ===== STEP 6: 新RLSポリシー =====
 
 -- -- trainees
 ALTER TABLE trainees ENABLE ROW LEVEL SECURITY;
@@ -141,15 +154,18 @@ CREATE POLICY "profiles_select" ON user_profiles FOR SELECT USING (
   )
 );
 
--- -- organizations
+-- -- organizations（認証済みなら全件読み取り可）
 ALTER TABLE organizations ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "orgs_select" ON organizations FOR SELECT USING (
   auth.uid() IS NOT NULL
 );
 
--- ===== 7. Supabase Storage（写真用） =====
-INSERT INTO storage.buckets (id, name, public) VALUES ('trainee-photos', 'trainee-photos', true);
+-- ===== STEP 7: Storageバケット（写真用） =====
+
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('trainee-photos', 'trainee-photos', true)
+ON CONFLICT (id) DO NOTHING;
 
 CREATE POLICY "trainee_photos_insert" ON storage.objects FOR INSERT
   WITH CHECK (bucket_id = 'trainee-photos' AND auth.uid() IS NOT NULL);
@@ -160,16 +176,24 @@ CREATE POLICY "trainee_photos_select" ON storage.objects FOR SELECT
 CREATE POLICY "trainee_photos_delete" ON storage.objects FOR DELETE
   USING (bucket_id = 'trainee-photos' AND auth.uid() IS NOT NULL);
 
--- ===== 8. セットアップ手順 =====
--- 1. Supabase Dashboard > Authentication > Users で4アカウント作成:
---    - admin@example.com (管理者)
---    - org-a@example.com (教育機関A)
---    - org-b@example.com (教育機関B)
---    - org-c@example.com (教育機関C)
+
+-- ============================================================
+-- ★ ここまでがSQL。以下はSQL実行後の手動作業 ★
+-- ============================================================
 --
--- 2. 各ユーザーのUUIDをコピーして user_profiles に登録:
---    INSERT INTO user_profiles (id, organization_id, role, display_name) VALUES
---      ('<admin-uuid>', NULL, 'admin', '管理者'),
---      ('<org-a-uuid>', (SELECT id FROM organizations WHERE slug='org-a'), 'org', '教育機関A'),
---      ('<org-b-uuid>', (SELECT id FROM organizations WHERE slug='org-b'), 'org', '教育機関B'),
---      ('<org-c-uuid>', (SELECT id FROM organizations WHERE slug='org-c'), 'org', '教育機関C');
+-- 【手動作業1】Supabase Dashboard > Authentication > Users で4アカウント作成:
+--   - admin@example.com     （管理者）
+--   - org-a@example.com     （教育機関A）
+--   - org-b@example.com     （教育機関B）
+--   - org-c@example.com     （教育機関C）
+--   ※メールアドレス・パスワードは自由に変更してOK
+--
+-- 【手動作業2】作成した各ユーザーのUUIDをコピーし、以下を実行:
+--
+--   INSERT INTO user_profiles (id, organization_id, role, display_name) VALUES
+--     ('<admin-uuid>', NULL, 'admin', '管理者'),
+--     ('<org-a-uuid>', (SELECT id FROM organizations WHERE slug='org-a'), 'org', '教育機関A'),
+--     ('<org-b-uuid>', (SELECT id FROM organizations WHERE slug='org-b'), 'org', '教育機関B'),
+--     ('<org-c-uuid>', (SELECT id FROM organizations WHERE slug='org-c'), 'org', '教育機関C');
+--
+-- ============================================================

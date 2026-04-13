@@ -308,10 +308,152 @@ input:focus {
   font-size: 14px;
 }
 
+/* ===== ログインページ ===== */
+.login-card {
+  max-width: 400px;
+  margin: 60px auto;
+  background: white;
+  border-radius: 12px;
+  padding: 36px 32px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+}
+
+.login-card h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.login-card .form-group { margin-bottom: 16px; }
+
+.btn-full { width: 100%; justify-content: center; margin-top: 8px; }
+
+input[type="email"],
+input[type="password"] {
+  padding: 9px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s;
+  width: 100%;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: #1a56db;
+  box-shadow: 0 0 0 3px rgba(26,86,219,0.1);
+}
+
+/* ===== 認証UI ===== */
+.auth-user-label {
+  color: rgba(255,255,255,0.9);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 4px 10px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 6px;
+}
+
+.btn-logout {
+  background: rgba(255,255,255,0.15);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.3);
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-logout:hover { background: rgba(255,255,255,0.3); }
+
+/* ===== 組織フィルタ ===== */
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.org-filter {
+  padding: 9px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  background: white;
+  min-width: 160px;
+}
+
+.org-filter:focus { border-color: #1a56db; }
+
+/* ===== 写真プレビュー ===== */
+.file-input {
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.photo-preview {
+  margin-top: 8px;
+}
+
+.photo-preview img {
+  max-width: 150px;
+  max-height: 200px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  object-fit: cover;
+}
+
+.form-group-full {
+  grid-column: 1 / -1;
+}
+
+/* ===== select要素 ===== */
+select {
+  padding: 9px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  background: white;
+  width: 100%;
+  transition: border 0.2s;
+}
+
+select:focus {
+  border-color: #1a56db;
+  box-shadow: 0 0 0 3px rgba(26,86,219,0.1);
+}
+
+/* ===== 詳細ページ写真 ===== */
+.detail-header-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.detail-photo {
+  width: 80px;
+  height: 100px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #e5e7eb;
+}
+
 /* ===== レスポンシブ ===== */
 @media (max-width: 640px) {
   .toolbar { flex-direction: column; align-items: stretch; }
+  .toolbar-left { flex-direction: column; }
   .search-box { max-width: 100%; }
+  .org-filter { min-width: auto; }
   .card { padding: 20px 16px; }
   .form-grid { grid-template-columns: 1fr; }
+  .login-card { margin: 30px 16px; padding: 24px 20px; }
+  .detail-header-left { flex-direction: column; }
 }

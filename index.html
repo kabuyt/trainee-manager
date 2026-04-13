@@ -20,7 +20,12 @@
   <main>
     <div class="container">
       <div class="toolbar">
-        <input type="text" id="searchInput" placeholder="名前・会社名で検索..." class="search-box">
+        <div class="toolbar-left">
+          <input type="text" id="searchInput" placeholder="名前・会社名で検索..." class="search-box">
+          <select id="orgFilter" class="org-filter hidden">
+            <option value="">全教育機関</option>
+          </select>
+        </div>
         <a href="register.html" class="btn btn-primary">+ 新規登録</a>
       </div>
 
@@ -35,6 +40,7 @@
             <th>名前（カタカナ）</th>
             <th>会社名</th>
             <th>クラス</th>
+            <th id="thOrg" class="hidden">教育機関</th>
             <th>操作</th>
           </tr>
         </thead>
@@ -50,13 +56,19 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
+  <script src="auth.js"></script>
   <script src="app.js"></script>
   <script>
-    loadTrainees();
+    (async function() {
+      const auth = await checkAuth();
+      if (!auth) return;
+      setupAuthUI();
+      await loadTrainees();
 
-    document.getElementById('searchInput').addEventListener('input', function() {
-      filterTrainees(this.value);
-    });
+      document.getElementById('searchInput').addEventListener('input', function() {
+        filterTrainees(this.value);
+      });
+    })();
   </script>
 </body>
 </html>
