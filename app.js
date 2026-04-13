@@ -289,10 +289,6 @@ function renderTraineeDetail(t, results) {
         <span class="info-label">入国日</span>
         <span class="info-value">${t.arrival_date ? formatDate(t.arrival_date) : '-'}</span>
       </div>
-      <div class="info-item">
-        <span class="info-label">在留期間</span>
-        <span class="info-value">${t.stay_period || '-'}</span>
-      </div>
     </div>
 
     <div class="section-title">テスト結果</div>
