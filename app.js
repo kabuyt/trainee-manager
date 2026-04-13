@@ -364,7 +364,8 @@ function renderReport(t, results, classResults) {
   } else {
     ageEl.textContent = '-';
   }
-  document.getElementById('rArrival').textContent = t.arrival_date ? formatDate(t.arrival_date) : '-';
+  // 受験日: 最新テスト結果の日付を使用（loadReportから渡される）
+  // arrival_date は学習状況セクションで使用
 
   // 顔写真
   const photoArea = document.getElementById('photoArea');
@@ -410,6 +411,9 @@ function renderReport(t, results, classResults) {
 
     document.getElementById('examCount').textContent = sameTest.length + '名';
 
+    // 受験日
+    document.getElementById('rExamDate').textContent = latest.test_date ? formatDate(latest.test_date) : '-';
+
     // 評価
     const grade = getGrade(total);
     document.getElementById('evalJapanese').textContent = grade.label;
@@ -439,6 +443,12 @@ function renderReport(t, results, classResults) {
     // 折れ線グラフ
     renderTrendChart(results);
   }
+
+  // 学習状況セクション
+  const learnStartEl = document.getElementById('learnStart');
+  if (learnStartEl) learnStartEl.textContent = t.training_start_date ? formatDate(t.training_start_date) : '-';
+  const learnDepartEl = document.getElementById('learnDepart');
+  if (learnDepartEl) learnDepartEl.textContent = t.arrival_date ? formatDate(t.arrival_date) : '-';
 
   // 診断コメント
   renderDiagnosis(document.getElementById('diagnosisArea'), results);

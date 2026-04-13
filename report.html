@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="report.css?v=10">
+<link rel="stylesheet" href="report.css?v=16">
 </head>
 <body>
 
@@ -47,7 +47,7 @@
         <div class="info-row">
           <div class="info-cell info-cell--fixed"><span class="label">生年月日</span><span class="value" id="rBirthDate">-</span></div>
           <div class="info-cell info-cell--narrow"><span class="label">年齢</span><span class="value" id="rAge">-</span></div>
-          <div class="info-cell"><span class="label">入国日</span><span class="value" id="rArrival">-</span></div>
+          <div class="info-cell"><span class="label">受験日</span><span class="value" id="rExamDate">-</span></div>
         </div>
       </div>
       <div class="photo-area" id="photoArea">
@@ -133,6 +133,12 @@
     </div>
   </div>
 
+  <!-- ===== 診断コメント ===== -->
+  <div class="section-header">診断コメント</div>
+  <div class="diagnosis-box" id="diagnosisArea">
+    <span style="color:#aaa">回答データがある場合、自動で診断コメントを表示します。</span>
+  </div>
+
   <!-- ===== 成績推移 ===== -->
   <div class="section-header">成績推移</div>
   <table class="trend-table">
@@ -154,41 +160,31 @@
   <div class="comment-grid">
     <div class="comment-block good">
       <div class="comment-label">Good</div>
-      <textarea id="lifeGood" rows="4" placeholder="良い点を入力..."></textarea>
+      <div class="comment-text" contenteditable="true" id="lifeGood" data-placeholder="良い点を入力..."></div>
     </div>
     <div class="comment-block bad">
       <div class="comment-label">Bad</div>
-      <textarea id="lifeBad" rows="4" placeholder="改善が必要な点を入力..."></textarea>
+      <div class="comment-text" contenteditable="true" id="lifeBad" data-placeholder="改善が必要な点を入力..."></div>
     </div>
   </div>
   <div class="comment-grid">
     <div class="comment-block">
       <div class="comment-label">対策</div>
-      <textarea id="lifeMeasure" rows="3" placeholder="対策を入力..."></textarea>
+      <div class="comment-text" contenteditable="true" id="lifeMeasure" data-placeholder="対策を入力..."></div>
     </div>
     <div class="comment-block">
       <div class="comment-label">改善点</div>
-      <textarea id="lifeImprove" rows="3" placeholder="改善点を入力..."></textarea>
+      <div class="comment-text" contenteditable="true" id="lifeImprove" data-placeholder="改善点を入力..."></div>
     </div>
   </div>
 
   <!-- ===== 学習状況 ===== -->
   <div class="section-header page-break-before">学習状況</div>
   <div class="info-row learn-info">
-    <div class="info-cell">
-      <span class="label">学習進捗</span>
-      <input type="text" id="learnProgress" placeholder="例：第18課" class="input-sm">
-    </div>
-    <div class="info-cell">
-      <span class="label">事前教育開始日</span>
-      <input type="date" id="learnStart" class="input-sm">
-    </div>
-    <div class="info-cell">
-      <span class="label">出国予定日</span>
-      <input type="date" id="learnDepart" class="input-sm">
-    </div>
-    <div class="info-cell">
-      <span class="label">生活環境</span>
+    <div class="info-cell"><span class="label">学習進捗</span><span class="value" contenteditable="true" id="learnProgress" data-placeholder="例：第18課">-</span></div>
+    <div class="info-cell"><span class="label">事前教育開始日</span><span class="value" id="learnStart">-</span></div>
+    <div class="info-cell"><span class="label">出国予定日</span><span class="value" id="learnDepart">-</span></div>
+    <div class="info-cell"><span class="label">生活環境</span>
       <select id="learnEnv" class="input-sm no-print-select">
         <option>寮生活</option><option>自宅通学</option>
       </select>
@@ -200,19 +196,19 @@
   <div class="weekly-log">
     <div class="week-row" id="week1">
       <div class="week-label">第1週</div>
-      <textarea rows="3" placeholder="授業内容・活動を入力..."></textarea>
+      <div class="comment-text" contenteditable="true" data-placeholder="授業内容・活動を入力..."></div>
     </div>
     <div class="week-row" id="week2">
       <div class="week-label">第2週</div>
-      <textarea rows="3" placeholder="授業内容・活動を入力..."></textarea>
+      <div class="comment-text" contenteditable="true" data-placeholder="授業内容・活動を入力..."></div>
     </div>
     <div class="week-row" id="week3">
       <div class="week-label">第3週</div>
-      <textarea rows="3" placeholder="授業内容・活動を入力..."></textarea>
+      <div class="comment-text" contenteditable="true" data-placeholder="授業内容・活動を入力..."></div>
     </div>
     <div class="week-row" id="week4">
       <div class="week-label">第4週</div>
-      <textarea rows="3" placeholder="授業内容・活動を入力..."></textarea>
+      <div class="comment-text" contenteditable="true" data-placeholder="授業内容・活動を入力..."></div>
     </div>
   </div>
 
@@ -220,28 +216,22 @@
   <div class="comment-grid">
     <div class="comment-block good">
       <div class="comment-label">Good</div>
-      <textarea id="learnGood" rows="3" placeholder="学習面の良い点..."></textarea>
+      <div class="comment-text" contenteditable="true" id="learnGood" data-placeholder="学習面の良い点..."></div>
     </div>
     <div class="comment-block bad">
       <div class="comment-label">Bad</div>
-      <textarea id="learnBad" rows="3" placeholder="学習面の課題..."></textarea>
+      <div class="comment-text" contenteditable="true" id="learnBad" data-placeholder="学習面の課題..."></div>
     </div>
   </div>
   <div class="comment-grid">
     <div class="comment-block">
       <div class="comment-label">対策</div>
-      <textarea id="learnMeasure" rows="3" placeholder="対策を入力..."></textarea>
+      <div class="comment-text" contenteditable="true" id="learnMeasure" data-placeholder="対策を入力..."></div>
     </div>
     <div class="comment-block">
       <div class="comment-label">改善点</div>
-      <textarea id="learnImprove" rows="3" placeholder="改善点を入力..."></textarea>
+      <div class="comment-text" contenteditable="true" id="learnImprove" data-placeholder="改善点を入力..."></div>
     </div>
-  </div>
-
-  <!-- ===== 診断コメント ===== -->
-  <div class="section-header">診断コメント</div>
-  <div id="diagnosisArea" style="padding:8px 12px;font-size:11px;color:#1e293b;min-height:40px">
-    <span style="color:#aaa">回答データがある場合、自動で診断コメントを表示します。</span>
   </div>
 
 </div><!-- /report-page -->
@@ -250,7 +240,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="auth.js?v=4"></script>
-<script src="app.js?v=3"></script>
+<script src="app.js?v=5"></script>
 <script>
   (async function() {
     const auth = await checkAuth();
