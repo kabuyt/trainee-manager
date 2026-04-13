@@ -23,6 +23,13 @@
         <h2>実習生 新規登録</h2>
 
         <form id="registerForm">
+          <div id="orgSelectGroup" class="form-group hidden" style="margin-bottom:20px">
+            <label for="orgSelect">教育機関 <span class="required">*</span></label>
+            <select id="orgSelect">
+              <option value="">-- 教育機関を選択 --</option>
+            </select>
+          </div>
+
           <section class="form-section">
             <h3>基本情報</h3>
             <div class="form-grid">
@@ -121,6 +128,22 @@
       const auth = await checkAuth();
       if (!auth) return;
       setupAuthUI();
+
+      // 管理者なら教育機関セレクトを表示
+      if (isAdmin()) {
+        const { data: orgs } = await supabase.from('organizations').select('*').order('name');
+        if (orgs) {
+          const group = document.getElementById('orgSelectGroup');
+          const sel = document.getElementById('orgSelect');
+          group.classList.remove('hidden');
+          orgs.forEach(o => {
+            const opt = document.createElement('option');
+            opt.value = o.id;
+            opt.textContent = o.name;
+            sel.appendChild(opt);
+          });
+        }
+      }
     })();
 
     document.getElementById('registerForm').addEventListener('submit', async function(e) {
