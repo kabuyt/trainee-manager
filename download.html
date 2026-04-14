@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>教育報告書ダウンロード</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans JP', sans-serif; background: #edf1f7; color: #1e293b; }
+
+.header {
+  background: #1e3a5f;
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.header-left { display: flex; align-items: center; gap: 16px; }
+.header img { height: 36px; }
+.header-text { color: white; }
+.header-text h1 { font-size: 18px; font-weight: 600; }
+.header-text p { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+.header-right { display: flex; align-items: center; gap: 12px; }
+.header-user { color: #94a3b8; font-size: 12px; }
+.btn-logout {
+  padding: 6px 16px;
+  background: transparent;
+  color: #94a3b8;
+  border: 1px solid #94a3b8;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.btn-logout:hover { color: white; border-color: white; }
+
+.container { max-width: 800px; margin: 0 auto; padding: 32px 20px 60px; }
+
+.hero {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  padding: 36px 32px;
+  text-align: center;
+  margin-bottom: 28px;
+}
+.hero h2 { font-size: 20px; color: #1e3a5f; margin-bottom: 6px; }
+.hero .sub { font-size: 13px; color: #64748b; margin-bottom: 24px; }
+.hero .info { display: flex; justify-content: center; gap: 32px; margin-bottom: 24px; }
+.hero .info-item { text-align: center; }
+.hero .info-item .num { font-size: 28px; font-weight: 700; color: #1e3a5f; }
+.hero .info-item .label { font-size: 11px; color: #64748b; margin-top: 2px; }
+
+.month-selector {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.month-btn {
+  padding: 8px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  color: #64748b;
+  transition: all 0.15s;
+}
+.month-btn:hover { border-color: #2563eb; color: #2563eb; }
+.month-btn.active { background: #2563eb; color: white; border-color: #2563eb; }
+
+.section {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  margin-bottom: 28px;
+  overflow: hidden;
+}
+.section-title {
+  background: #1e3a5f;
+  color: white;
+  padding: 12px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.student-list { padding: 0; }
+.student-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid #e8edf5;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.15s;
+}
+.student-item:last-child { border-bottom: none; }
+.student-item:hover { background: #f1f5f9; }
+.student-num { color: #94a3b8; font-size: 11px; width: 28px; flex-shrink: 0; }
+.student-name { font-weight: 600; font-size: 13px; color: #1e3a5f; min-width: 200px; margin-right: 12px; }
+.student-name-en { color: #94a3b8; font-size: 11px; flex: 1; white-space: nowrap; }
+.student-dl {
+  font-size: 11px;
+  color: #2563eb;
+  padding: 4px 10px;
+  border: 1px solid #2563eb;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.student-item:hover .student-dl { background: #2563eb; color: white; }
+
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.footer {
+  text-align: center;
+  padding: 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  color: #94a3b8;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <img src="logo-white.png" alt="GROP VIETNAM">
+    <div class="header-text">
+      <h1>教育報告書</h1>
+      <p>Education Report</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <span class="header-user" id="userName"></span>
+    <button class="btn-logout" onclick="logout()">ログアウト</button>
+  </div>
+</div>
+
+<div class="container">
+  <div class="hero">
+    <h2 id="heroTitle">教育課程　個人成績書</h2>
+    <p class="sub" id="heroSub">読み込み中...</p>
+    <div class="info">
+      <div class="info-item">
+        <div class="num" id="traineeCount">-</div>
+        <div class="label">名</div>
+      </div>
+    </div>
+    <div class="month-selector" id="monthSelector"></div>
+  </div>
+
+  <div class="section" id="studentSection">
+    <div class="section-title">個別閲覧</div>
+    <div class="student-list" id="studentList">
+      <div class="loading">読み込み中...</div>
+    </div>
+  </div>
+
+  <div class="footer">GROP VIETNAM CO., LTD</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="auth.js?v=5"></script>
+<script>
+let _trainees = [];
+let _selectedMonth = 1;
+
+(async function() {
+  const auth = await checkAuth();
+  if (!auth) return;
+
+  // customer以外は index.html へ
+  if (!isCustomer() && !isAdmin()) {
+    window.location.href = 'index.html';
+    return;
+  }
+
+  const profile = getCurrentProfile();
+  document.getElementById('userName').textContent = profile.display_name || profile.company || '';
+
+  // 実習生データ取得（RLSでフィルタされる）
+  let query = supabase.from('trainees').select('*').order('name_romaji');
+  // customerの場合、追加でcompanyフィルタ（RLSが効くが明示的にも）
+  if (isCustomer() && profile.company) {
+    query = query.eq('company', profile.company);
+  }
+  const { data: trainees, error } = await query;
+
+  if (error) {
+    document.getElementById('studentList').innerHTML = '<div class="loading">データの取得に失敗しました</div>';
+    console.error(error);
+    return;
+  }
+
+  _trainees = trainees || [];
+  document.getElementById('traineeCount').textContent = _trainees.length;
+  document.getElementById('heroSub').textContent = profile.company || '';
+
+  // 月セレクター生成
+  const monthSel = document.getElementById('monthSelector');
+  for (let m = 1; m <= 8; m++) {
+    const btn = document.createElement('button');
+    btn.className = 'month-btn' + (m === 1 ? ' active' : '');
+    btn.textContent = m + 'ヶ月目';
+    btn.onclick = () => selectMonth(m);
+    monthSel.appendChild(btn);
+  }
+
+  renderList();
+})();
+
+function selectMonth(m) {
+  _selectedMonth = m;
+  document.querySelectorAll('.month-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', i + 1 === m);
+  });
+  document.getElementById('heroTitle').textContent = `教育課程 ${m}ヶ月目　個人成績書`;
+}
+
+function renderList() {
+  const list = document.getElementById('studentList');
+  if (_trainees.length === 0) {
+    list.innerHTML = '<div class="loading">該当する実習生はいません</div>';
+    return;
+  }
+
+  list.innerHTML = _trainees.map((t, i) => `
+    <a href="download-report.html?id=${t.id}&month=${_selectedMonth}" class="student-item" target="_blank" data-idx="${i}">
+      <span class="student-num">${i + 1}</span>
+      <span class="student-name">${t.name_katakana || '-'}</span>
+      <span class="student-name-en">${t.name_romaji || '-'}</span>
+      <span class="student-dl">開く</span>
+    </a>
+  `).join('');
+
+  // 月が変わったらリンクも更新
+  document.querySelectorAll('.month-btn').forEach(btn => {
+    const origOnclick = btn.onclick;
+    btn.onclick = (e) => {
+      const m = parseInt(btn.textContent);
+      _selectedMonth = m;
+      document.querySelectorAll('.month-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === m));
+      document.getElementById('heroTitle').textContent = `教育課程 ${m}ヶ月目　個人成績書`;
+      // リンク先の month パラメータ更新
+      document.querySelectorAll('.student-item').forEach(a => {
+        const idx = a.dataset.idx;
+        a.href = `download-report.html?id=${_trainees[idx].id}&month=${m}`;
+      });
+    };
+  });
+}
+</script>
+</body>
+</html>

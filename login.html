@@ -38,10 +38,13 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
   <script>
-    // 既にログイン済みならindex.htmlへ
+    // 既にログイン済みならリダイレクト
     (async function() {
       const { data: { session } } = await supabase.auth.getSession();
-      if (session) window.location.href = 'index.html';
+      if (session) {
+        const { data: profile } = await supabase.from('user_profiles').select('role').eq('id', session.user.id).single();
+        window.location.href = (profile && profile.role === 'customer') ? 'download.html' : 'index.html';
+      }
     })();
 
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
@@ -67,7 +70,9 @@
         btn.disabled = false;
         btn.textContent = 'ログイン';
       } else {
-        window.location.href = 'index.html';
+        // ロールに応じてリダイレクト先を変更
+        const { data: profile } = await supabase.from('user_profiles').select('role').eq('id', (await supabase.auth.getUser()).data.user.id).single();
+        window.location.href = (profile && profile.role === 'customer') ? 'download.html' : 'index.html';
       }
     });
   </script>

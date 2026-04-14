@@ -49,6 +49,13 @@ function isAdmin() {
 }
 
 /**
+ * 顧客（受入企業）かどうか
+ */
+function isCustomer() {
+  return _currentProfile && _currentProfile.role === 'customer';
+}
+
+/**
  * ログアウト
  */
 async function logout() {

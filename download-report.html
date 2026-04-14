@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>教育報告書</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="report.css?v=17">
+</head>
+<body>
+<div class="print-footer">GROP VIETNAM CO., LTD</div>
+
+<div class="no-print toolbar-top">
+  <a href="download.html">&larr; 一覧に戻る</a>
+  <button onclick="window.print()" class="btn-print">PDF保存 / 印刷</button>
+</div>
+
+<div class="report-page" id="reportPage">
+
+  <div class="report-header">
+    <div class="logo-bar">
+      <img src="logo.png" alt="GROP VIETNAM" class="report-logo">
+    </div>
+    <div class="title-area">
+      <h1>教育課程 <span id="monthDisplay">1</span>ヶ月目　個人成績書</h1>
+    </div>
+    <div class="header-body">
+      <div class="header-main">
+        <div class="info-row">
+          <div class="info-cell info-cell--fixed"><span class="label">社名</span><span class="value" id="rCompany">-</span></div>
+          <div class="info-cell"><span class="label">氏名</span>
+            <span class="value">
+              <span id="rNameKata">-</span><br>
+              <small id="rNameRomaji">-</small>
+            </span>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-cell info-cell--fixed"><span class="label">生年月日</span><span class="value" id="rBirthDate">-</span></div>
+          <div class="info-cell info-cell--narrow"><span class="label">年齢</span><span class="value" id="rAge">-</span></div>
+          <div class="info-cell"><span class="label">受験日</span><span class="value" id="rExamDate">-</span></div>
+        </div>
+      </div>
+      <div class="photo-area" id="photoArea">
+        <div class="photo-placeholder">写真</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-header">テスト成績</div>
+  <table class="score-table">
+    <thead>
+      <tr>
+        <th class="col-label">試験範囲</th>
+        <th class="col-score col-vocab">語彙</th>
+        <th class="col-score col-grammar">文法</th>
+        <th class="col-score col-listen">聴解</th>
+        <th class="col-score col-conv">会話</th>
+        <th class="col-score col-total">合計</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="row-label" id="scopeLabel">-</td>
+        <td id="sVocab">-</td>
+        <td id="sGrammar">-</td>
+        <td id="sListen">-</td>
+        <td id="sConv">-</td>
+        <td id="sTotal" class="total-cell">-</td>
+      </tr>
+      <tr class="row-avg">
+        <td class="row-label">平均点</td>
+        <td id="avgVocab">-</td><td id="avgGrammar">-</td>
+        <td id="avgListen">-</td><td id="avgConv">-</td>
+        <td id="avgTotal" class="total-cell">-</td>
+      </tr>
+      <tr class="row-dev">
+        <td class="row-label">偏差値</td>
+        <td id="devVocab">-</td><td id="devGrammar">-</td>
+        <td id="devListen">-</td><td id="devConv">-</td>
+        <td id="devTotal" class="total-cell">-</td>
+      </tr>
+      <tr>
+        <td class="row-label">順位</td>
+        <td id="rankVocab">-</td><td id="rankGrammar">-</td>
+        <td id="rankListen">-</td><td id="rankConv">-</td>
+        <td id="rankTotal" class="total-cell">-</td>
+      </tr>
+      <tr>
+        <td class="row-label">受験者数</td>
+        <td id="examCount" colspan="5">-</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="eval-row">
+    <div class="eval-box">
+      <span class="eval-label">日本語</span>
+      <span class="eval-grade" id="evalJapanese">-</span>
+      <span class="eval-desc" id="evalJapaneseDesc">-</span>
+    </div>
+    <div class="eval-box">
+      <span class="eval-label">態度</span>
+      <span class="eval-grade" id="evalAttitude">-</span>
+      <span class="eval-desc" id="evalAttitudeDesc">-</span>
+    </div>
+  </div>
+
+  <div class="section-header">診断コメント</div>
+  <div class="diagnosis-box" id="diagnosisArea">-</div>
+
+  <div class="section-header">成績推移</div>
+  <div class="chart-container">
+    <canvas id="trendChart"></canvas>
+  </div>
+  <table class="trend-table">
+    <thead>
+      <tr><th>試験範囲</th><th>語彙</th><th>文法</th><th>聴解</th><th>会話</th><th>合計</th></tr>
+    </thead>
+    <tbody id="trendBody">
+      <tr><td colspan="6" style="color:#999;text-align:center">データなし</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-header page-break-before">学習状況</div>
+  <div class="info-row learn-info">
+    <div class="info-cell"><span class="label">学習進捗</span><span class="value" id="learnProgress">-</span></div>
+    <div class="info-cell"><span class="label">事前教育開始日</span><span class="value" id="learnStart">-</span></div>
+    <div class="info-cell"><span class="label">出国予定日</span><span class="value" id="learnDepart">-</span></div>
+    <div class="info-cell"><span class="label">生活環境</span><span class="value" id="learnEnv">-</span></div>
+  </div>
+
+  <div class="section-sub">週別活動</div>
+  <div class="weekly-log">
+    <div class="week-row"><div class="week-label">第1週</div><div class="comment-text" id="week1Text">-</div></div>
+    <div class="week-row"><div class="week-label">第2週</div><div class="comment-text" id="week2Text">-</div></div>
+    <div class="week-row"><div class="week-label">第3週</div><div class="comment-text" id="week3Text">-</div></div>
+    <div class="week-row"><div class="week-label">第4週</div><div class="comment-text" id="week4Text">-</div></div>
+  </div>
+
+  <div class="section-sub">学習状況詳細</div>
+  <div class="comment-grid">
+    <div class="comment-block good"><div class="comment-label">Good</div><div class="comment-text" id="learnGood">-</div></div>
+    <div class="comment-block bad"><div class="comment-label">Bad</div><div class="comment-text" id="learnBad">-</div></div>
+  </div>
+  <div class="comment-grid">
+    <div class="comment-block"><div class="comment-label">問題点に対する対策</div><div class="comment-text" id="learnMeasure">-</div></div>
+    <div class="comment-block"><div class="comment-label">改善した点</div><div class="comment-text" id="learnImprove">-</div></div>
+  </div>
+
+  <div class="section-header">生活状況・態度詳細</div>
+  <div class="comment-grid">
+    <div class="comment-block good"><div class="comment-label">Good</div><div class="comment-text" id="lifeGood">-</div></div>
+    <div class="comment-block bad"><div class="comment-label">Bad</div><div class="comment-text" id="lifeBad">-</div></div>
+  </div>
+  <div class="comment-grid">
+    <div class="comment-block"><div class="comment-label">問題点に対する対策</div><div class="comment-text" id="lifeMeasure">-</div></div>
+    <div class="comment-block"><div class="comment-label">改善した点</div><div class="comment-text" id="lifeImprove">-</div></div>
+  </div>
+
+  <div class="report-footer">GROP VIETNAM CO., LTD</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="auth.js?v=5"></script>
+<script>
+// === 読み取り専用報告書ビューア ===
+const TEST_NAMES = ['第1-4課','第5-11課','第12-18課','第19-25課','第26-33課','第34-40課','第41-45課','第46-50課'];
+const EVAL_MAP = {
+  '秀': '大変優秀な成績', '優': '優秀な成績', '良': '良好な成績',
+  '可': '基礎力の向上が必要', '不可': '基礎からの学習支援が必要'
+};
+const ATTITUDE_MAP = {
+  '秀': '模範的な学習態度', '優': '積極的に取り組んでいる', '良': '概ね良好な取り組み',
+  '可': 'より積極的な姿勢が期待される', '不可': '学習態度の改善が必要'
+};
+
+function formatDate(d) {
+  if (!d) return '-';
+  const dt = new Date(d);
+  return `${dt.getFullYear()}年${dt.getMonth()+1}月${dt.getDate()}日`;
+}
+
+function calcAge(birth) {
+  if (!birth) return '-';
+  const b = new Date(birth), now = new Date();
+  let age = now.getFullYear() - b.getFullYear();
+  if (now.getMonth() < b.getMonth() || (now.getMonth() === b.getMonth() && now.getDate() < b.getDate())) age--;
+  return age + '歳';
+}
+
+function getGrade(total) {
+  if (total >= 360) return '秀';
+  if (total >= 320) return '優';
+  if (total >= 280) return '良';
+  if (total >= 240) return '可';
+  return '不可';
+}
+
+function stddev(arr) {
+  if (arr.length < 2) return 0;
+  const mean = arr.reduce((a, b) => a + b, 0) / arr.length;
+  return Math.sqrt(arr.reduce((s, v) => s + (v - mean) ** 2, 0) / arr.length);
+}
+
+(async function() {
+  const auth = await checkAuth();
+  if (!auth) return;
+
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id');
+  const month = parseInt(params.get('month')) || 1;
+
+  document.getElementById('monthDisplay').textContent = month;
+
+  // データ取得
+  const [{ data: trainee }, { data: results }, { data: monthly }] = await Promise.all([
+    supabase.from('trainees').select('*').eq('id', id).single(),
+    supabase.from('test_results').select('*').eq('trainee_id', id).order('test_date'),
+    supabase.from('monthly_reports').select('*').eq('trainee_id', id).eq('month', month).maybeSingle(),
+  ]);
+
+  if (!trainee) {
+    document.getElementById('reportPage').innerHTML = '<div style="padding:40px;text-align:center;color:#999">データが見つかりません</div>';
+    return;
+  }
+
+  document.title = `教育報告書 - ${trainee.name_katakana || trainee.name_romaji}`;
+
+  // ヘッダー情報
+  document.getElementById('rCompany').textContent = trainee.company || '-';
+  document.getElementById('rNameKata').textContent = trainee.name_katakana || '-';
+  document.getElementById('rNameRomaji').textContent = trainee.name_romaji || '-';
+  document.getElementById('rBirthDate').textContent = formatDate(trainee.birth_date);
+  document.getElementById('rAge').textContent = calcAge(trainee.birth_date);
+  document.getElementById('learnStart').textContent = formatDate(trainee.training_start_date);
+  document.getElementById('learnDepart').textContent = formatDate(trainee.arrival_date);
+
+  if (trainee.photo_url) {
+    document.getElementById('photoArea').innerHTML = `<img src="${trainee.photo_url}" style="width:100%;height:100%;object-fit:cover;">`;
+  }
+
+  // テスト成績（該当月）
+  const testName = TEST_NAMES[month - 1];
+  const currentResult = results?.find(r => r.test_name === testName);
+
+  document.getElementById('scopeLabel').textContent = testName || '-';
+  if (currentResult) {
+    const r = currentResult;
+    document.getElementById('sVocab').textContent = r.score_vocab ?? '-';
+    document.getElementById('sGrammar').textContent = r.score_grammar ?? '-';
+    document.getElementById('sListen').textContent = r.score_listening ?? '-';
+    document.getElementById('sConv').textContent = r.score_conversation ?? '-';
+    const total = (r.score_vocab ?? 0) + (r.score_grammar ?? 0) + (r.score_listening ?? 0) + (r.score_conversation ?? 0);
+    document.getElementById('sTotal').textContent = total;
+    document.getElementById('rExamDate').textContent = formatDate(r.test_date);
+
+    // 統計計算のためにクラスメートのデータ取得
+    const { data: classTrainees } = await supabase.from('trainees').select('id').eq('class_group', trainee.class_group);
+    if (classTrainees && classTrainees.length > 1) {
+      const ids = classTrainees.map(ct => ct.id);
+      const { data: classResults } = await supabase.from('test_results').select('*').in('trainee_id', ids).eq('test_name', testName);
+
+      if (classResults && classResults.length > 0) {
+        const fields = ['score_vocab', 'score_grammar', 'score_listening', 'score_conversation'];
+        const prefixes = ['Vocab', 'Grammar', 'Listen', 'Conv'];
+
+        // 平均・偏差値・順位
+        fields.forEach((f, i) => {
+          const vals = classResults.map(cr => cr[f] ?? 0);
+          const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
+          const sd = stddev(vals);
+          const dev = sd > 0 ? 50 + 10 * ((r[f] ?? 0) - avg) / sd : 50;
+          const rank = vals.filter(v => v > (r[f] ?? 0)).length + 1;
+          document.getElementById('avg' + prefixes[i]).textContent = avg.toFixed(1);
+          document.getElementById('dev' + prefixes[i]).textContent = dev.toFixed(1);
+          document.getElementById('rank' + prefixes[i]).textContent = rank;
+        });
+
+        // 合計
+        const totals = classResults.map(cr => (cr.score_vocab ?? 0) + (cr.score_grammar ?? 0) + (cr.score_listening ?? 0) + (cr.score_conversation ?? 0));
+        const avgTot = totals.reduce((a, b) => a + b, 0) / totals.length;
+        const sdTot = stddev(totals);
+        const devTot = sdTot > 0 ? 50 + 10 * (total - avgTot) / sdTot : 50;
+        const rankTot = totals.filter(v => v > total).length + 1;
+        document.getElementById('avgTotal').textContent = avgTot.toFixed(1);
+        document.getElementById('devTotal').textContent = devTot.toFixed(1);
+        document.getElementById('rankTotal').textContent = rankTot;
+        document.getElementById('examCount').textContent = classResults.length + '名';
+
+        // 評価
+        const grade = getGrade(total);
+        document.getElementById('evalJapanese').textContent = grade;
+        document.getElementById('evalJapaneseDesc').textContent = EVAL_MAP[grade] || '-';
+      }
+    }
+  }
+
+  // 成績推移テーブル（全8回）
+  const resultMap = {};
+  (results || []).forEach(r => { resultMap[r.test_name] = r; });
+  document.getElementById('trendBody').innerHTML = TEST_NAMES.map(label => {
+    const r = resultMap[label];
+    if (r) {
+      const tot = (r.score_vocab ?? 0) + (r.score_grammar ?? 0) + (r.score_listening ?? 0) + (r.score_conversation ?? 0);
+      return `<tr><td class="row-label">${label}</td><td>${r.score_vocab ?? '-'}</td><td>${r.score_grammar ?? '-'}</td><td>${r.score_listening ?? '-'}</td><td>${r.score_conversation ?? '-'}</td><td class="total-cell">${tot}</td></tr>`;
+    }
+    return `<tr class="row-empty"><td class="row-label">${label}</td><td></td><td></td><td></td><td></td><td class="total-cell"></td></tr>`;
+  }).join('');
+
+  // グラフ
+  if (results && results.length > 0) {
+    const ctx = document.getElementById('trendChart');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: TEST_NAMES,
+        datasets: [
+          { label: '語彙', data: TEST_NAMES.map(l => resultMap[l]?.score_vocab ?? null), borderColor: '#e67e22', backgroundColor: '#e67e2233', tension: 0.3, spanGaps: true, borderWidth: 2, pointRadius: 4 },
+          { label: '文法', data: TEST_NAMES.map(l => resultMap[l]?.score_grammar ?? null), borderColor: '#2563eb', backgroundColor: '#2563eb33', tension: 0.3, spanGaps: true, borderWidth: 2, pointRadius: 4 },
+          { label: '聴解', data: TEST_NAMES.map(l => resultMap[l]?.score_listening ?? null), borderColor: '#16a34a', backgroundColor: '#16a34a33', tension: 0.3, spanGaps: true, borderWidth: 2, pointRadius: 4 },
+          { label: '会話', data: TEST_NAMES.map(l => resultMap[l]?.score_conversation ?? null), borderColor: '#9333ea', backgroundColor: '#9333ea33', tension: 0.3, spanGaps: true, borderWidth: 2, pointRadius: 4 },
+        ],
+      },
+      options: {
+        responsive: true, animation: false,
+        plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } },
+        scales: {
+          y: { beginAtZero: true, max: 100, ticks: { font: { size: 9 } } },
+          x: { ticks: { font: { size: 9 } } },
+        },
+      },
+    });
+  }
+
+  // 月次報告データ
+  if (monthly) {
+    const m = monthly;
+    document.getElementById('evalAttitude').textContent = m.attitude_eval || '-';
+    document.getElementById('evalAttitudeDesc').textContent = ATTITUDE_MAP[m.attitude_eval] || '-';
+    document.getElementById('learnEnv').textContent = m.living_env || '-';
+    document.getElementById('learnProgress').textContent = m.learn_progress || '-';
+    document.getElementById('week1Text').innerHTML = m.week1 || '-';
+    document.getElementById('week2Text').innerHTML = m.week2 || '-';
+    document.getElementById('week3Text').innerHTML = m.week3 || '-';
+    document.getElementById('week4Text').innerHTML = m.week4 || '-';
+    document.getElementById('learnGood').innerHTML = m.learn_good || '-';
+    document.getElementById('learnBad').innerHTML = m.learn_bad || '-';
+    document.getElementById('learnMeasure').innerHTML = m.learn_measure || '-';
+    document.getElementById('learnImprove').innerHTML = m.learn_improve || '-';
+    document.getElementById('lifeGood').innerHTML = m.life_good || '-';
+    document.getElementById('lifeBad').innerHTML = m.life_bad || '-';
+    document.getElementById('lifeMeasure').innerHTML = m.life_measure || '-';
+    document.getElementById('lifeImprove').innerHTML = m.life_improve || '-';
+  }
+})();
+</script>
+</body>
+</html>
