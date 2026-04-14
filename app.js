@@ -586,22 +586,32 @@ function renderReport(t, results, classResults) {
     photoArea.innerHTML = `<img src="${t.photo_url}" alt="写真" style="width:100%;height:100%;object-fit:cover;">`;
   }
 
-  // 成績推移テーブル + グラフ（全月分）
-  if (results.length > 0) {
+  // 成績推移テーブル + グラフ（全8回分表示）
+  {
+    const allLabels = ['第1-4課','第5-11課','第12-18課','第19-25課','第26-33課','第34-40課','第41-45課','第46-50課'];
+    const resultMap = {};
+    results.forEach(r => { resultMap[r.test_name] = r; });
     const tbody = document.getElementById('trendBody');
-    tbody.innerHTML = results.map(r => {
-      const tot = (r.score_vocab ?? 0) + (r.score_grammar ?? 0) +
-                  (r.score_listening ?? 0) + (r.score_conversation ?? 0);
-      return `<tr>
-        <td class="row-label">${r.test_name || '-'}</td>
-        <td>${r.score_vocab ?? '-'}</td>
-        <td>${r.score_grammar ?? '-'}</td>
-        <td>${r.score_listening ?? '-'}</td>
-        <td>${r.score_conversation ?? '-'}</td>
-        <td class="total-cell">${tot}</td>
+    tbody.innerHTML = allLabels.map(label => {
+      const r = resultMap[label];
+      if (r) {
+        const tot = (r.score_vocab ?? 0) + (r.score_grammar ?? 0) +
+                    (r.score_listening ?? 0) + (r.score_conversation ?? 0);
+        return `<tr>
+          <td class="row-label">${label}</td>
+          <td>${r.score_vocab ?? '-'}</td>
+          <td>${r.score_grammar ?? '-'}</td>
+          <td>${r.score_listening ?? '-'}</td>
+          <td>${r.score_conversation ?? '-'}</td>
+          <td class="total-cell">${tot}</td>
+        </tr>`;
+      }
+      return `<tr class="row-empty">
+        <td class="row-label">${label}</td>
+        <td></td><td></td><td></td><td></td><td class="total-cell"></td>
       </tr>`;
     }).join('');
-    renderTrendChart(results);
+    if (results.length > 0) renderTrendChart(results);
   }
 
   // 学習状況セクション（固定情報）
