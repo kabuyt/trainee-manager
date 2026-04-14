@@ -6,10 +6,11 @@
 <title>教育報告書</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="report.css?v=17">
 </head>
 <body>
+<div class="print-footer">GROP VIETNAM CO., LTD</div>
 
 <div class="no-print toolbar-top">
   <a href="index.html">&larr; 一覧に戻る</a>
@@ -137,6 +138,9 @@
 
   <!-- ===== 成績推移 ===== -->
   <div class="section-header">成績推移</div>
+  <div class="chart-container">
+    <canvas id="trendChart"></canvas>
+  </div>
   <table class="trend-table">
     <thead>
       <tr>
@@ -147,32 +151,6 @@
       <tr><td colspan="6" style="color:#999;text-align:center">データなし</td></tr>
     </tbody>
   </table>
-  <div class="chart-container">
-    <canvas id="trendChart"></canvas>
-  </div>
-
-  <!-- ===== 生活態度詳細 ===== -->
-  <div class="section-header">生活状況・態度詳細</div>
-  <div class="comment-grid">
-    <div class="comment-block good">
-      <div class="comment-label">Good</div>
-      <div class="comment-text" contenteditable="true" id="lifeGood" data-placeholder="良い点を入力..."></div>
-    </div>
-    <div class="comment-block bad">
-      <div class="comment-label">Bad</div>
-      <div class="comment-text" contenteditable="true" id="lifeBad" data-placeholder="改善が必要な点を入力..."></div>
-    </div>
-  </div>
-  <div class="comment-grid">
-    <div class="comment-block">
-      <div class="comment-label">対策</div>
-      <div class="comment-text" contenteditable="true" id="lifeMeasure" data-placeholder="対策を入力..."></div>
-    </div>
-    <div class="comment-block">
-      <div class="comment-label">改善点</div>
-      <div class="comment-text" contenteditable="true" id="lifeImprove" data-placeholder="改善点を入力..."></div>
-    </div>
-  </div>
 
   <!-- ===== 学習状況 ===== -->
   <div class="section-header page-break-before">学習状況</div>
@@ -228,6 +206,33 @@
       <div class="comment-label">改善点</div>
       <div class="comment-text" contenteditable="true" id="learnImprove" data-placeholder="改善点を入力..."></div>
     </div>
+  </div>
+
+  <!-- ===== 生活態度詳細 ===== -->
+  <div class="section-header">生活状況・態度詳細</div>
+  <div class="comment-grid">
+    <div class="comment-block good">
+      <div class="comment-label">Good</div>
+      <div class="comment-text" contenteditable="true" id="lifeGood" data-placeholder="良い点を入力..."></div>
+    </div>
+    <div class="comment-block bad">
+      <div class="comment-label">Bad</div>
+      <div class="comment-text" contenteditable="true" id="lifeBad" data-placeholder="改善が必要な点を入力..."></div>
+    </div>
+  </div>
+  <div class="comment-grid">
+    <div class="comment-block">
+      <div class="comment-label">対策</div>
+      <div class="comment-text" contenteditable="true" id="lifeMeasure" data-placeholder="対策を入力..."></div>
+    </div>
+    <div class="comment-block">
+      <div class="comment-label">改善点</div>
+      <div class="comment-text" contenteditable="true" id="lifeImprove" data-placeholder="改善点を入力..."></div>
+    </div>
+  </div>
+
+  <div class="report-footer">
+    GROP VIETNAM CO., LTD
   </div>
 
 </div><!-- /report-page -->
