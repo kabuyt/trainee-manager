@@ -509,10 +509,12 @@ async function saveReport() {
   btn.disabled = true;
   btn.textContent = '保存中...';
 
-  // コメント収集
+  // コメント収集（空欄は「※特記事項なし」を自動入力）
   const getHtml = (id) => {
     const el = document.getElementById(id);
-    return el ? el.innerHTML.trim() : '';
+    if (!el) return '※特記事項なし';
+    const text = el.textContent.trim();
+    return text ? el.innerHTML.trim() : '※特記事項なし';
   };
   const getWeek = (n) => {
     const row = document.getElementById('week' + n);
