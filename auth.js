@@ -90,4 +90,9 @@ function setupAuthUI() {
     subBar.textContent = orgName + ' 用管理画面';
     document.querySelector('header').after(subBar);
   }
+
+  // admin-only 要素の表示制御
+  document.querySelectorAll('.admin-only').forEach(el => {
+    el.style.display = isAdmin() ? '' : 'none';
+  });
 }
