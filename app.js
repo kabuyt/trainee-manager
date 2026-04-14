@@ -132,7 +132,7 @@ async function registerTrainee() {
   const traineeData = {
     organization_id: profile.organization_id,
     name_romaji: document.getElementById('nameRomaji').value.trim().toUpperCase(),
-    name_katakana: document.getElementById('nameKatakana').value.trim(),
+    name_katakana: document.getElementById('nameKatakana').value.trim().replace(/ /g, '\u3000'),
     company: document.getElementById('company').value.trim(),
     class_group: document.getElementById('classGroup').value.trim(),
     birth_date: document.getElementById('birthDate').value || null,
