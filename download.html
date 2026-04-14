@@ -189,13 +189,13 @@ let _selectedMonth = 1;
   }
 
   const profile = getCurrentProfile();
-  document.getElementById('userName').textContent = profile.display_name || profile.company || '';
+  document.getElementById('userName').textContent = profile.display_name || profile.supervising_org || '';
 
   // 実習生データ取得（RLSでフィルタされる）
   let query = supabase.from('trainees').select('*').order('name_romaji');
-  // customerの場合、追加でcompanyフィルタ（RLSが効くが明示的にも）
-  if (isCustomer() && profile.company) {
-    query = query.eq('company', profile.company);
+  // customerの場合、追加で監理団体フィルタ（RLSが効くが明示的にも）
+  if (isCustomer() && profile.supervising_org) {
+    query = query.eq('supervising_org', profile.supervising_org);
   }
   const { data: trainees, error } = await query;
 
@@ -207,7 +207,7 @@ let _selectedMonth = 1;
 
   _trainees = trainees || [];
   document.getElementById('traineeCount').textContent = _trainees.length;
-  document.getElementById('heroSub').textContent = profile.company || '';
+  document.getElementById('heroSub').textContent = profile.supervising_org || '';
 
   // 月セレクター生成
   const monthSel = document.getElementById('monthSelector');

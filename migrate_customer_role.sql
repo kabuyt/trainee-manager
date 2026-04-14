@@ -1,11 +1,10 @@
--- 顧客ロール対応マイグレーション
+-- 監理団体（組合）ロール対応マイグレーション
 -- Supabase SQL Editor で実行すること
 
--- 1. user_profiles に company カラム追加
-ALTER TABLE user_profiles ADD COLUMN IF NOT EXISTS company VARCHAR;
+-- 1. user_profiles に supervising_org カラム追加
+ALTER TABLE user_profiles ADD COLUMN IF NOT EXISTS supervising_org VARCHAR;
 
 -- 2. trainees テーブルの RLS ポリシーを拡張（customer ロール対応）
--- 既存の SELECT ポリシーを削除して再作成
 DROP POLICY IF EXISTS "trainees_select" ON trainees;
 CREATE POLICY "trainees_select" ON trainees FOR SELECT USING (
   -- admin: 全データ閲覧可
@@ -14,8 +13,8 @@ CREATE POLICY "trainees_select" ON trainees FOR SELECT USING (
   -- org: 自組織のデータのみ
   EXISTS (SELECT 1 FROM user_profiles WHERE id = auth.uid() AND role = 'org' AND organization_id = trainees.organization_id)
   OR
-  -- customer: 自社のデータのみ（company一致）
-  EXISTS (SELECT 1 FROM user_profiles WHERE id = auth.uid() AND role = 'customer' AND company = trainees.company)
+  -- customer（監理団体）: 自団体の実習生のみ
+  EXISTS (SELECT 1 FROM user_profiles WHERE id = auth.uid() AND role = 'customer' AND supervising_org = trainees.supervising_org)
 );
 
 -- 3. test_results テーブルの RLS ポリシーを拡張
@@ -30,7 +29,7 @@ CREATE POLICY "test_results_select" ON test_results FOR SELECT USING (
     AND (
       (p.role = 'org' AND p.organization_id = t.organization_id)
       OR
-      (p.role = 'customer' AND p.company = t.company)
+      (p.role = 'customer' AND p.supervising_org = t.supervising_org)
     )
   )
 );
@@ -47,20 +46,24 @@ CREATE POLICY "monthly_reports_select" ON monthly_reports FOR SELECT USING (
     AND (
       (p.role = 'org' AND p.organization_id = t.organization_id)
       OR
-      (p.role = 'customer' AND p.company = t.company)
+      (p.role = 'customer' AND p.supervising_org = t.supervising_org)
     )
   )
 );
 
--- 5. 顧客ユーザーの作成例（手動で実行）
+-- 5. テスト用 組合ユーザー作成
 -- ※ まず Supabase Dashboard > Authentication > Users で新規ユーザーを作成
---   Email: blastech@trainee.local, Password: (任意)
+--   Email: cic@trainee.local, Password: (任意)
 -- その後、以下を実行:
 --
--- INSERT INTO user_profiles (id, role, company, display_name)
+-- INSERT INTO user_profiles (id, role, supervising_org, display_name)
 -- VALUES (
---   (SELECT id FROM auth.users WHERE email = 'blastech@trainee.local'),
+--   (SELECT id FROM auth.users WHERE email = 'cic@trainee.local'),
 --   'customer',
---   '株式会社ブラステック',
---   'ブラステック'
+--   'CIC協同組合',
+--   'CIC協同組合'
 -- );
+--
+-- 他の組合も同様に作成:
+-- globalway@trainee.local → supervising_org='グローバルウェイ協同組合'
+-- hiroshima@trainee.local → supervising_org='広島ワールド協同組合'
