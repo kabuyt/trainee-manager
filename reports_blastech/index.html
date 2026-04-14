@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>教育報告書一覧 - 株式会社ブラステック</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body { font-family: 'Noto Sans JP', sans-serif; background: #edf1f7; margin: 0; padding: 20px; }
+h1 { color: #1e3a5f; font-size: 20px; margin-bottom: 16px; }
+.logo { height: 32px; margin-bottom: 12px; }
+.list { background: white; border-radius: 8px; box-shadow: 0 1px 6px rgba(0,0,0,0.08); overflow: hidden; }
+.item { display: flex; align-items: center; padding: 12px 20px; border-bottom: 1px solid #e8edf5; }
+.item:last-child { border-bottom: none; }
+.item:hover { background: #f1f5f9; }
+.num { color: #64748b; font-size: 12px; width: 30px; }
+.name-jp { font-weight: 600; font-size: 14px; color: #1e3a5f; min-width: 180px; }
+.name-en { color: #64748b; font-size: 12px; flex: 1; }
+a { color: inherit; text-decoration: none; }
+.btn { background: #1e3a5f; color: white; padding: 4px 12px; border-radius: 4px; font-size: 12px; }
+.btn-dl { display: inline-block; background: #2563eb; color: white; padding: 10px 24px; border-radius: 6px; font-size: 14px; font-weight: 600; text-decoration: none; box-shadow: 0 2px 6px rgba(37,99,235,0.3); }
+.btn-dl:hover { background: #1d4ed8; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3/dist/jszip.min.js"></script>
+</head>
+<body>
+<img src="../logo.png" alt="GROP VIETNAM" class="logo">
+<h1>教育報告書一覧　株式会社ブラステック（1ヶ月目）</h1>
+<div style="margin-bottom:16px;">
+  <a href="pdf/" class="btn-dl" id="pdfBtn">📥 PDF一括ダウンロード</a>
+</div>
+<div class="list">
+<a href="01_LO_THI_VAN.html" class="item"><span class="num">1</span><span class="name-jp">ロー　ティ　ヴァン</span><span class="name-en">LO THI VAN</span><span class="btn">開く</span></a>
+<a href="02_THI_HONG_VAN.html" class="item"><span class="num">2</span><span class="name-jp">ティ　ホン　ヴァン</span><span class="name-en">THI HONG VAN</span><span class="btn">開く</span></a>
+<a href="03_TRAN_THI_HONG_NHUNG.html" class="item"><span class="num">3</span><span class="name-jp">チャン　ティ　ホン　ニュン</span><span class="name-en">TRAN THI HONG NHUNG</span><span class="btn">開く</span></a>
+<a href="04_LO_THI_SI.html" class="item"><span class="num">4</span><span class="name-jp">ロー　ティ　シ</span><span class="name-en">LO THI SI</span><span class="btn">開く</span></a>
+<a href="05_HOANG_THUY_LINH.html" class="item"><span class="num">5</span><span class="name-jp">ホアン　トゥイ　リン</span><span class="name-en">HOANG THUY LINH</span><span class="btn">開く</span></a>
+<a href="06_HO_THI_HOA.html" class="item"><span class="num">6</span><span class="name-jp">ホー　ティ　ホア</span><span class="name-en">HO THI HOA</span><span class="btn">開く</span></a>
+<a href="07_MAI_THI_XUONG.html" class="item"><span class="num">7</span><span class="name-jp">マイ　ティ　スオン</span><span class="name-en">MAI THI XUONG</span><span class="btn">開く</span></a>
+<a href="08_NGUYEN_THI_MY_AI.html" class="item"><span class="num">8</span><span class="name-jp">グエン　ティ　ミー　アイ</span><span class="name-en">NGUYEN THI MY AI</span><span class="btn">開く</span></a>
+<a href="09_DANG_THI_VAN.html" class="item"><span class="num">9</span><span class="name-jp">ダン　ティ　ヴァン</span><span class="name-en">DANG THI VAN</span><span class="btn">開く</span></a>
+<a href="10_NGUYEN_THI_QUYNH_ANH.html" class="item"><span class="num">10</span><span class="name-jp">グエン　ティ　クィン　アイン</span><span class="name-en">NGUYEN THI QUYNH ANH</span><span class="btn">開く</span></a>
+<a href="11_VO_THI_BE_OANH.html" class="item"><span class="num">11</span><span class="name-jp">ヴォー　ティ　ベ　オアン</span><span class="name-en">VO THI BE OANH</span><span class="btn">開く</span></a>
+<a href="12_DO_THI_THU_HUONG.html" class="item"><span class="num">12</span><span class="name-jp">ドー　ティ　トゥ　フオン</span><span class="name-en">DO THI THU HUONG</span><span class="btn">開く</span></a>
+<a href="13_TRAN_THI_KIM_DUNG.html" class="item"><span class="num">13</span><span class="name-jp">チャン　ティ　キム　ズン</span><span class="name-en">TRAN THI KIM DUNG</span><span class="btn">開く</span></a>
+<a href="14_TRIEU_THI_OANH.html" class="item"><span class="num">14</span><span class="name-jp">チェウ　ティ　オアン</span><span class="name-en">TRIEU THI OANH</span><span class="btn">開く</span></a>
+<a href="15_NGUYEN_HUYNH_TRANG.html" class="item"><span class="num">15</span><span class="name-jp">グエン　フィン　チャン</span><span class="name-en">NGUYEN HUYNH TRANG</span><span class="btn">開く</span></a>
+</div>
+<script>
+document.getElementById('pdfBtn').addEventListener('click', async function(e) {
+  e.preventDefault();
+  const btn = this;
+  btn.textContent = '⏳ ダウンロード準備中...';
+  btn.style.pointerEvents = 'none';
+  try {
+    const files = ["pdf/01_01_LO_THI_VAN.pdf", "pdf/02_02_THI_HONG_VAN.pdf", "pdf/03_03_TRAN_THI_HONG_NHUNG.pdf", "pdf/04_04_LO_THI_SI.pdf", "pdf/05_05_HOANG_THUY_LINH.pdf", "pdf/06_06_HO_THI_HOA.pdf", "pdf/07_07_MAI_THI_XUONG.pdf", "pdf/08_08_NGUYEN_THI_MY_AI.pdf", "pdf/09_09_DANG_THI_VAN.pdf", "pdf/10_10_NGUYEN_THI_QUYNH_ANH.pdf", "pdf/11_11_VO_THI_BE_OANH.pdf", "pdf/12_12_DO_THI_THU_HUONG.pdf", "pdf/13_13_TRAN_THI_KIM_DUNG.pdf", "pdf/14_14_TRIEU_THI_OANH.pdf", "pdf/15_15_NGUYEN_HUYNH_TRANG.pdf"];
+    const zip = new JSZip();
+    for (const f of files) {
+      const resp = await fetch(f);
+      if (resp.ok) {
+        const blob = await resp.blob();
+        zip.file(f.replace('pdf/',''), blob);
+      }
+    }
+    const content = await zip.generateAsync({type:'blob'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(content);
+    a.download = '教育報告書_ブラステック.zip';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  } catch(err) {
+    alert('ダウンロードに失敗しました: ' + err.message);
+  }
+  btn.textContent = '📥 PDF一括ダウンロード';
+  btn.style.pointerEvents = '';
+});
+</script>
+</body>
+</html>

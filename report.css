@@ -148,7 +148,7 @@ body {
   padding: 4px 14px;
   font-size: 11px;
   font-weight: 600;
-  margin: 6px 0 3px;
+  margin: 8px 0 3px;
   letter-spacing: 1px;
 }
 .section-sub {
@@ -165,12 +165,12 @@ body {
 .score-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   font-size: 11px;
 }
 .score-table th, .score-table td {
   border: 1px solid #cbd5e1;
-  padding: 5px 8px;
+  padding: 6px 8px;
   text-align: center;
   font-size: 11px;
 }
@@ -190,12 +190,13 @@ body {
 .row-avg td { color: #64748b; }
 .row-dev .row-label { font-weight: 600; }
 .row-dev td { color: #1e40af; font-weight: 400; }
+.row-empty td { color: #cbd5e1; height: 22px; }
 
 /* ===== 評価 ===== */
 .eval-row {
   display: flex;
   gap: 6px;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 }
 .eval-box {
   flex: 1;
@@ -225,15 +226,16 @@ body {
 .trend-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 11px;
-  margin-bottom: 8px;
+  font-size: 10px;
+  margin-bottom: 4px;
 }
 .trend-table th, .trend-table td {
   border: 1px solid #cbd5e1;
-  padding: 5px 8px;
+  padding: 3px 8px;
   text-align: center;
-  font-size: 11px;
+  font-size: 10px;
 }
+.trend-table .row-empty td { color: #cbd5e1; }
 .trend-table th {
   background: #e8edf5;
   font-weight: 600;
@@ -243,14 +245,14 @@ body {
 
 /* ===== グラフ ===== */
 .chart-container {
-  margin: 4px 0 8px;
+  margin: 4px 0 6px;
   padding: 6px;
   background: #f8fafc;
   border: 1px solid #cbd5e1;
-  max-height: 200px;
+  max-height: 240px;
 }
 .chart-container canvas {
-  max-height: 185px;
+  max-height: 220px;
 }
 
 /* ===== コメント欄 ===== */
@@ -276,10 +278,10 @@ body {
 .comment-block.good .comment-label { background: #dfe8f5; color: #1e3a5f; }
 .comment-block.bad .comment-label { background: #d4ddef; color: #1e3a5f; }
 .comment-text {
-  padding: 4px 8px;
+  padding: 6px 8px;
   font-size: 11px;
-  line-height: 1.5;
-  min-height: 28px;
+  line-height: 1.6;
+  min-height: 48px;
   color: #1e293b;
 }
 .comment-text[contenteditable="true"] {
@@ -301,11 +303,11 @@ body {
 
 .diagnosis-box {
   border: 1px solid #cbd5e1;
-  padding: 6px 10px;
+  padding: 8px 10px;
   font-size: 11px;
   line-height: 1.6;
   color: #1e293b;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   background: #f1f5f9;
   border-left: 3px solid #1e3a5f;
 }
@@ -378,15 +380,35 @@ select.no-print-select {
 }
 select.no-print-select:focus { border-color: #2563eb; outline: none; }
 
+/* ===== フッター ===== */
+.report-footer {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid #cbd5e1;
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  color: #64748b;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.print-footer {
+  display: none;
+}
+
 /* 印刷時に表示するテキスト（画面では非表示） */
 .month-print, .scope-print, .attitude-print, .env-print { display: none; }
 
 /* ===== 印刷用スタイル ===== */
 @media print {
-  body { background: white; }
+  body { background: white !important; margin: 0; padding: 0; }
+  html { background: white !important; }
   .no-print { display: none !important; }
   .report-page {
     box-shadow: none;
+    border: none;
+    outline: none;
     margin: 0;
     padding: 0;
     width: 100%;
@@ -412,6 +434,24 @@ select.no-print-select:focus { border-color: #2563eb; outline: none; }
   .score-table, .trend-table, .chart-container { break-inside: avoid; }
   .report-page { max-height: none; min-height: auto; }
   .page-break-before { break-before: page; }
+
+  .report-footer { display: none; }
+  .print-footer {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    font-weight: 400;
+    color: #94a3b8;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-top: 1px solid #cbd5e1;
+    padding-top: 4px;
+  }
 
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }

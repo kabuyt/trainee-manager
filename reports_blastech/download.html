@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>教育報告書ダウンロード - 株式会社ブラステック</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/jszip@3/dist/jszip.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans JP', sans-serif; background: #edf1f7; color: #1e293b; }
+
+/* === Password gate === */
+.auth-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: #edf1f7;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.auth-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  padding: 48px 40px;
+  text-align: center;
+  max-width: 420px;
+  width: 90%;
+}
+.auth-card .auth-logo { height: 40px; margin-bottom: 20px; }
+.auth-card h2 { font-size: 18px; color: #1e3a5f; margin-bottom: 6px; }
+.auth-card .auth-sub { font-size: 12px; color: #94a3b8; margin-bottom: 28px; }
+.auth-input-wrap {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.auth-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.auth-input:focus { border-color: #2563eb; }
+.auth-input.error { border-color: #ef4444; animation: shake 0.4s; }
+.auth-submit {
+  padding: 12px 24px;
+  background: #1e3a5f;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+.auth-submit:hover { background: #162d4a; }
+.auth-error {
+  font-size: 12px;
+  color: #ef4444;
+  height: 18px;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+.main-content { display: none; }
+
+.header {
+  background: #1e3a5f;
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.header img { height: 36px; }
+.header-text { color: white; }
+.header-text h1 { font-size: 18px; font-weight: 600; }
+.header-text p { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+
+.container { max-width: 800px; margin: 0 auto; padding: 32px 20px 60px; }
+
+/* Hero card */
+.hero {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  padding: 36px 32px;
+  text-align: center;
+  margin-bottom: 28px;
+}
+.hero h2 { font-size: 20px; color: #1e3a5f; margin-bottom: 6px; }
+.hero .sub { font-size: 13px; color: #64748b; margin-bottom: 24px; }
+.hero .info { display: flex; justify-content: center; gap: 32px; margin-bottom: 24px; }
+.hero .info-item { text-align: center; }
+.hero .info-item .num { font-size: 28px; font-weight: 700; color: #1e3a5f; }
+.hero .info-item .label { font-size: 11px; color: #64748b; margin-top: 2px; }
+
+.btn-dl {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #2563eb;
+  color: white;
+  padding: 14px 36px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+  transition: background 0.2s;
+}
+.btn-dl:hover { background: #1d4ed8; }
+.btn-dl:disabled { background: #94a3b8; box-shadow: none; cursor: wait; }
+.btn-dl svg { width: 20px; height: 20px; }
+
+.progress-bar {
+  display: none;
+  margin-top: 16px;
+  background: #e2e8f0;
+  border-radius: 6px;
+  height: 6px;
+  overflow: hidden;
+}
+.progress-bar .fill {
+  height: 100%;
+  background: #2563eb;
+  border-radius: 6px;
+  transition: width 0.3s;
+  width: 0%;
+}
+.progress-text {
+  display: none;
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 8px;
+}
+
+/* Individual list */
+.section {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  margin-bottom: 28px;
+  overflow: hidden;
+}
+.section-title {
+  background: #1e3a5f;
+  color: white;
+  padding: 12px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.student-list { padding: 0; }
+.student-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  border-bottom: 1px solid #e8edf5;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.15s;
+}
+.student-item:last-child { border-bottom: none; }
+.student-item:hover { background: #f1f5f9; }
+.student-num { color: #94a3b8; font-size: 11px; width: 28px; flex-shrink: 0; }
+.student-name { font-weight: 600; font-size: 13px; color: #1e3a5f; min-width: 160px; }
+.student-name-en { color: #94a3b8; font-size: 11px; flex: 1; }
+.student-dl {
+  font-size: 11px;
+  color: #2563eb;
+  padding: 4px 10px;
+  border: 1px solid #2563eb;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.student-item:hover .student-dl { background: #2563eb; color: white; }
+
+/* Guide section */
+.guide { padding: 24px 28px; }
+.guide h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e3a5f;
+  margin: 18px 0 8px;
+  padding-left: 4px;
+  border-left: 3px solid #1e3a5f;
+  padding-left: 10px;
+}
+.guide h3:first-child { margin-top: 0; }
+.guide p { font-size: 12px; line-height: 1.8; margin-bottom: 6px; padding-left: 14px; }
+.guide ul { list-style: none; padding-left: 14px; margin-bottom: 6px; }
+.guide ul li { font-size: 12px; line-height: 1.8; padding-left: 12px; position: relative; }
+.guide ul li::before { content: "・"; position: absolute; left: 0; }
+
+.eval-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 8px 0 12px 14px;
+  font-size: 12px;
+  max-width: 500px;
+}
+.eval-table th, .eval-table td {
+  border: 1px solid #cbd5e1;
+  padding: 5px 12px;
+  text-align: center;
+}
+.eval-table th { background: #e8edf5; font-weight: 600; color: #334155; }
+.eval-table td:first-child { font-weight: 600; }
+.eval-table td:last-child { text-align: left; }
+
+.footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 11px;
+  color: #94a3b8;
+}
+.footer a { color: #64748b; }
+</style>
+</head>
+<body>
+
+<!-- Password Gate -->
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-card">
+    <img src="../logo.png" alt="GROP VIETNAM" class="auth-logo">
+    <h2>教育報告書ダウンロード</h2>
+    <p class="auth-sub">閲覧にはパスワードが必要です</p>
+    <form id="authForm">
+      <div class="auth-input-wrap">
+        <input type="password" class="auth-input" id="authPass" placeholder="パスワードを入力" autocomplete="off">
+        <button type="submit" class="auth-submit">認証</button>
+      </div>
+      <div class="auth-error" id="authError"></div>
+    </form>
+  </div>
+</div>
+
+<!-- Main Content (hidden until authenticated) -->
+<div class="main-content" id="mainContent">
+
+<div class="header">
+  <img src="../logo.png" alt="GROP VIETNAM">
+  <div class="header-text">
+    <h1>教育報告書</h1>
+    <p>Education Report</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Hero -->
+  <div class="hero">
+    <h2>教育課程 1ヶ月目　個人成績書</h2>
+    <p class="sub">株式会社ブラステック　1期生</p>
+    <div class="info">
+      <div class="info-item">
+        <div class="num">15</div>
+        <div class="label">名</div>
+      </div>
+      <div class="info-item">
+        <div class="num">1</div>
+        <div class="label">ヶ月目</div>
+      </div>
+    </div>
+    <button class="btn-dl" id="pdfBtn">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      PDF一括ダウンロード（ZIP）
+    </button>
+    <div class="progress-bar" id="progressBar"><div class="fill" id="progressFill"></div></div>
+    <div class="progress-text" id="progressText"></div>
+  </div>
+
+  <!-- Individual downloads -->
+  <div class="section">
+    <div class="section-title">個別ダウンロード</div>
+    <div class="student-list">
+      <a href="pdf/01_LO_THI_VAN.pdf" class="student-item" download>
+        <span class="student-num">1</span><span class="student-name">ロー　ティ　ヴァン</span><span class="student-name-en">LO THI VAN</span><span class="student-dl">PDF</span>
+      </a>
+      <a href="pdf/02_THI_HONG_VAN.pdf" class="student-item" download>
+        <span class="student-num">2</span><span class="student-name">ティ　ホン　ヴァン</span><span class="student-name-en">THI HONG VAN</span><span class="student-dl">PDF</span>
+      </a>
+      <a href="pdf/03_TRAN_THI_HONG_NHUNG.pdf" class="student-item" download>
+        <span class="student-num">3</span><span class="student-name">チャン　ティ　ホン　ニュン</span><span class="student-name-en">TRAN THI HONG NHUNG</span><span class="student-dl">PDF</span>
+      </a>
+      <a href="pdf/04_LO_THI_SI.pdf" class="student-item" download>
+        <span class="student-num">4</span><span class="student-name">ロー　ティ　シ</span><span class="student-name-en">LO THI SI</span><span class="student-dl">PDF</span>
+      </a>
+      <a href="pdf/05_HOANG_THUY_LINH.pdf" class="student-item" download>
+        <span class="student-num">5</span><span class="student-name">ホアン　トゥイ　リン</span><span class="student-name-en">HOANG THUY LINH</span><span class="student-dl">PDF</span>
+      </a>
+      <a href="pdf/06_HO_THI_HOA.pdf" class="student-item" download>
+        <span class="student-num">6</span><span class="student-name">ホー　ティ　ホア</span><span class="student-name-en">HO THI HOA</span><span class="student-dl">PDF</span>
+      </a>
+      <a href="pdf/07_MAI_THI_XUONG.pdf" class="student-item" download>
+        <span class="student-num">7</span><span class="student-name">マイ　ティ　スオン</span><span class="student-name-en">MAI THI XUONG</span><span class="student-dl">PDF</span>
+      </a>
+      <a href="pdf/08_NGUYEN_THI_MY_AI.pdf" class="student-item" download>
+        <span class="student-num">8</span><span class="student-name">グエン　ティ　ミー　アイ</span><span class="student-name-en">NGUYEN THI MY AI</span><span class="student-dl">PDF</span>
+      </a>
+      <a href="pdf/09_DANG_THI_VAN.pdf" class="student-item" download>
+        <span class="student-num">9</span><span class="student-name">ダン　ティ　ヴァン</span><span class="student-name-en">DANG THI VAN</span><span class="student-dl">PDF</span>
+      </a>
+      <a href="pdf/10_NGUYEN_THI_QUYNH_ANH.pdf" class="student-item" download>
+        <span class="student-num">10</span><span class="student-name">グエン　ティ　クィン　アイン</span><span class="student-name-en">NGUYEN THI QUYNH ANH</span><span class="student-dl">PDF</span>
+      </a>
+      <a href="pdf/11_VO_THI_BE_OANH.pdf" class="student-item" download>
+        <span class="student-num">11</span><span class="student-name">ヴォー　ティ　ベ　オアン</span><span class="student-name-en">VO THI BE OANH</span><span class="student-dl">PDF</span>
+      </a>
+      <a href="pdf/12_DO_THI_THU_HUONG.pdf" class="student-item" download>
+        <span class="student-num">12</span><span class="student-name">ドー　ティ　トゥ　フオン</span><span class="student-name-en">DO THI THU HUONG</span><span class="student-dl">PDF</span>
+      </a>
+      <a href="pdf/13_TRAN_THI_KIM_DUNG.pdf" class="student-item" download>
+        <span class="student-num">13</span><span class="student-name">チャン　ティ　キム　ズン</span><span class="student-name-en">TRAN THI KIM DUNG</span><span class="student-dl">PDF</span>
+      </a>
+      <a href="pdf/14_TRIEU_THI_OANH.pdf" class="student-item" download>
+        <span class="student-num">14</span><span class="student-name">チェウ　ティ　オアン</span><span class="student-name-en">TRIEU THI OANH</span><span class="student-dl">PDF</span>
+      </a>
+      <a href="pdf/15_NGUYEN_HUYNH_TRANG.pdf" class="student-item" download>
+        <span class="student-num">15</span><span class="student-name">グエン　フィン　チャン</span><span class="student-name-en">NGUYEN HUYNH TRANG</span><span class="student-dl">PDF</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Guide -->
+  <div class="section">
+    <div class="section-title">「教育課程　個人成績書」の見方</div>
+    <div class="guide">
+
+      <h3>基本情報</h3>
+      <p>受入企業名、実習生の氏名（日本語・ローマ字）、生年月日、年齢、受験日、顔写真を記載しています。</p>
+
+      <h3>テスト成績</h3>
+      <p>使用教材「みんなの日本語」の進度に応じた月間テストの結果です。</p>
+      <ul>
+        <li><b>語彙</b>（100点満点）：単語の読み書きに関する問題</li>
+        <li><b>文法</b>（100点満点）：文の組み立て・助詞の使い方など</li>
+        <li><b>聴解</b>（100点満点）：日本語音声の聞き取り問題</li>
+        <li><b>会話</b>（100点満点）：講師との面談による口頭評価</li>
+        <li><b>合計</b>（400点満点）：上記4科目の合計点</li>
+      </ul>
+      <p>同期受験者全体の<b>平均点</b>、学力の相対的位置を示す<b>偏差値</b>（50が平均、60以上が優秀）、同期中の<b>順位</b>も併記しています。</p>
+
+      <h3>総合評価</h3>
+      <p>日本語能力と学習態度をそれぞれ5段階で評価し、補足コメントを付しています。</p>
+      <table class="eval-table">
+        <tr><th>評価</th><th>得点率</th><th>テストコメント</th><th>態度コメント</th></tr>
+        <tr><td>秀</td><td>80%以上</td><td>大変優秀な成績</td><td>模範的な学習態度</td></tr>
+        <tr><td>優</td><td>70%台</td><td>優秀な成績</td><td>積極的に取り組んでいる</td></tr>
+        <tr><td>良</td><td>60%台</td><td>良好な成績</td><td>概ね良好な取り組み</td></tr>
+        <tr><td>可</td><td>50%台</td><td>基礎力の向上が必要</td><td>より積極的な姿勢が期待される</td></tr>
+        <tr><td>不可</td><td>50%未満</td><td>基礎からの学習支援が必要</td><td>学習態度の改善が必要</td></tr>
+        <tr><td>−</td><td>未受験</td><td>未受験</td><td>—</td></tr>
+      </table>
+
+      <h3>診断コメント</h3>
+      <p>テスト結果の詳細な分析に基づき、学習上の強みや課題を記載しています。苦手分野の特定や今後の学習方針の参考としてご活用ください。</p>
+
+      <h3>成績推移（グラフ）</h3>
+      <p>月ごとの科目別得点の変化を折れ線グラフで表示しています。学習の伸びや課題のある科目が一目で確認できます。</p>
+
+      <h3>生活状況・学習状況</h3>
+      <p>実習生の生活面・学習面について、以下の4つの観点から記載しています。</p>
+      <ul>
+        <li><b>Good</b>：良い点・評価できる行動</li>
+        <li><b>Bad</b>：改善が必要な点・注意事項</li>
+        <li><b>対策</b>：講師が現在行っている指導内容</li>
+        <li><b>改善点</b>：今後の課題と改善の方向性</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">
+    ご不明な点がございましたら担当者までお問い合わせください。<br>
+    GROP VIETNAM Co., Ltd.
+  </div>
+
+</div>
+
+</div><!-- /main-content -->
+
+<script>
+// === Password Authentication ===
+const PASS_HASH = 'e157b16cd414bafff295f2947585f7f6fa4e7c3b2c34553db362b8f0079a1324';
+
+async function sha256(text) {
+  const encoded = new TextEncoder().encode(text);
+  const buffer = await crypto.subtle.digest('SHA-256', encoded);
+  return Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function unlock() {
+  document.getElementById('authOverlay').style.display = 'none';
+  document.getElementById('mainContent').style.display = 'block';
+  sessionStorage.setItem('report_auth', '1');
+}
+
+// Check if already authenticated this session
+if (sessionStorage.getItem('report_auth') === '1') {
+  unlock();
+}
+
+document.getElementById('authForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const input = document.getElementById('authPass');
+  const hash = await sha256(input.value);
+  if (hash === PASS_HASH) {
+    unlock();
+  } else {
+    input.classList.add('error');
+    document.getElementById('authError').textContent = 'パスワードが正しくありません';
+    setTimeout(() => input.classList.remove('error'), 400);
+    input.value = '';
+    input.focus();
+  }
+});
+</script>
+
+<script>
+const PDF_FILES = [
+  "pdf/01_LO_THI_VAN.pdf","pdf/02_THI_HONG_VAN.pdf","pdf/03_TRAN_THI_HONG_NHUNG.pdf",
+  "pdf/04_LO_THI_SI.pdf","pdf/05_HOANG_THUY_LINH.pdf","pdf/06_HO_THI_HOA.pdf",
+  "pdf/07_MAI_THI_XUONG.pdf","pdf/08_NGUYEN_THI_MY_AI.pdf","pdf/09_DANG_THI_VAN.pdf",
+  "pdf/10_NGUYEN_THI_QUYNH_ANH.pdf","pdf/11_VO_THI_BE_OANH.pdf","pdf/12_DO_THI_THU_HUONG.pdf",
+  "pdf/13_TRAN_THI_KIM_DUNG.pdf","pdf/14_TRIEU_THI_OANH.pdf","pdf/15_NGUYEN_HUYNH_TRANG.pdf"
+];
+
+document.getElementById('pdfBtn').addEventListener('click', async function() {
+  const btn = this;
+  const bar = document.getElementById('progressBar');
+  const fill = document.getElementById('progressFill');
+  const text = document.getElementById('progressText');
+
+  btn.disabled = true;
+  btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 準備中...';
+  bar.style.display = 'block';
+  text.style.display = 'block';
+
+  try {
+    const zip = new JSZip();
+    for (let i = 0; i < PDF_FILES.length; i++) {
+      const f = PDF_FILES[i];
+      text.textContent = `${i + 1} / ${PDF_FILES.length} ダウンロード中...`;
+      fill.style.width = ((i + 1) / PDF_FILES.length * 100) + '%';
+      const resp = await fetch(f);
+      if (resp.ok) {
+        const blob = await resp.blob();
+        zip.file(f.replace('pdf/', ''), blob);
+      }
+    }
+    text.textContent = 'ZIP作成中...';
+    const content = await zip.generateAsync({type: 'blob'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(content);
+    a.download = '教育報告書_ブラステック_1期生.zip';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    text.textContent = 'ダウンロード完了';
+  } catch (err) {
+    alert('ダウンロードに失敗しました: ' + err.message);
+    text.textContent = 'エラーが発生しました';
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> PDF一括ダウンロード（ZIP）';
+  setTimeout(() => {
+    bar.style.display = 'none';
+    text.style.display = 'none';
+    fill.style.width = '0%';
+  }, 3000);
+});
+</script>
+</body>
+</html>

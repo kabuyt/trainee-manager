@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>教育報告書 - マイ　ティ　スオン</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../report.css?v=15">
+</head>
+<body>
+<div class="print-footer">GROP VIETNAM CO., LTD</div>
+
+<div class="no-print toolbar-top">
+  <a href="index.html">&larr; 一覧に戻る</a>
+  <button onclick="window.print()" class="btn-print">PDF保存 / 印刷</button>
+</div>
+
+<div class="report-page" id="reportPage">
+
+  <div class="report-header">
+    <div class="logo-bar">
+      <img src="../logo.png" alt="GROP VIETNAM" class="report-logo">
+    </div>
+    <div class="title-area">
+      <h1>教育課程 <span>1</span>ヶ月目　個人成績書</h1>
+    </div>
+    <div class="header-body">
+      <div class="header-main">
+        <div class="info-row">
+          <div class="info-cell info-cell--fixed"><span class="label">社名</span><span class="value">株式会社ブラステック　1期生</span></div>
+          <div class="info-cell"><span class="label">氏名</span>
+            <span class="value">マイ　ティ　スオン<br><small>MAI THI XUONG</small></span>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-cell info-cell--fixed"><span class="label">生年月日</span><span class="value">1994年12月16日</span></div>
+          <div class="info-cell info-cell--narrow"><span class="label">年齢</span><span class="value">31歳</span></div>
+          <div class="info-cell"><span class="label">受験日</span><span class="value">2026年3月30日</span></div>
+        </div>
+      </div>
+      <div class="photo-area"><img src="photos/image8.png"></div>
+    </div>
+  </div>
+
+  <div class="section-header">テスト成績</div>
+  <table class="score-table">
+    <thead>
+      <tr>
+        <th class="col-label">試験範囲</th>
+        <th class="col-score col-vocab">語彙</th>
+        <th class="col-score col-grammar">文法</th>
+        <th class="col-score col-listen">聴解</th>
+        <th class="col-score col-conv">会話</th>
+        <th class="col-score col-total">合計</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="row-label">第4課迄</td>
+        <td>94</td><td>73</td>
+        <td>53</td><td>60</td>
+        <td class="total-cell">280.0</td></tr>
+      <tr class="row-avg"><td class="row-label">平均点</td>
+        <td>92.8</td><td>67.9</td>
+        <td>49.6</td><td>77.6</td>
+        <td class="total-cell">268.7</td></tr>
+      <tr class="row-dev"><td class="row-label">偏差値</td>
+        <td>53.5</td><td>56.0</td>
+        <td>52.5</td><td>38.5</td>
+        <td class="total-cell">51.5</td></tr>
+      <tr><td class="row-label">順位</td>
+        <td>5</td><td>2</td>
+        <td>7</td><td>12</td>
+        <td class="total-cell">9</td></tr>
+      <tr><td class="row-label">受験者数</td>
+        <td colspan="5">14名</td></tr>
+    </tbody>
+  </table>
+
+  <div class="eval-row">
+    <div class="eval-box">
+      <span class="eval-label">日本語</span>
+      <span class="eval-grade">良</span>
+      <span class="eval-desc">良好な成績</span>
+    </div>
+    <div class="eval-box">
+      <span class="eval-label">態度</span>
+      <span class="eval-grade">良</span>
+      <span class="eval-desc">概ね良好な取り組み</span>
+    </div>
+  </div>
+
+  <div class="section-header">診断コメント</div><div class="diagnosis-box">基礎的な語彙力は高い水準にある。聴解が53点とやや低く、リスニング力の強化が望まれる。 日常的に日本語音声に触れる機会を増やすことが望ましい。</div>
+
+  <div class="section-header">成績推移</div>
+  <div class="chart-container">
+    <canvas id="trendChart"></canvas>
+  </div>
+  <table class="trend-table">
+    <thead><tr><th>試験範囲</th><th>語彙</th><th>文法</th><th>聴解</th><th>会話</th><th>合計</th></tr></thead>
+    <tbody><tr><td class="row-label">4課迄</td><td>94.0</td><td>73.0</td><td>53.0</td><td>60.0</td><td class="total-cell">280.0</td></tr>
+<tr class="row-empty"><td class="row-label">第5-11課</td><td></td><td></td><td></td><td></td><td class="total-cell"></td></tr>
+<tr class="row-empty"><td class="row-label">第12-18課</td><td></td><td></td><td></td><td></td><td class="total-cell"></td></tr>
+<tr class="row-empty"><td class="row-label">第19-25課</td><td></td><td></td><td></td><td></td><td class="total-cell"></td></tr>
+<tr class="row-empty"><td class="row-label">第26-33課</td><td></td><td></td><td></td><td></td><td class="total-cell"></td></tr>
+<tr class="row-empty"><td class="row-label">第34-40課</td><td></td><td></td><td></td><td></td><td class="total-cell"></td></tr>
+<tr class="row-empty"><td class="row-label">第41-45課</td><td></td><td></td><td></td><td></td><td class="total-cell"></td></tr>
+<tr class="row-empty"><td class="row-label">第46-50課</td><td></td><td></td><td></td><td></td><td class="total-cell"></td></tr>
+</tbody>
+  </table>
+<div class="section-header page-break-before">学習状況</div>
+  <div class="info-row learn-info">
+    <div class="info-cell"><span class="label">学習進捗</span><span class="value">第4課</span></div>
+    <div class="info-cell"><span class="label">事前教育開始日</span><span class="value">2026年2月1日</span></div>
+    <div class="info-cell"><span class="label">出国予定日</span><span class="value">2026年6月1日</span></div>
+    <div class="info-cell"><span class="label">生活環境</span><span class="value">寮生活</span></div>
+  </div>
+
+  <div class="section-sub">週別活動</div>
+  <div class="weekly-log">
+    <div class="week-row"><div class="week-label">第1週</div><div class="comment-text">・みんなの日本語　ひらがな<br>・小テスト　ひらがな<br>・聴解<br>*ひらがな課　復習</div></div>
+    <div class="week-row"><div class="week-label">第2週</div><div class="comment-text">・みんなの日本語　カタカナ<br>・小テスト　カタカナ<br>・聴解<br>*カタカナ課 復習</div></div>
+    <div class="week-row"><div class="week-label">第3週</div><div class="comment-text">・みんなの日本語1～2課<br>・小テスト1～2課<br>・聴解1～2課<br>・漢字1～2課</div></div>
+    <div class="week-row"><div class="week-label">第4週</div><div class="comment-text">・みんなの日本語3～4課<br>・小テスト3～4課<br>・聴解3～4課<br>・漢字3～4課</div></div>
+  </div>
+
+  <div class="section-sub">学習状況詳細</div>
+  <div class="comment-grid">
+    <div class="comment-block good">
+      <div class="comment-label">Good</div>
+      <div class="comment-text">・ひらがなとカタカナを書くことができる。<br>・数を聞いて書くことができる。</div>
+    </div>
+    <div class="comment-block bad">
+      <div class="comment-label">Bad</div>
+      <div class="comment-text">・授業中の発言が少なく、参加がやや消極的である。<br>・また、授業への参加状況にややばらつきが見られる。</div>
+    </div>
+  </div>
+  <div class="comment-grid">
+    <div class="comment-block">
+      <div class="comment-label">対策</div>
+      <div class="comment-text">・授業中に教師が積極的に指名し、発言の機会を増やしている。<br>・また、文字や既習内容の復習を強化している。</div>
+    </div>
+    <div class="comment-block">
+      <div class="comment-label">改善点</div>
+      <div class="comment-text">・授業への参加に対する自信は徐々に向上している。</div>
+    </div>
+  </div>
+
+
+  <div class="section-header">生活状況・態度詳細</div>
+  <div class="comment-grid">
+    <div class="comment-block good">
+      <div class="comment-label">Good</div>
+      <div class="comment-text">少数民族出身で、素直で正直な性格であり、思ったことを率直に話す。</div>
+    </div>
+    <div class="comment-block bad">
+      <div class="comment-label">Bad</div>
+      <div class="comment-text">※特記事項なし</div>
+    </div>
+  </div>
+  <div class="comment-grid">
+    <div class="comment-block">
+      <div class="comment-label">対策</div>
+      <div class="comment-text">※特記事項なし</div>
+    </div>
+    <div class="comment-block">
+      <div class="comment-label">改善点</div>
+      <div class="comment-text">※特記事項なし</div>
+    </div>
+  </div>
+
+
+  <div class="report-footer">
+    GROP VIETNAM CO., LTD
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script>
+(function() {
+  const ctx = document.getElementById('trendChart');
+  if (!ctx) return;
+  const labels = ['第1-4課', '第5-11課', '第12-18課', '第19-25課', '第26-33課', '第34-40課', '第41-45課', '第46-50課'];
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label: '語彙', data: [94.0,null,null,null,null,null,null,null], borderColor: '#e67e22', backgroundColor: '#e67e2233', tension: 0.3, spanGaps: true, borderWidth: 2, pointRadius: 4 },
+        { label: '文法', data: [73.0,null,null,null,null,null,null,null], borderColor: '#2563eb', backgroundColor: '#2563eb33', tension: 0.3, spanGaps: true, borderWidth: 2, pointRadius: 4 },
+        { label: '聴解', data: [53.0,null,null,null,null,null,null,null], borderColor: '#16a34a', backgroundColor: '#16a34a33', tension: 0.3, spanGaps: true, borderWidth: 2, pointRadius: 4 },
+        { label: '会話', data: [60.0,null,null,null,null,null,null,null], borderColor: '#9333ea', backgroundColor: '#9333ea33', tension: 0.3, spanGaps: true, borderWidth: 2, pointRadius: 4 },
+      ],
+    },
+    options: {
+      responsive: true,
+      animation: false,
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } }, title: { display: false } },
+      scales: {
+        y: { beginAtZero: true, max: 100, ticks: { font: { size: 9 } } },
+        x: { ticks: { font: { size: 9 } } },
+      },
+    },
+  });
+})();
+</script>
+</body>
+</html>
