@@ -140,7 +140,7 @@ async function registerTrainee() {
     supervising_org: document.getElementById('supervisingOrg').value || null,
     training_start_date: document.getElementById('trainingStartDate').value || null,
     arrival_date: document.getElementById('arrivalDate').value || null,
-    stay_period: document.getElementById('stayPeriod').value.trim(),
+    stay_period: document.getElementById('stayPeriod')?.value?.trim() || null,
   };
 
   // 管理者の場合は組織選択が必要
