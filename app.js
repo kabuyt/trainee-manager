@@ -121,7 +121,56 @@ async function deleteTrainee(id) {
   }
 }
 
-// ===== 新規登録 =====
+// ===== 編集モード: 既存データ読み込み =====
+let _editTraineeId = null;
+
+async function loadEditData() {
+  const editId = new URLSearchParams(location.search).get('edit');
+  if (!editId) return;
+  _editTraineeId = editId;
+
+  // タイトル・ボタン変更
+  document.querySelector('.card h2').textContent = '実習生 編集';
+  document.getElementById('submitBtn').textContent = '更新する';
+  document.title = '編集 | 実習生管理システム';
+
+  const { data: t, error } = await supabase
+    .from('trainees')
+    .select('*')
+    .eq('id', editId)
+    .single();
+
+  if (error || !t) {
+    alert('データの読み込みに失敗しました');
+    window.location.href = 'index.html';
+    return;
+  }
+
+  // フォームに値をセット
+  document.getElementById('nameRomaji').value = t.name_romaji || '';
+  document.getElementById('nameKatakana').value = t.name_katakana || '';
+  document.getElementById('company').value = t.company || '';
+  document.getElementById('supervisingOrg').value = t.supervising_org || '';
+  document.getElementById('classGroup').value = t.class_group || '';
+  document.getElementById('birthDate').value = t.birth_date || '';
+  document.getElementById('gender').value = t.gender || '';
+  document.getElementById('trainingStartDate').value = t.training_start_date || '';
+  document.getElementById('arrivalDate').value = t.arrival_date || '';
+
+  // 既存写真プレビュー
+  if (t.photo_url) {
+    const preview = document.getElementById('photoPreview');
+    preview.innerHTML = `<img src="${t.photo_url}" alt="現在の写真">`;
+  }
+
+  // 管理者の場合、組織セレクトを設定
+  if (isAdmin() && t.organization_id) {
+    const orgSelect = document.getElementById('orgSelect');
+    if (orgSelect) orgSelect.value = t.organization_id;
+  }
+}
+
+// ===== 新規登録 / 更新 =====
 async function registerTrainee() {
   const btn = document.getElementById('submitBtn');
   const msgEl = document.getElementById('formMsg');
@@ -157,39 +206,51 @@ async function registerTrainee() {
   }
 
   try {
-    // 実習生を登録
-    const { data: trainee, error: traineeError } = await supabase
-      .from('trainees')
-      .insert([traineeData])
-      .select()
-      .single();
+    let traineeId;
 
-    if (traineeError) throw traineeError;
+    if (_editTraineeId) {
+      // 更新モード
+      const { error: updateError } = await supabase
+        .from('trainees')
+        .update(traineeData)
+        .eq('id', _editTraineeId);
+      if (updateError) throw updateError;
+      traineeId = _editTraineeId;
+    } else {
+      // 新規登録
+      const { data: trainee, error: traineeError } = await supabase
+        .from('trainees')
+        .insert([traineeData])
+        .select()
+        .single();
+      if (traineeError) throw traineeError;
+      traineeId = trainee.id;
+    }
 
     // 写真アップロード
     const photoFile = document.getElementById('photo').files[0];
     if (photoFile) {
       const ext = photoFile.name.split('.').pop();
-      const path = `${trainee.id}.${ext}`;
+      const path = `${traineeId}.${ext}`;
       const { error: uploadError } = await supabase.storage
         .from('trainee-photos')
         .upload(path, photoFile, { contentType: photoFile.type, upsert: true });
 
       if (!uploadError) {
         const { data: urlData } = supabase.storage.from('trainee-photos').getPublicUrl(path);
-        await supabase.from('trainees').update({ photo_url: urlData.publicUrl }).eq('id', trainee.id);
+        await supabase.from('trainees').update({ photo_url: urlData.publicUrl }).eq('id', traineeId);
       }
     }
 
-    showMsg(msgEl, '登録しました！', 'success');
+    showMsg(msgEl, _editTraineeId ? '更新しました！' : '登録しました！', 'success');
     setTimeout(() => {
-      window.location.href = 'trainee.html?id=' + trainee.id;
+      window.location.href = 'trainee.html?id=' + traineeId;
     }, 1000);
 
   } catch (err) {
-    showMsg(msgEl, '登録に失敗しました: ' + err.message, 'error');
+    showMsg(msgEl, (_editTraineeId ? '更新' : '登録') + 'に失敗しました: ' + err.message, 'error');
     btn.disabled = false;
-    btn.textContent = '登録する';
+    btn.textContent = _editTraineeId ? '更新する' : '登録する';
   }
 }
 

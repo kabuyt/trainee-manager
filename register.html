@@ -141,6 +141,9 @@
           });
         }
       }
+
+      // 編集モード: ?edit={id} があれば既存データを読み込む
+      await loadEditData();
     })();
 
     document.getElementById('registerForm').addEventListener('submit', async function(e) {
