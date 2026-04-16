@@ -1,0 +1,135 @@
+{
+  "goii": {
+    "answer_key": {
+      "g1": ["牛乳","野菜","魚","肉","卵","やま","せんぷうき","スプーン","でんち","バレーボール"],
+      "g2": ["すし","サッカー","スイッチ","セロテープ","はさみ","じてんしゃ","アイスクリーム","ビール"],
+      "g3": {
+        "g3_1": "しがつ",
+        "g3_2": "しちがつ",
+        "g3_3": "おととい",
+        "g3_4": "きょう",
+        "g3_5": "きょねん",
+        "g3_6": "らいねん",
+        "g3_7": "いつか",
+        "g3_8": "なのか",
+        "g3_9": "ようか",
+        "g3_10": "ここのか",
+        "g3_11": "じゅうよっか",
+        "g3_12": "はつか",
+        "g3_13": "さんじゅういちにち"
+      },
+      "g4": ["③","④","①","②","③"],
+      "g5": ["ちいさい","むずかしい","たかい","ひまな／ひま","いい／よい","あたらしい","しずかな／しずか"],
+      "g6_left": [
+        "Gia, kệ",
+        "Lời hứa, cuộc hẹn",
+        "Cay",
+        "Bận",
+        "Ký túc xá",
+        "Hành lý, đồ đạc",
+        "Cho mượn, cho vay",
+        "Công việc",
+        "Giỏi"
+      ],
+      "g6_right": [
+        "Nhận",
+        "Con gái, bé gái",
+        "Cuộc sống",
+        "Đồ uống",
+        "Tủ lạnh",
+        "Anh em",
+        "Bên cạnh",
+        "Hiểu",
+        "Điểm lên xe"
+      ]
+    },
+    "scoring_rules": {
+      "g1": {"method": "exact_match", "points_each": 1, "field_ids": ["g1_1","g1_2","g1_3","g1_4","g1_5","g1_6","g1_7","g1_8","g1_9","g1_10"]},
+      "g2": {"method": "exact_match", "points_each": 3, "field_ids": ["g2_1","g2_2","g2_3","g2_4","g2_5","g2_6","g2_7","g2_8"]},
+      "g3": {"method": "normalized_match", "points_each": 1, "field_ids": ["g3_1","g3_2","g3_3","g3_4","g3_5","g3_6","g3_7","g3_8","g3_9","g3_10","g3_11","g3_12","g3_13"]},
+      "g4": {"method": "radio_exact", "points_each": 2, "field_ids": ["g4_1","g4_2","g4_3","g4_4","g4_5"]},
+      "g5": {"method": "split_match", "points_each": 1, "separator": "／", "strip_suffix": "な", "field_ids": ["g5_1","g5_2","g5_3","g5_4","g5_5","g5_6","g5_7"]},
+      "g6": {"method": "vietnamese_fuzzy", "points_each": 2, "field_ids": ["g6_1","g6_2","g6_3","g6_4","g6_5","g6_6","g6_7","g6_8","g6_9","g6_10","g6_11","g6_12","g6_13","g6_14","g6_15","g6_16","g6_17","g6_18"]}
+    }
+  },
+  "bunpo": {
+    "answer_key": {
+      "b1": {
+        "b1_1": "が", "b1_2": "から", "b1_3": "に", "b1_4": "で", "b1_5": "が",
+        "b1_6": "に", "b1_7": "を",
+        "b1_8": ["へ","に"], "b1_9": ["に","の"], "b1_10": "で",
+        "b1_11": "で", "b1_12": ["が","から"], "b1_13": "に"
+      },
+      "b2": {"b2_1": "しませんか", "b2_2": "どうですか", "b2_3": "どのくらい", "b2_4": "あります", "b2_5": "もらいました"},
+      "b3": [
+        "それから友だちと映画を見ました",
+        "このバスは大阪駅へ行きますか",
+        "どんな料理が好きですか",
+        "りんごを2つと切手を2枚ください",
+        "この近くにVP銀行がありますか"
+      ],
+      "b4": {"b4_1": "G", "b4_2": "A", "b4_3": "F", "b4_4": "H", "b4_5": "B", "b4_6": "D", "b4_7": "C"},
+      "b5": [
+        {"a": "つくえ", "b": "まえ"},
+        {"a": "はこ", "b": "うえ"},
+        {"a": "ベッド", "b": "うえ"},
+        {"a": "たな", "b": "なか"}
+      ],
+      "b6": ["○","×","○","×","×"],
+      "b7": {
+        "b7_1a": "×", "b7_1b": "○",
+        "b7_2a": "○", "b7_2b": "×",
+        "b7_3a": "×", "b7_3b": "○",
+        "b7_4a": "○", "b7_4b": "×",
+        "b7_5a": "×", "b7_5b": "○"
+      },
+      "b8": ["b","c","d","c","c","c","b","c"]
+    },
+    "scoring_rules": {
+      "b1": {"method": "multi_field_match", "points_per_field": 1, "field_ids": ["b1_1","b1_2","b1_3","b1_4","b1_5","b1_6","b1_7","b1_8","b1_9","b1_10","b1_11","b1_12","b1_13"]},
+      "b2": {"method": "exact_match", "points_each": 2, "field_ids": ["b2_1","b2_2","b2_3","b2_4","b2_5"]},
+      "b3": {"method": "normalized_match", "points_each": 3, "field_ids": ["b3_1","b3_2","b3_3","b3_4","b3_5"]},
+      "b4": {"method": "exact_match", "points_each": 2, "field_ids": ["b4_1","b4_2","b4_3","b4_4","b4_5","b4_6","b4_7"]},
+      "b5": {"method": "pair_match", "points_each": 3, "items": [
+        {"a_field": "b5_1a", "b_field": "b5_1b"},
+        {"a_field": "b5_2a", "b_field": "b5_2b"},
+        {"a_field": "b5_3a", "b_field": "b5_3b"},
+        {"a_field": "b5_4a", "b_field": "b5_4b"}
+      ]},
+      "b6": {"method": "exact_match", "points_each": 2, "field_ids": ["b6_1","b6_2","b6_3","b6_4","b6_5"]},
+      "b7": {"method": "exact_match", "points_each": 2, "field_ids": ["b7_1a","b7_1b","b7_2a","b7_2b","b7_3a","b7_3b","b7_4a","b7_4b","b7_5a","b7_5b"]},
+      "b8": {"method": "radio_exact", "points_each": 2, "field_ids": ["b8_1","b8_2","b8_3","b8_4","b8_5","b8_6","b8_7","b8_8"]}
+    }
+  },
+  "chokkai": {
+    "answer_key": {
+      "c1": ["a","c"],
+      "c2": ["a","a"],
+      "c3": {"c3_1r": "d", "c3_1v": "飲みません", "c3_2r": "f", "c3_2v": "タクシーで行きます"},
+      "c4": ["a","b"],
+      "c5": ["b","a"],
+      "c6": ["a","b"],
+      "c7": ["b","d","f","c","e","a"],
+      "c8": ["c","a"],
+      "c9": ["b","c","b"],
+      "c10": ["b","b","b","a"],
+      "c11": ["○","✕","✕","✕","○"],
+      "c12": ["1","2","1","3","1"]
+    },
+    "scoring_rules": {
+      "c1": {"method": "exact_match", "points_each": 4, "field_ids": ["c1_1","c1_2"]},
+      "c2": {"method": "exact_match", "points_each": 3, "field_ids": ["c2_1","c2_2"]},
+      "c3": {"method": "exact_match", "points_each": 2, "field_ids": ["c3_1r","c3_1v","c3_2r","c3_2v"]},
+      "c4": {"method": "radio_exact", "points_each": 3, "field_ids": ["c4_1","c4_2"]},
+      "c5": {"method": "radio_exact", "points_each": 3, "field_ids": ["c5_1","c5_2"]},
+      "c6": {"method": "exact_match", "points_each": 3, "field_ids": ["c6_1","c6_2"]},
+      "c7": {"method": "exact_match", "points_each": 2, "field_ids": ["c7_1","c7_2","c7_3","c7_4","c7_5","c7_6"]},
+      "c8": {"method": "radio_exact", "points_each": 3, "field_ids": ["c8_1","c8_2"]},
+      "c9": {"method": "exact_match", "points_each": 3, "field_ids": ["c9_1","c9_2","c9_3"]},
+      "c10": {"method": "exact_match", "points_each": 2, "field_ids": ["c10_1","c10_2","c10_3","c10_4"]},
+      "c11": {"method": "ox_match", "points_each": 2, "field_ids": ["c11_1","c11_2","c11_3","c11_4","c11_5"]},
+      "c12": {"method": "radio_exact", "points_each": 3, "field_ids": ["c12_1","c12_2","c12_3","c12_4","c12_5"]}
+    },
+    "manual_fields": []
+  }
+}

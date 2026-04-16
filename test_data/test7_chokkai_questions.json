@@ -1,0 +1,206 @@
+[
+  {
+    "id": "c1",
+    "type": "audio_image_radio",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>１．<ruby>音声<rt>おんせい</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて<ruby>答<rt>こた</rt></ruby>えてください　＜12<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "Nghe va chon dap an dung.",
+    "points_each": 4,
+    "total_points": 12,
+    "audio_src": "audio/問題１.mp3",
+    "images": [
+      {"label": "a", "image_src": "images/chokkai/img_1.jpg"},
+      {"label": "b", "image_src": "images/chokkai/img_2.jpg"},
+      {"label": "c", "image_src": "images/chokkai/img_3.jpg"},
+      {"label": "d", "image_src": "images/chokkai/img_4.jpg"},
+      {"label": "e", "image_src": "images/chokkai/img_5.jpg"},
+      {"label": "f", "image_src": "images/chokkai/img_6.jpg"}
+    ],
+    "items": [
+      {
+        "field_id": "c1_1",
+        "label": "①",
+        "suffix": "→　⑤",
+        "input_type": "select",
+        "options": ["a","b","c","d","e","f"]
+      },
+      {
+        "field_id": "c1_2",
+        "label": "②",
+        "suffix": "→　②",
+        "input_type": "select",
+        "options": ["a","b","c","d","e","f"]
+      },
+      {
+        "field_id": "c1_3",
+        "label": "③",
+        "suffix": "→　④",
+        "input_type": "select",
+        "options": ["a","b","c","d","e","f"]
+      }
+    ]
+  },
+  {
+    "id": "c2",
+    "type": "audio_select",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>２．<ruby>音声<rt>おんせい</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて<ruby>答<rt>こた</rt></ruby>えてください　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×3<ruby>問<rt>もん</rt></ruby>＝9<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "Nghe va chon dap an dung.",
+    "points_each": 3,
+    "total_points": 9,
+    "audio_src": "audio/問題２.mp3",
+    "items": [
+      {"field_id": "c2_1", "label": "①", "input_type": "select", "options": ["a","b","c"]},
+      {"field_id": "c2_2", "label": "②", "input_type": "select", "options": ["a","b","c"]},
+      {"field_id": "c2_3", "label": "③", "input_type": "select", "options": ["a","b","c"]}
+    ]
+  },
+  {
+    "id": "c3",
+    "type": "audio_select",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>３．<ruby>音声<rt>おんせい</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて<ruby>答<rt>こた</rt></ruby>えてください　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×3<ruby>問<rt>もん</rt></ruby>＝6<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "Nghe va chon dap an dung.",
+    "points_each": 2,
+    "total_points": 6,
+    "audio_src": "audio/問題３.mp3",
+    "items": [
+      {"field_id": "c3_1", "label": "①", "input_type": "select", "options": ["a","b","c","d","e"]},
+      {"field_id": "c3_2", "label": "②", "input_type": "select", "options": ["a","b","c","d","e"]},
+      {"field_id": "c3_3", "label": "③", "input_type": "select", "options": ["a","b","c","d","e"]}
+    ]
+  },
+  {
+    "id": "c4",
+    "type": "audio_select",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>４．⚠ <ruby>音声<rt>おんせい</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて<ruby>答<rt>こた</rt></ruby>えてください　＜18<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "買ったものと理由を書いてください。",
+    "grading": "manual",
+    "total_points": 18,
+    "audio_src": "audio/問題４.mp3",
+    "items": [
+      {
+        "label": "①",
+        "fields": [
+          {"field_id": "c4_1a", "prefix": "買ったもの：", "input_type": "text"},
+          {"field_id": "c4_1b", "prefix": "理由：", "input_type": "text"}
+        ]
+      },
+      {
+        "label": "②",
+        "fields": [
+          {"field_id": "c4_2a", "prefix": "買ったもの：", "input_type": "text"},
+          {"field_id": "c4_2b", "prefix": "理由：", "input_type": "text"}
+        ]
+      },
+      {
+        "label": "③",
+        "fields": [
+          {"field_id": "c4_3a", "prefix": "買ったもの：", "input_type": "text"},
+          {"field_id": "c4_3b", "prefix": "理由：", "input_type": "text"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c5",
+    "type": "audio_select",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>５．<ruby>音声<rt>おんせい</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて<ruby>答<rt>こた</rt></ruby>えてください　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×3<ruby>問<rt>もん</rt></ruby>＝6<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "Nghe va chon dap an dung.",
+    "points_each": 2,
+    "total_points": 6,
+    "audio_src": "audio/問題５.mp3",
+    "items": [
+      {"field_id": "c5_1", "label": "①", "input_type": "select", "options": ["a","b","c","d","e","f"]},
+      {"field_id": "c5_2", "label": "②", "input_type": "select", "options": ["a","b","c","d","e","f"]},
+      {"field_id": "c5_3", "label": "③", "input_type": "select", "options": ["a","b","c","d","e","f"]}
+    ]
+  },
+  {
+    "id": "c6",
+    "type": "audio_select",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>６．<ruby>音声<rt>おんせい</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて<ruby>答<rt>こた</rt></ruby>えてください　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×3<ruby>問<rt>もん</rt></ruby>＝6<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "Nghe va chon dap an dung.",
+    "points_each": 2,
+    "total_points": 6,
+    "audio_src": "audio/問題６.mp3",
+    "items": [
+      {"field_id": "c6_1", "label": "①", "input_type": "select", "options": ["a","b"]},
+      {"field_id": "c6_2", "label": "②", "input_type": "select", "options": ["a","b"]},
+      {"field_id": "c6_3", "label": "③", "input_type": "select", "options": ["a","b"]}
+    ]
+  },
+  {
+    "id": "c7",
+    "type": "audio_select",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>７．<ruby>音声<rt>おんせい</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて<ruby>答<rt>こた</rt></ruby>えてください　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×2<ruby>問<rt>もん</rt></ruby>＝6<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "Nghe va chon dap an dung.",
+    "points_each": 3,
+    "total_points": 6,
+    "audio_src": "audio/問題７.mp3",
+    "items": [
+      {"field_id": "c7_1", "label": "①", "input_type": "select", "options": ["a","b","c"]},
+      {"field_id": "c7_2", "label": "②", "input_type": "select", "options": ["a","b","c"]}
+    ]
+  },
+  {
+    "id": "c8",
+    "type": "audio_select",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>８．⚠ <ruby>音声<rt>おんせい</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて<ruby>答<rt>こた</rt></ruby>えてください　＜15<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "場合と対応を書いてください。",
+    "grading": "manual",
+    "total_points": 15,
+    "audio_src": "audio/問題８.mp3",
+    "word_bank_html": "a: <ruby>病院<rt>びょういん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>く　　b: もう1<ruby>日<rt>にち</rt></ruby><ruby>休<rt>やす</rt></ruby>む　　c: <ruby>会社<rt>かいしゃ</rt></ruby>を<ruby>休<rt>やす</rt></ruby>む<br>d: <ruby>救急車<rt>きゅうきゅうしゃ</rt></ruby>を<ruby>呼<rt>よ</rt></ruby>ぶ　　e: <ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>んで<ruby>寝<rt>ね</rt></ruby>る",
+    "items": [
+      {
+        "label": "①",
+        "fields": [
+          {"field_id": "c8_1a", "prefix": "場合：", "input_type": "text"},
+          {"field_id": "c8_1b", "prefix": "対応：", "input_type": "select", "options": ["a","b","c","d","e"]}
+        ]
+      },
+      {
+        "label": "②",
+        "fields": [
+          {"field_id": "c8_2a", "prefix": "場合：", "input_type": "text"},
+          {"field_id": "c8_2b", "prefix": "対応：", "input_type": "select", "options": ["a","b","c","d","e"]}
+        ]
+      },
+      {
+        "label": "③",
+        "fields": [
+          {"field_id": "c8_3a", "prefix": "場合：", "input_type": "text"},
+          {"field_id": "c8_3b", "prefix": "対応：", "input_type": "select", "options": ["a","b","c","d","e"]}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c9",
+    "type": "audio_select",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>９．⚠ <ruby>音声<rt>おんせい</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて<ruby>質問<rt>しつもん</rt></ruby>に<ruby>答<rt>こた</rt></ruby>えてください　＜12<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "日本語で答えてください。",
+    "grading": "manual",
+    "total_points": 12,
+    "audio_src": "audio/問題９.mp3",
+    "items": [
+      {"field_id": "c9_1", "label": "①", "input_type": "text"},
+      {"field_id": "c9_2", "label": "②", "input_type": "text"},
+      {"field_id": "c9_3", "label": "③", "input_type": "text"}
+    ]
+  },
+  {
+    "id": "c10",
+    "type": "audio_ox",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>１０．<ruby>音声<rt>おんせい</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて○か×で<ruby>答<rt>こた</rt></ruby>えてください　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×5<ruby>問<rt>もん</rt></ruby>＝10<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "Nghe va chon O (dung) / X (sai).",
+    "points_each": 2,
+    "total_points": 10,
+    "audio_src": "audio/問題１０.mp3",
+    "items": [
+      {"field_id": "c10_1", "label": "①", "input_type": "select", "options": ["○","×"]},
+      {"field_id": "c10_2", "label": "②", "input_type": "select", "options": ["○","×"]},
+      {"field_id": "c10_3", "label": "③", "input_type": "select", "options": ["○","×"]},
+      {"field_id": "c10_4", "label": "④", "input_type": "select", "options": ["○","×"]},
+      {"field_id": "c10_5", "label": "⑤", "input_type": "select", "options": ["○","×"]}
+    ]
+  }
+]

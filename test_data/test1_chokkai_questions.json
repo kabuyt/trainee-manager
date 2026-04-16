@@ -1,0 +1,330 @@
+[
+  {
+    "id": "c1",
+    "type": "audio_image_radio",
+    "title_html": "問題１．おんなの人のしごとはａですか、ｂですか　＜各3点×2問＝6点＞",
+    "grading": "manual",
+    "points_each": 3,
+    "total_points": 6,
+    "intro_audio": "audio/1-0.mp3",
+    "intro_label": "しつもん（Câu hỏi mẫu）",
+    "items": [
+      {
+        "field_id": "c1_1",
+        "label": "① 問１",
+        "audio_src": "audio/1-1.mp3",
+        "choices": [
+          {"value": "a", "label": "ａ", "image_src": "images/chokkai/image1.png"},
+          {"value": "b", "label": "ｂ", "image_src": "images/chokkai/image2.png"}
+        ]
+      },
+      {
+        "field_id": "c1_2",
+        "label": "② 問２",
+        "audio_src": "audio/1-2.mp3",
+        "choices": [
+          {"value": "a", "label": "ａ", "image_src": "images/chokkai/image3.png"},
+          {"value": "b", "label": "ｂ", "image_src": "images/chokkai/image4.png"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c2",
+    "type": "audio_select",
+    "title_html": "問題２．なんさいですか　＜各3点×2問＝6点＞",
+    "points_each": 3,
+    "total_points": 6,
+    "intro_audio": "audio/2-0.mp3",
+    "intro_label": "しつもん（Câu hỏi mẫu）",
+    "items": [
+      {
+        "field_id": "c2_1",
+        "label": "① 問１（ますださん）",
+        "audio_src": "audio/2-1.mp3",
+        "prefix": "ますださん：",
+        "suffix": "さい",
+        "input_type": "select",
+        "options": ["17","27","61","71","81"]
+      },
+      {
+        "field_id": "c2_2",
+        "label": "② 問２（ケリーさん）",
+        "audio_src": "audio/2-2.mp3",
+        "prefix": "ケリーさん：",
+        "suffix": "さい",
+        "input_type": "select",
+        "options": ["16","26","36","46","56"]
+      }
+    ]
+  },
+  {
+    "id": "c3",
+    "type": "audio_image_radio",
+    "title_html": "問題３．「これ」はなんですか。「それ」は？「あれ」は？　＜各3点×2問＝6点＞",
+    "grading": "manual",
+    "points_each": 3,
+    "total_points": 6,
+    "intro_audio": "audio/3-0.mp3",
+    "intro_label": "しつもん（Câu hỏi mẫu）",
+    "items": [
+      {
+        "field_id": "c3_1",
+        "label": "① 問１",
+        "audio_src": "audio/3-1.mp3",
+        "choices": [
+          {"value": "a", "label": "ａ", "image_src": "images/chokkai/image5.png"},
+          {"value": "b", "label": "ｂ", "image_src": "images/chokkai/image6.png"},
+          {"value": "c", "label": "ｃ", "image_src": "images/chokkai/image7.png"}
+        ]
+      },
+      {
+        "field_id": "c3_2",
+        "label": "② 問２",
+        "audio_src": "audio/3-2.mp3",
+        "choices": [
+          {"value": "a", "label": "ａ", "image_src": "images/chokkai/image8.png"},
+          {"value": "b", "label": "ｂ", "image_src": "images/chokkai/image9.png"},
+          {"value": "c", "label": "ｃ", "image_src": "images/chokkai/image10.png"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c4",
+    "type": "audio_image_radio",
+    "title_html": "問題４．それはなんですか　＜各3点×2問＝6点＞",
+    "grading": "manual",
+    "points_each": 3,
+    "total_points": 6,
+    "intro_audio": "audio/4-0.mp3",
+    "intro_label": "しつもん（Câu hỏi mẫu）",
+    "items": [
+      {
+        "field_id": "c4_1",
+        "label": "① 問１",
+        "audio_src": "audio/4-1.mp3",
+        "choices": [
+          {"value": "a", "label": "ａ", "image_src": "images/chokkai/image11.png"},
+          {"value": "b", "label": "ｂ", "image_src": "images/chokkai/image12.png"}
+        ]
+      },
+      {
+        "field_id": "c4_2",
+        "label": "② 問２",
+        "audio_src": "audio/4-2.mp3",
+        "choices": [
+          {"value": "a", "label": "ａ", "image_src": "images/chokkai/image13.png"},
+          {"value": "b", "label": "ｂ", "image_src": "images/chokkai/image14.png"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c5",
+    "type": "audio_select",
+    "title_html": "問題５．だれのですか　＜各3点×2問＝6点＞",
+    "grading": "manual",
+    "points_each": 3,
+    "total_points": 6,
+    "items": [
+      {
+        "field_id": "c5_1",
+        "audio_src": "audio/5.mp3",
+        "image_src": "images/chokkai/image15.png",
+        "question": "① （これ）はだれのですか？",
+        "input_type": "select",
+        "options": [
+          {"value": "a", "label": "a. エド"},
+          {"value": "b", "label": "b. リン"},
+          {"value": "c", "label": "c. ジャン"},
+          {"value": "d", "label": "d. タワポン"},
+          {"value": "e", "label": "e. 先生"}
+        ]
+      },
+      {
+        "field_id": "c5_2",
+        "question": "② （それ）はだれのですか？",
+        "input_type": "select",
+        "options": [
+          {"value": "a", "label": "a. エド"},
+          {"value": "b", "label": "b. リン"},
+          {"value": "c", "label": "c. ジャン"},
+          {"value": "d", "label": "d. タワポン"},
+          {"value": "e", "label": "e. 先生"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c6",
+    "type": "audio_multi_select",
+    "title_html": "問題６．「ここ」はａですか、ｂですか。「そこ」は？「あそこ」は？　＜各3点×2問＝6点＞",
+    "grading": "manual",
+    "points_each": 3,
+    "total_points": 6,
+    "items": [
+      {
+        "label": "① 問１",
+        "audio_src": "audio/6-1.mp3",
+        "image_src": "images/chokkai/image16.png",
+        "fields": [
+          {"field_id": "c6_1a", "prefix": "①", "input_type": "select", "options": ["a","b"]},
+          {"field_id": "c6_1b", "prefix": "②", "input_type": "select", "options": ["a","b"]}
+        ]
+      },
+      {
+        "label": "② 問２",
+        "audio_src": "audio/6-2.mp3",
+        "image_src": "images/chokkai/image17.png",
+        "fields": [
+          {"field_id": "c6_2a", "prefix": "①", "input_type": "select", "options": ["a","b"]},
+          {"field_id": "c6_2b", "prefix": "②", "input_type": "select", "options": ["a","b"]}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c7",
+    "type": "audio_select",
+    "title_html": "問題７．どこですか　＜各3点×2問＝6点＞",
+    "points_each": 3,
+    "total_points": 6,
+    "audio_files": ["audio/7-0.mp3", "audio/7-1.mp3"],
+    "image_src": "images/chokkai/image18.png",
+    "items": [
+      {"field_id": "c7_1", "prefix": "タワポンさん　→", "input_type": "select", "options": ["a","b","c","d","e","f","g","h"]},
+      {"field_id": "c7_2", "prefix": "こばやし先生　→", "input_type": "select", "options": ["a","b","c","d","e","f","g","h"]}
+    ]
+  },
+  {
+    "id": "c8",
+    "type": "audio_price_country",
+    "title_html": "問題８．いくらですか。どこのですか　＜（値段2点＋国1点）×2問＝6点＞",
+    "points_each_price": 2,
+    "points_each_country": 1,
+    "total_points": 6,
+    "intro_audio": "audio/8-0.mp3",
+    "intro_label": "Giải thích",
+    "intro_image": "images/chokkai/image19.png",
+    "country_options": [
+      {"value": "a", "label": "a. ちゅうごく"},
+      {"value": "b", "label": "b. にほん"},
+      {"value": "c", "label": "c. インド"},
+      {"value": "d", "label": "d. かんこく"},
+      {"value": "e", "label": "e. インドネシア"}
+    ],
+    "items": [
+      {
+        "label": "① あのかばん",
+        "audio_src": "audio/8-1.mp3",
+        "price_field": {"field_id": "c8_1p", "prefix": "いくら：", "suffix": "えん", "options": ["800","1800","2800","3800","5800"]},
+        "country_field": {"field_id": "c8_1c", "prefix": "くに："}
+      },
+      {
+        "label": "② あのカメラ",
+        "audio_src": "audio/8-2.mp3",
+        "price_field": {"field_id": "c8_2p", "prefix": "いくら：", "suffix": "えん", "options": ["8500","15000","18500","20500","85000"]},
+        "country_field": {"field_id": "c8_2c", "prefix": "くに："}
+      }
+    ]
+  },
+  {
+    "id": "c9",
+    "type": "audio_schedule",
+    "title_html": "問題９．なんじからなんじまでですか。やすみはなんようびですか　＜（時間2点＋曜日1点）×2問＝6点＞",
+    "grading": "manual",
+    "total_points": 6,
+    "intro_audio": "audio/9-0.mp3",
+    "intro_image": "images/chokkai/image20.png",
+    "day_options": ["にちようび","げつようび","かようび","すいようび","もくようび","きんようび","どようび"],
+    "items": [
+      {
+        "label": "① なにわ図書館",
+        "audio_src": "audio/9-1.mp3",
+        "fields": [
+          {"field_id": "c9_1s", "prefix": "", "suffix": "じ〜", "input_type": "select", "options": ["9","10","11","12","13","14","15","16","17","18","19","20","21"]},
+          {"field_id": "c9_1e", "suffix": "じ", "input_type": "select", "options": ["9","10","11","12","13","14","15","16","17","18","19","20","21"]},
+          {"field_id": "c9_1d", "prefix": "やすみ：", "input_type": "select", "use_day_options": true}
+        ]
+      },
+      {
+        "label": "② げんき 病院",
+        "audio_src": "audio/9-2.mp3",
+        "fields": [
+          {"field_id": "c9_2sa", "prefix": "ごぜん（午前）：", "suffix": "じ〜", "input_type": "select", "options": ["8","9","10","11","12"]},
+          {"field_id": "c9_2ea", "suffix": "じ", "input_type": "select", "options": ["8","9","10","11","12"]},
+          {"field_id": "c9_2sb", "prefix": "ごご（午後）：", "suffix": "じ〜", "input_type": "select", "options": ["13","14","15","16","17","18","19"]},
+          {"field_id": "c9_2eb", "suffix": "じ", "input_type": "select", "options": ["13","14","15","16","17","18","19"]},
+          {"field_id": "c9_2d", "prefix": "やすみ：", "input_type": "select", "use_day_options": true}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c10",
+    "type": "audio_select",
+    "title_html": "問題１０．でんわばんごう（電話番号）はなんばんですか　＜各3点×2問＝6点＞",
+    "instruction": "※ Hãy nhập câu trả lời bằng điện thoại của bạn.",
+    "points_each": 3,
+    "total_points": 6,
+    "items": [
+      {
+        "field_id": "c10_1",
+        "label": "① 問１",
+        "audio_src": "audio/10-1.mp3",
+        "prefix": "でんわばんごう：",
+        "input_type": "select",
+        "options": ["336-8080","336-8008","363-8080","336-8880"]
+      },
+      {
+        "field_id": "c10_2",
+        "label": "② 問２",
+        "audio_src": "audio/10-2.mp3",
+        "prefix": "でんわばんごう：",
+        "input_type": "select",
+        "options": ["078-4211-3168","078-4112-3168","078-4211-3186","087-4211-3168"]
+      }
+    ]
+  },
+  {
+    "id": "c11",
+    "type": "audio_ox",
+    "title_html": "問題１１．○・✕で答えてください　＜各4点×5問＝20点＞",
+    "instruction": "Nghe đoạn hội thoại, xem câu kế tiếp đúng hay sai → ○（đúng）/ ✕（sai）",
+    "points_each": 4,
+    "total_points": 20,
+    "items": [
+      {"field_id": "c11_1", "label": "①", "audio_src": "audio/11-1.mp3", "input_type": "select", "options": ["○","✕"]},
+      {"field_id": "c11_2", "label": "②", "audio_src": "audio/11-2.mp3", "input_type": "select", "options": ["○","✕"]},
+      {"field_id": "c11_3", "label": "③", "audio_src": "audio/11-3.mp3", "input_type": "select", "options": ["○","✕"]},
+      {"field_id": "c11_4", "label": "④", "audio_src": "audio/11-4.mp3", "input_type": "select", "options": ["○","✕"]},
+      {"field_id": "c11_5", "label": "⑤", "audio_src": "audio/11-5.mp3", "input_type": "select", "options": ["○","✕"]}
+    ]
+  },
+  {
+    "id": "c12",
+    "type": "audio_tanaka",
+    "title_html": "問題１２．田中さんの一日を聞いて答えてください　＜各4点×5問＝20点＞",
+    "instruction": "※ Nghe đoạn văn về một ngày của Tanaka-san, nhìn tranh và trả lời câu hỏi.",
+    "points_each": 4,
+    "total_points": 20,
+    "header_html": "🗓 田中さんの いちにち",
+    "illustration_src": "images/chokkai/tanaka.png",
+    "audio_src": "audio/12-tanaka.mp3",
+    "items": [
+      {"field_id": "c12_1", "question": "① 田中さんは なんじに おきますか？", "input_type": "select", "options_dynamic": true},
+      {"field_id": "c12_2", "question": "② ひるやすみに どこで ごはんを たべますか？", "input_type": "select", "options_dynamic": true},
+      {"field_id": "c12_3", "question": "③ なんじに うちへ かえりますか？", "input_type": "select", "options_dynamic": true},
+      {"field_id": "c12_4", "question": "④ まいばん なにを しますか？", "input_type": "select", "options_dynamic": true},
+      {"field_id": "c12_5", "question": "⑤ やすみは なんようびですか？", "input_type": "select", "options_dynamic": true}
+    ],
+    "c12_option_sets": {
+      "c12_1": ["5じ","5じはん","6じ","6じはん","7じ","7じはん"],
+      "c12_2": ["いえ","しょくどう","レストラン","こうえん","じむしょ"],
+      "c12_3": ["5じ","5じはん","6じ","6じはん","7じ","7じはん"],
+      "c12_4": ["テレビを みます","にほんごを べんきょうします","ほんを よみます","おんがくを ききます","ともだちに でんわします"],
+      "c12_5": ["げつようび","かようび","すいようび","もくようび","きんようび","どようび","にちようび"]
+    }
+  }
+]

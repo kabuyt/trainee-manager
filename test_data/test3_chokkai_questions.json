@@ -1,0 +1,243 @@
+[
+  {
+    "id": "c1",
+    "type": "audio_select",
+    "title_html": "問題１．どちらのスーパーで買いますか　＜各3点×3問＝9点＞",
+    "instruction": "Nghe và chọn đáp án đúng. a.わかばスーパー / b.まるやスーパー",
+    "points_each": 3,
+    "total_points": 9,
+    "audio_src": "audio/問題１.mp3",
+    "items": [
+      {"field_id": "c1_1", "label": "１）", "input_type": "select", "options": [{"value": "a", "label": "a. わかばスーパー"}, {"value": "b", "label": "b. まるやスーパー"}]},
+      {"field_id": "c1_2", "label": "２）", "input_type": "select", "options": [{"value": "a", "label": "a. わかばスーパー"}, {"value": "b", "label": "b. まるやスーパー"}]},
+      {"field_id": "c1_3", "label": "３）", "input_type": "select", "options": [{"value": "a", "label": "a. わかばスーパー"}, {"value": "b", "label": "b. まるやスーパー"}]}
+    ]
+  },
+  {
+    "id": "c2",
+    "type": "audio_image_radio",
+    "title_html": "問題２．何をしに来ましたか　＜各3点×2問＝6点＞",
+    "instruction": "Nghe và chọn hình đúng (a-f).",
+    "points_each": 3,
+    "total_points": 6,
+    "image_src": "images/chokkai/chokkai_mondai_002.png",
+    "audio_src": "audio/問題２.mp3",
+    "items": [
+      {"field_id": "c2_1", "label": "１）", "input_type": "select", "options": ["a","b","c","d","e","f"]},
+      {"field_id": "c2_2", "label": "２）", "input_type": "select", "options": ["a","b","c","d","e","f"]}
+    ]
+  },
+  {
+    "id": "c3",
+    "type": "audio_image_radio",
+    "title_html": "問題３．明日は何をしますか　＜各3点×2問＝6点＞",
+    "instruction": "Nghe và chọn đáp án đúng (a/b/c).",
+    "points_each": 3,
+    "total_points": 6,
+    "image_src": "images/chokkai/chokkai_mondai_003.png",
+    "items": [
+      {
+        "field_id": "c3_1",
+        "label": "① 問１",
+        "audio_src": "audio/問題3-1カリナさんはタクシーで空港まで.mp3",
+        "input_type": "select",
+        "options": ["a","b","c"]
+      },
+      {
+        "field_id": "c3_2",
+        "label": "② 問２",
+        "audio_src": "audio/問題3-2カリナさんはタクシーで空港まで-1.mp3",
+        "input_type": "select",
+        "options": ["a","b","c"]
+      }
+    ]
+  },
+  {
+    "id": "c4",
+    "type": "audio_select",
+    "title_html": "問題４．パーティをします。aとbのどちら　＜各3点×2問＝6点＞",
+    "instruction": "Nghe và chọn đáp án đúng.",
+    "points_each": 3,
+    "total_points": 6,
+    "audio_src": "audio/問題４.mp3",
+    "items": [
+      {"field_id": "c4_1", "label": "１）", "input_type": "select", "options": ["a","b"]},
+      {"field_id": "c4_2", "label": "２）", "input_type": "select", "options": ["a","b"]}
+    ]
+  },
+  {
+    "id": "c5",
+    "type": "audio_select",
+    "title_html": "問題５．サントスさんは何をしなければなりませんか　＜各3点×2問＝6点＞",
+    "instruction": "Nghe và chọn đáp án đúng.",
+    "points_each": 3,
+    "total_points": 6,
+    "audio_src": "audio/問題５.mp3",
+    "items": [
+      {
+        "field_id": "c5_1",
+        "label": "１）",
+        "sentence_html": "{c5_1} 薬は1日3回飲みます。",
+        "input_type": "select",
+        "options": [{"value": "a", "label": "a. 白い"}, {"value": "b", "label": "b. 赤い"}]
+      },
+      {
+        "field_id": "c5_2",
+        "label": "２）",
+        "sentence_html": "{c5_2} を持って来ます。",
+        "input_type": "select",
+        "options": [{"value": "a", "label": "a. 保険証"}, {"value": "b", "label": "b. パスポート"}]
+      }
+    ]
+  },
+  {
+    "id": "c6",
+    "type": "audio_select",
+    "title_html": "問題６．a, b, c から1つ選んでください　＜各1点×10問＝10点＞",
+    "instruction": "Nghe và chọn đáp án đúng.",
+    "points_each": 1,
+    "total_points": 10,
+    "audio_src": "audio/問題６.mp3",
+    "items": [
+      {"field_id": "c6_1",  "label": "１）", "input_type": "select", "options": ["a","b","c"]},
+      {"field_id": "c6_2",  "label": "２）", "input_type": "select", "options": ["a","b","c"]},
+      {"field_id": "c6_3",  "label": "３）", "input_type": "select", "options": ["a","b","c"]},
+      {"field_id": "c6_4",  "label": "４）", "input_type": "select", "options": ["a","b","c"]},
+      {"field_id": "c6_5",  "label": "５）", "input_type": "select", "options": ["a","b","c"]},
+      {"field_id": "c6_6",  "label": "６）", "input_type": "select", "options": ["a","b","c"]},
+      {"field_id": "c6_7",  "label": "７）", "input_type": "select", "options": ["a","b","c"]},
+      {"field_id": "c6_8",  "label": "８）", "input_type": "select", "options": ["a","b","c"]},
+      {"field_id": "c6_9",  "label": "９）", "input_type": "select", "options": ["a","b","c"]},
+      {"field_id": "c6_10", "label": "１０）", "input_type": "select", "options": ["a","b","c"]}
+    ]
+  },
+  {
+    "id": "c7",
+    "type": "audio_ox",
+    "title_html": "問題７．できますか・できませんか　＜各3点×2問＝6点＞",
+    "instruction": "Nghe và chọn ○ hoặc ×.",
+    "points_each": 3,
+    "total_points": 6,
+    "audio_src": "audio/問題７.mp3",
+    "items": [
+      {"field_id": "c7_1", "label": "１）Eメールと電話ができます。", "input_type": "select", "options": ["○","×"]},
+      {"field_id": "c7_2", "label": "２）お寺の写真を撮ります。", "input_type": "select", "options": ["○","×"]}
+    ]
+  },
+  {
+    "id": "c8",
+    "type": "audio_image_radio",
+    "title_html": "問題８．○○さんは何をしていますか　＜各3点×2問＝6点＞",
+    "instruction": "Nghe và chọn hình đúng (a-e).",
+    "points_each": 3,
+    "total_points": 6,
+    "image_src": "images/chokkai/chokkai_mondai_008.png",
+    "audio_src": "audio/問題８.mp3",
+    "items": [
+      {"field_id": "c8_1", "label": "１）", "input_type": "select", "options": ["a","b","c","d","e"]},
+      {"field_id": "c8_2", "label": "２）", "input_type": "select", "options": ["a","b","c","d","e"]}
+    ]
+  },
+  {
+    "id": "c9",
+    "type": "audio_select",
+    "title_html": "問題９．音声を聞いて正しい答えを選んでください　＜各3点×5問＝15点＞",
+    "instruction": "Nghe và chọn đáp án đúng (1/2/3).",
+    "points_each": 3,
+    "total_points": 15,
+    "intro_audio": "audio/問題９－０（例-1）.mp3",
+    "intro_label": "（例）",
+    "items": [
+      {"field_id": "c9_1", "label": "① 問１", "audio_src": "audio/問題９－１.mp3", "input_type": "select", "options": ["1","2","3"]},
+      {"field_id": "c9_2", "label": "② 問２", "audio_src": "audio/問題９－２.mp3", "input_type": "select", "options": ["1","2","3"]},
+      {"field_id": "c9_3", "label": "③ 問３", "audio_src": "audio/問題９－３.mp3", "input_type": "select", "options": ["1","2","3"]},
+      {"field_id": "c9_4", "label": "④ 問４", "audio_src": "audio/問題９－４.mp3", "input_type": "select", "options": ["1","2","3"]},
+      {"field_id": "c9_5", "label": "⑤ 問５", "audio_src": "audio/問題９－５.mp3", "input_type": "select", "options": ["1","2","3"]}
+    ]
+  },
+  {
+    "id": "c10",
+    "type": "audio_ox",
+    "title_html": "問題１０．○か×で答えてください　＜各2点×5問＝10点＞",
+    "instruction": "Nghe và chọn ○（đúng）hoặc ×（sai）.",
+    "points_each": 2,
+    "total_points": 10,
+    "items": [
+      {"field_id": "c10_1", "label": "①", "audio_src": "audio/問題１０－１.mp3", "input_type": "select", "options": ["○","×"]},
+      {"field_id": "c10_2", "label": "②", "audio_src": "audio/問題１０－２.mp3", "input_type": "select", "options": ["○","×"]},
+      {"field_id": "c10_3", "label": "③", "audio_src": "audio/問題１０－３.mp3", "input_type": "select", "options": ["○","×"]},
+      {"field_id": "c10_4", "label": "④", "audio_src": "audio/問題１０－４.mp3", "input_type": "select", "options": ["○","×"]},
+      {"field_id": "c10_5", "label": "⑤", "audio_src": "audio/問題１０－５.mp3", "input_type": "select", "options": ["○","×"]}
+    ]
+  },
+  {
+    "id": "c11",
+    "type": "audio_select",
+    "title_html": "問題１１．質問に答えてください　＜各4点×5問＝20点＞",
+    "instruction": "音声を聞いて、正しい答えを選んでください。Nghe và chọn câu trả lời đúng.",
+    "points_each": 4,
+    "total_points": 20,
+    "items": [
+      {
+        "field_id": "c11_1",
+        "label": "①",
+        "audio_src": "audio/問題１１－１.mp3",
+        "input_type": "select",
+        "options": [
+          {"value": "1", "label": "1. パスポートをもっていかなければなりません。"},
+          {"value": "2", "label": "2. パスポートをもっていきたいです。"},
+          {"value": "3", "label": "3. パスポートをもっていってもいいです。"},
+          {"value": "4", "label": "4. パスポートをもっていくことができます。"}
+        ]
+      },
+      {
+        "field_id": "c11_2",
+        "label": "②",
+        "audio_src": "audio/問題１１－２.mp3",
+        "input_type": "select",
+        "options": [
+          {"value": "1", "label": "1. 10メートルぐらいおよぐことができます。"},
+          {"value": "2", "label": "2. 10メートルぐらいおよがなければなりません。"},
+          {"value": "3", "label": "3. 10メートルぐらいおよいでいます。"},
+          {"value": "4", "label": "4. 10メートルぐらいおよぎたいです。"}
+        ]
+      },
+      {
+        "field_id": "c11_3",
+        "label": "③",
+        "audio_src": "audio/問題１１－３.mp3",
+        "input_type": "select",
+        "options": [
+          {"value": "1", "label": "1. はい、ふじさんです。"},
+          {"value": "2", "label": "2. いいえ、ふじさんではありません。"},
+          {"value": "3", "label": "3. ふじさんに行きたいです。"},
+          {"value": "4", "label": "4. ふじさんを知っています。"}
+        ]
+      },
+      {
+        "field_id": "c11_4",
+        "label": "④",
+        "audio_src": "audio/問題１１－４.mp3",
+        "input_type": "select",
+        "options": [
+          {"value": "1", "label": "1. こうえんに行きたいです。"},
+          {"value": "2", "label": "2. こうえんに行かなければなりません。"},
+          {"value": "3", "label": "3. こうえんに行ってもいいです。"},
+          {"value": "4", "label": "4. こうえんに行ったことがあります。"}
+        ]
+      },
+      {
+        "field_id": "c11_5",
+        "label": "⑤",
+        "audio_src": "audio/問題１１－５.mp3",
+        "input_type": "select",
+        "options": [
+          {"value": "1", "label": "1. ホーチミンがいちばんゆうめいです。"},
+          {"value": "2", "label": "2. ホーチミンはハノイよりゆうめいです。"},
+          {"value": "3", "label": "3. ホーチミンもゆうめいです。"},
+          {"value": "4", "label": "4. ホーチミンへ行きたいです。"}
+        ]
+      }
+    ]
+  }
+]

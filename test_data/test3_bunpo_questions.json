@@ -1,0 +1,297 @@
+[
+  {
+    "id": "b1",
+    "type": "fill_particle",
+    "title_html": "問題１．助詞を書いてください　＜各1点×12問＝12点＞",
+    "instruction": "Hãy điền trợ từ đúng vào（　　）.",
+    "example_html": "きのう（<span class=\"already\">は</span>）日曜日でした。",
+    "points_each": 1,
+    "total_points": 12,
+    "items": [
+      {
+        "sentence_html": "１）　昨日は（{b1_1}）食べませんでした。",
+        "fields": [
+          {"field_id": "b1_1", "input_type": "select", "options": ["も","を","に","は","が","で"]}
+        ]
+      },
+      {
+        "sentence_html": "２）　あの電車に乗って、（{b1_2}）電車（{b1_3}）降ります。",
+        "fields": [
+          {"field_id": "b1_2", "input_type": "select", "options": ["で","に","を","は","が","も"]},
+          {"field_id": "b1_3", "input_type": "select", "options": ["を","に","で","が","は","も"]}
+        ]
+      },
+      {
+        "sentence_html": "３）　金曜日の5時（{b1_4}）本を返さなければなりませんよ。",
+        "fields": [
+          {"field_id": "b1_4", "input_type": "select", "options": ["までに","まで","に","で","は","が"]}
+        ]
+      },
+      {
+        "sentence_html": "４）　ベトナムの（{b1_5}）何（{b1_6}）有名ですか。",
+        "fields": [
+          {"field_id": "b1_5", "input_type": "select", "options": ["で","に","を","は","が","も"]},
+          {"field_id": "b1_6", "input_type": "select", "options": ["が","を","に","で","は","も"]}
+        ]
+      },
+      {
+        "sentence_html": "５）　日本は（{b1_7}）いいです。そして、食べ物（{b1_8}）おいしいです。",
+        "fields": [
+          {"field_id": "b1_7", "input_type": "select", "options": ["が","を","に","で","は","も"]},
+          {"field_id": "b1_8", "input_type": "select", "options": ["が","も","は","を","に","で"]}
+        ]
+      },
+      {
+        "sentence_html": "６）　タワポンさんはハンサム（{b1_9}）、親切な人です。",
+        "fields": [
+          {"field_id": "b1_9", "input_type": "select", "options": ["で","に","が","を","は","も"]}
+        ]
+      },
+      {
+        "sentence_html": "７）　あの信号（{b1_10}）右（{b1_11}）曲がってください。それから、消防署の前（{b1_12}）止めてください。",
+        "fields": [
+          {"field_id": "b1_10", "input_type": "select", "options": ["を","に","で","が","は","も"]},
+          {"field_id": "b1_11", "input_type": "select", "options": ["へ","に","を","で","が","は"]},
+          {"field_id": "b1_12", "input_type": "select", "options": ["に","を","で","が","は","も"]}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "b2",
+    "type": "select_in_sentence",
+    "title_html": "問題２．正しいものを選んでください　＜各2点×5問＝10点＞",
+    "instruction": "Hãy chọn từ đúng.",
+    "points_each": 2,
+    "total_points": 10,
+    "items": [
+      {
+        "sentence_html": "１）　空港まで迎えに来（　{b2_1}　）。",
+        "fields": [{"field_id": "b2_1", "input_type": "select", "options": ["ましょうか","ましたか","ませんか"]}]
+      },
+      {
+        "sentence_html": "２）　（　{b2_2}　）",
+        "fields": [{"field_id": "b2_2", "input_type": "select", "options": ["ご注文は？","休みは？","定食は？"]}]
+      },
+      {
+        "sentence_html": "３）　ご家族はどちらに（　{b2_3}　）。",
+        "fields": [{"field_id": "b2_3", "input_type": "select", "options": ["いらっしゃいませ","いらっしゃい","いらっしゃいますか"]}]
+      },
+      {
+        "sentence_html": "４）　京都のホテルは（　{b2_4}　）。",
+        "fields": [{"field_id": "b2_4", "input_type": "select", "options": ["どうしてですか","どうしましたか","どうでしたか"]}]
+      },
+      {
+        "sentence_html": "５）　犬と猫と（　{b2_5}　）が好きですか。",
+        "fields": [{"field_id": "b2_5", "input_type": "select", "options": ["あちら","こちら","そちら","どちら"]}]
+      }
+    ]
+  },
+  {
+    "id": "b3",
+    "type": "word_puzzle",
+    "title_html": "問題３．Sắp xếp theo thứ tự đúng　＜各3点×5問＝15点＞",
+    "instruction": "タイルをタップして正しい順に並べてください。もう一度タップすると戻ります。",
+    "points_each": 3,
+    "total_points": 15,
+    "grading": "manual",
+    "puzzles": [
+      {"field_id": "b3_1", "words": ["ベトナムへ","帰ってから","日本の","会社で","働きます"]},
+      {"field_id": "b3_2", "words": ["ミラーさんの","誕生日を","知って","いますか"]},
+      {"field_id": "b3_3", "words": ["ここは","禁煙ですから","たばこを","吸わないで","ください"]},
+      {"field_id": "b3_4", "words": ["図書館へ","勉強しに","行きます"]},
+      {"field_id": "b3_5", "words": ["赤いボタンを","押す前に","大迫さんに","聞いてください"]}
+    ]
+  },
+  {
+    "id": "b4",
+    "type": "dialogue_fill",
+    "title_html": "問題４．会話を完成してください　＜各3点×5問＝15点＞",
+    "instruction": "Bの返事を選んでください。Hãy chọn câu trả lời của B.",
+    "points_each": 3,
+    "total_points": 15,
+    "items": [
+      {
+        "dialogue_html": "①　A：すみません。ここから市役所までどうやって行きますか。<br>　　B：",
+        "fields": [{"field_id": "b4_1", "input_type": "select", "options": [
+          {"value": "a", "label": "a. この道をまっすぐ行って、二つ目の信号を右に曲がってください。"},
+          {"value": "b", "label": "b. 市役所は大きくて、きれいです。"},
+          {"value": "c", "label": "c. 市役所で働いています。"},
+          {"value": "d", "label": "d. 市役所へ行きたいです。"}
+        ]}]
+      },
+      {
+        "dialogue_html": "②　A：先生、すみません、ひらがなで書いてもいいですか。<br>　　B：",
+        "fields": [{"field_id": "b4_2", "input_type": "select", "options": [
+          {"value": "a", "label": "a. はい、いいですよ。"},
+          {"value": "b", "label": "b. はい、書きました。"},
+          {"value": "c", "label": "c. いいえ、書くことができません。"},
+          {"value": "d", "label": "d. はい、ひらがなを覚えました。"}
+        ]}]
+      },
+      {
+        "dialogue_html": "③　A：○○さんはいつ結婚しましたか。<br>　　B：",
+        "fields": [{"field_id": "b4_3", "input_type": "select", "options": [
+          {"value": "a", "label": "a. 去年の5月に結婚しました。"},
+          {"value": "b", "label": "b. はい、結婚しています。"},
+          {"value": "c", "label": "c. 結婚したいです。"},
+          {"value": "d", "label": "d. 結婚してもいいですか。"}
+        ]}]
+      },
+      {
+        "dialogue_html": "④　A：ビックさんは日本の歌を歌うことができますか。<br>　　B：",
+        "fields": [{"field_id": "b4_4", "input_type": "select", "options": [
+          {"value": "a", "label": "a. はい、少し歌うことができます。"},
+          {"value": "b", "label": "b. はい、日本の歌が好きです。"},
+          {"value": "c", "label": "c. いいえ、歌いませんでした。"},
+          {"value": "d", "label": "d. 日本の歌を聞きたいです。"}
+        ]}]
+      },
+      {
+        "dialogue_html": "⑤　A：日本へ来る前に何をしましたか。<br>　　B：",
+        "fields": [{"field_id": "b4_5", "input_type": "select", "options": [
+          {"value": "a", "label": "a. 日本語を勉強しました。"},
+          {"value": "b", "label": "b. 日本語を勉強しています。"},
+          {"value": "c", "label": "c. 日本語を勉強したいです。"},
+          {"value": "d", "label": "d. 日本語を勉強してもいいですか。"}
+        ]}]
+      }
+    ]
+  },
+  {
+    "id": "b5",
+    "type": "reading_comprehension",
+    "title_html": "問題５．読解　＜(1)○×各2点×5問＝10点＋(2)⚠記述12点＞",
+    "points_each": 2,
+    "total_points": 22,
+    "passage_image": "images/goii/goii_mondai_001.jpeg",
+    "sub_sections": [
+      {
+        "sub_id": "b5_ox",
+        "sub_title": "(1) ○か×を選んでください",
+        "points_each": 2,
+        "items": [
+          {"field_id": "b5_1", "question": "１）", "input_type": "select", "options": ["○","×"]},
+          {"field_id": "b5_2", "question": "２）", "input_type": "select", "options": ["○","×"]},
+          {"field_id": "b5_3", "question": "３）", "input_type": "select", "options": ["○","×"]},
+          {"field_id": "b5_4", "question": "４）", "input_type": "select", "options": ["○","×"]},
+          {"field_id": "b5_5", "question": "５）", "input_type": "select", "options": ["○","×"]}
+        ]
+      },
+      {
+        "sub_id": "b5_written",
+        "sub_title": "(2) 質問に答えてください",
+        "instruction": "Hãy chọn câu trả lời đúng.",
+        "points_each": 4,
+        "items": [
+          {
+            "field_id": "b5_6",
+            "question": "６）日曜日の15日に図書館へ行ってもいいですか。",
+            "input_type": "select",
+            "options": [
+              {"value": "a", "label": "a. はい、行ってもいいです。"},
+              {"value": "b", "label": "b. いいえ、行ってはいけません。"},
+              {"value": "c", "label": "c. はい、行きたいです。"},
+              {"value": "d", "label": "d. いいえ、行きませんでした。"}
+            ]
+          },
+          {
+            "field_id": "b5_7",
+            "question": "７）図書館はどうしてお金がかかりませんか。",
+            "input_type": "select",
+            "options": [
+              {"value": "a", "label": "a. 国と町がお金を払っていますから。"},
+              {"value": "b", "label": "b. 本がたくさんありますから。"},
+              {"value": "c", "label": "c. 日曜日は休みですから。"},
+              {"value": "d", "label": "d. 図書館は古いですから。"}
+            ]
+          },
+          {
+            "field_id": "b5_8",
+            "question": "８）あなたは日本の友達が欲しいですか。どうしてですか。",
+            "input_type": "select",
+            "options": [
+              {"value": "a", "label": "a. はい、欲しいです。日本語を習いたいですから。"},
+              {"value": "b", "label": "b. いいえ、友達がいませんでした。"},
+              {"value": "c", "label": "c. はい、日本へ行ったことがあります。"},
+              {"value": "d", "label": "d. いいえ、日本語を話すことができません。"}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "b6",
+    "type": "table_fill",
+    "title_html": "問題６．過去形に変えてください　＜各2点×5問＝10点＞",
+    "instruction": "Hãy đổi sang thể quá khứ.",
+    "points_each": 2,
+    "total_points": 10,
+    "tables": [
+      {
+        "items": [
+          {"field_id": "b6_1", "prompt": "１）　昨日は涼しかったですか。→ はい、", "input_type": "text", "placeholder": "涼しかったです"},
+          {"field_id": "b6_2", "prompt": "２）　仕事は忙しかったですか。→ いいえ、", "input_type": "text", "placeholder": "忙しくなかったです"},
+          {"field_id": "b6_3", "prompt": "３）　会社は休みでしたか。→ はい、", "input_type": "text", "placeholder": "休みでした"},
+          {"field_id": "b6_4", "prompt": "４）　テストは難しかったですか。→ いいえ、", "input_type": "text", "placeholder": "難しくなかったです"},
+          {"field_id": "b6_5", "prompt": "５）　大阪城はよかったですか。→ いいえ、", "input_type": "text", "placeholder": "よくなかったです"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "b7",
+    "type": "select_choice",
+    "title_html": "問題７．質問に答えてください　＜各4点×4問＝16点＞",
+    "instruction": "正しい答えを選んでください。Hãy chọn câu trả lời đúng.",
+    "points_each": 4,
+    "total_points": 16,
+    "items": [
+      {
+        "field_id": "b7_1",
+        "prompt": "１）　国へ帰る前に何がしたいですか。",
+        "input_type": "select",
+        "options": [
+          {"value": "a", "label": "a. 家族とたくさん話したいです。"},
+          {"value": "b", "label": "b. 家族とたくさん話しています。"},
+          {"value": "c", "label": "c. 家族とたくさん話しました。"},
+          {"value": "d", "label": "d. 家族とたくさん話すことができます。"}
+        ]
+      },
+      {
+        "field_id": "b7_2",
+        "prompt": "２）　寮の生活はどうですか。",
+        "input_type": "select",
+        "options": [
+          {"value": "a", "label": "a. 楽しくて、にぎやかです。"},
+          {"value": "b", "label": "b. 楽しいで、にぎやかです。"},
+          {"value": "c", "label": "c. 楽しいくて、にぎやかです。"},
+          {"value": "d", "label": "d. 楽しかって、にぎやかです。"}
+        ]
+      },
+      {
+        "field_id": "b7_3",
+        "prompt": "３）　今、雨が降っていますか。",
+        "input_type": "select",
+        "options": [
+          {"value": "a", "label": "a. はい、雨が降っています。"},
+          {"value": "b", "label": "b. はい、雨が降ります。"},
+          {"value": "c", "label": "c. はい、雨が降りました。"},
+          {"value": "d", "label": "d. はい、雨が降りたいです。"}
+        ]
+      },
+      {
+        "field_id": "b7_4",
+        "prompt": "４）　今年の夏は去年より暑かったですか。",
+        "input_type": "select",
+        "options": [
+          {"value": "a", "label": "a. はい、去年より暑かったです。"},
+          {"value": "b", "label": "b. はい、去年より暑いでした。"},
+          {"value": "c", "label": "c. はい、去年から暑かったです。"},
+          {"value": "d", "label": "d. はい、去年より暑いです。"}
+        ]
+      }
+    ]
+  }
+]

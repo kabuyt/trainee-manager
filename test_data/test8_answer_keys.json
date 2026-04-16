@@ -1,0 +1,47 @@
+{
+  "bunpo": {
+    "answer_key": {},
+    "scoring_rules": {
+      "b1": {"method": "manual", "points_each": 3, "field_ids": ["b1_1","b1_2","b1_3","b1_4","b1_5","b1_6"]},
+      "b2": {"method": "manual", "points_each": 3, "field_ids": ["b2_1","b2_2","b2_3","b2_4","b2_5","b2_6","b2_7"]},
+      "b3": {"method": "manual", "points_each": 2, "field_ids": ["b3_1","b3_2","b3_3","b3_4","b3_5","b3_6","b3_7","b3_8"]},
+      "b4": {"method": "manual", "points_each": 5, "field_ids": ["b4_1_ox","b4_1","b4_2_ox","b4_2","b4_3_ox","b4_3","b4_4_ox","b4_4","b4_5_ox","b4_5","b4_6_ox","b4_6"]},
+      "b5": {"method": "manual", "points_each": 5, "field_ids": ["b5_1","b5_2","b5_3"]}
+    }
+  },
+  "chokkai": {
+    "answer_key": {
+      "c1": {"c1_1": "a", "c1_2": "a", "c1_3": "a"},
+      "c2": {"c2_1": "a", "c2_2": "a", "c2_3": "a"},
+      "c3": {"c3_1": "a", "c3_2": "a", "c3_3": "a"},
+      "c4": {"c4_1": "a", "c4_2": "a", "c4_3": "a"},
+      "c6": {"c6_1": "○", "c6_2": "○", "c6_3": "○", "c6_4": "○", "c6_5": "○"},
+      "c7": {"c7_1": "a", "c7_2": "a"},
+      "c8s": {"c8_1s": "○", "c8_2s": "○", "c8_3s": "○", "c8_4s": "○", "c8_5s": "○"},
+      "c8k": {"c8_1k": "○", "c8_2k": "○", "c8_3k": "○", "c8_4k": "○", "c8_5k": "○"},
+      "c9": {"c9_1": "○", "c9_2": "○", "c9_3": "○"}
+    },
+    "scoring_rules": {
+      "c1": {"method": "exact_match", "points_each": 2, "field_ids": ["c1_1","c1_2","c1_3"]},
+      "c2": {"method": "exact_match", "points_each": 2, "field_ids": ["c2_1","c2_2","c2_3"]},
+      "c3": {"method": "exact_match", "points_each": 2, "field_ids": ["c3_1","c3_2","c3_3"]},
+      "c4": {"method": "exact_match", "points_each": 2, "field_ids": ["c4_1","c4_2","c4_3"]},
+      "c5": {"method": "manual", "total_points": 16, "field_ids": ["c5_1","c5_2","c5_3","c5_4"]},
+      "c6": {"method": "ox_match", "points_each": 3, "field_ids": ["c6_1","c6_2","c6_3","c6_4","c6_5"]},
+      "c7": {"method": "exact_match", "points_each": 2, "field_ids": ["c7_1","c7_2"]},
+      "c8": {"method": "ox_match", "points_each": 3, "field_ids": ["c8_1s","c8_1k","c8_2s","c8_2k","c8_3s","c8_3k","c8_4s","c8_4k","c8_5s","c8_5k"]},
+      "c9": {"method": "ox_match", "points_each": 2, "field_ids": ["c9_1","c9_2","c9_3"]},
+      "c10": {"method": "manual", "total_points": 5, "field_ids": ["c10_1","c10_2"]}
+    },
+    "manual_fields": [
+      "c5_1","c5_2","c5_3","c5_4",
+      "c10_1","c10_2",
+      "b1_1","b1_2","b1_3","b1_4","b1_5","b1_6",
+      "b2_1","b2_2","b2_3","b2_4","b2_5","b2_6","b2_7",
+      "b3_1","b3_2","b3_3","b3_4","b3_5","b3_6","b3_7","b3_8",
+      "b4_1_ox","b4_1","b4_2_ox","b4_2","b4_3_ox","b4_3",
+      "b4_4_ox","b4_4","b4_5_ox","b4_5","b4_6_ox","b4_6",
+      "b5_1","b5_2","b5_3"
+    ]
+  }
+}

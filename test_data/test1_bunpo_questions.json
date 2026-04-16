@@ -1,0 +1,276 @@
+[
+  {
+    "id": "b1",
+    "type": "fill_particle",
+    "title_html": "問題１．Hãy điền từ thích hợp　＜各1点×10問＝10点＞",
+    "instruction": "Hãy điền từ đúng（trợ từ...）vào（　　）.",
+    "example_html": "きょう（<span class=\"already\">は</span>）すいようびです。",
+    "points_each": 1,
+    "total_points": 10,
+    "items": [
+      {
+        "sentence_html": "１）　つつみさんはまいばんなんじ（{b1_1}）ねますか。",
+        "fields": [
+          {"field_id": "b1_1", "input_type": "select", "options": ["で","に","を","は"]}
+        ]
+      },
+      {
+        "sentence_html": "２）　チュンさんはじっしゅうせいです。リンさん（{b1_2}）じっしゅうせいです。",
+        "fields": [
+          {"field_id": "b1_2", "input_type": "select", "options": ["が","は","も","と"]}
+        ]
+      },
+      {
+        "sentence_html": "３）　やまもとさんはABC（{b1_3}）かいしゃいんです。",
+        "fields": [
+          {"field_id": "b1_3", "input_type": "select", "options": ["で","は","の","が"]}
+        ]
+      },
+      {
+        "sentence_html": "４）　しつれいです（{b1_4}）、おいくつですか。",
+        "fields": [
+          {"field_id": "b1_4", "input_type": "select", "options": ["は","も","が","で"]}
+        ]
+      },
+      {
+        "sentence_html": "５）　これ（{b1_5a}）だれ（{b1_5b}）ボールペンですか。",
+        "fields": [
+          {"field_id": "b1_5a", "input_type": "select", "options": ["が","も","は","を"]},
+          {"field_id": "b1_5b", "input_type": "select", "options": ["が","は","の","で"]}
+        ]
+      },
+      {
+        "sentence_html": "６）　VPぎんこう（{b1_6a}）なんじ（{b1_6b}）なんじ（{b1_6c}）までですか。",
+        "fields": [
+          {"field_id": "b1_6a", "input_type": "select", "options": ["が","も","で","は"]},
+          {"field_id": "b1_6b", "input_type": "select", "options": ["まで","に","から","で"]},
+          {"field_id": "b1_6c", "input_type": "select", "options": ["から","に","まで","で"]}
+        ]
+      },
+      {
+        "sentence_html": "７）　やすみはあした（{b1_7}）あさってです。",
+        "fields": [
+          {"field_id": "b1_7", "input_type": "select", "options": ["や","も","と","か"]}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "b2",
+    "type": "select_in_sentence",
+    "title_html": "問題２．Hãy chọn từ đúng　＜各2点×5問＝10点＞",
+    "instruction": "正しい言葉を選んで○をつけてください。",
+    "points_each": 2,
+    "total_points": 10,
+    "items": [
+      {
+        "sentence_html": "１）　わたしのなまえは（　{b2_1}　）です。",
+        "fields": [{"field_id": "b2_1", "input_type": "select", "options": ["リンちゃん","リンさん","リン"]}]
+      },
+      {
+        "sentence_html": "２）　けさ、5じに（　{b2_2}　）。",
+        "fields": [{"field_id": "b2_2", "input_type": "select", "options": ["おきます","おきました","ねます"]}]
+      },
+      {
+        "sentence_html": "３）　まいにち（　{b2_3}　）か。",
+        "fields": [{"field_id": "b2_3", "input_type": "select", "options": ["はたらきました","はたらきます"]}]
+      },
+      {
+        "sentence_html": "４）　じむしょは（　{b2_4}　）です。",
+        "fields": [{"field_id": "b2_4", "input_type": "select", "options": ["どれ","あの","どこ","あそこ","その"]}]
+      },
+      {
+        "sentence_html": "５）　（　{b2_5}　）じどうしゃはイタリアのです。",
+        "fields": [{"field_id": "b2_5", "input_type": "select", "options": ["これ","どの","それ","この","あちら"]}]
+      }
+    ]
+  },
+  {
+    "id": "b3",
+    "type": "word_puzzle",
+    "title_html": "問題３．Sắp xếp theo thứ tự đúng　＜各3点×5問＝15点＞",
+    "instruction": "タイルをタップして正しい順に並べてください。もう一度タップすると戻ります。",
+    "points_each": 3,
+    "total_points": 15,
+    "grading": "manual",
+    "puzzles": [
+      {"field_id": "b3_1", "words": ["の","かばん","ですか","あなた","は","この"]},
+      {"field_id": "b3_2", "words": ["さん","ありません","アメリカ","は","じん","チャン","じゃ"]},
+      {"field_id": "b3_3", "words": ["から","は","しけん","ですか","なんじ"]},
+      {"field_id": "b3_4", "words": ["は","この","まで","12じはん","です","えいが"]},
+      {"field_id": "b3_5", "words": ["ばんごう","の","なんばん","は","かいしゃ","ですか","でんわ"]}
+    ]
+  },
+  {
+    "id": "b4",
+    "type": "select_choice",
+    "title_html": "問題４．Hãy ghi bằng Hiragana　＜各3点×5問＝15点＞",
+    "instruction": "Chọn cách đọc bằng Hiragana đúng.",
+    "example_html": "０９：１５　→　<span class=\"already\">くじじゅうごふんです。</span><br>＼3,600　→　<span class=\"already\">さんぜんろっぴゃくえんです。</span>",
+    "points_each": 3,
+    "total_points": 15,
+    "items": [
+      {"field_id": "b4_1", "prompt": "１）１０：４０　→", "input_type": "select", "options": ["じゅうじさんじゅっぷん","じゅうじよんじゅっぷん","じゅうじはん","くじよんじゅっぷん"]},
+      {"field_id": "b4_2", "prompt": "２）１８：３０　→", "input_type": "select", "options": ["しちじはん","ろくじはん","じゅうしちじはん","ろくじよんじゅっぷん"]},
+      {"field_id": "b4_3", "prompt": "３）００：２０　→", "input_type": "select", "options": ["れいじじゅっぷん","れいじにじゅっぷん","いちじにじゅっぷん","れいじさんじゅっぷん"]},
+      {"field_id": "b4_4", "prompt": "４）＼125,840　→", "input_type": "select", "options": ["じゅうにまんはっぴゃくよんじゅうえん","じゅうにまんごせんはっぴゃくよんじゅうえん","じゅうごまんはっぴゃくよんじゅうえん","にじゅうごまんはっぴゃくよんじゅうえん"]},
+      {"field_id": "b4_5", "prompt": "５）＼74,090　→", "input_type": "select", "options": ["しちまんよんせんきゅうじゅうえん","ななまんよんせんきゅうじゅうえん","ごまんよんせんきゅうじゅうえん","ははまんよんせんきゅうじゅうえん"]}
+    ]
+  },
+  {
+    "id": "b5",
+    "type": "reading_comprehension",
+    "title_html": "問題５．Hãy đọc câu rồi trả lời　＜各4点×4問＝16点＞",
+    "points_each": 4,
+    "total_points": 16,
+    "passage_html": "<b>もりもとさんのいっしゅうかん</b><br>もりもとさん は げつようび と すいようび に はたらきます。げつようび は 8じ から はたらきます。すいようび は 1じ から はたらきます。よる 7じ に おわります。どようび の ばん と にちようび の ばん、べんきょうします。どようび と にちようび も やすみません。まいばん 11じ に ねます。",
+    "items": [
+      {
+        "field_id": "b5_1",
+        "question": "１）　かようび、もりもとさん は はたらきますか。",
+        "input_type": "select",
+        "options": ["はい、8じからはたらきます。","いいえ、はたらきません。","はい、はたらきます。","いいえ、べんきょうします。"]
+      },
+      {
+        "field_id": "b5_2",
+        "question": "２）　すいようび、もりもとさん は ばん まで はたらきますか。",
+        "input_type": "select",
+        "options": ["いいえ、はたらきません。","はい、はたらきます。","はい、よる7じにおわります。","いいえ、よるははたらきません。"]
+      },
+      {
+        "field_id": "b5_3",
+        "question": "３）　げつようび、もりもとさん は なんじ に ねますか。",
+        "input_type": "select",
+        "options": ["げつようびは8じにねます。","よる9じにねます。","11じにねます。","まいばん1じにねます。"]
+      },
+      {
+        "field_id": "b5_4",
+        "question": "４）　もりもとさん の やすみ は なんようびですか。",
+        "input_type": "select",
+        "options": ["にちようびです。","どようびです。","かようびとにちようびです。","やすみはありません。"]
+      }
+    ]
+  },
+  {
+    "id": "b6",
+    "type": "dialogue_fill",
+    "title_html": "問題６．Hoàn thành đoạn hội thoại bên dưới　＜各3点×6問＝18点＞",
+    "points_each": 3,
+    "total_points": 18,
+    "items": [
+      {
+        "dialogue_html": "①　A：すみません。（{b6_1}）。<br>　　B：ああ、トイレはあちらです。",
+        "fields": [{"field_id": "b6_1", "input_type": "select", "options": ["なんじまでですか","トイレはどちらですか","トイレはどれですか","かいぎしつはどこですか"]}]
+      },
+      {
+        "dialogue_html": "②　A：はじめまして。105のディエンです。よろしくおねがいします。<br>　　B：（{b6_2}）、よろしくおねがいします。",
+        "fields": [{"field_id": "b6_2", "input_type": "select", "options": ["はじめまして","こちらこそ","ありがとうございます","どうぞよろしく"]}]
+      },
+      {
+        "dialogue_html": "③　A：あのう、これ、おみやげです。どうぞ。<br>　　B：えっ、（{b6_3}）。<br>　　A：それはベトナムのコーヒーです。",
+        "fields": [{"field_id": "b6_3", "input_type": "select", "options": ["これはいくらですか","これはなんですか","これはどこですか","これはだれのですか"]}]
+      },
+      {
+        "dialogue_html": "④　A：さとうさん、ひるやすみは（{b6_4}）。<br>　　B：12じ50ぷんまでです。<br>　　A：あしたはやすみですか。<br>　　B：いいえ、（{b6_5}）。やすみはにちようびです。",
+        "fields": [
+          {"field_id": "b6_4", "input_type": "select", "options": ["なんじからですか","なんじまでですか","いつですか","いくらですか"]},
+          {"field_id": "b6_5", "input_type": "select", "options": ["やすみです","やすみじゃありません","やすみでした","やすみじゃないですか"]}
+        ]
+      },
+      {
+        "dialogue_html": "⑤　A：すみません、（{b6_6}）。<br>　　B：かいぎしつは6かいです。",
+        "fields": [{"field_id": "b6_6", "input_type": "select", "options": ["かいぎしつはどこですか","かいぎしつはなんかいですか","かいぎしつはなんじですか","じむしょはなんかいですか"]}]
+      }
+    ]
+  },
+  {
+    "id": "b7",
+    "type": "radio_choice",
+    "title_html": "問題７．正しい文を①〜④から選びなさい　＜各2点×8問＝16点＞",
+    "instruction": "※ Chọn câu đúng về mặt ngữ pháp từ ①〜④。",
+    "points_each": 2,
+    "total_points": 16,
+    "items": [
+      {
+        "field_id": "b7_1",
+        "question": "１）Câu nào đúng?",
+        "choices": [
+          {"value": "①", "label": "① わたし は かいしゃいん です。"},
+          {"value": "②", "label": "② わたし が かいしゃいん は。"},
+          {"value": "③", "label": "③ わたし を かいしゃいん です。"},
+          {"value": "④", "label": "④ わたし に かいしゃいん です。"}
+        ]
+      },
+      {
+        "field_id": "b7_2",
+        "question": "２）Câu nào đúng?",
+        "choices": [
+          {"value": "①", "label": "① これ は だれ か の かばん ですか。"},
+          {"value": "②", "label": "② これ は だれ の かばん ですか。"},
+          {"value": "③", "label": "③ これ は だれ を かばん ですか。"},
+          {"value": "④", "label": "④ これ は だれ に かばん ですか。"}
+        ]
+      },
+      {
+        "field_id": "b7_3",
+        "question": "３）A：それ は なん ですか。　　Câu trả lời của B nào đúng?",
+        "choices": [
+          {"value": "①", "label": "① はい、てちょう です。"},
+          {"value": "②", "label": "② いいえ、てちょう です。"},
+          {"value": "③", "label": "③ てちょう です。"},
+          {"value": "④", "label": "④ そう じゃ ありません。"}
+        ]
+      },
+      {
+        "field_id": "b7_4",
+        "question": "４）A：しごと は なんじ から なんじ まで ですか。　　Câu trả lời của B nào đúng?",
+        "choices": [
+          {"value": "①", "label": "① くじ に ごじ まで です。"},
+          {"value": "②", "label": "② くじ から ごじ に です。"},
+          {"value": "③", "label": "③ くじ と ごじ まで です。"},
+          {"value": "④", "label": "④ くじ から ごじ まで です。"}
+        ]
+      },
+      {
+        "field_id": "b7_5",
+        "question": "５）Câu nào đúng?",
+        "choices": [
+          {"value": "①", "label": "① この じしょ は いくら の ですか。"},
+          {"value": "②", "label": "② この じしょ は いくら ですか。"},
+          {"value": "③", "label": "③ この じしょ は いくら に ですか。"},
+          {"value": "④", "label": "④ この じしょ は いくら で ですか。"}
+        ]
+      },
+      {
+        "field_id": "b7_6",
+        "question": "６）A：やすみ は なんようび ですか。　　Câu trả lời của B nào đúng?",
+        "choices": [
+          {"value": "①", "label": "① どようび の にちようび です。"},
+          {"value": "②", "label": "② どようび で にちようび です。"},
+          {"value": "③", "label": "③ どようび と にちようび です。"},
+          {"value": "④", "label": "④ どようび を にちようび です。"}
+        ]
+      },
+      {
+        "field_id": "b7_7",
+        "question": "７）Câu nào đúng?",
+        "choices": [
+          {"value": "①", "label": "① テレサ さん は も がくせい です。"},
+          {"value": "②", "label": "② テレサ さん が も がくせい です。"},
+          {"value": "③", "label": "③ テレサ さん を も がくせい です。"},
+          {"value": "④", "label": "④ テレサ さん も がくせい です。"}
+        ]
+      },
+      {
+        "field_id": "b7_8",
+        "question": "８）A：ミラー さん は にほんじん ですか。　　Câu trả lời của B nào đúng?",
+        "choices": [
+          {"value": "①", "label": "① いいえ、にほんじん です。"},
+          {"value": "②", "label": "② はい、にほんじん じゃ は ありません。"},
+          {"value": "③", "label": "③ いいえ、にほんじん じゃ ありません。"},
+          {"value": "④", "label": "④ はい、にほんじん です。"}
+        ]
+      }
+    ]
+  }
+]

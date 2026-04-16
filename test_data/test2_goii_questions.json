@@ -1,0 +1,271 @@
+[
+  {
+    "id": "g1",
+    "type": "image_select",
+    "title_html": "問題１．Hãy chọn từ đúng cho mỗi hình　＜各1点×10問＝10点＞",
+    "points_each": 1,
+    "total_points": 10,
+    "images": [
+      {"label": "①", "src": "images/goii/image1.jpeg"},
+      {"label": "②", "src": "images/goii/image2.jpeg"},
+      {"label": "③", "src": "images/goii/image3.jpeg"},
+      {"label": "④", "src": "images/goii/image4.jpeg"},
+      {"label": "⑤", "src": "images/goii/image5.png"},
+      {"label": "⑥", "src": "images/goii/image6.png"},
+      {"label": "⑦", "src": "images/goii/image7.jpeg"},
+      {"label": "⑧", "src": "images/goii/image8.png"},
+      {"label": "⑨", "src": "images/goii/image9.png"},
+      {"label": "⑩", "src": "images/goii/image10.jpeg"}
+    ],
+    "items": [
+      {"field_id": "g1_1",  "label": "①", "input_type": "select", "options": ["牛乳","野菜","魚","肉","卵","やま","せんぷうき","スプーン","でんち","バレーボール"]},
+      {"field_id": "g1_2",  "label": "②", "input_type": "select", "options": ["牛乳","野菜","魚","肉","卵","やま","せんぷうき","スプーン","でんち","バレーボール"]},
+      {"field_id": "g1_3",  "label": "③", "input_type": "select", "options": ["牛乳","野菜","魚","肉","卵","やま","せんぷうき","スプーン","でんち","バレーボール"]},
+      {"field_id": "g1_4",  "label": "④", "input_type": "select", "options": ["牛乳","野菜","魚","肉","卵","やま","せんぷうき","スプーン","でんち","バレーボール"]},
+      {"field_id": "g1_5",  "label": "⑤", "input_type": "select", "options": ["牛乳","野菜","魚","肉","卵","やま","せんぷうき","スプーン","でんち","バレーボール"]},
+      {"field_id": "g1_6",  "label": "⑥", "input_type": "select", "options": ["牛乳","野菜","魚","肉","卵","やま","せんぷうき","スプーン","でんち","バレーボール"]},
+      {"field_id": "g1_7",  "label": "⑦", "input_type": "select", "options": ["牛乳","野菜","魚","肉","卵","やま","せんぷうき","スプーン","でんち","バレーボール"]},
+      {"field_id": "g1_8",  "label": "⑧", "input_type": "select", "options": ["牛乳","野菜","魚","肉","卵","やま","せんぷうき","スプーン","でんち","バレーボール"]},
+      {"field_id": "g1_9",  "label": "⑨", "input_type": "select", "options": ["牛乳","野菜","魚","肉","卵","やま","せんぷうき","スプーン","でんち","バレーボール"]},
+      {"field_id": "g1_10", "label": "⑩", "input_type": "select", "options": ["牛乳","野菜","魚","肉","卵","やま","せんぷうき","スプーン","でんち","バレーボール"]}
+    ]
+  },
+  {
+    "id": "g2",
+    "type": "image_select_grid",
+    "title_html": "問題２．Chuyển sang tiếng Nhật（日本語で書いてください）　＜各3点×8問＝24点＞",
+    "points_each": 3,
+    "total_points": 24,
+    "dynamic_options": true,
+    "correct_pool": ["すし","サッカー","スイッチ","セロテープ","はさみ","じてんしゃ","アイスクリーム","ビール"],
+    "extra_pool": ["おちゃ","パン","ぎゅうにゅう","ケーキ","テニス","やきゅう","ラジオ","テレビ"],
+    "distractors_per_item": 3,
+    "rows": [
+      {
+        "images": [
+          {"src": "images/goii/image11.png"},
+          {"src": "images/goii/image12.jpeg"},
+          {"src": "images/goii/image13.png"},
+          {"src": "images/goii/image14.jpeg"}
+        ],
+        "items": [
+          {"field_id": "g2_1", "label": "１）", "input_type": "select"},
+          {"field_id": "g2_2", "label": "２）", "input_type": "select"},
+          {"field_id": "g2_3", "label": "３）", "input_type": "select"},
+          {"field_id": "g2_4", "label": "４）", "input_type": "select"}
+        ]
+      },
+      {
+        "images": [
+          {"src": "images/goii/image15.jpeg"},
+          {"src": "images/goii/image16.jpeg"},
+          {"src": "images/goii/image17.jpeg"},
+          {"src": "images/goii/image18.jpeg"}
+        ],
+        "items": [
+          {"field_id": "g2_5", "label": "５）", "input_type": "select"},
+          {"field_id": "g2_6", "label": "６）", "input_type": "select"},
+          {"field_id": "g2_7", "label": "７）", "input_type": "select"},
+          {"field_id": "g2_8", "label": "８）", "input_type": "select"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "g3",
+    "type": "table_fill",
+    "title_html": "問題３．読み方を書いてください　＜各1点×13問＝13点＞",
+    "instruction": "Hãy viết cách đọc bằng Hiragana.",
+    "points_each": 1,
+    "total_points": 13,
+    "tables": [
+      {
+        "sub_title": "月の読み方",
+        "sub_instruction": "読みかたを日本語で書いてください",
+        "headers": ["4月","5月","6月","7月","8月"],
+        "items": [
+          {"field_id": "g3_1", "col": 0, "input_type": "text"},
+          {"field_id": null, "col": 1, "fixed_value": "ごがつ"},
+          {"field_id": null, "col": 2, "fixed_value": "ろくがつ"},
+          {"field_id": "g3_2", "col": 3, "input_type": "text"},
+          {"field_id": null, "col": 4, "fixed_value": "はちがつ"}
+        ]
+      },
+      {
+        "sub_title": "時の言葉",
+        "headers": ["おととい","きのう","今日","明日","あさって"],
+        "items": [
+          {"field_id": "g3_3", "col": 0, "input_type": "text"},
+          {"field_id": null, "col": 1, "fixed_value": "きのう"},
+          {"field_id": "g3_4", "col": 2, "input_type": "text"},
+          {"field_id": null, "col": 3, "fixed_value": "あした"},
+          {"field_id": null, "col": 4, "fixed_value": "あさって"}
+        ]
+      },
+      {
+        "headers": ["一昨年","去年","今年","来年","再来年"],
+        "items": [
+          {"field_id": null, "col": 0, "fixed_value": "おととし"},
+          {"field_id": "g3_5", "col": 1, "input_type": "text"},
+          {"field_id": null, "col": 2, "fixed_value": "ことし"},
+          {"field_id": "g3_6", "col": 3, "input_type": "text"},
+          {"field_id": null, "col": 4, "fixed_value": "さらいねん"}
+        ]
+      },
+      {
+        "sub_title": "日の読み方",
+        "headers": ["1日","5日","7日","8日","9日","14日","20日","31日"],
+        "items": [
+          {"field_id": null, "col": 0, "fixed_value": "ついたち"},
+          {"field_id": "g3_7", "col": 1, "input_type": "text"},
+          {"field_id": "g3_8", "col": 2, "input_type": "text"},
+          {"field_id": "g3_9", "col": 3, "input_type": "text"},
+          {"field_id": "g3_10", "col": 4, "input_type": "text"},
+          {"field_id": "g3_11", "col": 5, "input_type": "text"},
+          {"field_id": "g3_12", "col": 6, "input_type": "text"},
+          {"field_id": "g3_13", "col": 7, "input_type": "text"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "g4",
+    "type": "radio_choice",
+    "title_html": "問題４．正しいものを選んでください　＜各2点×5問＝10点＞",
+    "instruction": "Hãy khoanh tròn đáp án đúng.",
+    "example_html": "例）　けさ9時に（　①　）を食べました。<br>　　①朝ごはん　　②昼ごはん　　③夜ごはん　　④ジュース　　⑤お茶",
+    "points_each": 2,
+    "total_points": 10,
+    "items": [
+      {
+        "field_id": "g4_1",
+        "question": "１）　明日1時から公園で（　　）をします。リンさんも来ますか。",
+        "choices": [
+          {"value": "①", "label": "① 手紙"},
+          {"value": "②", "label": "② なに"},
+          {"value": "③", "label": "③ お花見"},
+          {"value": "④", "label": "④ 新聞"},
+          {"value": "⑤", "label": "⑤ 旅行"}
+        ]
+      },
+      {
+        "field_id": "g4_2",
+        "question": "２）　細かいお金を（　　）貸してください。",
+        "choices": [
+          {"value": "①", "label": "① ぜんぜん"},
+          {"value": "②", "label": "② よく"},
+          {"value": "③", "label": "③ もう"},
+          {"value": "④", "label": "④ すこし"},
+          {"value": "⑤", "label": "⑤ まだ"}
+        ]
+      },
+      {
+        "field_id": "g4_3",
+        "question": "３）　ねぎを3本とたまねぎを３つ、（　　）で６つください。",
+        "choices": [
+          {"value": "①", "label": "① 全部"},
+          {"value": "②", "label": "② ひとり"},
+          {"value": "③", "label": "③ それから"},
+          {"value": "④", "label": "④ いっしょ"},
+          {"value": "⑤", "label": "⑤ ちょっと"}
+        ]
+      },
+      {
+        "field_id": "g4_4",
+        "question": "４）　わたしは日本語を1年ぐらい勉強しましたから、日本語が（　　）わかります。",
+        "choices": [
+          {"value": "①", "label": "① あまり"},
+          {"value": "②", "label": "② だいたい"},
+          {"value": "③", "label": "③ まだ"},
+          {"value": "④", "label": "④ いつも"},
+          {"value": "⑤", "label": "⑤ もう"}
+        ]
+      },
+      {
+        "field_id": "g4_5",
+        "question": "５）　今日は（　　）仕事が終わりました。",
+        "choices": [
+          {"value": "①", "label": "① あまり"},
+          {"value": "②", "label": "② いつ"},
+          {"value": "③", "label": "③ はやく"},
+          {"value": "④", "label": "④ ずっと"},
+          {"value": "⑤", "label": "⑤ ぜんぜん"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "g5",
+    "type": "table_fill",
+    "title_html": "問題５．反対の意味の言葉を書いてください　＜各1点×7問＝7点＞",
+    "instruction": "Hãy viết từ có nghĩa ngược lại bằng Hiragana.",
+    "points_each": 1,
+    "total_points": 7,
+    "tables": [
+      {
+        "headers": ["形容詞", "反対の言葉"],
+        "items": [
+          {"field_id": "g5_1", "col": 1, "label": "１）おおきい", "input_type": "text"},
+          {"field_id": "g5_2", "col": 1, "label": "２）やさしい", "input_type": "text"},
+          {"field_id": "g5_3", "col": 1, "label": "３）やすい", "input_type": "text"},
+          {"field_id": "g5_4", "col": 1, "label": "４）いそがしい", "input_type": "text"},
+          {"field_id": "g5_5", "col": 1, "label": "５）わるい", "input_type": "text"},
+          {"field_id": "g5_6", "col": 1, "label": "６）ふるい", "input_type": "text"},
+          {"field_id": "g5_7", "col": 1, "label": "７）にぎやかな", "input_type": "text"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "g6",
+    "type": "select_dynamic_pool",
+    "title_html": "問題６．Tiếng Nhật ⇔ Tiếng Việt　＜各2点×18問＝36点＞",
+    "instruction": "Hãy viết nghĩa tiếng Việt.（ベトナム語の意味を書いてください）",
+    "points_each": 2,
+    "total_points": 36,
+    "pool_correct": [
+      "Gia, kệ",
+      "Lời hứa, cuộc hẹn",
+      "Cay",
+      "Bận",
+      "Ký túc xá",
+      "Hành lý, đồ đạc",
+      "Cho mượn, cho vay",
+      "Công việc",
+      "Giỏi",
+      "Nhận",
+      "Con gái, bé gái",
+      "Cuộc sống",
+      "Đồ uống",
+      "Tủ lạnh",
+      "Anh em",
+      "Bên cạnh",
+      "Hiểu",
+      "Điểm lên xe"
+    ],
+    "pool_extra": [],
+    "distractors_per_item": 3,
+    "items": [
+      {"field_id": "g6_1",  "label": "１．たな"},
+      {"field_id": "g6_10", "label": "１．もらいます"},
+      {"field_id": "g6_2",  "label": "２．やくそく"},
+      {"field_id": "g6_11", "label": "２．おんなのこ"},
+      {"field_id": "g6_3",  "label": "３．からい"},
+      {"field_id": "g6_12", "label": "３．せいかつ"},
+      {"field_id": "g6_4",  "label": "４．いそがしい"},
+      {"field_id": "g6_13", "label": "４．のみもの"},
+      {"field_id": "g6_5",  "label": "５．りょう"},
+      {"field_id": "g6_14", "label": "５．れいぞうこ"},
+      {"field_id": "g6_6",  "label": "６．にもつ"},
+      {"field_id": "g6_15", "label": "６．きょうだい"},
+      {"field_id": "g6_7",  "label": "７．かします"},
+      {"field_id": "g6_16", "label": "７．となり"},
+      {"field_id": "g6_8",  "label": "８．しごと"},
+      {"field_id": "g6_17", "label": "８．わかります"},
+      {"field_id": "g6_9",  "label": "９．じょうずな"},
+      {"field_id": "g6_18", "label": "９．のりば"}
+    ],
+    "layout": "two_column",
+    "input_type": "text"
+  }
+]

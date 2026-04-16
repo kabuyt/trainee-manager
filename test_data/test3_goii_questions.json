@@ -1,0 +1,225 @@
+[
+  {
+    "id": "g1",
+    "type": "image_select",
+    "title_html": "問題１．Hãy chọn từ đúng cho mỗi hình　＜各1点×10問＝10点＞",
+    "points_each": 1,
+    "total_points": 10,
+    "images": [
+      {"label": "①", "src": "images/goii/goii_mondai_001.jpeg"},
+      {"label": "②", "src": "images/goii/goii_mondai_002.jpeg"},
+      {"label": "③", "src": "images/goii/goii_mondai_003.jpeg"},
+      {"label": "④", "src": "images/goii/goii_mondai_004.png"},
+      {"label": "⑤", "src": "images/goii/goii_mondai_005.png"},
+      {"label": "⑥", "src": "images/goii/goii_mondai_006.png"},
+      {"label": "⑦", "src": "images/goii/goii_mondai_007.jpeg"},
+      {"label": "⑧", "src": "images/goii/goii_mondai_008.png"},
+      {"label": "⑨", "src": "images/goii/goii_mondai_009.jpeg"},
+      {"label": "⑩", "src": "images/goii/goii_mondai_010.png"}
+    ],
+    "items": [
+      {"field_id": "g1_1",  "label": "①", "input_type": "select", "options": ["コート","セーター","くつした","くつ","ぼうし","かさ","ネクタイ","シャツ","スカート","ズボン"]},
+      {"field_id": "g1_2",  "label": "②", "input_type": "select", "options": ["コート","セーター","くつした","くつ","ぼうし","かさ","ネクタイ","シャツ","スカート","ズボン"]},
+      {"field_id": "g1_3",  "label": "③", "input_type": "select", "options": ["コート","セーター","くつした","くつ","ぼうし","かさ","ネクタイ","シャツ","スカート","ズボン"]},
+      {"field_id": "g1_4",  "label": "④", "input_type": "select", "options": ["コート","セーター","くつした","くつ","ぼうし","かさ","ネクタイ","シャツ","スカート","ズボン"]},
+      {"field_id": "g1_5",  "label": "⑤", "input_type": "select", "options": ["コート","セーター","くつした","くつ","ぼうし","かさ","ネクタイ","シャツ","スカート","ズボン"]},
+      {"field_id": "g1_6",  "label": "⑥", "input_type": "select", "options": ["コート","セーター","くつした","くつ","ぼうし","かさ","ネクタイ","シャツ","スカート","ズボン"]},
+      {"field_id": "g1_7",  "label": "⑦", "input_type": "select", "options": ["コート","セーター","くつした","くつ","ぼうし","かさ","ネクタイ","シャツ","スカート","ズボン"]},
+      {"field_id": "g1_8",  "label": "⑧", "input_type": "select", "options": ["コート","セーター","くつした","くつ","ぼうし","かさ","ネクタイ","シャツ","スカート","ズボン"]},
+      {"field_id": "g1_9",  "label": "⑨", "input_type": "select", "options": ["コート","セーター","くつした","くつ","ぼうし","かさ","ネクタイ","シャツ","スカート","ズボン"]},
+      {"field_id": "g1_10", "label": "⑩", "input_type": "select", "options": ["コート","セーター","くつした","くつ","ぼうし","かさ","ネクタイ","シャツ","スカート","ズボン"]}
+    ]
+  },
+  {
+    "id": "g2",
+    "type": "image_select_grid",
+    "title_html": "問題２．Chuyển sang tiếng Nhật（日本語で書いてください）　＜各3点×8問＝24点＞",
+    "points_each": 3,
+    "total_points": 24,
+    "dynamic_options": true,
+    "pool_correct": ["のります","おります","のりかえます","わたります","あるきます","はしります","とまります","まがります"],
+    "pool_extra": ["きります","おぼえます","わすれます","でかけます","つきます"],
+    "distractors_per_item": 3,
+    "rows": [
+      {
+        "images": [
+          {"src": "images/goii/goii_mondai_011.jpeg"},
+          {"src": "images/goii/goii_mondai_012.png"},
+          {"src": "images/goii/goii_mondai_013.png"},
+          {"src": "images/goii/goii_mondai_014.png"}
+        ],
+        "items": [
+          {"field_id": "g2_1", "label": "１）", "input_type": "select"},
+          {"field_id": "g2_2", "label": "２）", "input_type": "select"},
+          {"field_id": "g2_3", "label": "３）", "input_type": "select"},
+          {"field_id": "g2_4", "label": "４）", "input_type": "select"}
+        ]
+      },
+      {
+        "images": [
+          {"src": "images/goii/goii_mondai_015.jpeg"},
+          {"src": "images/goii/goii_mondai_016.png"},
+          {"src": "images/goii/image17.jpeg"},
+          {"src": "images/goii/image18.jpeg"}
+        ],
+        "items": [
+          {"field_id": "g2_5", "label": "５）", "input_type": "select"},
+          {"field_id": "g2_6", "label": "６）", "input_type": "select"},
+          {"field_id": "g2_7", "label": "７）", "input_type": "select"},
+          {"field_id": "g2_8", "label": "８）", "input_type": "select"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "g3",
+    "type": "table_fill",
+    "title_html": "問題３．読み方を書いてください　＜各1点×10問＝10点＞",
+    "instruction": "Hãy viết cách đọc bằng Hiragana.",
+    "points_each": 1,
+    "total_points": 10,
+    "tables": [
+      {
+        "headers": ["簡単","背","季節","世界","経験"],
+        "header_label": "漢字",
+        "row_label": "読み",
+        "items": [
+          {"field_id": "g3_1", "col": 0, "input_type": "text"},
+          {"field_id": "g3_2", "col": 1, "input_type": "text"},
+          {"field_id": "g3_3", "col": 2, "input_type": "text"},
+          {"field_id": "g3_4", "col": 3, "input_type": "text"},
+          {"field_id": "g3_5", "col": 4, "input_type": "text"}
+        ]
+      },
+      {
+        "headers": ["広い","着ます","降ります","遊びます","届けます"],
+        "header_label": "漢字",
+        "row_label": "読み",
+        "items": [
+          {"field_id": "g3_6", "col": 0, "input_type": "text"},
+          {"field_id": "g3_7", "col": 1, "input_type": "text"},
+          {"field_id": "g3_8", "col": 2, "input_type": "text"},
+          {"field_id": "g3_9", "col": 3, "input_type": "text"},
+          {"field_id": "g3_10", "col": 4, "input_type": "text"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "g4",
+    "type": "radio_choice",
+    "title_html": "問題４．正しいものを選んでください　＜各2点×5問＝10点＞",
+    "instruction": "Hãy khoanh tròn đáp án đúng.",
+    "points_each": 2,
+    "total_points": 10,
+    "items": [
+      {
+        "field_id": "g4_1",
+        "question": "１）　日本は今（　　）です。毎日雪が降ります。",
+        "choices": [
+          {"value": "①", "label": "① あたたかい"},
+          {"value": "②", "label": "② すずしい"},
+          {"value": "③", "label": "③ さむい"},
+          {"value": "④", "label": "④ あつい"}
+        ]
+      },
+      {
+        "field_id": "g4_2",
+        "question": "２）　今日は何も（　　）たくないです。",
+        "choices": [
+          {"value": "①", "label": "① 食べ"},
+          {"value": "②", "label": "② 食べます"},
+          {"value": "③", "label": "③ 食べる"},
+          {"value": "④", "label": "④ 食べて"}
+        ]
+      },
+      {
+        "field_id": "g4_3",
+        "question": "３）　昨日は雨でした。そして、風も（　　）です。",
+        "choices": [
+          {"value": "①", "label": "① 強い"},
+          {"value": "②", "label": "② 強かった"},
+          {"value": "③", "label": "③ 強くない"},
+          {"value": "④", "label": "④ 強くて"}
+        ]
+      },
+      {
+        "field_id": "g4_4",
+        "question": "４）　日本語が上手に（　　）たいです。",
+        "choices": [
+          {"value": "①", "label": "① なります"},
+          {"value": "②", "label": "② なり"},
+          {"value": "③", "label": "③ なる"},
+          {"value": "④", "label": "④ なって"}
+        ]
+      },
+      {
+        "field_id": "g4_5",
+        "question": "５）　彼女は髪が（　　）、きれいな人です。",
+        "choices": [
+          {"value": "①", "label": "① 長い"},
+          {"value": "②", "label": "② 長くて"},
+          {"value": "③", "label": "③ 長かった"},
+          {"value": "④", "label": "④ 長く"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "g5",
+    "type": "table_fill",
+    "title_html": "問題５．動詞のて形を書いてください　＜各2点×10問＝20点＞",
+    "instruction": "Hãy viết dạng て của động từ bằng Hiragana.",
+    "points_each": 2,
+    "total_points": 20,
+    "tables": [
+      {
+        "headers": ["辞書形", "て形"],
+        "items": [
+          {"field_id": "g5_1", "prompt": "１）かきます", "input_type": "text"},
+          {"field_id": "g5_2", "prompt": "２）のみます", "input_type": "text"},
+          {"field_id": "g5_3", "prompt": "３）あそびます", "input_type": "text"},
+          {"field_id": "g5_4", "prompt": "４）まちます", "input_type": "text"},
+          {"field_id": "g5_5", "prompt": "５）つかいます", "input_type": "text"},
+          {"field_id": "g5_6", "prompt": "６）もちます", "input_type": "text"},
+          {"field_id": "g5_7", "prompt": "７）とります", "input_type": "text"},
+          {"field_id": "g5_8", "prompt": "８）はなします", "input_type": "text"},
+          {"field_id": "g5_9", "prompt": "９）きます（来ます）", "input_type": "text"},
+          {"field_id": "g5_10", "prompt": "１０）します", "input_type": "text"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "g6",
+    "type": "select_dynamic_pool",
+    "title_html": "問題６．Tiếng Nhật ⇔ Tiếng Việt　＜各2点×13問＝26点＞",
+    "instruction": "Hãy chọn nghĩa tiếng Việt đúng.（ベトナム語の意味を選んでください）",
+    "points_each": 2,
+    "total_points": 26,
+    "pool_correct": [
+      "đang sống","đang làm việc","nhớ, ghi nhớ","quên","rẽ, quẹo","lên (xe)","xuống (xe)",
+      "đã kết hôn","thẳng","ngã tư","đèn giao thông","cầu","cảnh sát"
+    ],
+    "pool_extra": [
+      "chạy","đi bộ","dừng lại","bắt đầu","kết thúc","nguy hiểm","an toàn"
+    ],
+    "distractors_per_item": 3,
+    "items": [
+      {"field_id": "g6_1",  "label": "１．すんでいます"},
+      {"field_id": "g6_8",  "label": "１．けっこんしています"},
+      {"field_id": "g6_2",  "label": "２．はたらいています"},
+      {"field_id": "g6_9",  "label": "２．まっすぐ"},
+      {"field_id": "g6_3",  "label": "３．おぼえます"},
+      {"field_id": "g6_10", "label": "３．こうさてん"},
+      {"field_id": "g6_4",  "label": "４．わすれます"},
+      {"field_id": "g6_11", "label": "４．しんごう"},
+      {"field_id": "g6_5",  "label": "５．まがります"},
+      {"field_id": "g6_12", "label": "５．はし"},
+      {"field_id": "g6_6",  "label": "６．のります"},
+      {"field_id": "g6_13", "label": "６．けいさつ"},
+      {"field_id": "g6_7",  "label": "７．おります"}
+    ],
+    "layout": "two_column"
+  }
+]

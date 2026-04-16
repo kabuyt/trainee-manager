@@ -1,0 +1,358 @@
+[
+  {
+    "id": "b1",
+    "type": "fill_particle",
+    "title_html": "問題１．Hãy điền trợ từ thích hợp　＜各1点×13問＝13点＞",
+    "instruction": "Hãy điền trợ từ đúng vào（　　）.",
+    "example_html": "きのう（<span class=\"already\">は</span>）日曜日でした。",
+    "points_each": 1,
+    "total_points": 13,
+    "items": [
+      {
+        "sentence_html": "１）　時間（{b1_1}）ありません（{b1_2}）、新聞を読みません。",
+        "fields": [
+          {"field_id": "b1_1", "input_type": "select", "options": ["が","を","に","は","から"]},
+          {"field_id": "b1_2", "input_type": "select", "options": ["が","に","から","で","を"]}
+        ]
+      },
+      {
+        "sentence_html": "２）　かばんの（{b1_3}）財布がありますか。",
+        "fields": [
+          {"field_id": "b1_3", "input_type": "select", "options": ["に","で","を","が","は"]}
+        ]
+      },
+      {
+        "sentence_html": "３）　ベトナム語（{b1_4}）「ありがとう」は何ですか。― ベトナム語（{b1_5}）わかりません。",
+        "fields": [
+          {"field_id": "b1_4", "input_type": "select", "options": ["で","に","は","を","が"]},
+          {"field_id": "b1_5", "input_type": "select", "options": ["が","を","は","で","に"]}
+        ]
+      },
+      {
+        "sentence_html": "４）　母（{b1_6}）電話（{b1_7}）かけます。",
+        "fields": [
+          {"field_id": "b1_6", "input_type": "select", "options": ["に","を","で","が","は"]},
+          {"field_id": "b1_7", "input_type": "select", "options": ["を","に","が","で","は"]}
+        ]
+      },
+      {
+        "sentence_html": "５）　いつ日本（{b1_8}）行きますか。― 3月18日（{b1_9}）飛行機（{b1_10}）行きます。",
+        "fields": [
+          {"field_id": "b1_8", "input_type": "select", "options": ["へ","に","を","で","が"]},
+          {"field_id": "b1_9", "input_type": "select", "options": ["に","の","で","を","は"]},
+          {"field_id": "b1_10", "input_type": "select", "options": ["で","に","を","が","は"]}
+        ]
+      },
+      {
+        "sentence_html": "６）　スーパー（{b1_11}）ジュースを買いました。おいしくないです（{b1_12}）、安いです。",
+        "fields": [
+          {"field_id": "b1_11", "input_type": "select", "options": ["で","に","を","が","は"]},
+          {"field_id": "b1_12", "input_type": "select", "options": ["が","から","に","で","を"]}
+        ]
+      },
+      {
+        "sentence_html": "７）　1年（{b1_13}）1回ベトナムを旅行します。",
+        "fields": [
+          {"field_id": "b1_13", "input_type": "select", "options": ["に","で","を","が","は"]}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "b2",
+    "type": "select_in_sentence",
+    "title_html": "問題２．Hãy chọn từ đúng　＜各2点×5問＝10点＞",
+    "instruction": "正しい言葉を選んでください。",
+    "points_each": 2,
+    "total_points": 10,
+    "items": [
+      {
+        "sentence_html": "１）　日曜日いっしょにテニスを（　{b2_1}　）。",
+        "fields": [{"field_id": "b2_1", "input_type": "select", "options": ["しましたか","しませんか","しませんでしたか"]}]
+      },
+      {
+        "sentence_html": "２）　寮の生活は（　{b2_2}　）。",
+        "fields": [{"field_id": "b2_2", "input_type": "select", "options": ["どうですか","どうしてですか","なんですか"]}]
+      },
+      {
+        "sentence_html": "３）　加藤さんは（　{b2_3}　）ベトナムを旅行しますか。―1か月旅行します。",
+        "fields": [{"field_id": "b2_3", "input_type": "select", "options": ["どうして","どのくらい","どんな"]}]
+      },
+      {
+        "sentence_html": "４）　すみません、牛乳はどこに（　{b2_4}　）か。",
+        "fields": [{"field_id": "b2_4", "input_type": "select", "options": ["います","あります","みます"]}]
+      },
+      {
+        "sentence_html": "５）　山口さんから花を（　{b2_5}　）。",
+        "fields": [{"field_id": "b2_5", "input_type": "select", "options": ["あげました","もらいました"]}]
+      }
+    ]
+  },
+  {
+    "id": "b3",
+    "type": "word_puzzle",
+    "title_html": "問題３．Sắp xếp theo thứ tự đúng　＜各3点×5問＝15点＞",
+    "instruction": "タイルをタップして正しい順に並べてください。もう一度タップすると戻ります。",
+    "points_each": 3,
+    "total_points": 15,
+    "puzzles": [
+      {"field_id": "b3_1", "words": ["友","だち","と","映画","を","見ました","それから"]},
+      {"field_id": "b3_2", "words": ["は","大阪駅","へ","バス","行きますか","この"]},
+      {"field_id": "b3_3", "words": ["料理","が","好き","ですか","どんな"]},
+      {"field_id": "b3_4", "words": ["りんご","を","2つ","と","切手","を","2枚","ください"]},
+      {"field_id": "b3_5", "words": ["近く","に","VP銀行","が","ありますか","この"]}
+    ]
+  },
+  {
+    "id": "b4",
+    "type": "dialogue_fill",
+    "title_html": "問題４．会話を完成してください　＜各2点×7問＝14点＞",
+    "instruction": "Chọn từ A-H để điền vào chỗ trống.",
+    "points_each": 2,
+    "total_points": 14,
+    "option_pool_html": "A: いかがですか　　B: 行きましょう　　C: ちょっと　　D: 残念ですが<br>E: はい。どうぞ　　F: いただきます　　G: 借りましたか　　H: 行きませんか",
+    "option_pool": ["A","B","C","D","E","F","G","H"],
+    "items": [
+      {
+        "dialogue_html": "①　A：グエンさん、図書館でどんな本を（{b4_1}）。<br>　　B：『ハリー・ポッター』です。",
+        "fields": [{"field_id": "b4_1", "input_type": "select", "options": ["A","B","C","D","E","F","G","H"]}]
+      },
+      {
+        "dialogue_html": "②　A：いらっしゃい。コーヒーは（{b4_2}）。<br>　　B：ありがとうございます。（{b4_3}）。",
+        "fields": [
+          {"field_id": "b4_2", "input_type": "select", "options": ["A","B","C","D","E","F","G","H"]},
+          {"field_id": "b4_3", "input_type": "select", "options": ["A","B","C","D","E","F","G","H"]}
+        ]
+      },
+      {
+        "dialogue_html": "③　A：ここに映画のチケットがあります。今週の日曜日（{b4_4}）。<br>　　B：いいですね、（{b4_5}）。",
+        "fields": [
+          {"field_id": "b4_4", "input_type": "select", "options": ["A","B","C","D","E","F","G","H"]},
+          {"field_id": "b4_5", "input_type": "select", "options": ["A","B","C","D","E","F","G","H"]}
+        ]
+      },
+      {
+        "dialogue_html": "④　A：加藤さん、昼に一緒にごはんを食べましょう。<br>　　B：（{b4_6}）、用事がありますから…。晩にごはんを食べましょう。<br>　　A：すみません。晩は（{b4_7}）…。友だちとサッカーをしますから。",
+        "fields": [
+          {"field_id": "b4_6", "input_type": "select", "options": ["A","B","C","D","E","F","G","H"]},
+          {"field_id": "b4_7", "input_type": "select", "options": ["A","B","C","D","E","F","G","H"]}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "b5",
+    "type": "select_in_sentence",
+    "title_html": "問題５．絵を見て位置を答えてください　＜各3点×4問＝12点＞",
+    "instruction": "絵を見て、正しい言葉を選んでください。",
+    "points_each": 3,
+    "total_points": 12,
+    "image_src": "images/bunpo/image1.jpeg",
+    "example_html": "例）いすはどこにありますか。→　机　の　前　にあります。",
+    "items": [
+      {
+        "sentence_html": "１）　いすはどこにありますか。→　（{b5_1a}）の（{b5_1b}）にあります。",
+        "fields": [
+          {"field_id": "b5_1a", "input_type": "select", "options": ["つくえ","ベッド","はこ","たな","テーブル"]},
+          {"field_id": "b5_1b", "input_type": "select", "options": ["まえ","うえ","なか","した","よこ","うしろ"]}
+        ]
+      },
+      {
+        "sentence_html": "２）　プレゼントはどこにありますか。→　（{b5_2a}）の（{b5_2b}）にあります。",
+        "fields": [
+          {"field_id": "b5_2a", "input_type": "select", "options": ["つくえ","ベッド","はこ","たな","テーブル"]},
+          {"field_id": "b5_2b", "input_type": "select", "options": ["まえ","うえ","なか","した","よこ","うしろ"]}
+        ]
+      },
+      {
+        "sentence_html": "３）　ぬいぐるみはどこにありますか。（*ぬいぐるみ = thú nhồi bông）→　（{b5_3a}）の（{b5_3b}）にあります。",
+        "fields": [
+          {"field_id": "b5_3a", "input_type": "select", "options": ["つくえ","ベッド","はこ","たな","テーブル"]},
+          {"field_id": "b5_3b", "input_type": "select", "options": ["まえ","うえ","なか","した","よこ","うしろ"]}
+        ]
+      },
+      {
+        "sentence_html": "４）　黄色い箱はどこにありますか。→　（{b5_4a}）の（{b5_4b}）にあります。",
+        "fields": [
+          {"field_id": "b5_4a", "input_type": "select", "options": ["つくえ","ベッド","はこ","たな","テーブル"]},
+          {"field_id": "b5_4b", "input_type": "select", "options": ["まえ","うえ","なか","した","よこ","うしろ"]}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "b6",
+    "type": "reading_comprehension",
+    "title_html": "問題６．○か×を書きましょう。　＜各2点×5問＝10点＞",
+    "points_each": 2,
+    "total_points": 10,
+    "passage_html": "私はミラーです。私の会社はSOYOTAです。毎日９時から６時まで、働きます。昼に１時間休みます。町は小さいですが、電車があります。しかし、私はバイクで会社へ行きます。私の会社は、車を売ります。車は１台１００万円から５００万円です。車は安くないですが、とても人気です。",
+    "items": [
+      {
+        "field_id": "b6_1",
+        "question": "１）　ミラーさんは毎日８時間ぐらい働きます。",
+        "input_type": "select",
+        "options": ["○","×"]
+      },
+      {
+        "field_id": "b6_2",
+        "question": "２）　私は電車で学校へ行きます。",
+        "input_type": "select",
+        "options": ["○","×"]
+      },
+      {
+        "field_id": "b6_3",
+        "question": "３）　車は２台で２００万円から１０００万円です。",
+        "input_type": "select",
+        "options": ["○","×"]
+      },
+      {
+        "field_id": "b6_4",
+        "question": "４）　男の人はよく車を買います。",
+        "input_type": "select",
+        "options": ["○","×"]
+      },
+      {
+        "field_id": "b6_5",
+        "question": "５）　車は安いですから、とても人気です。",
+        "input_type": "select",
+        "options": ["○","×"]
+      }
+    ]
+  },
+  {
+    "id": "b7",
+    "type": "reading_comprehension",
+    "title_html": "問題７．同じ日本語に○か×を書きましょう。　＜各2点×10問＝10点＞",
+    "points_each": 2,
+    "total_points": 10,
+    "example_html": "例）あの方はリン先生です。＝（ × ）リン先生はこちらです。（ ○ ）あそこにリン先生がいます。",
+    "items": [
+      {
+        "group_sentence": "１）クイン先生は私に日本語を教えました。",
+        "sub_items": [
+          {"field_id": "b7_1a", "question": "a）クイン先生と日本語を勉強しました。", "input_type": "select", "options": ["○","×"]},
+          {"field_id": "b7_1b", "question": "b）クイン先生に日本語を習いました。", "input_type": "select", "options": ["○","×"]}
+        ]
+      },
+      {
+        "group_sentence": "２）アインさんに本を借りました。",
+        "sub_items": [
+          {"field_id": "b7_2a", "question": "a）アインさんは私に本を貸しました。", "input_type": "select", "options": ["○","×"]},
+          {"field_id": "b7_2b", "question": "b）アインさんと本を読みました。", "input_type": "select", "options": ["○","×"]}
+        ]
+      },
+      {
+        "group_sentence": "３）ターニャさんは料理が上手じゃありません。",
+        "sub_items": [
+          {"field_id": "b7_3a", "question": "a）ターニャさんはごはんが嫌いです。", "input_type": "select", "options": ["○","×"]},
+          {"field_id": "b7_3b", "question": "b）ターニャさんのごはんはおいしくないです。", "input_type": "select", "options": ["○","×"]}
+        ]
+      },
+      {
+        "group_sentence": "４）A「明日映画を見ましょう。」B「明日は友だちと約束がありますから…。」",
+        "sub_items": [
+          {"field_id": "b7_4a", "question": "a）明日映画を見ません。", "input_type": "select", "options": ["○","×"]},
+          {"field_id": "b7_4b", "question": "b）明日友だちがいません。", "input_type": "select", "options": ["○","×"]}
+        ]
+      },
+      {
+        "group_sentence": "５）A「会社を何日休みましたか。」B「4日休みました。」",
+        "sub_items": [
+          {"field_id": "b7_5a", "question": "a）11月4日の金曜日に休みました。", "input_type": "select", "options": ["○","×"]},
+          {"field_id": "b7_5b", "question": "b）月曜日から木曜日まで休みました。", "input_type": "select", "options": ["○","×"]}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "b8",
+    "type": "radio_choice",
+    "title_html": "問題８．質問に正しい答えを選んでください　＜各2点×8問＝16点＞",
+    "instruction": "Chọn câu trả lời đúng cho mỗi câu hỏi.",
+    "points_each": 2,
+    "total_points": 16,
+    "items": [
+      {
+        "field_id": "b8_1",
+        "question": "１）　1か月に何回うちへ帰りますか。",
+        "choices": [
+          {"value": "a", "label": "a．2人帰ります。"},
+          {"value": "b", "label": "b．2回帰ります。"},
+          {"value": "c", "label": "c．2つ帰ります。"},
+          {"value": "d", "label": "d．2日帰ります。"}
+        ]
+      },
+      {
+        "field_id": "b8_2",
+        "question": "２）　あなたはどのくらい日本語を勉強しましたか。",
+        "choices": [
+          {"value": "a", "label": "a．6か月勉強します。"},
+          {"value": "b", "label": "b．6つ勉強しました。"},
+          {"value": "c", "label": "c．6か月勉強しました。"},
+          {"value": "d", "label": "d．6回勉強しました。"}
+        ]
+      },
+      {
+        "field_id": "b8_3",
+        "question": "３）　あなたのクラスに女の人が何人いますか。",
+        "choices": [
+          {"value": "a", "label": "a．3つあります。"},
+          {"value": "b", "label": "b．3回います。"},
+          {"value": "c", "label": "c．3人あります。"},
+          {"value": "d", "label": "d．3人います。"}
+        ]
+      },
+      {
+        "field_id": "b8_4",
+        "question": "４）　もう日本語の辞書を買いましたか。",
+        "choices": [
+          {"value": "a", "label": "a．いいえ、もう買いませんでした。"},
+          {"value": "b", "label": "b．はい、もう買います。"},
+          {"value": "c", "label": "c．はい、もう買いました。"},
+          {"value": "d", "label": "d．はい、まだ買いました。"}
+        ]
+      },
+      {
+        "field_id": "b8_5",
+        "question": "５）　東京はどんな町ですか。",
+        "choices": [
+          {"value": "a", "label": "a．はい、東京です。"},
+          {"value": "b", "label": "b．東京は日本にあります。"},
+          {"value": "c", "label": "c．にぎやかで大きい町です。"},
+          {"value": "d", "label": "d．東京がすきです。"}
+        ]
+      },
+      {
+        "field_id": "b8_6",
+        "question": "６）　どうしてきのう休みましたか。",
+        "choices": [
+          {"value": "a", "label": "a．きのう休みました。"},
+          {"value": "b", "label": "b．いいえ、休みませんでした。"},
+          {"value": "c", "label": "c．病気ですから、休みました。"},
+          {"value": "d", "label": "d．病気ですが、休みました。"}
+        ]
+      },
+      {
+        "field_id": "b8_7",
+        "question": "７）　机の上に何がありますか。",
+        "choices": [
+          {"value": "a", "label": "a．本は机です。"},
+          {"value": "b", "label": "b．本があります。"},
+          {"value": "c", "label": "c．机の上です。"},
+          {"value": "d", "label": "d．本がいます。"}
+        ]
+      },
+      {
+        "field_id": "b8_8",
+        "question": "８）　誕生日に誰にプレゼントをもらいましたか。",
+        "choices": [
+          {"value": "a", "label": "a．時計をもらいました。"},
+          {"value": "b", "label": "b．母にあげました。"},
+          {"value": "c", "label": "c．母にもらいました。"},
+          {"value": "d", "label": "d．誕生日は3月です。"}
+        ]
+      }
+    ]
+  }
+]

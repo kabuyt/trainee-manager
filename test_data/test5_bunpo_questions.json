@@ -1,0 +1,242 @@
+[
+  {
+    "id": "b1",
+    "type": "fill_particle",
+    "title_html": "問題１．<ruby>助詞<rt>じょし</rt></ruby>を<ruby>入<rt>い</rt></ruby>れてください　＜<ruby>各<rt>かく</rt></ruby>1<ruby>点<rt>てん</rt></ruby>×15<ruby>問<rt>もん</rt></ruby>＝15<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "Hay dien tro tu thich hop vao（　　）.",
+    "points_each": 1,
+    "total_points": 15,
+    "items": [
+      {
+        "sentence_html": "１）　<ruby>初<rt>はじ</rt></ruby>めてだし、（{b1_1}）<ruby>話<rt>はな</rt></ruby>せないし、それで<ruby>少<rt>すこ</rt></ruby>し<ruby>心配<rt>しんぱい</rt></ruby>です。",
+        "fields": [
+          {"field_id": "b1_1", "input_type": "select", "options": ["が","を","に","は","で","も"]}
+        ]
+      },
+      {
+        "sentence_html": "２）　<ruby>海<rt>うみ</rt></ruby>に（{b1_2}）<ruby>行<rt>い</rt></ruby>ったら、くらげ（{b1_3}）<ruby>注意<rt>ちゅうい</rt></ruby>してください。",
+        "fields": [
+          {"field_id": "b1_2", "input_type": "select", "options": ["が","を","に","は","で","も"]},
+          {"field_id": "b1_3", "input_type": "select", "options": ["が","を","に","は","で","も"]}
+        ]
+      },
+      {
+        "sentence_html": "３）　わたしは<ruby>田舎<rt>いなか</rt></ruby>（{b1_4}）は<ruby>帰<rt>かえ</rt></ruby>りません。",
+        "fields": [
+          {"field_id": "b1_4", "input_type": "select", "options": ["が","を","に","は","で","も","に/へ"]}
+        ]
+      },
+      {
+        "sentence_html": "４）　ここ（{b1_5}）<ruby>掃除<rt>そうじ</rt></ruby>しておいてください。／ここ（{b1_6}）もう<ruby>掃除<rt>そうじ</rt></ruby>してありますよ。",
+        "fields": [
+          {"field_id": "b1_5", "input_type": "select", "options": ["が","を","に","は","で","も"]},
+          {"field_id": "b1_6", "input_type": "select", "options": ["が","を","に","は","で","も"]}
+        ]
+      },
+      {
+        "sentence_html": "５）　テーブル（{b1_7}）お<ruby>皿<rt>さら</rt></ruby>（{b1_8}）<ruby>置<rt>お</rt></ruby>いてあります。",
+        "fields": [
+          {"field_id": "b1_7", "input_type": "select", "options": ["が","を","に","は","で","も"]},
+          {"field_id": "b1_8", "input_type": "select", "options": ["が","を","に","は","で","も"]}
+        ]
+      },
+      {
+        "sentence_html": "６）　このエアコン（{b1_9}）<ruby>故障<rt>こしょう</rt></ruby>していますから、<ruby>使<rt>つか</rt></ruby>わないでください。",
+        "fields": [
+          {"field_id": "b1_9", "input_type": "select", "options": ["が","を","に","は","で","も"]}
+        ]
+      },
+      {
+        "sentence_html": "７）　お<ruby>茶<rt>ちゃ</rt></ruby>は<ruby>好<rt>す</rt></ruby>きですが、ミルクティー（{b1_10}）<ruby>嫌<rt>きら</rt></ruby>いです。",
+        "fields": [
+          {"field_id": "b1_10", "input_type": "select", "options": ["が","を","に","は","で","も"]}
+        ]
+      },
+      {
+        "sentence_html": "８）　<ruby>怪我<rt>けが</rt></ruby>（{b1_11}）したんですか？／あの<ruby>道<rt>みち</rt></ruby>は<ruby>暗<rt>くら</rt></ruby>いですから、<ruby>走<rt>はし</rt></ruby>って（{b1_12}）いけません。",
+        "fields": [
+          {"field_id": "b1_11", "input_type": "select", "options": ["が","を","に","は","で","も"]},
+          {"field_id": "b1_12", "input_type": "select", "options": ["が","を","に","は","で","も"]}
+        ]
+      },
+      {
+        "sentence_html": "９）　33<ruby>課<rt>か</rt></ruby>の<ruby>漢字<rt>かんじ</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しくありませんから、30<ruby>分<rt>ぷん</rt></ruby>（{b1_13}）<ruby>覚<rt>おぼ</rt></ruby>えられます。",
+        "fields": [
+          {"field_id": "b1_13", "input_type": "select", "options": ["が","を","に","は","で","も"]}
+        ]
+      },
+      {
+        "sentence_html": "１０）　この<ruby>電車<rt>でんしゃ</rt></ruby>は5<ruby>時<rt>じ</rt></ruby>45<ruby>分<rt>ふん</rt></ruby>（{b1_14}）<ruby>着<rt>つ</rt></ruby>く<ruby>予定<rt>よてい</rt></ruby>です。",
+        "fields": [
+          {"field_id": "b1_14", "input_type": "select", "options": ["が","を","に","は","で","も"]}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "b2",
+    "type": "free_text",
+    "title_html": "問題２．<ruby>文<rt>ぶん</rt></ruby>を<ruby>作<rt>つく</rt></ruby>ってください　＜<ruby>各<rt>かく</rt></ruby>5<ruby>点<rt>てん</rt></ruby>×4<ruby>問<rt>もん</rt></ruby>＝20<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "この問題は先生が採点します。日本語で書いてください。",
+    "grading": "manual",
+    "points_each": 5,
+    "total_points": 20,
+    "items": [
+      {"field_id": "b2_1", "prompt_html": "１）　<ruby>音楽<rt>おんがく</rt></ruby>を<ruby>聞<rt>き</rt></ruby>きながら、＿＿＿＿。"},
+      {"field_id": "b2_2", "prompt_html": "２）　<ruby>日本<rt>にほん</rt></ruby>は<ruby>暑<rt>あつ</rt></ruby>いし、＿＿＿＿。"},
+      {"field_id": "b2_3", "prompt_html": "３）　わたしは＿＿＿＿。"},
+      {"field_id": "b2_4", "prompt_html": "４）　<ruby>寝<rt>ね</rt></ruby>る<ruby>前<rt>まえ</rt></ruby>に、＿＿＿＿。"}
+    ]
+  },
+  {
+    "id": "b3",
+    "type": "word_conjugation",
+    "title_html": "問題３．<ruby>言葉<rt>ことば</rt></ruby>を<ruby>選<rt>えら</rt></ruby>んで<ruby>正<rt>ただ</rt></ruby>しい<ruby>形<rt>かたち</rt></ruby>にしてください　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×8<ruby>問<rt>もん</rt></ruby>＝16<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "Chon tu thich hop tu khung, doi sang dang dung roi dien vao cho trong.",
+    "word_bank_html": "いっぱいです　　とまってしまいました　　<ruby>乗<rt>の</rt></ruby>ります　　<ruby>食<rt>た</rt></ruby>べません　　<ruby>好<rt>す</rt></ruby>きです<br><ruby>買<rt>か</rt></ruby>いました　　<ruby>行<rt>い</rt></ruby>きたいです　　ありません　　<ruby>壊<rt>こわ</rt></ruby>れました",
+    "points_each": 2,
+    "total_points": 16,
+    "items": [
+      {
+        "sentence_html": "１）　いい<ruby>時計<rt>とけい</rt></ruby>ですね。― ええ、<ruby>誕生日<rt>たんじょうび</rt></ruby>に（{b3_1}）。",
+        "fields": [{"field_id": "b3_1", "input_type": "text"}]
+      },
+      {
+        "sentence_html": "２）　どうして<ruby>遅<rt>おく</rt></ruby>れましたか。― バスが（{b3_2}）。",
+        "fields": [{"field_id": "b3_2", "input_type": "text"}]
+      },
+      {
+        "sentence_html": "３）　すみません。<ruby>京都<rt>きょうと</rt></ruby>へ（{b3_3}）、どうやって<ruby>行<rt>い</rt></ruby>ったらいいですか。",
+        "fields": [{"field_id": "b3_3", "input_type": "text"}]
+      },
+      {
+        "sentence_html": "４）　どうして<ruby>肉<rt>にく</rt></ruby>を<ruby>食<rt>た</rt></ruby>べないんですか。― <ruby>肉<rt>にく</rt></ruby>が<ruby>好<rt>す</rt></ruby>きじゃないから、（{b3_4}）。",
+        "fields": [{"field_id": "b3_4", "input_type": "text"}]
+      },
+      {
+        "sentence_html": "５）　<ruby>傘<rt>かさ</rt></ruby>を<ruby>持<rt>も</rt></ruby>っていますか。― いいえ、（{b3_5a}）。",
+        "fields": [{"field_id": "b3_5a", "input_type": "text"}]
+      },
+      {
+        "sentence_html": "　　どうして<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>しているんですか。― <ruby>日本<rt>にほん</rt></ruby>の<ruby>文化<rt>ぶんか</rt></ruby>が（{b3_5b}）。",
+        "fields": [{"field_id": "b3_5b", "input_type": "text"}]
+      },
+      {
+        "sentence_html": "　　<ruby>新幹線<rt>しんかんせん</rt></ruby>に（{b3_5c}）ことがありますか。",
+        "fields": [{"field_id": "b3_5c", "input_type": "text"}]
+      }
+    ]
+  },
+  {
+    "id": "b4",
+    "type": "free_text",
+    "title_html": "問題４．<ruby>可能形<rt>かのうけい</rt></ruby>に<ruby>書<rt>か</rt></ruby>き<ruby>換<rt>か</rt></ruby>えてください　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×3<ruby>問<rt>もん</rt></ruby>＝6<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "Hay viet lai bang dang kha nang (kano-kei). Viet bang Hiragana.",
+    "example_html": "<ruby>例<rt>れい</rt></ruby>）<ruby>日本語<rt>にほんご</rt></ruby>で<ruby>電話<rt>でんわ</rt></ruby>をかけることができますか → <ruby>日本語<rt>にほんご</rt></ruby>で<ruby>電話<rt>でんわ</rt></ruby>がかけられますか。",
+    "points_each": 2,
+    "total_points": 6,
+    "items": [
+      {"field_id": "b4_1", "prompt_html": "１）　<ruby>先生<rt>せんせい</rt></ruby>は<ruby>今晩<rt>こんばん</rt></ruby>のパーティに<ruby>来<rt>く</rt></ruby>ることができます"},
+      {"field_id": "b4_2", "prompt_html": "２）　<ruby>勉強<rt>べんきょう</rt></ruby>の<ruby>時<rt>とき</rt></ruby>は<ruby>携帯<rt>けいたい</rt></ruby><ruby>電話<rt>でんわ</rt></ruby>を<ruby>使<rt>つか</rt></ruby>うことができません"},
+      {"field_id": "b4_3", "prompt_html": "３）　あの<ruby>山<rt>やま</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>から<ruby>町<rt>まち</rt></ruby>を<ruby>見<rt>み</rt></ruby>ることができます"}
+    ]
+  },
+  {
+    "id": "b5",
+    "type": "free_text",
+    "title_html": "問題５．<ruby>命令形<rt>めいれいけい</rt></ruby>／<ruby>禁止形<rt>きんしけい</rt></ruby>に<ruby>書<rt>か</rt></ruby>き<ruby>換<rt>か</rt></ruby>えてください　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×3<ruby>問<rt>もん</rt></ruby>＝6<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "Hay viet lai bang dang menh lenh / cam chi. Viet bang Hiragana.",
+    "example_html": "<ruby>例<rt>れい</rt></ruby>）<ruby>急<rt>いそ</rt></ruby>いでください → <ruby>急<rt>いそ</rt></ruby>げ",
+    "points_each": 2,
+    "total_points": 6,
+    "items": [
+      {"field_id": "b5_1", "prompt_html": "１）　この<ruby>部屋<rt>へや</rt></ruby>に<ruby>入<rt>はい</rt></ruby>ってください"},
+      {"field_id": "b5_2", "prompt_html": "２）　ビールを<ruby>飲<rt>の</rt></ruby>まないでください"},
+      {"field_id": "b5_3", "prompt_html": "３）　じゅんびしてください"}
+    ]
+  },
+  {
+    "id": "b6",
+    "type": "select_choice",
+    "title_html": "問題６．<ruby>看板<rt>かんばん</rt></ruby>の<ruby>意味<rt>いみ</rt></ruby>を<ruby>選<rt>えら</rt></ruby>んでください　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×5<ruby>問<rt>もん</rt></ruby>＝10<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "Chon nghia dung cho moi bien bao.",
+    "choice_bank_html": "A: <ruby>営業中<rt>えいぎょうちゅう</rt></ruby>　　B: <ruby>無料<rt>むりょう</rt></ruby>　　C: <ruby>本日<rt>ほんじつ</rt></ruby><ruby>休業<rt>きゅうぎょう</rt></ruby>　　D: <ruby>使用<rt>しよう</rt></ruby><ruby>禁止<rt>きんし</rt></ruby>　　E: <ruby>出口<rt>でぐち</rt></ruby>",
+    "points_each": 2,
+    "total_points": 10,
+    "items": [
+      {"field_id": "b6_1", "prompt_html": "１）　<ruby>使<rt>つか</rt></ruby>ってはいけません。", "input_type": "select", "options": ["A","B","C","D","E"]},
+      {"field_id": "b6_2", "prompt_html": "２）　お<ruby>金<rt>かね</rt></ruby>がいりません。", "input_type": "select", "options": ["A","B","C","D","E"]},
+      {"field_id": "b6_3", "prompt_html": "３）　この<ruby>店<rt>みせ</rt></ruby>は<ruby>今<rt>いま</rt></ruby><ruby>開<rt>あ</rt></ruby>いています。", "input_type": "select", "options": ["A","B","C","D","E"]},
+      {"field_id": "b6_4", "prompt_html": "４）　<ruby>今日<rt>きょう</rt></ruby>は<ruby>休<rt>やす</rt></ruby>みです。", "input_type": "select", "options": ["A","B","C","D","E"]},
+      {"field_id": "b6_5", "prompt_html": "５）　ここから<ruby>出<rt>で</rt></ruby>ます。", "input_type": "select", "options": ["A","B","C","D","E"]}
+    ]
+  },
+  {
+    "id": "b7",
+    "type": "dialogue_fill",
+    "title_html": "問題７．<ruby>会話<rt>かいわ</rt></ruby>を<ruby>完成<rt>かんせい</rt></ruby>してください　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×5<ruby>問<rt>もん</rt></ruby>＝10<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "Chon tu a-j de dien vao cho trong.",
+    "choice_bank_html": "a: <ruby>暑<rt>あつ</rt></ruby>いでしょう　　b: まだまだです　　c: よかったでしょう<br>d: そうだ　　e: <ruby>元気<rt>げんき</rt></ruby>です　　f: <ruby>伝<rt>つた</rt></ruby>えて<br>g: <ruby>教<rt>おし</rt></ruby>えて　　h: <ruby>帰<rt>かえ</rt></ruby>ろう　　i: <ruby>電話<rt>でんわ</rt></ruby>する　　j: <ruby>聞<rt>き</rt></ruby>く",
+    "example_html": "<ruby>例<rt>れい</rt></ruby>）<ruby>日本語<rt>にほんご</rt></ruby>がお<ruby>上手<rt>じょうず</rt></ruby>ですね。― いいえ、（ <b>b</b> ）。",
+    "points_each": 2,
+    "total_points": 10,
+    "items": [
+      {
+        "dialogue_html": "１）　<ruby>今日<rt>きょう</rt></ruby>は<ruby>天気<rt>てんき</rt></ruby>がいいですね。― ええ、でも<ruby>午後<rt>ごご</rt></ruby>から（{b7_1}）。",
+        "fields": [{"field_id": "b7_1", "input_type": "select", "options": ["a","b","c","d","e","f","g","h","i","j"]}]
+      },
+      {
+        "dialogue_html": "２）　あっ、（{b7_2}）、<ruby>忘<rt>わす</rt></ruby>れてた。",
+        "fields": [{"field_id": "b7_2", "input_type": "select", "options": ["a","b","c","d","e","f","g","h","i","j"]}]
+      },
+      {
+        "dialogue_html": "３）　もう<ruby>遅<rt>おそ</rt></ruby>いから、（{b7_3}）。",
+        "fields": [{"field_id": "b7_3", "input_type": "select", "options": ["a","b","c","d","e","f","g","h","i","j"]}]
+      },
+      {
+        "dialogue_html": "４）　<ruby>田中<rt>たなか</rt></ruby>さんに<ruby>会<rt>あ</rt></ruby>ったら、（{b7_4a}）ください。<ruby>会議<rt>かいぎ</rt></ruby>は3<ruby>時<rt>じ</rt></ruby>からだと（{b7_4b}）ください。",
+        "fields": [
+          {"field_id": "b7_4a", "input_type": "select", "options": ["a","b","c","d","e","f","g","h","i","j"]},
+          {"field_id": "b7_4b", "input_type": "select", "options": ["a","b","c","d","e","f","g","h","i","j"]}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "b8",
+    "type": "reading_comprehension",
+    "title_html": "問題８．<ruby>読<rt>よ</rt></ruby>んで○か×で<ruby>答<rt>こた</rt></ruby>えてください　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×4<ruby>問<rt>もん</rt></ruby>＝12<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "Doc va chon O (dung) / X (sai).",
+    "points_each": 3,
+    "total_points": 12,
+    "passage_html": "Aさんは<ruby>図書館<rt>としょかん</rt></ruby>に<ruby>行<rt>い</rt></ruby>きたいです。<ruby>図書館<rt>としょかん</rt></ruby>はここから<ruby>歩<rt>ある</rt></ruby>いて15<ruby>分<rt>ふん</rt></ruby>です。バスでも<ruby>行<rt>い</rt></ruby>けます。Aさんは<ruby>歩<rt>ある</rt></ruby>いて<ruby>行<rt>い</rt></ruby>くつもりです。<ruby>図書館<rt>としょかん</rt></ruby>はあまり<ruby>大<rt>おお</rt></ruby>きくありませんが、いい<ruby>本<rt>ほん</rt></ruby>がたくさんあります。<ruby>今日<rt>きょう</rt></ruby>は<ruby>土曜日<rt>どようび</rt></ruby>ですから、たぶん<ruby>混<rt>こ</rt></ruby>んでいます。",
+    "items": [
+      {"field_id": "b8_1", "question": "１）　Aさんは<ruby>図書館<rt>としょかん</rt></ruby>に<ruby>歩<rt>ある</rt></ruby>かないつもりですか？", "input_type": "select", "options": ["○","×"]},
+      {"field_id": "b8_2", "question": "２）　<ruby>図書館<rt>としょかん</rt></ruby>へは<ruby>歩<rt>ある</rt></ruby>いて<ruby>行<rt>い</rt></ruby>けますか？", "input_type": "select", "options": ["○","×"]},
+      {"field_id": "b8_3", "question": "３）　<ruby>図書館<rt>としょかん</rt></ruby>は<ruby>大<rt>おお</rt></ruby>きいですか？", "input_type": "select", "options": ["○","×"]},
+      {"field_id": "b8_4", "question": "４）　<ruby>図書館<rt>としょかん</rt></ruby>は<ruby>混<rt>こ</rt></ruby>んでいますか？", "input_type": "select", "options": ["○","×"]}
+    ]
+  },
+  {
+    "id": "b9",
+    "type": "radio_choice",
+    "title_html": "問題９．<ruby>質問<rt>しつもん</rt></ruby>に<ruby>答<rt>こた</rt></ruby>えてください　＜5<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "Dua vao noi dung, hay tra loi cau hoi.",
+    "grading": "manual",
+    "points_each": 5,
+    "total_points": 5,
+    "items": [
+      {
+        "field_id": "b9_1",
+        "question": "<ruby>図書館<rt>としょかん</rt></ruby>に<ruby>行<rt>い</rt></ruby>くために<ruby>何回<rt>なんかい</rt></ruby><ruby>曲<rt>ま</rt></ruby>がりますか。",
+        "choices": [
+          {"value": "1", "label": "1）0<ruby>回<rt>かい</rt></ruby>"},
+          {"value": "2", "label": "2）1<ruby>回<rt>かい</rt></ruby>"},
+          {"value": "3", "label": "3）2<ruby>回<rt>かい</rt></ruby>"},
+          {"value": "4", "label": "4）3<ruby>回<rt>かい</rt></ruby>"},
+          {"value": "5", "label": "5）4<ruby>回<rt>かい</rt></ruby>"}
+        ]
+      }
+    ]
+  }
+]

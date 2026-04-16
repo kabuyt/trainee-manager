@@ -1,0 +1,181 @@
+[
+  {
+    "id": "g1",
+    "type": "image_select",
+    "title_html": "問題１．Hãy chọn từ đúng cho mỗi hình　＜各1点×10問＝10点＞",
+    "points_each": 1,
+    "total_points": 10,
+    "images": [
+      {"label": "①", "src": "images/goii/image1.jpeg"},
+      {"label": "②", "src": "images/goii/image2.jpeg"},
+      {"label": "③", "src": "images/goii/image3.png"},
+      {"label": "④", "src": "images/goii/image4.gif"},
+      {"label": "⑤", "src": "images/goii/image5.png"},
+      {"label": "⑥", "src": "images/goii/image6.jpeg"},
+      {"label": "⑦", "src": "images/goii/image7.png"},
+      {"label": "⑧", "src": "images/goii/image8.png"},
+      {"label": "⑨", "src": "images/goii/image9.png"},
+      {"label": "⑩", "src": "images/goii/image10.png"}
+    ],
+    "items": [
+      {"field_id": "g1_1",  "label": "①", "input_type": "select", "options": ["いしゃ","ネクタイ","くるま","かぎ","つくえ","めいし","としょかん","しんぶん","かさ","とけい"]},
+      {"field_id": "g1_2",  "label": "②", "input_type": "select", "options": ["いしゃ","ネクタイ","くるま","かぎ","つくえ","めいし","としょかん","しんぶん","かさ","とけい"]},
+      {"field_id": "g1_3",  "label": "③", "input_type": "select", "options": ["いしゃ","ネクタイ","くるま","かぎ","つくえ","めいし","としょかん","しんぶん","かさ","とけい"]},
+      {"field_id": "g1_4",  "label": "④", "input_type": "select", "options": ["いしゃ","ネクタイ","くるま","かぎ","つくえ","めいし","としょかん","しんぶん","かさ","とけい"]},
+      {"field_id": "g1_5",  "label": "⑤", "input_type": "select", "options": ["いしゃ","ネクタイ","くるま","かぎ","つくえ","めいし","としょかん","しんぶん","かさ","とけい"]},
+      {"field_id": "g1_6",  "label": "⑥", "input_type": "select", "options": ["ネクタイ","いしゃ","くるま","かぎ","つくえ","めいし","としょかん","しんぶん","かさ","とけい"]},
+      {"field_id": "g1_7",  "label": "⑦", "input_type": "select", "options": ["いしゃ","ネクタイ","くるま","かぎ","つくえ","めいし","としょかん","しんぶん","かさ","とけい"]},
+      {"field_id": "g1_8",  "label": "⑧", "input_type": "select", "options": ["いしゃ","ネクタイ","くるま","かぎ","つくえ","めいし","としょかん","しんぶん","かさ","とけい"]},
+      {"field_id": "g1_9",  "label": "⑨", "input_type": "select", "options": ["いしゃ","ネクタイ","くるま","かぎ","つくえ","めいし","としょかん","しんぶん","かさ","とけい"]},
+      {"field_id": "g1_10", "label": "⑩", "input_type": "select", "options": ["いしゃ","ネクタイ","くるま","かぎ","つくえ","めいし","としょかん","しんぶん","かさ","とけい"]}
+    ]
+  },
+  {
+    "id": "g2",
+    "type": "image_select_grid",
+    "title_html": "問題２．Chuyển sang tiếng Nhật（日本語で書いてください）　＜各3点×8問＝24点＞",
+    "points_each": 3,
+    "total_points": 24,
+    "rows": [
+      {
+        "images": [
+          {"src": "images/goii/image11.jpeg"},
+          {"src": "images/goii/image12.jpeg"},
+          {"src": "images/goii/image13.jpeg"},
+          {"src": "images/goii/image14.jpeg"}
+        ],
+        "items": [
+          {"field_id": "g2_1", "label": "１）", "input_type": "select", "options": ["てちう","てちょう","てぢょう","てうちょ"]},
+          {"field_id": "g2_2", "label": "２）", "input_type": "select", "options": ["がばん","かぱん","かばん","かばの"]},
+          {"field_id": "g2_3", "label": "３）", "input_type": "select", "options": ["えんびつ","えんぴっ","えんぴず","えんぴつ"]},
+          {"field_id": "g2_4", "label": "４）", "input_type": "select", "options": ["てんわ","でんわ","でんは","でわん"]}
+        ]
+      },
+      {
+        "images": [
+          {"src": "images/goii/image15.jpeg"},
+          {"src": "images/goii/image16.jpeg"},
+          {"src": "images/goii/image17.jpeg"},
+          {"src": "images/goii/image18.png"}
+        ],
+        "items": [
+          {"field_id": "g2_5", "label": "５）", "input_type": "select", "options": ["コンビューター","コンピユーター","コンピューター","コンピュータ"]},
+          {"field_id": "g2_6", "label": "６）", "input_type": "select", "options": ["エリベーター","エレベータ","エレベーダ","エレベーター"]},
+          {"field_id": "g2_7", "label": "７）", "input_type": "select", "options": ["バイン","ワイン","ウイン","ワイム"]},
+          {"field_id": "g2_8", "label": "８）", "input_type": "select", "options": ["コーピー","コーヒイ","コーヒー","コーフィ"]}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "g3",
+    "type": "tile_sort_buckets",
+    "title_html": "問題３．Phân loại từ A→L vào đúng nhóm　＜各2点×3問＝6点＞",
+    "instruction": "▶ Nhấn thẻ để chọn, sau đó nhấn nhóm để xếp vào. Nhấn thẻ đã xếp để lấy lại. ⚠ Xếp sai sẽ bị trừ điểm!",
+    "points_each": 2,
+    "total_points": 6,
+    "tiles": [
+      {"key": "a", "label": "A. さとう"},
+      {"key": "b", "label": "B. かいぎしつ"},
+      {"key": "c", "label": "C. かんこく"},
+      {"key": "d", "label": "D. すずき"},
+      {"key": "e", "label": "E. アメリカ"},
+      {"key": "f", "label": "F. マイク"},
+      {"key": "g", "label": "G. きょうし"},
+      {"key": "h", "label": "H. にほん"},
+      {"key": "i", "label": "I. けんきゅうしゃ"},
+      {"key": "j", "label": "J. エンジニア"},
+      {"key": "k", "label": "K. しょくどう"},
+      {"key": "l", "label": "L. じむしょ"}
+    ],
+    "buckets": [
+      {"id": "g3_1", "label": "１）くに"},
+      {"id": "g3_2", "label": "２）へや"},
+      {"id": "g3_3", "label": "３）しごと"}
+    ],
+    "none_bucket": {"label": "Không thuộc nhóm nào"}
+  },
+  {
+    "id": "g4",
+    "type": "table_fill",
+    "title_html": "問題４．Tiếng Việt ⇔ Tiếng Nhật　＜各2点×10問＝20点＞",
+    "points_each": 2,
+    "total_points": 20,
+    "tables": [
+      {
+        "headers": ["Thứ 2","Thứ 3","Thứ 4","Thứ 5","Thứ 6","Thứ 7","Chủ nhật"],
+        "items": [
+          {"field_id": "g4_1", "col": 0, "input_type": "select", "options": ["にちようび","きんようび","げつようび","どようび","すいようび","かようび","もくようび"]},
+          {"field_id": "g4_2", "col": 1, "input_type": "select", "options": ["もくようび","にちようび","どようび","かようび","げつようび","きんようび","すいようび"]},
+          {"field_id": "g4_3", "col": 2, "input_type": "select", "options": ["かようび","どようび","にちようび","もくようび","すいようび","げつようび","きんようび"]},
+          {"field_id": null, "col": 3, "fixed_value": "もくようび"},
+          {"field_id": "g4_5", "col": 4, "input_type": "select", "options": ["どようび","すいようび","かようび","きんようび","にちようび","もくようび","げつようび"]},
+          {"field_id": "g4_6", "col": 5, "input_type": "select", "options": ["げつようび","もくようび","きんようび","にちようび","どようび","すいようび","かようび"]},
+          {"field_id": "g4_7", "col": 6, "input_type": "select", "options": ["すいようび","かようび","もくようび","げつようび","きんようび","にちようび","どようび"]}
+        ]
+      },
+      {
+        "headers": ["hôm kia","hôm qua","hôm nay","ngày mai","ngày kia"],
+        "items": [
+          {"field_id": "g4_8",  "col": 0, "input_type": "select", "options": ["あした","おととい","あさって","きのう"]},
+          {"field_id": "g4_9",  "col": 1, "input_type": "select", "options": ["あさって","きのう","おととい","あした"]},
+          {"field_id": null,    "col": 2, "fixed_value": "きょう"},
+          {"field_id": "g4_10", "col": 3, "input_type": "select", "options": ["きのう","あさって","あした","おととい"]},
+          {"field_id": "g4_11", "col": 4, "input_type": "select", "options": ["おととい","あした","きのう","あさって"]}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "g5",
+    "type": "select_dynamic_pool",
+    "title_html": "問題５．Tiếng Việt ⇔ Tiếng Nhật　＜各2点×20問＝40点＞",
+    "instruction": "Hãy viết nghĩa của tiếng Nhật bằng tiếng Việt.",
+    "points_each": 2,
+    "total_points": 40,
+    "pool_correct": [
+      "Số","Bệnh viện",
+      "Ngân hàng","Kết thúc",
+      "Nhân viên","Phim điện ảnh",
+      "Buổi sáng","Cái ô／ dù",
+      "Nhà vệ sinh","Thức dậy",
+      "Mỗi sáng","Nghỉ／ Nghỉ phép",
+      "Tầng hầm","Quầy lễ tân",
+      "Buổi chiều","Ngủ",
+      "Cầu thang","Xin lỗi",
+      "Giày","Từ điển"
+    ],
+    "pool_extra": [
+      "Mỗi tối","Mỗi ngày","Buổi tối","Buổi trưa",
+      "Bắt đầu","Làm việc","Đi","Về nhà",
+      "Ăn","Uống","Xem","Nghe","Đọc","Mua",
+      "Bưu điện","Trung tâm thương mại","Nhà hàng","Siêu thị",
+      "Thư viện","Nhà ga","Văn phòng","Phòng họp",
+      "Tạp chí","Sách","Ví","Hộ chiếu","Bút bi"
+    ],
+    "distractors_per_item": 3,
+    "items": [
+      {"field_id": "g5_1",  "label": "１．ばんごう"},
+      {"field_id": "g5_2",  "label": "１１．びょういん"},
+      {"field_id": "g5_3",  "label": "２．ぎんこう"},
+      {"field_id": "g5_4",  "label": "１２．おわります"},
+      {"field_id": "g5_5",  "label": "３．しゃいん"},
+      {"field_id": "g5_6",  "label": "１３．えいが"},
+      {"field_id": "g5_7",  "label": "４．ごぜん"},
+      {"field_id": "g5_8",  "label": "１４．かさ"},
+      {"field_id": "g5_9",  "label": "５．トイレ"},
+      {"field_id": "g5_10", "label": "１５．おきます"},
+      {"field_id": "g5_11", "label": "６．まいあさ"},
+      {"field_id": "g5_12", "label": "１６．やすみます"},
+      {"field_id": "g5_13", "label": "７．ちか"},
+      {"field_id": "g5_14", "label": "１７．うけつけ"},
+      {"field_id": "g5_15", "label": "８．ごご"},
+      {"field_id": "g5_16", "label": "１８．ねます"},
+      {"field_id": "g5_17", "label": "９．かいだん"},
+      {"field_id": "g5_18", "label": "１９．すみません"},
+      {"field_id": "g5_19", "label": "１０．くつ"},
+      {"field_id": "g5_20", "label": "２０．じしょ"}
+    ],
+    "layout": "two_column"
+  }
+]

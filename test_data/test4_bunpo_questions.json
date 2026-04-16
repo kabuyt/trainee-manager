@@ -1,0 +1,298 @@
+[
+  {
+    "id": "b1",
+    "type": "fill_particle",
+    "title_html": "問題１．Hay dien tro tu thich hop　＜各1点×10問＝10点＞",
+    "instruction": "Hay dien tro tu dung vao（　　）.",
+    "points_each": 1,
+    "total_points": 10,
+    "items": [
+      {
+        "sentence_html": "１）　食べた日本は暑かった（{b1_1}）、おいしかった。",
+        "fields": [
+          {"field_id": "b1_1", "input_type": "select", "options": ["が","を","に","は","で","けど","と","とき"]}
+        ]
+      },
+      {
+        "sentence_html": "２）　家（{b1_2}）買ってから、田舎（{b1_3}）住みたいです。",
+        "fields": [
+          {"field_id": "b1_2", "input_type": "select", "options": ["が","を","に","は","で","けど","と","とき"]},
+          {"field_id": "b1_3", "input_type": "select", "options": ["が","を","に","は","で","けど","と","とき"]}
+        ]
+      },
+      {
+        "sentence_html": "３）　このラジオは音（{b1_4}）小さいから、彼女（{b1_5}）買ってもらいます。",
+        "fields": [
+          {"field_id": "b1_4", "input_type": "select", "options": ["が","を","に","は","で","けど","と","とき"]},
+          {"field_id": "b1_5", "input_type": "select", "options": ["が","を","に","は","で","けど","と","とき"]}
+        ]
+      },
+      {
+        "sentence_html": "４）　この映画（{b1_6}）あまりおもしろくない（{b1_7}）思います。",
+        "fields": [
+          {"field_id": "b1_6", "input_type": "select", "options": ["が","を","に","は","で","けど","と","とき"]},
+          {"field_id": "b1_7", "input_type": "select", "options": ["が","を","に","は","で","けど","と","とき"]}
+        ]
+      },
+      {
+        "sentence_html": "５）　120円の切符を買う（{b1_8}）、500円出す（{b1_9}）、おつり（{b1_10}）出ます。",
+        "fields": [
+          {"field_id": "b1_8", "input_type": "select", "options": ["が","を","に","は","で","けど","と","とき"]},
+          {"field_id": "b1_9", "input_type": "select", "options": ["が","を","に","は","で","けど","と","とき"]},
+          {"field_id": "b1_10", "input_type": "select", "options": ["が","を","に","は","で","けど","と","とき"]}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "b2",
+    "type": "table_fill",
+    "title_html": "問題２．正しい形を書いてください　＜各2点×5問＝10点＞",
+    "instruction": "（　）の中に正しい形を書いてください。",
+    "points_each": 2,
+    "total_points": 10,
+    "tables": [
+      {
+        "items": [
+          {"field_id": "b2_1", "prompt": "１）　仕事が（終わる＋たら→　　）、何をしますか。", "input_type": "text", "placeholder": "?"},
+          {"field_id": "b2_2", "prompt": "２）　雨が（降る＋ても→　　）、サッカーの試合があります。", "input_type": "text", "placeholder": "?"},
+          {"field_id": "b2_3", "prompt": "３）　うちへ（来ます＋こと→　　）がありますか。", "input_type": "text", "placeholder": "?"},
+          {"field_id": "b2_4", "prompt": "４）　日本へ（行きます＋とき→　　）、このおみやげを持って行ってね。", "input_type": "text", "placeholder": "?"},
+          {"field_id": "b2_5", "prompt": "５）　ビールをたくさん（飲みます＋と→　　）、顔が赤くなりますか。", "input_type": "text", "placeholder": "?"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "b3",
+    "type": "radio_choice",
+    "title_html": "問題３．正しいものを選んでください　＜各3点×5問＝15点＞",
+    "instruction": "A, B, C, D から正しいものを一つ選んでください。",
+    "points_each": 3,
+    "total_points": 15,
+    "items": [
+      {
+        "field_id": "b3_1",
+        "question": "１）　日曜日は買い物したり、映画を見たり、歌を＿＿＿＿します。",
+        "choices": [
+          {"value": "A", "label": "A. 歌って"},
+          {"value": "B", "label": "B. 歌う"},
+          {"value": "C", "label": "C. 歌った"},
+          {"value": "D", "label": "D. 歌ったり"}
+        ]
+      },
+      {
+        "field_id": "b3_2",
+        "question": "２）　来年から大学生に＿＿＿＿ます。",
+        "choices": [
+          {"value": "A", "label": "A. なって"},
+          {"value": "B", "label": "B. なる"},
+          {"value": "C", "label": "C. なり"},
+          {"value": "D", "label": "D. なった"}
+        ]
+      },
+      {
+        "field_id": "b3_3",
+        "question": "３）　友達に本を＿＿＿＿。",
+        "choices": [
+          {"value": "A", "label": "A. もらった"},
+          {"value": "B", "label": "B. くれた"},
+          {"value": "C", "label": "C. あげた"},
+          {"value": "D", "label": "D. やった"}
+        ]
+      },
+      {
+        "field_id": "b3_4",
+        "question": "４）　図書館の本は＿＿＿＿いいですか。",
+        "choices": [
+          {"value": "A", "label": "A. 借りても"},
+          {"value": "B", "label": "B. 借りたら"},
+          {"value": "C", "label": "C. 借りると"},
+          {"value": "D", "label": "D. 借りて"}
+        ]
+      },
+      {
+        "field_id": "b3_5",
+        "question": "５）　傘を＿＿＿＿行きましょう。",
+        "choices": [
+          {"value": "A", "label": "A. 持つ"},
+          {"value": "B", "label": "B. 持って"},
+          {"value": "C", "label": "C. 持った"},
+          {"value": "D", "label": "D. 持ち"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "b4",
+    "type": "table_fill",
+    "title_html": "問題４．間違っている言葉を見つけてください　＜各3点×5問＝15点＞",
+    "instruction": "下線の言葉の中で間違っているものを正しく書き直してください。",
+    "points_each": 3,
+    "total_points": 15,
+    "tables": [
+      {
+        "items": [
+          {
+            "field_id": "b4_1",
+            "prompt": "１）　試合はドイツが勝ったですか。→ 正しくは：",
+            "hint": "（正しい文：試合はドイツが勝ったでしょう？）",
+            "input_type": "text",
+            "placeholder": "?"
+          },
+          {
+            "field_id": "b4_2",
+            "prompt": "２）　帰ったとき「ただいま」と思います。→ 正しくは：",
+            "hint": "（正しい文：帰ったとき「ただいま」と言います。）",
+            "input_type": "text",
+            "placeholder": "?"
+          },
+          {
+            "field_id": "b4_3",
+            "prompt": "３）　友達に会うたら、約束があります。→ 正しくは：",
+            "hint": "（正しい文：友達に会う約束があります。）",
+            "input_type": "text",
+            "placeholder": "?"
+          },
+          {
+            "field_id": "b4_4",
+            "prompt": "４）　もうおなかがごはんになった？→ 正しくは：",
+            "hint": "（正しい文：もうおなかがいっぱいになった？）",
+            "input_type": "text",
+            "placeholder": "?"
+          },
+          {
+            "field_id": "b4_5",
+            "prompt": "５）　分からないからリンさんが教えてもらった。→ 正しくは：",
+            "hint": "（正しい文：分からないからリンさんが教えてくれた。）",
+            "input_type": "text",
+            "placeholder": "?"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "b5",
+    "type": "select_choice",
+    "title_html": "問題５．文に合うものを選んでください　＜各3点×5問＝15点＞",
+    "instruction": "a～i から正しいものを選んでください。",
+    "points_each": 3,
+    "total_points": 15,
+    "image_src": "images/bunpo/bunpo_mondai_1.gif",
+    "choice_pool": [
+      {"value": "a", "label": "a: 1回、日本へ来たことがある。"},
+      {"value": "b", "label": "b: 道を右へ曲がるとき、コンビニがある。"},
+      {"value": "c", "label": "c: 道を右へ曲がっても、コンビニがない。"},
+      {"value": "d", "label": "d: 道を右へ曲がったら、コンビニがある。"},
+      {"value": "e", "label": "e: 道を右へ曲がることができない。"},
+      {"value": "f", "label": "f: ドゥックさんとリーさんは先生に漢字を教えます。"},
+      {"value": "g", "label": "g: リーさんはドゥックさんに漢字を聞きます。"},
+      {"value": "h", "label": "h: リーさんはドゥックさんに漢字を教えます。"},
+      {"value": "i", "label": "i: 先生はドゥックさんとリーさんに漢字を教えます。"}
+    ],
+    "items": [
+      {"field_id": "b5_1", "label": "１）", "input_type": "select", "options": ["a","b","c","d","e","f","g","h","i"]},
+      {"field_id": "b5_2", "label": "２）", "input_type": "select", "options": ["a","b","c","d","e","f","g","h","i"]},
+      {"field_id": "b5_3", "label": "３）", "input_type": "select", "options": ["a","b","c","d","e","f","g","h","i"]},
+      {"field_id": "b5_4", "label": "４）", "input_type": "select", "options": ["a","b","c","d","e","f","g","h","i"]},
+      {"field_id": "b5_5", "label": "５）", "input_type": "select", "options": ["a","b","c","d","e","f","g","h","i"]}
+    ]
+  },
+  {
+    "id": "b6",
+    "type": "radio_choice",
+    "title_html": "問題６．会話の応答を選んでください　＜各3点×5問＝15点＞",
+    "instruction": "正しい答えを選んでください。",
+    "points_each": 3,
+    "total_points": 15,
+    "items": [
+      {
+        "field_id": "b6_1",
+        "question": "１）　もう昼ごはんを食べましたか。",
+        "choices": [
+          {"value": "1", "label": "1. はい、食べました。"},
+          {"value": "2", "label": "2. いいえ、まだです。"},
+          {"value": "3", "label": "3. はい、まだです。"},
+          {"value": "4", "label": "4. いいえ、食べます。"}
+        ]
+      },
+      {
+        "field_id": "b6_2",
+        "question": "２）　明日は雨でしょうか。",
+        "choices": [
+          {"value": "1", "label": "1. はい、雨です。"},
+          {"value": "2", "label": "2. いいえ、雨じゃありません。"},
+          {"value": "3", "label": "3. そうだと思います。"},
+          {"value": "4", "label": "4. 雨がありました。"}
+        ]
+      },
+      {
+        "field_id": "b6_3",
+        "question": "３）　旅行はどうでしたか。",
+        "choices": [
+          {"value": "1", "label": "1. 楽しいです。"},
+          {"value": "2", "label": "2. 楽しかったです。"},
+          {"value": "3", "label": "3. 楽しかったでしょう？"},
+          {"value": "4", "label": "4. 楽しくないです。"}
+        ]
+      },
+      {
+        "field_id": "b6_4",
+        "question": "４）　国へ帰ったら、どうなりますか。",
+        "choices": [
+          {"value": "1", "label": "1. うれしいです。"},
+          {"value": "2", "label": "2. 帰りたいです。"},
+          {"value": "3", "label": "3. さびしくなります。"},
+          {"value": "4", "label": "4. 帰りません。"}
+        ]
+      },
+      {
+        "field_id": "b6_5",
+        "question": "５）　今度いっしょにビールを飲みませんか。",
+        "choices": [
+          {"value": "1", "label": "1. いいえ、飲みません。"},
+          {"value": "2", "label": "2. はい、飲みました。"},
+          {"value": "3", "label": "3. ビールが好きです。"},
+          {"value": "4", "label": "4. ええ、必ず飲みましょう。"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "b7",
+    "type": "reading_comprehension",
+    "title_html": "問題７．⚠ 読んで質問に答えてください　＜各4点×5問＝20点＞",
+    "grading": "manual",
+    "points_each": 4,
+    "total_points": 20,
+    "passage_image": "images/bunpo/bunpo_kotae_1.gif",
+    "items": [
+      {
+        "field_id": "b7_1",
+        "question": "１）タインさんはレーさんより日本語が上手ですか。",
+        "input_type": "textarea"
+      },
+      {
+        "field_id": "b7_2",
+        "question": "２）タインさんは、だれに日本の話を聞きますか。",
+        "input_type": "textarea"
+      },
+      {
+        "field_id": "b7_3",
+        "question": "３）タインさんはどうして体の調子が悪いですか。",
+        "input_type": "textarea"
+      },
+      {
+        "field_id": "b7_4",
+        "question": "４）タインさんは、レーさんに会うとき、何をしますか。",
+        "input_type": "textarea"
+      },
+      {
+        "field_id": "b7_5",
+        "question": "５）あなたは日本人と話すチャンスがあったら、どんな話が聞きたいですか。",
+        "input_type": "textarea"
+      }
+    ]
+  }
+]
