@@ -16,12 +16,30 @@
         "audio_src": "audio/1-1.mp3",
         "input_type": "select",
         "options": [
-          {"value": "a", "label": "a"},
-          {"value": "b", "label": "b"},
-          {"value": "c", "label": "c"},
-          {"value": "d", "label": "d"},
-          {"value": "e", "label": "e"},
-          {"value": "f", "label": "f"}
+          {
+            "value": "a",
+            "label": "a"
+          },
+          {
+            "value": "b",
+            "label": "b"
+          },
+          {
+            "value": "c",
+            "label": "c"
+          },
+          {
+            "value": "d",
+            "label": "d"
+          },
+          {
+            "value": "e",
+            "label": "e"
+          },
+          {
+            "value": "f",
+            "label": "f"
+          }
         ]
       },
       {
@@ -30,12 +48,30 @@
         "audio_src": "audio/1-2.mp3",
         "input_type": "select",
         "options": [
-          {"value": "a", "label": "a"},
-          {"value": "b", "label": "b"},
-          {"value": "c", "label": "c"},
-          {"value": "d", "label": "d"},
-          {"value": "e", "label": "e"},
-          {"value": "f", "label": "f"}
+          {
+            "value": "a",
+            "label": "a"
+          },
+          {
+            "value": "b",
+            "label": "b"
+          },
+          {
+            "value": "c",
+            "label": "c"
+          },
+          {
+            "value": "d",
+            "label": "d"
+          },
+          {
+            "value": "e",
+            "label": "e"
+          },
+          {
+            "value": "f",
+            "label": "f"
+          }
         ]
       }
     ]
@@ -55,8 +91,14 @@
         "audio_src": "audio/2-1.mp3",
         "input_type": "select",
         "options": [
-          {"value": "a", "label": "a. もらいました"},
-          {"value": "b", "label": "b. あげました"}
+          {
+            "value": "a",
+            "label": "a. もらいました"
+          },
+          {
+            "value": "b",
+            "label": "b. あげました"
+          }
         ]
       },
       {
@@ -65,8 +107,14 @@
         "audio_src": "audio/2-2.mp3",
         "input_type": "select",
         "options": [
-          {"value": "a", "label": "a. 借りました"},
-          {"value": "b", "label": "b. 貸しました"}
+          {
+            "value": "a",
+            "label": "a. 借りました"
+          },
+          {
+            "value": "b",
+            "label": "b. 貸しました"
+          }
         ]
       }
     ]
@@ -86,40 +134,120 @@
         "label": "① 問１",
         "audio_src": "audio/3-1.mp3",
         "fields": [
-          {"field_id": "c3_1r", "prefix": "理由：", "input_type": "select", "options": [
-            {"value": "a", "label": "a. お金"},
-            {"value": "b", "label": "b. 仕事"},
-            {"value": "c", "label": "c. 休み"},
-            {"value": "d", "label": "d. 用事"},
-            {"value": "e", "label": "e. 約束"},
-            {"value": "f", "label": "f. 時間"}
-          ]},
-          {"field_id": "c3_1v", "prefix": "→", "input_type": "select", "options": [
-            {"value": "飲みません", "label": "飲みません"},
-            {"value": "行きません", "label": "行きません"},
-            {"value": "買いません", "label": "買いません"},
-            {"value": "食べません", "label": "食べません"}
-          ]}
+          {
+            "field_id": "c3_1r",
+            "prefix": "理由：",
+            "input_type": "select",
+            "options": [
+              {
+                "value": "a",
+                "label": "a. お金"
+              },
+              {
+                "value": "b",
+                "label": "b. 仕事"
+              },
+              {
+                "value": "c",
+                "label": "c. 休み"
+              },
+              {
+                "value": "d",
+                "label": "d. 用事"
+              },
+              {
+                "value": "e",
+                "label": "e. 約束"
+              },
+              {
+                "value": "f",
+                "label": "f. 時間"
+              }
+            ]
+          },
+          {
+            "field_id": "c3_1v",
+            "prefix": "→",
+            "input_type": "select",
+            "options": [
+              {
+                "value": "飲みません",
+                "label": "飲みません"
+              },
+              {
+                "value": "行きません",
+                "label": "行きません"
+              },
+              {
+                "value": "買いません",
+                "label": "買いません"
+              },
+              {
+                "value": "食べません",
+                "label": "食べません"
+              }
+            ]
+          }
         ]
       },
       {
         "label": "② 問２",
         "audio_src": "audio/3-2.mp3",
         "fields": [
-          {"field_id": "c3_2r", "prefix": "理由：", "input_type": "select", "options": [
-            {"value": "a", "label": "a. お金"},
-            {"value": "b", "label": "b. 仕事"},
-            {"value": "c", "label": "c. 休み"},
-            {"value": "d", "label": "d. 用事"},
-            {"value": "e", "label": "e. 約束"},
-            {"value": "f", "label": "f. 時間"}
-          ]},
-          {"field_id": "c3_2v", "prefix": "→", "input_type": "select", "options": [
-            {"value": "タクシーで行きます", "label": "タクシーで行きます"},
-            {"value": "バスで行きます", "label": "バスで行きます"},
-            {"value": "歩いて行きます", "label": "歩いて行きます"},
-            {"value": "電車で行きます", "label": "電車で行きます"}
-          ]}
+          {
+            "field_id": "c3_2r",
+            "prefix": "理由：",
+            "input_type": "select",
+            "options": [
+              {
+                "value": "a",
+                "label": "a. お金"
+              },
+              {
+                "value": "b",
+                "label": "b. 仕事"
+              },
+              {
+                "value": "c",
+                "label": "c. 休み"
+              },
+              {
+                "value": "d",
+                "label": "d. 用事"
+              },
+              {
+                "value": "e",
+                "label": "e. 約束"
+              },
+              {
+                "value": "f",
+                "label": "f. 時間"
+              }
+            ]
+          },
+          {
+            "field_id": "c3_2v",
+            "prefix": "→",
+            "input_type": "select",
+            "options": [
+              {
+                "value": "タクシーで行きます",
+                "label": "タクシーで行きます"
+              },
+              {
+                "value": "バスで行きます",
+                "label": "バスで行きます"
+              },
+              {
+                "value": "歩いて行きます",
+                "label": "歩いて行きます"
+              },
+              {
+                "value": "電車で行きます",
+                "label": "電車で行きます"
+              }
+            ]
+          }
         ]
       }
     ]
@@ -138,9 +266,21 @@
         "label": "① 問１",
         "audio_src": "audio/4-1.mp3",
         "choices": [
-          {"value": "a", "label": "ａ", "image_src": "images/chokkai/image1.png"},
-          {"value": "b", "label": "ｂ", "image_src": "images/chokkai/image2.png"},
-          {"value": "c", "label": "ｃ", "image_src": "images/chokkai/image3.png"}
+          {
+            "value": "a",
+            "label": "ａ",
+            "image_src": "images/chokkai/image1.png"
+          },
+          {
+            "value": "b",
+            "label": "ｂ",
+            "image_src": "images/chokkai/image2.png"
+          },
+          {
+            "value": "c",
+            "label": "ｃ",
+            "image_src": "images/chokkai/image3.png"
+          }
         ]
       },
       {
@@ -148,9 +288,21 @@
         "label": "② 問２",
         "audio_src": "audio/4-2.mp3",
         "choices": [
-          {"value": "a", "label": "ａ", "image_src": "images/chokkai/image4.png"},
-          {"value": "b", "label": "ｂ", "image_src": "images/chokkai/image5.png"},
-          {"value": "c", "label": "ｃ", "image_src": "images/chokkai/image6.png"}
+          {
+            "value": "a",
+            "label": "ａ",
+            "image_src": "images/chokkai/image4.png"
+          },
+          {
+            "value": "b",
+            "label": "ｂ",
+            "image_src": "images/chokkai/image5.png"
+          },
+          {
+            "value": "c",
+            "label": "ｃ",
+            "image_src": "images/chokkai/image6.png"
+          }
         ]
       }
     ]
@@ -169,9 +321,21 @@
         "label": "① 問１",
         "audio_src": "audio/5-1.mp3",
         "choices": [
-          {"value": "a", "label": "ａ", "image_src": "images/chokkai/image7.png"},
-          {"value": "b", "label": "ｂ", "image_src": "images/chokkai/image8.png"},
-          {"value": "c", "label": "ｃ", "image_src": "images/chokkai/image9.png"}
+          {
+            "value": "a",
+            "label": "ａ",
+            "image_src": "images/chokkai/image7.png"
+          },
+          {
+            "value": "b",
+            "label": "ｂ",
+            "image_src": "images/chokkai/image8.png"
+          },
+          {
+            "value": "c",
+            "label": "ｃ",
+            "image_src": "images/chokkai/image9.png"
+          }
         ]
       },
       {
@@ -179,9 +343,21 @@
         "label": "② 問２",
         "audio_src": "audio/5-2.mp3",
         "choices": [
-          {"value": "a", "label": "ａ", "image_src": "images/chokkai/image10.png"},
-          {"value": "b", "label": "ｂ", "image_src": "images/chokkai/image11.png"},
-          {"value": "c", "label": "ｃ", "image_src": "images/chokkai/image12.png"}
+          {
+            "value": "a",
+            "label": "ａ",
+            "image_src": "images/chokkai/image10.png"
+          },
+          {
+            "value": "b",
+            "label": "ｂ",
+            "image_src": "images/chokkai/image11.png"
+          },
+          {
+            "value": "c",
+            "label": "ｃ",
+            "image_src": "images/chokkai/image12.png"
+          }
         ]
       }
     ]
@@ -199,9 +375,18 @@
         "audio_src": "audio/6-1.mp3",
         "input_type": "select",
         "options": [
-          {"value": "a", "label": "a. 大きい町です"},
-          {"value": "b", "label": "b. にぎやかな町です"},
-          {"value": "c", "label": "c. 古い町です"}
+          {
+            "value": "a",
+            "label": "a. 大きい町です"
+          },
+          {
+            "value": "b",
+            "label": "b. にぎやかな町です"
+          },
+          {
+            "value": "c",
+            "label": "c. 古い町です"
+          }
         ]
       },
       {
@@ -210,8 +395,14 @@
         "audio_src": "audio/6-2.mp3",
         "input_type": "select",
         "options": [
-          {"value": "a", "label": "a. おもしろい人です"},
-          {"value": "b", "label": "b. ハンサムな人です"}
+          {
+            "value": "a",
+            "label": "a. おもしろい人です"
+          },
+          {
+            "value": "b",
+            "label": "b. ハンサムな人です"
+          }
         ]
       }
     ]
@@ -224,14 +415,197 @@
     "points_each": 2,
     "total_points": 12,
     "option_pool_html": "a. バス　　b. 地下鉄　　c. 船　　d. 新幹線　　e. 飛行機　　f. タクシー",
-    "audio_files": ["audio/7-0.mp3", "audio/7-1.mp3"],
+    "audio_files": [
+      "audio/7-0.mp3",
+      "audio/7-1.mp3"
+    ],
     "items": [
-      {"field_id": "c7_1", "prefix": "① 学校 → 地下鉄の駅：", "input_type": "select", "options": [{"value":"a","label":"a. バス"},{"value":"b","label":"b. 地下鉄"},{"value":"c","label":"c. 船"},{"value":"d","label":"d. 新幹線"},{"value":"e","label":"e. 飛行機"},{"value":"f","label":"f. タクシー"}]},
-      {"field_id": "c7_2", "prefix": "② 駅 → 新大阪：", "input_type": "select", "options": [{"value":"a","label":"a. バス"},{"value":"b","label":"b. 地下鉄"},{"value":"c","label":"c. 船"},{"value":"d","label":"d. 新幹線"},{"value":"e","label":"e. 飛行機"},{"value":"f","label":"f. タクシー"}]},
-      {"field_id": "c7_3", "prefix": "③ 新大阪 → 広島：", "input_type": "select", "options": [{"value":"a","label":"a. バス"},{"value":"b","label":"b. 地下鉄"},{"value":"c","label":"c. 船"},{"value":"d","label":"d. 新幹線"},{"value":"e","label":"e. 飛行機"},{"value":"f","label":"f. タクシー"}]},
-      {"field_id": "c7_4", "prefix": "④ 広島 → 松山：", "input_type": "select", "options": [{"value":"a","label":"a. バス"},{"value":"b","label":"b. 地下鉄"},{"value":"c","label":"c. 船"},{"value":"d","label":"d. 新幹線"},{"value":"e","label":"e. 飛行機"},{"value":"f","label":"f. タクシー"}]},
-      {"field_id": "c7_5", "prefix": "⑤ 松山 → 大阪：", "input_type": "select", "options": [{"value":"a","label":"a. バス"},{"value":"b","label":"b. 地下鉄"},{"value":"c","label":"c. 船"},{"value":"d","label":"d. 新幹線"},{"value":"e","label":"e. 飛行機"},{"value":"f","label":"f. タクシー"}]},
-      {"field_id": "c7_6", "prefix": "⑥ 大阪 → 学校：", "input_type": "select", "options": [{"value":"a","label":"a. バス"},{"value":"b","label":"b. 地下鉄"},{"value":"c","label":"c. 船"},{"value":"d","label":"d. 新幹線"},{"value":"e","label":"e. 飛行機"},{"value":"f","label":"f. タクシー"}]}
+      {
+        "field_id": "c7_1",
+        "prefix": "① 学校 → 地下鉄の駅：",
+        "input_type": "select",
+        "options": [
+          {
+            "value": "a",
+            "label": "a. バス"
+          },
+          {
+            "value": "b",
+            "label": "b. 地下鉄"
+          },
+          {
+            "value": "c",
+            "label": "c. 船"
+          },
+          {
+            "value": "d",
+            "label": "d. 新幹線"
+          },
+          {
+            "value": "e",
+            "label": "e. 飛行機"
+          },
+          {
+            "value": "f",
+            "label": "f. タクシー"
+          }
+        ]
+      },
+      {
+        "field_id": "c7_2",
+        "prefix": "② 駅 → 新大阪：",
+        "input_type": "select",
+        "options": [
+          {
+            "value": "a",
+            "label": "a. バス"
+          },
+          {
+            "value": "b",
+            "label": "b. 地下鉄"
+          },
+          {
+            "value": "c",
+            "label": "c. 船"
+          },
+          {
+            "value": "d",
+            "label": "d. 新幹線"
+          },
+          {
+            "value": "e",
+            "label": "e. 飛行機"
+          },
+          {
+            "value": "f",
+            "label": "f. タクシー"
+          }
+        ]
+      },
+      {
+        "field_id": "c7_3",
+        "prefix": "③ 新大阪 → 広島：",
+        "input_type": "select",
+        "options": [
+          {
+            "value": "a",
+            "label": "a. バス"
+          },
+          {
+            "value": "b",
+            "label": "b. 地下鉄"
+          },
+          {
+            "value": "c",
+            "label": "c. 船"
+          },
+          {
+            "value": "d",
+            "label": "d. 新幹線"
+          },
+          {
+            "value": "e",
+            "label": "e. 飛行機"
+          },
+          {
+            "value": "f",
+            "label": "f. タクシー"
+          }
+        ]
+      },
+      {
+        "field_id": "c7_4",
+        "prefix": "④ 広島 → 松山：",
+        "input_type": "select",
+        "options": [
+          {
+            "value": "a",
+            "label": "a. バス"
+          },
+          {
+            "value": "b",
+            "label": "b. 地下鉄"
+          },
+          {
+            "value": "c",
+            "label": "c. 船"
+          },
+          {
+            "value": "d",
+            "label": "d. 新幹線"
+          },
+          {
+            "value": "e",
+            "label": "e. 飛行機"
+          },
+          {
+            "value": "f",
+            "label": "f. タクシー"
+          }
+        ]
+      },
+      {
+        "field_id": "c7_5",
+        "prefix": "⑤ 松山 → 大阪：",
+        "input_type": "select",
+        "options": [
+          {
+            "value": "a",
+            "label": "a. バス"
+          },
+          {
+            "value": "b",
+            "label": "b. 地下鉄"
+          },
+          {
+            "value": "c",
+            "label": "c. 船"
+          },
+          {
+            "value": "d",
+            "label": "d. 新幹線"
+          },
+          {
+            "value": "e",
+            "label": "e. 飛行機"
+          },
+          {
+            "value": "f",
+            "label": "f. タクシー"
+          }
+        ]
+      },
+      {
+        "field_id": "c7_6",
+        "prefix": "⑥ 大阪 → 学校：",
+        "input_type": "select",
+        "options": [
+          {
+            "value": "a",
+            "label": "a. バス"
+          },
+          {
+            "value": "b",
+            "label": "b. 地下鉄"
+          },
+          {
+            "value": "c",
+            "label": "c. 船"
+          },
+          {
+            "value": "d",
+            "label": "d. 新幹線"
+          },
+          {
+            "value": "e",
+            "label": "e. 飛行機"
+          },
+          {
+            "value": "f",
+            "label": "f. タクシー"
+          }
+        ]
+      }
     ]
   },
   {
@@ -248,10 +622,26 @@
         "label": "① 問１",
         "audio_src": "audio/8-1.mp3",
         "choices": [
-          {"value": "a", "label": "ａ", "image_src": "images/chokkai/image13.png"},
-          {"value": "b", "label": "ｂ", "image_src": "images/chokkai/image14.png"},
-          {"value": "c", "label": "ｃ", "image_src": "images/chokkai/image15.png"},
-          {"value": "d", "label": "ｄ", "image_src": "images/chokkai/image16.png"}
+          {
+            "value": "a",
+            "label": "ａ",
+            "image_src": "images/chokkai/image13.png"
+          },
+          {
+            "value": "b",
+            "label": "ｂ",
+            "image_src": "images/chokkai/image14.png"
+          },
+          {
+            "value": "c",
+            "label": "ｃ",
+            "image_src": "images/chokkai/image15.png"
+          },
+          {
+            "value": "d",
+            "label": "ｄ",
+            "image_src": "images/chokkai/image16.png"
+          }
         ]
       },
       {
@@ -259,42 +649,215 @@
         "label": "② 問２",
         "audio_src": "audio/8-2.mp3",
         "choices": [
-          {"value": "a", "label": "ａ", "image_src": "images/chokkai/image17.png"},
-          {"value": "b", "label": "ｂ", "image_src": "images/chokkai/image18.png"},
-          {"value": "c", "label": "ｃ", "image_src": "images/chokkai/image19.png"},
-          {"value": "d", "label": "ｄ", "image_src": "images/chokkai/image20.png"}
+          {
+            "value": "a",
+            "label": "ａ",
+            "image_src": "images/chokkai/image17.png"
+          },
+          {
+            "value": "b",
+            "label": "ｂ",
+            "image_src": "images/chokkai/image18.png"
+          },
+          {
+            "value": "c",
+            "label": "ｃ",
+            "image_src": "images/chokkai/image19.png"
+          },
+          {
+            "value": "d",
+            "label": "ｄ",
+            "image_src": "images/chokkai/image20.png"
+          }
         ]
       }
     ]
   },
   {
     "id": "c9",
-    "type": "audio_schedule",
+    "type": "audio_select",
     "title_html": "問題９．スケジュールを聞いて答えてください　＜各3点×3問＝9点＞",
     "instruction": "※ 下のスケジュール表を見て、音声を聞いて答えてください。",
     "total_points": 9,
     "points_each": 3,
     "schedule_table": {
-      "headers": ["","月","火","水","木","金","土","日"],
+      "headers": [
+        "",
+        "月",
+        "火",
+        "水",
+        "木",
+        "金",
+        "土",
+        "日"
+      ],
       "rows": [
-        {"label": "午前", "cells": ["授業 9:00-12:00","授業","授業","授業","授業","美容院",""]},
-        {"label": "午後", "cells": ["授業 1:00-3:00","図書館","横浜","","図書館","アルバイト 3:00-8:00",""]}
+        {
+          "label": "午前",
+          "cells": [
+            "授業 9:00-12:00",
+            "授業",
+            "授業",
+            "授業",
+            "授業",
+            "美容院",
+            ""
+          ]
+        },
+        {
+          "label": "午後",
+          "cells": [
+            "授業 1:00-3:00",
+            "図書館",
+            "横浜",
+            "",
+            "図書館",
+            "アルバイト 3:00-8:00",
+            ""
+          ]
+        }
       ]
     },
     "audio_src": "audio/9.mp3",
     "day_options": [
-      {"value": "a", "label": "a. 月曜日"},
-      {"value": "b", "label": "b. 火曜日"},
-      {"value": "c", "label": "c. 水曜日"},
-      {"value": "d", "label": "d. 木曜日"},
-      {"value": "e", "label": "e. 金曜日"},
-      {"value": "f", "label": "f. 土曜日"},
-      {"value": "g", "label": "g. 日曜日"}
+      {
+        "value": "a",
+        "label": "a. 月曜日"
+      },
+      {
+        "value": "b",
+        "label": "b. 火曜日"
+      },
+      {
+        "value": "c",
+        "label": "c. 水曜日"
+      },
+      {
+        "value": "d",
+        "label": "d. 木曜日"
+      },
+      {
+        "value": "e",
+        "label": "e. 金曜日"
+      },
+      {
+        "value": "f",
+        "label": "f. 土曜日"
+      },
+      {
+        "value": "g",
+        "label": "g. 日曜日"
+      }
     ],
     "items": [
-      {"field_id": "c9_1", "label": "①", "input_type": "select"},
-      {"field_id": "c9_2", "label": "②", "input_type": "select"},
-      {"field_id": "c9_3", "label": "③", "input_type": "select"}
+      {
+        "field_id": "c9_1",
+        "label": "①",
+        "input_type": "select",
+        "options": [
+          {
+            "value": "a",
+            "label": "a. 月曜日"
+          },
+          {
+            "value": "b",
+            "label": "b. 火曜日"
+          },
+          {
+            "value": "c",
+            "label": "c. 水曜日"
+          },
+          {
+            "value": "d",
+            "label": "d. 木曜日"
+          },
+          {
+            "value": "e",
+            "label": "e. 金曜日"
+          },
+          {
+            "value": "f",
+            "label": "f. 土曜日"
+          },
+          {
+            "value": "g",
+            "label": "g. 日曜日"
+          }
+        ],
+        "audio_src": "audio/9.mp3"
+      },
+      {
+        "field_id": "c9_2",
+        "label": "②",
+        "input_type": "select",
+        "options": [
+          {
+            "value": "a",
+            "label": "a. 月曜日"
+          },
+          {
+            "value": "b",
+            "label": "b. 火曜日"
+          },
+          {
+            "value": "c",
+            "label": "c. 水曜日"
+          },
+          {
+            "value": "d",
+            "label": "d. 木曜日"
+          },
+          {
+            "value": "e",
+            "label": "e. 金曜日"
+          },
+          {
+            "value": "f",
+            "label": "f. 土曜日"
+          },
+          {
+            "value": "g",
+            "label": "g. 日曜日"
+          }
+        ],
+        "audio_src": "audio/9.mp3"
+      },
+      {
+        "field_id": "c9_3",
+        "label": "③",
+        "input_type": "select",
+        "options": [
+          {
+            "value": "a",
+            "label": "a. 月曜日"
+          },
+          {
+            "value": "b",
+            "label": "b. 火曜日"
+          },
+          {
+            "value": "c",
+            "label": "c. 水曜日"
+          },
+          {
+            "value": "d",
+            "label": "d. 木曜日"
+          },
+          {
+            "value": "e",
+            "label": "e. 金曜日"
+          },
+          {
+            "value": "f",
+            "label": "f. 土曜日"
+          },
+          {
+            "value": "g",
+            "label": "g. 日曜日"
+          }
+        ],
+        "audio_src": "audio/9.mp3"
+      }
     ]
   },
   {
@@ -310,28 +873,96 @@
         "label": "① 問１",
         "audio_src": "audio/10-1.mp3",
         "input_type": "select",
-        "options": [{"value":"a","label":"a"},{"value":"b","label":"b"},{"value":"c","label":"c"},{"value":"d","label":"d"}]
+        "options": [
+          {
+            "value": "a",
+            "label": "a"
+          },
+          {
+            "value": "b",
+            "label": "b"
+          },
+          {
+            "value": "c",
+            "label": "c"
+          },
+          {
+            "value": "d",
+            "label": "d"
+          }
+        ]
       },
       {
         "field_id": "c10_2",
         "label": "② 問２",
         "audio_src": "audio/10-2.mp3",
         "input_type": "select",
-        "options": [{"value":"a","label":"a"},{"value":"b","label":"b"},{"value":"c","label":"c"},{"value":"d","label":"d"}]
+        "options": [
+          {
+            "value": "a",
+            "label": "a"
+          },
+          {
+            "value": "b",
+            "label": "b"
+          },
+          {
+            "value": "c",
+            "label": "c"
+          },
+          {
+            "value": "d",
+            "label": "d"
+          }
+        ]
       },
       {
         "field_id": "c10_3",
         "label": "③ 問３",
         "audio_src": "audio/10-3.mp3",
         "input_type": "select",
-        "options": [{"value":"a","label":"a"},{"value":"b","label":"b"},{"value":"c","label":"c"},{"value":"d","label":"d"}]
+        "options": [
+          {
+            "value": "a",
+            "label": "a"
+          },
+          {
+            "value": "b",
+            "label": "b"
+          },
+          {
+            "value": "c",
+            "label": "c"
+          },
+          {
+            "value": "d",
+            "label": "d"
+          }
+        ]
       },
       {
         "field_id": "c10_4",
         "label": "④ 問４",
         "audio_src": "audio/10-4.mp3",
         "input_type": "select",
-        "options": [{"value":"a","label":"a"},{"value":"b","label":"b"},{"value":"c","label":"c"},{"value":"d","label":"d"}]
+        "options": [
+          {
+            "value": "a",
+            "label": "a"
+          },
+          {
+            "value": "b",
+            "label": "b"
+          },
+          {
+            "value": "c",
+            "label": "c"
+          },
+          {
+            "value": "d",
+            "label": "d"
+          }
+        ]
       }
     ]
   },
@@ -343,11 +974,56 @@
     "points_each": 2,
     "total_points": 10,
     "items": [
-      {"field_id": "c11_1", "label": "①", "audio_src": "audio/11-1.mp3", "input_type": "select", "options": ["○","✕"]},
-      {"field_id": "c11_2", "label": "②", "audio_src": "audio/11-2.mp3", "input_type": "select", "options": ["○","✕"]},
-      {"field_id": "c11_3", "label": "③", "audio_src": "audio/11-3.mp3", "input_type": "select", "options": ["○","✕"]},
-      {"field_id": "c11_4", "label": "④", "audio_src": "audio/11-4.mp3", "input_type": "select", "options": ["○","✕"]},
-      {"field_id": "c11_5", "label": "⑤", "audio_src": "audio/11-5.mp3", "input_type": "select", "options": ["○","✕"]}
+      {
+        "field_id": "c11_1",
+        "label": "①",
+        "audio_src": "audio/11-1.mp3",
+        "input_type": "select",
+        "options": [
+          "○",
+          "✕"
+        ]
+      },
+      {
+        "field_id": "c11_2",
+        "label": "②",
+        "audio_src": "audio/11-2.mp3",
+        "input_type": "select",
+        "options": [
+          "○",
+          "✕"
+        ]
+      },
+      {
+        "field_id": "c11_3",
+        "label": "③",
+        "audio_src": "audio/11-3.mp3",
+        "input_type": "select",
+        "options": [
+          "○",
+          "✕"
+        ]
+      },
+      {
+        "field_id": "c11_4",
+        "label": "④",
+        "audio_src": "audio/11-4.mp3",
+        "input_type": "select",
+        "options": [
+          "○",
+          "✕"
+        ]
+      },
+      {
+        "field_id": "c11_5",
+        "label": "⑤",
+        "audio_src": "audio/11-5.mp3",
+        "input_type": "select",
+        "options": [
+          "○",
+          "✕"
+        ]
+      }
     ]
   },
   {
@@ -363,10 +1039,22 @@
         "question": "①",
         "audio_src": "audio/12-new-1.mp3",
         "choices": [
-          {"value": "1", "label": "1. テニスを　します"},
-          {"value": "2", "label": "2. テニスを　しました"},
-          {"value": "3", "label": "3. テニスが　すきです"},
-          {"value": "4", "label": "4. にちようびです"}
+          {
+            "value": "1",
+            "label": "1. テニスを　します"
+          },
+          {
+            "value": "2",
+            "label": "2. テニスを　しました"
+          },
+          {
+            "value": "3",
+            "label": "3. テニスが　すきです"
+          },
+          {
+            "value": "4",
+            "label": "4. にちようびです"
+          }
         ]
       },
       {
@@ -374,10 +1062,22 @@
         "question": "②",
         "audio_src": "audio/12-new-2.mp3",
         "choices": [
-          {"value": "1", "label": "1. やまださんに　あげました"},
-          {"value": "2", "label": "2. やまださんに　もらいました"},
-          {"value": "3", "label": "3. やまださんの　ほんです"},
-          {"value": "4", "label": "4. ほんを　よみました"}
+          {
+            "value": "1",
+            "label": "1. やまださんに　あげました"
+          },
+          {
+            "value": "2",
+            "label": "2. やまださんに　もらいました"
+          },
+          {
+            "value": "3",
+            "label": "3. やまださんの　ほんです"
+          },
+          {
+            "value": "4",
+            "label": "4. ほんを　よみました"
+          }
         ]
       },
       {
@@ -385,10 +1085,22 @@
         "question": "③",
         "audio_src": "audio/12-new-3.mp3",
         "choices": [
-          {"value": "1", "label": "1. びょうきでしたから"},
-          {"value": "2", "label": "2. びょうきですから"},
-          {"value": "3", "label": "3. がっこうが　すきですから"},
-          {"value": "4", "label": "4. きのう　いきました"}
+          {
+            "value": "1",
+            "label": "1. びょうきでしたから"
+          },
+          {
+            "value": "2",
+            "label": "2. びょうきですから"
+          },
+          {
+            "value": "3",
+            "label": "3. がっこうが　すきですから"
+          },
+          {
+            "value": "4",
+            "label": "4. きのう　いきました"
+          }
         ]
       },
       {
@@ -396,10 +1108,22 @@
         "question": "④",
         "audio_src": "audio/12-new-4.mp3",
         "choices": [
-          {"value": "1", "label": "1. はなやへ　いきます"},
-          {"value": "2", "label": "2. はなやが　ありました"},
-          {"value": "3", "label": "3. はなやが　あります"},
-          {"value": "4", "label": "4. はなやが　います"}
+          {
+            "value": "1",
+            "label": "1. はなやへ　いきます"
+          },
+          {
+            "value": "2",
+            "label": "2. はなやが　ありました"
+          },
+          {
+            "value": "3",
+            "label": "3. はなやが　あります"
+          },
+          {
+            "value": "4",
+            "label": "4. はなやが　います"
+          }
         ]
       },
       {
@@ -407,10 +1131,22 @@
         "question": "⑤",
         "audio_src": "audio/12-new-5.mp3",
         "choices": [
-          {"value": "1", "label": "1. 3じかん　べんきょうします"},
-          {"value": "2", "label": "2. 5かい　べんきょうします"},
-          {"value": "3", "label": "3. にほんごが　すきです"},
-          {"value": "4", "label": "4. きのう　べんきょうしました"}
+          {
+            "value": "1",
+            "label": "1. 3じかん　べんきょうします"
+          },
+          {
+            "value": "2",
+            "label": "2. 5かい　べんきょうします"
+          },
+          {
+            "value": "3",
+            "label": "3. にほんごが　すきです"
+          },
+          {
+            "value": "4",
+            "label": "4. きのう　べんきょうしました"
+          }
         ]
       }
     ]
