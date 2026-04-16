@@ -146,6 +146,12 @@ async function loadEditData() {
     return;
   }
 
+  // 管理者なら学生IDフィールドを表示
+  if (isAdmin()) {
+    document.getElementById('studentIdGroup').classList.remove('hidden');
+    document.getElementById('studentId').value = t.student_id || '';
+  }
+
   // フォームに値をセット
   document.getElementById('nameRomaji').value = t.name_romaji || '';
   document.getElementById('nameKatakana').value = t.name_katakana || '';
@@ -209,6 +215,11 @@ async function registerTrainee() {
     let traineeId;
 
     if (_editTraineeId) {
+      // 管理者がIDを変更した場合
+      if (isAdmin()) {
+        const newStudentId = document.getElementById('studentId').value.trim();
+        if (newStudentId) traineeData.student_id = newStudentId;
+      }
       // 更新モード
       const { error: updateError } = await supabase
         .from('trainees')
