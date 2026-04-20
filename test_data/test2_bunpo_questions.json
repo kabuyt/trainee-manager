@@ -368,14 +368,38 @@
             "field_id": "b4_1",
             "input_type": "select",
             "options": [
-              "A",
-              "B",
-              "C",
-              "D",
-              "E",
-              "F",
-              "G",
-              "H"
+              {
+                "value": "A",
+                "label": "A. いかがですか"
+              },
+              {
+                "value": "B",
+                "label": "B. 行きましょう"
+              },
+              {
+                "value": "C",
+                "label": "C. ちょっと"
+              },
+              {
+                "value": "D",
+                "label": "D. 残念ですが"
+              },
+              {
+                "value": "E",
+                "label": "E. はい。どうぞ"
+              },
+              {
+                "value": "F",
+                "label": "F. いただきます"
+              },
+              {
+                "value": "G",
+                "label": "G. 借りましたか"
+              },
+              {
+                "value": "H",
+                "label": "H. 行きませんか"
+              }
             ]
           }
         ]
@@ -387,28 +411,76 @@
             "field_id": "b4_2",
             "input_type": "select",
             "options": [
-              "A",
-              "B",
-              "C",
-              "D",
-              "E",
-              "F",
-              "G",
-              "H"
+              {
+                "value": "A",
+                "label": "A. いかがですか"
+              },
+              {
+                "value": "B",
+                "label": "B. 行きましょう"
+              },
+              {
+                "value": "C",
+                "label": "C. ちょっと"
+              },
+              {
+                "value": "D",
+                "label": "D. 残念ですが"
+              },
+              {
+                "value": "E",
+                "label": "E. はい。どうぞ"
+              },
+              {
+                "value": "F",
+                "label": "F. いただきます"
+              },
+              {
+                "value": "G",
+                "label": "G. 借りましたか"
+              },
+              {
+                "value": "H",
+                "label": "H. 行きませんか"
+              }
             ]
           },
           {
             "field_id": "b4_3",
             "input_type": "select",
             "options": [
-              "A",
-              "B",
-              "C",
-              "D",
-              "E",
-              "F",
-              "G",
-              "H"
+              {
+                "value": "A",
+                "label": "A. いかがですか"
+              },
+              {
+                "value": "B",
+                "label": "B. 行きましょう"
+              },
+              {
+                "value": "C",
+                "label": "C. ちょっと"
+              },
+              {
+                "value": "D",
+                "label": "D. 残念ですが"
+              },
+              {
+                "value": "E",
+                "label": "E. はい。どうぞ"
+              },
+              {
+                "value": "F",
+                "label": "F. いただきます"
+              },
+              {
+                "value": "G",
+                "label": "G. 借りましたか"
+              },
+              {
+                "value": "H",
+                "label": "H. 行きませんか"
+              }
             ]
           }
         ]
@@ -420,28 +492,76 @@
             "field_id": "b4_4",
             "input_type": "select",
             "options": [
-              "A",
-              "B",
-              "C",
-              "D",
-              "E",
-              "F",
-              "G",
-              "H"
+              {
+                "value": "A",
+                "label": "A. いかがですか"
+              },
+              {
+                "value": "B",
+                "label": "B. 行きましょう"
+              },
+              {
+                "value": "C",
+                "label": "C. ちょっと"
+              },
+              {
+                "value": "D",
+                "label": "D. 残念ですが"
+              },
+              {
+                "value": "E",
+                "label": "E. はい。どうぞ"
+              },
+              {
+                "value": "F",
+                "label": "F. いただきます"
+              },
+              {
+                "value": "G",
+                "label": "G. 借りましたか"
+              },
+              {
+                "value": "H",
+                "label": "H. 行きませんか"
+              }
             ]
           },
           {
             "field_id": "b4_5",
             "input_type": "select",
             "options": [
-              "A",
-              "B",
-              "C",
-              "D",
-              "E",
-              "F",
-              "G",
-              "H"
+              {
+                "value": "A",
+                "label": "A. いかがですか"
+              },
+              {
+                "value": "B",
+                "label": "B. 行きましょう"
+              },
+              {
+                "value": "C",
+                "label": "C. ちょっと"
+              },
+              {
+                "value": "D",
+                "label": "D. 残念ですが"
+              },
+              {
+                "value": "E",
+                "label": "E. はい。どうぞ"
+              },
+              {
+                "value": "F",
+                "label": "F. いただきます"
+              },
+              {
+                "value": "G",
+                "label": "G. 借りましたか"
+              },
+              {
+                "value": "H",
+                "label": "H. 行きませんか"
+              }
             ]
           }
         ]
@@ -453,28 +573,76 @@
             "field_id": "b4_6",
             "input_type": "select",
             "options": [
-              "A",
-              "B",
-              "C",
-              "D",
-              "E",
-              "F",
-              "G",
-              "H"
+              {
+                "value": "A",
+                "label": "A. いかがですか"
+              },
+              {
+                "value": "B",
+                "label": "B. 行きましょう"
+              },
+              {
+                "value": "C",
+                "label": "C. ちょっと"
+              },
+              {
+                "value": "D",
+                "label": "D. 残念ですが"
+              },
+              {
+                "value": "E",
+                "label": "E. はい。どうぞ"
+              },
+              {
+                "value": "F",
+                "label": "F. いただきます"
+              },
+              {
+                "value": "G",
+                "label": "G. 借りましたか"
+              },
+              {
+                "value": "H",
+                "label": "H. 行きませんか"
+              }
             ]
           },
           {
             "field_id": "b4_7",
             "input_type": "select",
             "options": [
-              "A",
-              "B",
-              "C",
-              "D",
-              "E",
-              "F",
-              "G",
-              "H"
+              {
+                "value": "A",
+                "label": "A. いかがですか"
+              },
+              {
+                "value": "B",
+                "label": "B. 行きましょう"
+              },
+              {
+                "value": "C",
+                "label": "C. ちょっと"
+              },
+              {
+                "value": "D",
+                "label": "D. 残念ですが"
+              },
+              {
+                "value": "E",
+                "label": "E. はい。どうぞ"
+              },
+              {
+                "value": "F",
+                "label": "F. いただきます"
+              },
+              {
+                "value": "G",
+                "label": "G. 借りましたか"
+              },
+              {
+                "value": "H",
+                "label": "H. 行きませんか"
+              }
             ]
           }
         ]
