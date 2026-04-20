@@ -169,7 +169,9 @@ def main():
     if invalid:
         print(f'  ⚠ 作成不可（birth_date欠落）: {len(invalid)}名')
         for t in invalid[:5]:
-            print(f'    - {t.get(\"student_id\",\"?\")} {t.get(\"name_katakana\",\"?\")}')
+            sid = t.get("student_id", "?")
+            nm = t.get("name_katakana", "?")
+            print(f'    - {sid} {nm}')
 
     if not valid:
         print('\n作成対象なし。終了。')
@@ -179,7 +181,9 @@ def main():
     print('\n--- 作成予定 ---')
     for t in valid[:10]:
         bd = t['birth_date'].replace('-', '')
-        print(f'  {t[\"student_id\"]} ({t[\"name_katakana\"]}) → {t[\"student_id\"]}{EMAIL_DOMAIN} / pw={bd}')
+        sid = t["student_id"]
+        nm = t["name_katakana"]
+        print(f'  {sid} ({nm}) → {sid}{EMAIL_DOMAIN} / pw={bd}')
     if len(valid) > 10:
         print(f'  ... 他 {len(valid) - 10}名')
 
