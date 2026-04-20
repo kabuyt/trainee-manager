@@ -36,7 +36,7 @@
         ]
       },
       {
-        "sentence_html": "２）　かばんの（{b1_3}）<ruby>財布<rt>さいふ</rt></ruby>がありますか。",
+        "sentence_html": "２）　かばんのなか（{b1_3}）<ruby>財布<rt>さいふ</rt></ruby>がありますか。",
         "fields": [
           {
             "field_id": "b1_3",
