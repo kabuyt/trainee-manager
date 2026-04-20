@@ -296,17 +296,17 @@
           {
             "value": "a",
             "label": "ａ",
-            "image_src": "images/chokkai/image7.png"
+            "image_src": "images/chokkai/image5.png"
           },
           {
             "value": "b",
             "label": "ｂ",
-            "image_src": "images/chokkai/image8.png"
+            "image_src": "images/chokkai/image6.png"
           },
           {
             "value": "c",
             "label": "ｃ",
-            "image_src": "images/chokkai/image9.png"
+            "image_src": "images/chokkai/image7.png"
           }
         ]
       },
@@ -318,17 +318,17 @@
           {
             "value": "a",
             "label": "ａ",
-            "image_src": "images/chokkai/image10.png"
+            "image_src": "images/chokkai/image8.png"
           },
           {
             "value": "b",
             "label": "ｂ",
-            "image_src": "images/chokkai/image11.png"
+            "image_src": "images/chokkai/image9.png"
           },
           {
             "value": "c",
             "label": "ｃ",
-            "image_src": "images/chokkai/image12.png"
+            "image_src": "images/chokkai/image10.png"
           }
         ]
       }
@@ -873,8 +873,9 @@
     "items": [
       {
         "field_id": "c10_1",
-        "label": "① 問１",
+        "label": "① 問1",
         "audio_src": "audio/10-1.mp3",
+        "image_src": "images/chokkai/image18.png",
         "input_type": "select",
         "options": [
           {
@@ -884,21 +885,14 @@
           {
             "value": "b",
             "label": "b"
-          },
-          {
-            "value": "c",
-            "label": "c"
-          },
-          {
-            "value": "d",
-            "label": "d"
           }
         ]
       },
       {
         "field_id": "c10_2",
-        "label": "② 問２",
+        "label": "② 問2",
         "audio_src": "audio/10-2.mp3",
+        "image_src": "images/chokkai/image19.png",
         "input_type": "select",
         "options": [
           {
@@ -908,21 +902,14 @@
           {
             "value": "b",
             "label": "b"
-          },
-          {
-            "value": "c",
-            "label": "c"
-          },
-          {
-            "value": "d",
-            "label": "d"
           }
         ]
       },
       {
         "field_id": "c10_3",
-        "label": "③ 問３",
+        "label": "③ 問3",
         "audio_src": "audio/10-3.mp3",
+        "image_src": "images/chokkai/image20.png",
         "input_type": "select",
         "options": [
           {
@@ -932,21 +919,14 @@
           {
             "value": "b",
             "label": "b"
-          },
-          {
-            "value": "c",
-            "label": "c"
-          },
-          {
-            "value": "d",
-            "label": "d"
           }
         ]
       },
       {
         "field_id": "c10_4",
-        "label": "④ 問４",
+        "label": "④ 問4",
         "audio_src": "audio/10-4.mp3",
+        "image_src": "images/chokkai/image21.png",
         "input_type": "select",
         "options": [
           {
@@ -956,14 +936,6 @@
           {
             "value": "b",
             "label": "b"
-          },
-          {
-            "value": "c",
-            "label": "c"
-          },
-          {
-            "value": "d",
-            "label": "d"
           }
         ]
       }

@@ -521,7 +521,7 @@
         ]
       },
       "c5": {
-        "method": "radio_exact",
+        "method": "exact_match",
         "points_each": 3,
         "field_ids": [
           "c5_1",
