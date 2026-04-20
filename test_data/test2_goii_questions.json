@@ -2,7 +2,7 @@
   {
     "id": "g1",
     "type": "image_select",
-    "title_html": "問題１．Hãy chọn từ đúng cho mỗi hình　＜各1点×10問＝10点＞",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>１．Hãy chọn từ đúng cho mỗi hình　＜<ruby>各<rt>かく</rt></ruby>1<ruby>点<rt>てん</rt></ruby>×10<ruby>問<rt>とい</rt></ruby>＝10<ruby>点<rt>てん</rt></ruby>＞",
     "points_each": 1,
     "total_points": 10,
     "images": [
@@ -53,11 +53,11 @@
         "label": "①",
         "input_type": "select",
         "options": [
-          "牛乳",
-          "野菜",
-          "魚",
-          "肉",
-          "卵",
+          "<ruby>牛乳<rt>ぎゅうにゅう</rt></ruby>",
+          "<ruby>野菜<rt>やさい</rt></ruby>",
+          "<ruby>魚<rt>さかな</rt></ruby>",
+          "<ruby>肉<rt>にく</rt></ruby>",
+          "<ruby>卵<rt>たまご</rt></ruby>",
           "やま",
           "せんぷうき",
           "スプーン",
@@ -70,11 +70,11 @@
         "label": "②",
         "input_type": "select",
         "options": [
-          "牛乳",
-          "野菜",
-          "魚",
-          "肉",
-          "卵",
+          "<ruby>牛乳<rt>ぎゅうにゅう</rt></ruby>",
+          "<ruby>野菜<rt>やさい</rt></ruby>",
+          "<ruby>魚<rt>さかな</rt></ruby>",
+          "<ruby>肉<rt>にく</rt></ruby>",
+          "<ruby>卵<rt>たまご</rt></ruby>",
           "やま",
           "せんぷうき",
           "スプーン",
@@ -87,11 +87,11 @@
         "label": "③",
         "input_type": "select",
         "options": [
-          "牛乳",
-          "野菜",
-          "魚",
-          "肉",
-          "卵",
+          "<ruby>牛乳<rt>ぎゅうにゅう</rt></ruby>",
+          "<ruby>野菜<rt>やさい</rt></ruby>",
+          "<ruby>魚<rt>さかな</rt></ruby>",
+          "<ruby>肉<rt>にく</rt></ruby>",
+          "<ruby>卵<rt>たまご</rt></ruby>",
           "やま",
           "せんぷうき",
           "スプーン",
@@ -104,11 +104,11 @@
         "label": "④",
         "input_type": "select",
         "options": [
-          "牛乳",
-          "野菜",
-          "魚",
-          "肉",
-          "卵",
+          "<ruby>牛乳<rt>ぎゅうにゅう</rt></ruby>",
+          "<ruby>野菜<rt>やさい</rt></ruby>",
+          "<ruby>魚<rt>さかな</rt></ruby>",
+          "<ruby>肉<rt>にく</rt></ruby>",
+          "<ruby>卵<rt>たまご</rt></ruby>",
           "やま",
           "せんぷうき",
           "スプーン",
@@ -121,11 +121,11 @@
         "label": "⑤",
         "input_type": "select",
         "options": [
-          "牛乳",
-          "野菜",
-          "魚",
-          "肉",
-          "卵",
+          "<ruby>牛乳<rt>ぎゅうにゅう</rt></ruby>",
+          "<ruby>野菜<rt>やさい</rt></ruby>",
+          "<ruby>魚<rt>さかな</rt></ruby>",
+          "<ruby>肉<rt>にく</rt></ruby>",
+          "<ruby>卵<rt>たまご</rt></ruby>",
           "やま",
           "せんぷうき",
           "スプーン",
@@ -138,11 +138,11 @@
         "label": "⑥",
         "input_type": "select",
         "options": [
-          "牛乳",
-          "野菜",
-          "魚",
-          "肉",
-          "卵",
+          "<ruby>牛乳<rt>ぎゅうにゅう</rt></ruby>",
+          "<ruby>野菜<rt>やさい</rt></ruby>",
+          "<ruby>魚<rt>さかな</rt></ruby>",
+          "<ruby>肉<rt>にく</rt></ruby>",
+          "<ruby>卵<rt>たまご</rt></ruby>",
           "やま",
           "せんぷうき",
           "スプーン",
@@ -155,11 +155,11 @@
         "label": "⑦",
         "input_type": "select",
         "options": [
-          "牛乳",
-          "野菜",
-          "魚",
-          "肉",
-          "卵",
+          "<ruby>牛乳<rt>ぎゅうにゅう</rt></ruby>",
+          "<ruby>野菜<rt>やさい</rt></ruby>",
+          "<ruby>魚<rt>さかな</rt></ruby>",
+          "<ruby>肉<rt>にく</rt></ruby>",
+          "<ruby>卵<rt>たまご</rt></ruby>",
           "やま",
           "せんぷうき",
           "スプーン",
@@ -172,11 +172,11 @@
         "label": "⑧",
         "input_type": "select",
         "options": [
-          "牛乳",
-          "野菜",
-          "魚",
-          "肉",
-          "卵",
+          "<ruby>牛乳<rt>ぎゅうにゅう</rt></ruby>",
+          "<ruby>野菜<rt>やさい</rt></ruby>",
+          "<ruby>魚<rt>さかな</rt></ruby>",
+          "<ruby>肉<rt>にく</rt></ruby>",
+          "<ruby>卵<rt>たまご</rt></ruby>",
           "やま",
           "せんぷうき",
           "スプーン",
@@ -189,11 +189,11 @@
         "label": "⑨",
         "input_type": "select",
         "options": [
-          "牛乳",
-          "野菜",
-          "魚",
-          "肉",
-          "卵",
+          "<ruby>牛乳<rt>ぎゅうにゅう</rt></ruby>",
+          "<ruby>野菜<rt>やさい</rt></ruby>",
+          "<ruby>魚<rt>さかな</rt></ruby>",
+          "<ruby>肉<rt>にく</rt></ruby>",
+          "<ruby>卵<rt>たまご</rt></ruby>",
           "やま",
           "せんぷうき",
           "スプーン",
@@ -206,11 +206,11 @@
         "label": "⑩",
         "input_type": "select",
         "options": [
-          "牛乳",
-          "野菜",
-          "魚",
-          "肉",
-          "卵",
+          "<ruby>牛乳<rt>ぎゅうにゅう</rt></ruby>",
+          "<ruby>野菜<rt>やさい</rt></ruby>",
+          "<ruby>魚<rt>さかな</rt></ruby>",
+          "<ruby>肉<rt>にく</rt></ruby>",
+          "<ruby>卵<rt>たまご</rt></ruby>",
           "やま",
           "せんぷうき",
           "スプーン",
@@ -223,7 +223,7 @@
   {
     "id": "g2",
     "type": "image_select_grid",
-    "title_html": "問題２．Chuyển sang tiếng Nhật（日本語で書いてください）　＜各3点×8問＝24点＞",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>２．Chuyển sang tiếng Nhật（<ruby>日本語<rt>にほんご</rt></ruby>で<ruby>書いて<rt>かいて</rt></ruby>ください）　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×8<ruby>問<rt>とい</rt></ruby>＝24<ruby>点<rt>てん</rt></ruby>＞",
     "points_each": 3,
     "total_points": 24,
     "dynamic_options": true,
@@ -330,20 +330,20 @@
   {
     "id": "g3",
     "type": "table_fill",
-    "title_html": "問題３．読み方を書いてください　＜各1点×13問＝13点＞",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>３．<ruby>読み方<rt>よみかた</rt></ruby>を<ruby>書いて<rt>かいて</rt></ruby>ください　＜<ruby>各<rt>かく</rt></ruby>1<ruby>点<rt>てん</rt></ruby>×13<ruby>問<rt>とい</rt></ruby>＝13<ruby>点<rt>てん</rt></ruby>＞",
     "instruction": "Hãy viết cách đọc bằng Hiragana.",
     "points_each": 1,
     "total_points": 13,
     "tables": [
       {
-        "sub_title": "月の読み方",
-        "sub_instruction": "読みかたを日本語で書いてください",
+        "sub_title": "<ruby>月<rt>つき</rt></ruby>の<ruby>読み方<rt>よみかた</rt></ruby>",
+        "sub_instruction": "<ruby>読みかた<rt>よみかた</rt></ruby>を<ruby>日本語<rt>にほんご</rt></ruby>で<ruby>書いて<rt>かいて</rt></ruby>ください",
         "headers": [
-          "4月",
-          "5月",
-          "6月",
-          "7月",
-          "8月"
+          "4<ruby>月<rt>つき</rt></ruby>",
+          "5<ruby>月<rt>つき</rt></ruby>",
+          "6<ruby>月<rt>つき</rt></ruby>",
+          "7<ruby>月<rt>つき</rt></ruby>",
+          "8<ruby>月<rt>つき</rt></ruby>"
         ],
         "items": [
           {
@@ -374,12 +374,12 @@
         ]
       },
       {
-        "sub_title": "時の言葉",
+        "sub_title": "<ruby>時<rt>じ</rt></ruby>の<ruby>言葉<rt>ことば</rt></ruby>",
         "headers": [
           "おととい",
           "きのう",
-          "今日",
-          "明日",
+          "<ruby>今日<rt>きょう</rt></ruby>",
+          "<ruby>明日<rt>あした</rt></ruby>",
           "あさって"
         ],
         "items": [
@@ -412,11 +412,11 @@
       },
       {
         "headers": [
-          "一昨年",
-          "去年",
-          "今年",
-          "来年",
-          "再来年"
+          "<ruby>一昨年<rt>おととし</rt></ruby>",
+          "<ruby>去年<rt>きょねん</rt></ruby>",
+          "<ruby>今年<rt>ことし</rt></ruby>",
+          "<ruby>来年<rt>らいねん</rt></ruby>",
+          "<ruby>再来年<rt>さらいねん</rt></ruby>"
         ],
         "items": [
           {
@@ -447,16 +447,16 @@
         ]
       },
       {
-        "sub_title": "日の読み方",
+        "sub_title": "<ruby>日<rt>にち</rt></ruby>の<ruby>読み方<rt>よみかた</rt></ruby>",
         "headers": [
-          "1日",
-          "5日",
-          "7日",
-          "8日",
-          "9日",
-          "14日",
-          "20日",
-          "31日"
+          "1<ruby>日<rt>にち</rt></ruby>",
+          "5<ruby>日<rt>にち</rt></ruby>",
+          "7<ruby>日<rt>にち</rt></ruby>",
+          "8<ruby>日<rt>にち</rt></ruby>",
+          "9<ruby>日<rt>にち</rt></ruby>",
+          "14<ruby>日<rt>にち</rt></ruby>",
+          "20<ruby>日<rt>にち</rt></ruby>",
+          "31<ruby>日<rt>にち</rt></ruby>"
         ],
         "items": [
           {
@@ -506,9 +506,9 @@
   {
     "id": "g4",
     "type": "radio_choice",
-    "title_html": "問題４．正しいものを選んでください　＜各2点×5問＝10点＞",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>４．<ruby>正<rt>せい</rt></ruby>しいものを<ruby>選んで<rt>えらんで</rt></ruby>ください　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×5<ruby>問<rt>とい</rt></ruby>＝10<ruby>点<rt>てん</rt></ruby>＞",
     "instruction": "Hãy khoanh tròn đáp án đúng.",
-    "example_html": "例）　けさ9<ruby>時<rt>じ</rt></ruby>に（　①　）を<ruby>食べました<rt>たべました</rt></ruby>。<br>　　①<ruby>朝ごはん<rt>あさごはん</rt></ruby>　　②<ruby>昼ごはん<rt>ひるごはん</rt></ruby>　　③<ruby>夜ごはん<rt>よるごはん</rt></ruby>　　④ジュース　　⑤<ruby>お茶<rt>おちゃ</rt></ruby>",
+    "example_html": "<ruby>例<rt>れい</rt></ruby>）　けさ9<ruby>時<rt>じ</rt></ruby>に（　①　）を<ruby>食べました<rt>たべました</rt></ruby>。<br>　　①<ruby>朝<rt>あさ</rt></ruby>ごはん　　②<ruby>昼<rt>ひる</rt></ruby>ごはん　　③<ruby>夜<rt>よる</rt></ruby>ごはん　　④ジュース　　⑤<ruby>お茶<rt>おちゃ</rt></ruby>",
     "points_each": 2,
     "total_points": 10,
     "items": [
@@ -540,7 +540,7 @@
       },
       {
         "field_id": "g4_2",
-        "question": "２）　<ruby>細かい<rt>こまかい</rt></ruby><ruby>お金<rt>おかね</rt></ruby>を（　　）<ruby>貸して<rt>かして</rt></ruby>ください。",
+        "question": "２）　<ruby>細かい<rt>こまかい</rt></ruby>お<ruby>金<rt>きん</rt></ruby>を（　　）<ruby>貸して<rt>かして</rt></ruby>ください。",
         "choices": [
           {
             "value": "①",
@@ -566,7 +566,7 @@
       },
       {
         "field_id": "g4_3",
-        "question": "３）　ねぎを3本とたまねぎを３つ、（　　）で６つください。",
+        "question": "３）　ねぎを3<ruby>本<rt>ほん</rt></ruby>とたまねぎを３つ、（　　）で６つください。",
         "choices": [
           {
             "value": "①",
@@ -647,15 +647,15 @@
   {
     "id": "g5",
     "type": "table_fill",
-    "title_html": "問題５．反対の意味の言葉を書いてください　＜各1点×7問＝7点＞",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>５．<ruby>反対<rt>はんたい</rt></ruby>の<ruby>意味<rt>いみ</rt></ruby>の<ruby>言葉<rt>ことば</rt></ruby>を<ruby>書いて<rt>かいて</rt></ruby>ください　＜<ruby>各<rt>かく</rt></ruby>1<ruby>点<rt>てん</rt></ruby>×7<ruby>問<rt>とい</rt></ruby>＝7<ruby>点<rt>てん</rt></ruby>＞",
     "instruction": "Hãy viết từ có nghĩa ngược lại bằng Hiragana.",
     "points_each": 1,
     "total_points": 7,
     "tables": [
       {
         "headers": [
-          "形容詞",
-          "反対の言葉"
+          "<ruby>形容詞<rt>けいようし</rt></ruby>",
+          "<ruby>反対<rt>はんたい</rt></ruby>の<ruby>言葉<rt>ことば</rt></ruby>"
         ],
         "items": [
           {
@@ -707,8 +707,8 @@
   {
     "id": "g6",
     "type": "select_dynamic_pool",
-    "title_html": "問題６．Tiếng Nhật ⇔ Tiếng Việt　＜各2点×18問＝36点＞",
-    "instruction": "Hãy viết nghĩa tiếng Việt.（ベトナム語の意味を書いてください）",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>６．Tiếng Nhật ⇔ Tiếng Việt　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×18<ruby>問<rt>とい</rt></ruby>＝36<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "Hãy viết nghĩa tiếng Việt.（ベトナム<ruby>語<rt>ご</rt></ruby>の<ruby>意味<rt>いみ</rt></ruby>を<ruby>書いて<rt>かいて</rt></ruby>ください）",
     "points_each": 2,
     "total_points": 36,
     "pool_correct": [
