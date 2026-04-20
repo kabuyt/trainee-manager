@@ -277,60 +277,68 @@
     "puzzles": [
       {
         "field_id": "b3_1",
+        "prefix": "<ruby>朝<rt>あさ</rt></ruby>8<ruby>時<rt>じ</rt></ruby>に<ruby>起<rt>お</rt></ruby>きました。",
         "words": [
-          "<ruby>友<rt>とも</rt></ruby>",
-          "だち",
-          "と",
-          "<ruby>映画<rt>えいが</rt></ruby>",
+          "<ruby>友<rt>とも</rt></ruby>だち",
           "を",
           "<ruby>見<rt>み</rt></ruby>ました",
-          "それから"
-        ]
+          "それから",
+          "と",
+          "<ruby>映画<rt>えいが</rt></ruby>"
+        ],
+        "suffix": "。"
       },
       {
         "field_id": "b3_2",
+        "prefix": "すみません、",
         "words": [
           "は",
-          "<ruby>大阪駅<rt>おおさかえき</rt></ruby>",
           "へ",
+          "<ruby>大阪駅<rt>おおさかえき</rt></ruby>",
           "バス",
-          "<ruby>行<rt>い</rt></ruby>きますか",
-          "この"
-        ]
+          "<ruby>行<rt>い</rt></ruby>きます",
+          "この",
+          "か"
+        ],
+        "suffix": "。"
       },
       {
         "field_id": "b3_3",
+        "prefix": "<ruby>紙谷<rt>かみや</rt></ruby>さんは",
         "words": [
           "<ruby>料理<rt>りょうり</rt></ruby>",
-          "が",
-          "<ruby>好<rt>す</rt></ruby>き",
           "ですか",
-          "どんな"
-        ]
+          "どんな",
+          "<ruby>好<rt>す</rt></ruby>き",
+          "が"
+        ],
+        "suffix": "。"
       },
       {
         "field_id": "b3_4",
+        "prefix": "",
         "words": [
-          "りんご",
-          "を",
           "2つ",
-          "と",
-          "<ruby>切手<rt>きって</rt></ruby>",
-          "を",
           "2<ruby>枚<rt>まい</rt></ruby>",
-          "ください"
-        ]
+          "ください",
+          "りんごを",
+          "<ruby>切手<rt>きって</rt></ruby>を",
+          "と"
+        ],
+        "suffix": "。"
       },
       {
         "field_id": "b3_5",
+        "prefix": "すみません、",
         "words": [
           "<ruby>近<rt>ちか</rt></ruby>く",
-          "に",
-          "VP<ruby>銀行<rt>ぎんこう</rt></ruby>",
           "が",
-          "ありますか",
-          "この"
-        ]
+          "VP<ruby>銀行<rt>ぎんこう</rt></ruby>",
+          "に",
+          "この",
+          "ありますか"
+        ],
+        "suffix": ""
       }
     ]
   },
