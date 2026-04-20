@@ -336,8 +336,6 @@
     "total_points": 13,
     "tables": [
       {
-        "sub_title": "月の<ruby>読み方<rt>よみかた</rt></ruby>",
-        "sub_instruction": "<ruby>読<rt>よ</rt></ruby>みかたを<ruby>日本語<rt>にほんご</rt></ruby>で<ruby>書<rt>か</rt></ruby>いてください",
         "headers": [
           "4月",
           "5月",
@@ -374,14 +372,6 @@
         ]
       },
       {
-        "sub_title": "時の<ruby>言葉<rt>ことば</rt></ruby>",
-        "headers": [
-          "おととい",
-          "きのう",
-          "今日",
-          "明日",
-          "あさって"
-        ],
         "items": [
           {
             "field_id": "g3_3",
@@ -391,7 +381,7 @@
           {
             "field_id": null,
             "col": 1,
-            "fixed_value": "きのう"
+            "fixed_value": "<ruby>昨日<rt>きのう</rt></ruby>"
           },
           {
             "field_id": "g3_4",
@@ -401,28 +391,21 @@
           {
             "field_id": null,
             "col": 3,
-            "fixed_value": "あした"
+            "fixed_value": "<ruby>明日<rt>あした</rt></ruby>"
           },
           {
             "field_id": null,
             "col": 4,
-            "fixed_value": "あさって"
+            "fixed_value": "<ruby>明後日<rt>あさって</rt></ruby>"
           }
         ]
       },
       {
-        "headers": [
-          "一昨年",
-          "去年",
-          "今年",
-          "来年",
-          "再来年"
-        ],
         "items": [
           {
             "field_id": null,
             "col": 0,
-            "fixed_value": "おととし"
+            "fixed_value": "<ruby>一昨年<rt>おととし</rt></ruby>"
           },
           {
             "field_id": "g3_5",
@@ -432,7 +415,7 @@
           {
             "field_id": null,
             "col": 2,
-            "fixed_value": "ことし"
+            "fixed_value": "<ruby>今年<rt>ことし</rt></ruby>"
           },
           {
             "field_id": "g3_6",
@@ -442,7 +425,7 @@
           {
             "field_id": null,
             "col": 4,
-            "fixed_value": "さらいねん"
+            "fixed_value": "<ruby>再来年<rt>さらいねん</rt></ruby>"
           }
         ]
       },
