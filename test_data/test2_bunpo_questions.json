@@ -2,14 +2,14 @@
   {
     "id": "b1",
     "type": "fill_particle",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>１．Hãy điền trợ từ thích hợp　＜<ruby>各<rt>かく</rt></ruby>1<ruby>点<rt>てん</rt></ruby>×13<ruby>問<rt>とい</rt></ruby>＝13<ruby>点<rt>てん</rt></ruby>＞",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>１．Hãy điền trợ từ thích hợp　＜<ruby>各<rt>かく</rt></ruby>1<ruby>点<rt>てん</rt></ruby>×13問＝13<ruby>点<rt>てん</rt></ruby>＞",
     "instruction": "Hãy điền trợ từ đúng vào（　　）.",
     "example_html": "きのう（<span class=\"already\">は</span>）<ruby>日曜日<rt>にちようび</rt></ruby>でした。",
     "points_each": 1,
     "total_points": 13,
     "items": [
       {
-        "sentence_html": "１）　<ruby>時間<rt>じかん</rt></ruby>（{b1_1}）ありません（{b1_2}）、<ruby>新聞<rt>しんぶん</rt></ruby>を<ruby>読みません<rt>よみません</rt></ruby>。",
+        "sentence_html": "１）　<ruby>時間<rt>じかん</rt></ruby>（{b1_1}）ありません（{b1_2}）、<ruby>新聞<rt>しんぶん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>みません。",
         "fields": [
           {
             "field_id": "b1_1",
@@ -52,7 +52,7 @@
         ]
       },
       {
-        "sentence_html": "３）　ベトナム<ruby>語<rt>ご</rt></ruby>（{b1_4}）「ありがとう」は<ruby>何<rt>なに</rt></ruby>ですか。― ベトナム<ruby>語<rt>ご</rt></ruby>（{b1_5}）わかりません。",
+        "sentence_html": "３）　ベトナム語（{b1_4}）「ありがとう」は<ruby>何<rt>なに</rt></ruby>ですか。― ベトナム語（{b1_5}）わかりません。",
         "fields": [
           {
             "field_id": "b1_4",
@@ -106,7 +106,7 @@
         ]
       },
       {
-        "sentence_html": "５）　いつ<ruby>日本<rt>にほん</rt></ruby>（{b1_8}）<ruby>行きます<rt>いきます</rt></ruby>か。― 3<ruby>月<rt>つき</rt></ruby>18<ruby>日<rt>にち</rt></ruby>（{b1_9}）<ruby>飛行機<rt>ひこうき</rt></ruby>（{b1_10}）<ruby>行きます<rt>いきます</rt></ruby>。",
+        "sentence_html": "５）　いつ<ruby>日本<rt>にほん</rt></ruby>（{b1_8}）<ruby>行<rt>い</rt></ruby>きますか。― 3<ruby>月<rt>がつ</rt></ruby>18<ruby>日<rt>にち</rt></ruby>（{b1_9}）<ruby>飛行機<rt>ひこうき</rt></ruby>（{b1_10}）<ruby>行<rt>い</rt></ruby>きます。",
         "fields": [
           {
             "field_id": "b1_8",
@@ -144,7 +144,7 @@
         ]
       },
       {
-        "sentence_html": "６）　スーパー（{b1_11}）ジュースを<ruby>買いました<rt>かいました</rt></ruby>。おいしくないです（{b1_12}）、<ruby>安い<rt>やすい</rt></ruby>です。",
+        "sentence_html": "６）　スーパー（{b1_11}）ジュースを<ruby>買<rt>か</rt></ruby>いました。おいしくないです（{b1_12}）、<ruby>安<rt>やす</rt></ruby>いです。",
         "fields": [
           {
             "field_id": "b1_11",
@@ -191,8 +191,8 @@
   {
     "id": "b2",
     "type": "select_in_sentence",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>２．Hãy chọn từ đúng　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×5<ruby>問<rt>とい</rt></ruby>＝10<ruby>点<rt>てん</rt></ruby>＞",
-    "instruction": "<ruby>正<rt>せい</rt></ruby>しい<ruby>言葉<rt>ことば</rt></ruby>を<ruby>選んで<rt>えらんで</rt></ruby>ください。",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>２．Hãy chọn từ đúng　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×5問＝10<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "<ruby>正<rt>せい</rt></ruby>しい<ruby>言葉<rt>ことば</rt></ruby>を<ruby>選<rt>えら</rt></ruby>んでください。",
     "points_each": 2,
     "total_points": 10,
     "items": [
@@ -225,7 +225,7 @@
         ]
       },
       {
-        "sentence_html": "３）　<ruby>加藤<rt>かとう</rt></ruby>さんは（　{b2_3}　）ベトナムを<ruby>旅行<rt>りょこう</rt></ruby>しますか。―1か<ruby>月<rt>つき</rt></ruby><ruby>旅行<rt>りょこう</rt></ruby>します。",
+        "sentence_html": "３）　<ruby>加藤<rt>かとう</rt></ruby>さんは（　{b2_3}　）ベトナムを<ruby>旅行<rt>りょこう</rt></ruby>しますか。―1か月<ruby>旅行<rt>りょこう</rt></ruby>します。",
         "fields": [
           {
             "field_id": "b2_3",
@@ -270,8 +270,8 @@
   {
     "id": "b3",
     "type": "word_puzzle",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>３．Sắp xếp theo thứ tự đúng　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×5<ruby>問<rt>とい</rt></ruby>＝15<ruby>点<rt>てん</rt></ruby>＞",
-    "instruction": "タイルをタップして<ruby>正<rt>せい</rt></ruby>しい<ruby>順<rt>じゅん</rt></ruby>に<ruby>並べて<rt>ならべて</rt></ruby>ください。もう<ruby>一度<rt>いちど</rt></ruby>タップすると<ruby>戻ります<rt>もどります</rt></ruby>。",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>３．Sắp xếp theo thứ tự đúng　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×5問＝15<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "タイルをタップして<ruby>正<rt>せい</rt></ruby>しい<ruby>順<rt>じゅん</rt></ruby>に<ruby>並<rt>なら</rt></ruby>べてください。もう<ruby>一度<rt>いちど</rt></ruby>タップすると<ruby>戻<rt>もど</rt></ruby>ります。",
     "points_each": 3,
     "total_points": 15,
     "puzzles": [
@@ -283,7 +283,7 @@
           "と",
           "<ruby>映画<rt>えいが</rt></ruby>",
           "を",
-          "<ruby>見ました<rt>みました</rt></ruby>",
+          "<ruby>見<rt>み</rt></ruby>ました",
           "それから"
         ]
       },
@@ -294,7 +294,7 @@
           "<ruby>大阪駅<rt>おおさかえき</rt></ruby>",
           "へ",
           "バス",
-          "<ruby>行きます<rt>いきます</rt></ruby>か",
+          "<ruby>行<rt>い</rt></ruby>きますか",
           "この"
         ]
       },
@@ -303,7 +303,7 @@
         "words": [
           "<ruby>料理<rt>りょうり</rt></ruby>",
           "が",
-          "<ruby>好き<rt>すき</rt></ruby>",
+          "<ruby>好<rt>す</rt></ruby>き",
           "ですか",
           "どんな"
         ]
@@ -324,7 +324,7 @@
       {
         "field_id": "b3_5",
         "words": [
-          "<ruby>近く<rt>ちかく</rt></ruby>",
+          "<ruby>近<rt>ちか</rt></ruby>く",
           "に",
           "VP<ruby>銀行<rt>ぎんこう</rt></ruby>",
           "が",
@@ -337,11 +337,11 @@
   {
     "id": "b4",
     "type": "dialogue_fill",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>４．<ruby>会話<rt>かいわ</rt></ruby>を<ruby>完成<rt>かんせい</rt></ruby>してください　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×7<ruby>問<rt>とい</rt></ruby>＝14<ruby>点<rt>てん</rt></ruby>＞",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>４．<ruby>会話<rt>かいわ</rt></ruby>を<ruby>完成<rt>かんせい</rt></ruby>してください　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×7問＝14<ruby>点<rt>てん</rt></ruby>＞",
     "instruction": "Chọn từ A-H để điền vào chỗ trống.",
     "points_each": 2,
     "total_points": 14,
-    "option_pool_html": "A: いかがですか　　B: <ruby>行きましょう<rt>いきましょう</rt></ruby>　　C: ちょっと　　D: <ruby>残念<rt>ざんねん</rt></ruby>ですが<br>E: はい。どうぞ　　F: いただきます　　G: <ruby>借りました<rt>かりました</rt></ruby>か　　H: <ruby>行きません<rt>いきません</rt></ruby>か",
+    "option_pool_html": "A: いかがですか　　B: <ruby>行<rt>い</rt></ruby>きましょう　　C: ちょっと　　D: <ruby>残念<rt>ざんねん</rt></ruby>ですが<br>E: はい。どうぞ　　F: いただきます　　G: <ruby>借<rt>か</rt></ruby>りましたか　　H: <ruby>行<rt>い</rt></ruby>きませんか",
     "option_pool": [
       "A",
       "B",
@@ -439,7 +439,7 @@
         ]
       },
       {
-        "dialogue_html": "④　A：<ruby>加藤<rt>かとう</rt></ruby>さん、<ruby>昼<rt>ひる</rt></ruby>に<ruby>一緒<rt>いっしょ</rt></ruby>にごはんを<ruby>食べましょう<rt>たべましょう</rt></ruby>。<br>　　B：（{b4_6}）、<ruby>用事<rt>ようじ</rt></ruby>がありますから…。<ruby>晩<rt>ばん</rt></ruby>にごはんを<ruby>食べましょう<rt>たべましょう</rt></ruby>。<br>　　A：すみません。<ruby>晩<rt>ばん</rt></ruby>は（{b4_7}）…。<ruby>友<rt>とも</rt></ruby>だちとサッカーをしますから。",
+        "dialogue_html": "④　A：<ruby>加藤<rt>かとう</rt></ruby>さん、<ruby>昼<rt>ひる</rt></ruby>に<ruby>一緒<rt>いっしょ</rt></ruby>にごはんを<ruby>食<rt>た</rt></ruby>べましょう。<br>　　B：（{b4_6}）、<ruby>用事<rt>ようじ</rt></ruby>がありますから…。<ruby>晩<rt>ばん</rt></ruby>にごはんを<ruby>食<rt>た</rt></ruby>べましょう。<br>　　A：すみません。<ruby>晩<rt>ばん</rt></ruby>は（{b4_7}）…。<ruby>友<rt>とも</rt></ruby>だちとサッカーをしますから。",
         "fields": [
           {
             "field_id": "b4_6",
@@ -476,8 +476,8 @@
   {
     "id": "b5",
     "type": "select_in_sentence",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>５．<ruby>絵<rt>え</rt></ruby>を<ruby>見て<rt>みて</rt></ruby><ruby>位置<rt>いち</rt></ruby>を<ruby>答えて<rt>こたえて</rt></ruby>ください　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×4<ruby>問<rt>とい</rt></ruby>＝12<ruby>点<rt>てん</rt></ruby>＞",
-    "instruction": "<ruby>絵<rt>え</rt></ruby>を<ruby>見て<rt>みて</rt></ruby>、<ruby>正<rt>せい</rt></ruby>しい<ruby>言葉<rt>ことば</rt></ruby>を<ruby>選んで<rt>えらんで</rt></ruby>ください。",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>５．<ruby>絵<rt>え</rt></ruby>を<ruby>見<rt>み</rt></ruby>て<ruby>位置<rt>いち</rt></ruby>を<ruby>答<rt>こた</rt></ruby>えてください　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×4問＝12<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "<ruby>絵<rt>え</rt></ruby>を<ruby>見<rt>み</rt></ruby>て、<ruby>正<rt>せい</rt></ruby>しい<ruby>言葉<rt>ことば</rt></ruby>を<ruby>選<rt>えら</rt></ruby>んでください。",
     "points_each": 3,
     "total_points": 12,
     "image_src": "images/bunpo/image1.jpeg",
@@ -568,7 +568,7 @@
         ]
       },
       {
-        "sentence_html": "４）　<ruby>黄色<rt>きいろ</rt></ruby>い<ruby>箱<rt>はこ</rt></ruby>はどこにありますか。→　（{b5_4a}）の（{b5_4b}）にあります。",
+        "sentence_html": "４）　<ruby>黄色<rt>きいろ</rt></ruby>い箱はどこにありますか。→　（{b5_4a}）の（{b5_4b}）にあります。",
         "fields": [
           {
             "field_id": "b5_4a",
@@ -600,14 +600,14 @@
   {
     "id": "b6",
     "type": "reading_comprehension",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>６．○か×を<ruby>書きましょう<rt>かきましょう</rt></ruby>。　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×5<ruby>問<rt>とい</rt></ruby>＝10<ruby>点<rt>てん</rt></ruby>＞",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>６．○か×を<ruby>書<rt>か</rt></ruby>きましょう。　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×5問＝10<ruby>点<rt>てん</rt></ruby>＞",
     "points_each": 2,
     "total_points": 10,
-    "passage_html": "<ruby>私<rt>わたし</rt></ruby>はミラーです。<ruby>私<rt>わたし</rt></ruby>の<ruby>会社<rt>かいしゃ</rt></ruby>はSOYOTAです。<ruby>毎日<rt>まいにち</rt></ruby>９<ruby>時<rt>じ</rt></ruby>から６<ruby>時<rt>じ</rt></ruby>まで、<ruby>働きます<rt>はたらきます</rt></ruby>。<ruby>昼<rt>ひる</rt></ruby>に１<ruby>時間<rt>じかん</rt></ruby><ruby>休みます<rt>やすみます</rt></ruby>。<ruby>町<rt>まち</rt></ruby>は<ruby>小さい<rt>ちいさい</rt></ruby>ですが、<ruby>電車<rt>でんしゃ</rt></ruby>があります。しかし、<ruby>私<rt>わたし</rt></ruby>はバイクで<ruby>会社<rt>かいしゃ</rt></ruby>へ<ruby>行きます<rt>いきます</rt></ruby>。<ruby>私<rt>わたし</rt></ruby>の<ruby>会社<rt>かいしゃ</rt></ruby>は、<ruby>車<rt>くるま</rt></ruby>を<ruby>売ります<rt>うります</rt></ruby>。<ruby>車<rt>くるま</rt></ruby>は１<ruby>台<rt>だい</rt></ruby>１００<ruby>万円<rt>まんえん</rt></ruby>から５００<ruby>万円<rt>まんえん</rt></ruby>です。<ruby>車<rt>くるま</rt></ruby>は<ruby>安く<rt>やすく</rt></ruby>ないですが、とても<ruby>人気<rt>にんき</rt></ruby>です。",
+    "passage_html": "<ruby>私<rt>わたし</rt></ruby>はミラーです。<ruby>私<rt>わたし</rt></ruby>の<ruby>会社<rt>かいしゃ</rt></ruby>はSOYOTAです。<ruby>毎日<rt>まいにち</rt></ruby>９<ruby>時<rt>じ</rt></ruby>から６<ruby>時<rt>じ</rt></ruby>まで、<ruby>働<rt>はたら</rt></ruby>きます。<ruby>昼<rt>ひる</rt></ruby>に１<ruby>時<rt>じ</rt></ruby>間<ruby>休<rt>やす</rt></ruby>みます。<ruby>町<rt>まち</rt></ruby>は<ruby>小<rt>ちい</rt></ruby>さいですが、<ruby>電車<rt>でんしゃ</rt></ruby>があります。しかし、<ruby>私<rt>わたし</rt></ruby>はバイクで<ruby>会社<rt>かいしゃ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。<ruby>私<rt>わたし</rt></ruby>の<ruby>会社<rt>かいしゃ</rt></ruby>は、<ruby>車<rt>くるま</rt></ruby>を<ruby>売<rt>う</rt></ruby>ります。<ruby>車<rt>くるま</rt></ruby>は１<ruby>台<rt>だい</rt></ruby>１００万円から５００万円です。<ruby>車<rt>くるま</rt></ruby>は<ruby>安<rt>やす</rt></ruby>くないですが、とても<ruby>人気<rt>にんき</rt></ruby>です。",
     "items": [
       {
         "field_id": "b6_1",
-        "question": "１）　ミラーさんは<ruby>毎日<rt>まいにち</rt></ruby>８<ruby>時間<rt>じかん</rt></ruby>ぐらい<ruby>働きます<rt>はたらきます</rt></ruby>。",
+        "question": "１）　ミラーさんは<ruby>毎日<rt>まいにち</rt></ruby>８<ruby>時<rt>じ</rt></ruby>間ぐらい<ruby>働<rt>はたら</rt></ruby>きます。",
         "input_type": "select",
         "options": [
           "○",
@@ -616,7 +616,7 @@
       },
       {
         "field_id": "b6_2",
-        "question": "２）　<ruby>私<rt>わたし</rt></ruby>は<ruby>電車<rt>でんしゃ</rt></ruby>で<ruby>学校<rt>がっこう</rt></ruby>へ<ruby>行きます<rt>いきます</rt></ruby>。",
+        "question": "２）　<ruby>私<rt>わたし</rt></ruby>は<ruby>電車<rt>でんしゃ</rt></ruby>で<ruby>学校<rt>がっこう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。",
         "input_type": "select",
         "options": [
           "○",
@@ -625,7 +625,7 @@
       },
       {
         "field_id": "b6_3",
-        "question": "３）　<ruby>車<rt>くるま</rt></ruby>は２<ruby>台<rt>だい</rt></ruby>で２００<ruby>万円<rt>まんえん</rt></ruby>から１０００<ruby>万円<rt>まんえん</rt></ruby>です。",
+        "question": "３）　<ruby>車<rt>くるま</rt></ruby>は２<ruby>台<rt>だい</rt></ruby>で２００万円から１０００万円です。",
         "input_type": "select",
         "options": [
           "○",
@@ -634,7 +634,7 @@
       },
       {
         "field_id": "b6_4",
-        "question": "４）　<ruby>男<rt>おとこ</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>はよく<ruby>車<rt>くるま</rt></ruby>を<ruby>買います<rt>かいます</rt></ruby>。",
+        "question": "４）　<ruby>男<rt>おとこ</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>はよく<ruby>車<rt>くるま</rt></ruby>を<ruby>買<rt>か</rt></ruby>います。",
         "input_type": "select",
         "options": [
           "○",
@@ -643,7 +643,7 @@
       },
       {
         "field_id": "b6_5",
-        "question": "５）　<ruby>車<rt>くるま</rt></ruby>は<ruby>安い<rt>やすい</rt></ruby>ですから、とても<ruby>人気<rt>にんき</rt></ruby>です。",
+        "question": "５）　<ruby>車<rt>くるま</rt></ruby>は<ruby>安<rt>やす</rt></ruby>いですから、とても<ruby>人気<rt>にんき</rt></ruby>です。",
         "input_type": "select",
         "options": [
           "○",
@@ -655,13 +655,13 @@
   {
     "id": "b7",
     "type": "reading_comprehension",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>７．<ruby>同じ<rt>おなじ</rt></ruby><ruby>日本語<rt>にほんご</rt></ruby>に○か×を<ruby>書きましょう<rt>かきましょう</rt></ruby>。　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×10<ruby>問<rt>とい</rt></ruby>＝10<ruby>点<rt>てん</rt></ruby>＞",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>７．<ruby>同<rt>おな</rt></ruby>じ<ruby>日本語<rt>にほんご</rt></ruby>に○か×を<ruby>書<rt>か</rt></ruby>きましょう。　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×10問＝10<ruby>点<rt>てん</rt></ruby>＞",
     "points_each": 2,
     "total_points": 10,
-    "example_html": "<ruby>例<rt>れい</rt></ruby>）<ruby>あの方<rt>あのかた</rt></ruby>はリン<ruby>先生<rt>せんせい</rt></ruby>です。＝（ × ）リン<ruby>先生<rt>せんせい</rt></ruby>はこちらです。（ ○ ）あそこにリン<ruby>先生<rt>せんせい</rt></ruby>がいます。",
+    "example_html": "<ruby>例<rt>れい</rt></ruby>）あの<ruby>方<rt>ほう</rt></ruby>はリン<ruby>先生<rt>せんせい</rt></ruby>です。＝（ × ）リン<ruby>先生<rt>せんせい</rt></ruby>はこちらです。（ ○ ）あそこにリン<ruby>先生<rt>せんせい</rt></ruby>がいます。",
     "items": [
       {
-        "group_sentence": "１）クイン<ruby>先生<rt>せんせい</rt></ruby>は<ruby>私<rt>わたし</rt></ruby>に<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>教えました<rt>おしえました</rt></ruby>。",
+        "group_sentence": "１）クイン<ruby>先生<rt>せんせい</rt></ruby>は<ruby>私<rt>わたし</rt></ruby>に<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えました。",
         "sub_items": [
           {
             "field_id": "b7_1a",
@@ -674,7 +674,7 @@
           },
           {
             "field_id": "b7_1b",
-            "question": "b）クイン<ruby>先生<rt>せんせい</rt></ruby>に<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>習いました<rt>ならいました</rt></ruby>。",
+            "question": "b）クイン<ruby>先生<rt>せんせい</rt></ruby>に<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>習<rt>なら</rt></ruby>いました。",
             "input_type": "select",
             "options": [
               "○",
@@ -684,11 +684,11 @@
         ]
       },
       {
-        "group_sentence": "２）アインさんに<ruby>本<rt>ほん</rt></ruby>を<ruby>借りました<rt>かりました</rt></ruby>。",
+        "group_sentence": "２）アインさんに<ruby>本<rt>ほん</rt></ruby>を<ruby>借<rt>か</rt></ruby>りました。",
         "sub_items": [
           {
             "field_id": "b7_2a",
-            "question": "a）アインさんは<ruby>私<rt>わたし</rt></ruby>に<ruby>本<rt>ほん</rt></ruby>を<ruby>貸しました<rt>かしました</rt></ruby>。",
+            "question": "a）アインさんは<ruby>私<rt>わたし</rt></ruby>に<ruby>本<rt>ほん</rt></ruby>を<ruby>貸<rt>か</rt></ruby>しました。",
             "input_type": "select",
             "options": [
               "○",
@@ -697,7 +697,7 @@
           },
           {
             "field_id": "b7_2b",
-            "question": "b）アインさんと<ruby>本<rt>ほん</rt></ruby>を<ruby>読みました<rt>よみました</rt></ruby>。",
+            "question": "b）アインさんと<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>みました。",
             "input_type": "select",
             "options": [
               "○",
@@ -711,7 +711,7 @@
         "sub_items": [
           {
             "field_id": "b7_3a",
-            "question": "a）ターニャさんはごはんが<ruby>嫌い<rt>きらい</rt></ruby>です。",
+            "question": "a）ターニャさんはごはんが<ruby>嫌<rt>きら</rt></ruby>いです。",
             "input_type": "select",
             "options": [
               "○",
@@ -730,11 +730,11 @@
         ]
       },
       {
-        "group_sentence": "４）A「<ruby>明日<rt>あした</rt></ruby><ruby>映画<rt>えいが</rt></ruby>を<ruby>見ましょう<rt>みましょう</rt></ruby>。」B「<ruby>明日<rt>あした</rt></ruby>は<ruby>友<rt>とも</rt></ruby>だちと<ruby>約束<rt>やくそく</rt></ruby>がありますから…。」",
+        "group_sentence": "４）A「<ruby>明日<rt>あした</rt></ruby><ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>ましょう。」B「<ruby>明日<rt>あした</rt></ruby>は<ruby>友<rt>とも</rt></ruby>だちと<ruby>約束<rt>やくそく</rt></ruby>がありますから…。」",
         "sub_items": [
           {
             "field_id": "b7_4a",
-            "question": "a）<ruby>明日<rt>あした</rt></ruby><ruby>映画<rt>えいが</rt></ruby>を<ruby>見ません<rt>みません</rt></ruby>。",
+            "question": "a）<ruby>明日<rt>あした</rt></ruby><ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>ません。",
             "input_type": "select",
             "options": [
               "○",
@@ -753,11 +753,11 @@
         ]
       },
       {
-        "group_sentence": "５）A「<ruby>会社<rt>かいしゃ</rt></ruby>を<ruby>何日<rt>なんにち</rt></ruby><ruby>休みました<rt>やすみました</rt></ruby>か。」B「4<ruby>日<rt>にち</rt></ruby><ruby>休みました<rt>やすみました</rt></ruby>。」",
+        "group_sentence": "５）A「<ruby>会社<rt>かいしゃ</rt></ruby>を何日<ruby>休<rt>やす</rt></ruby>みましたか。」B「4<ruby>日<rt>にち</rt></ruby><ruby>休<rt>やす</rt></ruby>みました。」",
         "sub_items": [
           {
             "field_id": "b7_5a",
-            "question": "a）11<ruby>月<rt>つき</rt></ruby>4<ruby>日<rt>にち</rt></ruby>の<ruby>金曜日<rt>きんようび</rt></ruby>に<ruby>休みました<rt>やすみました</rt></ruby>。",
+            "question": "a）11<ruby>月<rt>がつ</rt></ruby>4<ruby>日<rt>にち</rt></ruby>の<ruby>金曜日<rt>きんようび</rt></ruby>に<ruby>休<rt>やす</rt></ruby>みました。",
             "input_type": "select",
             "options": [
               "○",
@@ -766,7 +766,7 @@
           },
           {
             "field_id": "b7_5b",
-            "question": "b）<ruby>月曜日<rt>げつようび</rt></ruby>から<ruby>木曜日<rt>もくようび</rt></ruby>まで<ruby>休みました<rt>やすみました</rt></ruby>。",
+            "question": "b）<ruby>月曜日<rt>げつようび</rt></ruby>から<ruby>木曜日<rt>もくようび</rt></ruby>まで<ruby>休<rt>やす</rt></ruby>みました。",
             "input_type": "select",
             "options": [
               "○",
@@ -780,30 +780,30 @@
   {
     "id": "b8",
     "type": "radio_choice",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>８．<ruby>質問<rt>しつもん</rt></ruby>に<ruby>正<rt>せい</rt></ruby>しい<ruby>答え<rt>こたえ</rt></ruby>を<ruby>選んで<rt>えらんで</rt></ruby>ください　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×8<ruby>問<rt>とい</rt></ruby>＝16<ruby>点<rt>てん</rt></ruby>＞",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>８．<ruby>質問<rt>しつもん</rt></ruby>に<ruby>正<rt>せい</rt></ruby>しい<ruby>答<rt>こた</rt></ruby>えを<ruby>選<rt>えら</rt></ruby>んでください　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×8問＝16<ruby>点<rt>てん</rt></ruby>＞",
     "instruction": "Chọn câu trả lời đúng cho mỗi câu hỏi.",
     "points_each": 2,
     "total_points": 16,
     "items": [
       {
         "field_id": "b8_1",
-        "question": "１）　1か<ruby>月<rt>つき</rt></ruby>に<ruby>何回<rt>なんかい</rt></ruby>うちへ<ruby>帰ります<rt>かえります</rt></ruby>か。",
+        "question": "１）　1か月に何回うちへ<ruby>帰<rt>かえ</rt></ruby>りますか。",
         "choices": [
           {
             "value": "a",
-            "label": "a．2<ruby>人<rt>ひと</rt></ruby><ruby>帰ります<rt>かえります</rt></ruby>。"
+            "label": "a．2<ruby>人<rt>ふたり</rt></ruby><ruby>帰<rt>かえ</rt></ruby>ります。"
           },
           {
             "value": "b",
-            "label": "b．2<ruby>回<rt>かい</rt></ruby><ruby>帰ります<rt>かえります</rt></ruby>。"
+            "label": "b．2<ruby>回<rt>かい</rt></ruby><ruby>帰<rt>かえ</rt></ruby>ります。"
           },
           {
             "value": "c",
-            "label": "c．2つ<ruby>帰ります<rt>かえります</rt></ruby>。"
+            "label": "c．2つ<ruby>帰<rt>かえ</rt></ruby>ります。"
           },
           {
             "value": "d",
-            "label": "d．2<ruby>日<rt>にち</rt></ruby><ruby>帰ります<rt>かえります</rt></ruby>。"
+            "label": "d．2<ruby>日<rt>にち</rt></ruby><ruby>帰<rt>かえ</rt></ruby>ります。"
           }
         ]
       },
@@ -813,7 +813,7 @@
         "choices": [
           {
             "value": "a",
-            "label": "a．6か<ruby>月<rt>つき</rt></ruby><ruby>勉強<rt>べんきょう</rt></ruby>します。"
+            "label": "a．6か月<ruby>勉強<rt>べんきょう</rt></ruby>します。"
           },
           {
             "value": "b",
@@ -821,7 +821,7 @@
           },
           {
             "value": "c",
-            "label": "c．6か<ruby>月<rt>つき</rt></ruby><ruby>勉強<rt>べんきょう</rt></ruby>しました。"
+            "label": "c．6か月<ruby>勉強<rt>べんきょう</rt></ruby>しました。"
           },
           {
             "value": "d",
@@ -831,7 +831,7 @@
       },
       {
         "field_id": "b8_3",
-        "question": "３）　あなたのクラスに<ruby>女<rt>おんな</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>が<ruby>何人<rt>なんにん</rt></ruby>いますか。",
+        "question": "３）　あなたのクラスに<ruby>女<rt>おんな</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>が何人いますか。",
         "choices": [
           {
             "value": "a",
@@ -843,33 +843,33 @@
           },
           {
             "value": "c",
-            "label": "c．3<ruby>人<rt>ひと</rt></ruby>あります。"
+            "label": "c．3<ruby>人<rt>にん</rt></ruby>あります。"
           },
           {
             "value": "d",
-            "label": "d．3<ruby>人<rt>ひと</rt></ruby>います。"
+            "label": "d．3<ruby>人<rt>にん</rt></ruby>います。"
           }
         ]
       },
       {
         "field_id": "b8_4",
-        "question": "４）　もう<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>辞書<rt>じしょ</rt></ruby>を<ruby>買いました<rt>かいました</rt></ruby>か。",
+        "question": "４）　もう<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>辞書<rt>じしょ</rt></ruby>を<ruby>買<rt>か</rt></ruby>いましたか。",
         "choices": [
           {
             "value": "a",
-            "label": "a．いいえ、もう<ruby>買いません<rt>かいません</rt></ruby>でした。"
+            "label": "a．いいえ、もう<ruby>買<rt>か</rt></ruby>いませんでした。"
           },
           {
             "value": "b",
-            "label": "b．はい、もう<ruby>買います<rt>かいます</rt></ruby>。"
+            "label": "b．はい、もう<ruby>買<rt>か</rt></ruby>います。"
           },
           {
             "value": "c",
-            "label": "c．はい、もう<ruby>買いました<rt>かいました</rt></ruby>。"
+            "label": "c．はい、もう<ruby>買<rt>か</rt></ruby>いました。"
           },
           {
             "value": "d",
-            "label": "d．はい、まだ<ruby>買いました<rt>かいました</rt></ruby>。"
+            "label": "d．はい、まだ<ruby>買<rt>か</rt></ruby>いました。"
           }
         ]
       },
@@ -887,7 +887,7 @@
           },
           {
             "value": "c",
-            "label": "c．にぎやかで<ruby>大きい<rt>おおきい</rt></ruby><ruby>町<rt>まち</rt></ruby>です。"
+            "label": "c．にぎやかで<ruby>大<rt>おお</rt></ruby>きい<ruby>町<rt>まち</rt></ruby>です。"
           },
           {
             "value": "d",
@@ -897,23 +897,23 @@
       },
       {
         "field_id": "b8_6",
-        "question": "６）　どうしてきのう<ruby>休みました<rt>やすみました</rt></ruby>か。",
+        "question": "６）　どうしてきのう<ruby>休<rt>やす</rt></ruby>みましたか。",
         "choices": [
           {
             "value": "a",
-            "label": "a．きのう<ruby>休みました<rt>やすみました</rt></ruby>。"
+            "label": "a．きのう<ruby>休<rt>やす</rt></ruby>みました。"
           },
           {
             "value": "b",
-            "label": "b．いいえ、<ruby>休みません<rt>やすみません</rt></ruby>でした。"
+            "label": "b．いいえ、<ruby>休<rt>やす</rt></ruby>みませんでした。"
           },
           {
             "value": "c",
-            "label": "c．<ruby>病気<rt>びょうき</rt></ruby>ですから、<ruby>休みました<rt>やすみました</rt></ruby>。"
+            "label": "c．<ruby>病気<rt>びょうき</rt></ruby>ですから、<ruby>休<rt>やす</rt></ruby>みました。"
           },
           {
             "value": "d",
-            "label": "d．<ruby>病気<rt>びょうき</rt></ruby>ですが、<ruby>休みました<rt>やすみました</rt></ruby>。"
+            "label": "d．<ruby>病気<rt>びょうき</rt></ruby>ですが、<ruby>休<rt>やす</rt></ruby>みました。"
           }
         ]
       },
@@ -957,7 +957,7 @@
           },
           {
             "value": "d",
-            "label": "d．<ruby>誕生日<rt>たんじょうび</rt></ruby>は3<ruby>月<rt>つき</rt></ruby>です。"
+            "label": "d．<ruby>誕生日<rt>たんじょうび</rt></ruby>は3<ruby>月<rt>がつ</rt></ruby>です。"
           }
         ]
       }

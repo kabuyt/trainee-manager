@@ -2,17 +2,17 @@
   {
     "id": "c1",
     "type": "audio_select",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>１．カリーナさんは<ruby>今日<rt>きょう</rt></ruby><ruby>何<rt>なに</rt></ruby>をしますか　＜<ruby>各<rt>かく</rt></ruby>4<ruby>点<rt>てん</rt></ruby>×2<ruby>問<rt>とい</rt></ruby>＝8<ruby>点<rt>てん</rt></ruby>＞",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>１．カリーナさんは<ruby>今日<rt>きょう</rt></ruby><ruby>何<rt>なに</rt></ruby>をしますか　＜<ruby>各<rt>かく</rt></ruby>4<ruby>点<rt>てん</rt></ruby>×2問＝8<ruby>点<rt>てん</rt></ruby>＞",
     "instruction": "Nghe và chọn đáp án đúng.",
     "points_each": 4,
     "total_points": 8,
     "intro_audio": "audio/1-0.mp3",
     "intro_label": "しつもん（Câu hỏi mẫu）",
-    "option_pool_html": "a. <ruby>友<rt>とも</rt></ruby>だちに<ruby>会います<rt>あいます</rt></ruby>　　b. <ruby>花見<rt>はなみ</rt></ruby>をします　　c. <ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>します<br>d. <ruby>昼<rt>ひる</rt></ruby>ごはんを<ruby>食べます<rt>たべます</rt></ruby>　　e. ビールを<ruby>飲みます<rt>のみます</rt></ruby>　　f. <ruby>映画<rt>えいが</rt></ruby>を<ruby>見ます<rt>みます</rt></ruby>",
+    "option_pool_html": "a. <ruby>友<rt>とも</rt></ruby>だちに<ruby>会<rt>あ</rt></ruby>います　　b. <ruby>花見<rt>はなみ</rt></ruby>をします　　c. <ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>します<br>d. <ruby>昼<rt>ひる</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べます　　e. ビールを<ruby>飲<rt>の</rt></ruby>みます　　f. <ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>ます",
     "items": [
       {
         "field_id": "c1_1",
-        "label": "① <ruby>問<rt>とい</rt></ruby>１",
+        "label": "① 問１",
         "audio_src": "audio/1-1.mp3",
         "input_type": "select",
         "options": [
@@ -44,7 +44,7 @@
       },
       {
         "field_id": "c1_2",
-        "label": "② <ruby>問<rt>とい</rt></ruby>２",
+        "label": "② 問２",
         "audio_src": "audio/1-2.mp3",
         "input_type": "select",
         "options": [
@@ -79,7 +79,7 @@
   {
     "id": "c2",
     "type": "audio_select",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>２．A or B？　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×2<ruby>問<rt>とい</rt></ruby>＝6<ruby>点<rt>てん</rt></ruby>＞",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>２．A or B？　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×2問＝6<ruby>点<rt>てん</rt></ruby>＞",
     "points_each": 3,
     "total_points": 6,
     "intro_audio": "audio/2-0.mp3",
@@ -87,7 +87,7 @@
     "items": [
       {
         "field_id": "c2_1",
-        "label": "① <ruby>問<rt>とい</rt></ruby>１",
+        "label": "① 問１",
         "audio_src": "audio/2-1.mp3",
         "input_type": "select",
         "options": [
@@ -103,17 +103,17 @@
       },
       {
         "field_id": "c2_2",
-        "label": "② <ruby>問<rt>とい</rt></ruby>２",
+        "label": "② 問２",
         "audio_src": "audio/2-2.mp3",
         "input_type": "select",
         "options": [
           {
             "value": "a",
-            "label": "a. <ruby>借りました<rt>かりました</rt></ruby>"
+            "label": "a. 借りました"
           },
           {
             "value": "b",
-            "label": "b. <ruby>貸しました<rt>かしました</rt></ruby>"
+            "label": "b. 貸しました"
           }
         ]
       }
@@ -122,16 +122,16 @@
   {
     "id": "c3",
     "type": "audio_multi_select",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>３．どうして？　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×2×2<ruby>問<rt>とい</rt></ruby>＝8<ruby>点<rt>てん</rt></ruby>＞",
-    "instruction": "<ruby>理由<rt>りゆう</rt></ruby>を<ruby>聞いて<rt>きいて</rt></ruby><ruby>選んで<rt>えらんで</rt></ruby>ください。",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>３．どうして？　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×2×2問＝8<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "<ruby>理由<rt>りゆう</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて<ruby>選<rt>えら</rt></ruby>んでください。",
     "points_each": 2,
     "total_points": 8,
     "intro_audio": "audio/3-0.mp3",
     "intro_label": "しつもん（Câu hỏi mẫu）",
-    "option_pool_html": "a. お<ruby>金<rt>きん</rt></ruby>　　b. <ruby>仕事<rt>しごと</rt></ruby>　　c. <ruby>休み<rt>やすみ</rt></ruby>　　d. <ruby>用事<rt>ようじ</rt></ruby>　　e. <ruby>約束<rt>やくそく</rt></ruby>　　f. <ruby>時間<rt>じかん</rt></ruby>",
+    "option_pool_html": "a. お金　　b. <ruby>仕事<rt>しごと</rt></ruby>　　c. <ruby>休<rt>やす</rt></ruby>み　　d. <ruby>用事<rt>ようじ</rt></ruby>　　e. <ruby>約束<rt>やくそく</rt></ruby>　　f. <ruby>時間<rt>じかん</rt></ruby>",
     "items": [
       {
-        "label": "① <ruby>問<rt>とい</rt></ruby>１",
+        "label": "① 問１",
         "audio_src": "audio/3-1.mp3",
         "fields": [
           {
@@ -141,27 +141,27 @@
             "options": [
               {
                 "value": "a",
-                "label": "a. お<ruby>金<rt>きん</rt></ruby>"
+                "label": "a. お金"
               },
               {
                 "value": "b",
-                "label": "b. <ruby>仕事<rt>しごと</rt></ruby>"
+                "label": "b. 仕事"
               },
               {
                 "value": "c",
-                "label": "c. <ruby>休み<rt>やすみ</rt></ruby>"
+                "label": "c. 休み"
               },
               {
                 "value": "d",
-                "label": "d. <ruby>用事<rt>ようじ</rt></ruby>"
+                "label": "d. 用事"
               },
               {
                 "value": "e",
-                "label": "e. <ruby>約束<rt>やくそく</rt></ruby>"
+                "label": "e. 約束"
               },
               {
                 "value": "f",
-                "label": "f. <ruby>時間<rt>じかん</rt></ruby>"
+                "label": "f. 時間"
               }
             ]
           },
@@ -172,26 +172,26 @@
             "options": [
               {
                 "value": "<ruby>飲みません<rt>のみません</rt></ruby>",
-                "label": "<ruby>飲みません<rt>のみません</rt></ruby>"
+                "label": "飲みません"
               },
               {
                 "value": "<ruby>行きません<rt>いきません</rt></ruby>",
-                "label": "<ruby>行きません<rt>いきません</rt></ruby>"
+                "label": "行きません"
               },
               {
                 "value": "<ruby>買いません<rt>かいません</rt></ruby>",
-                "label": "<ruby>買いません<rt>かいません</rt></ruby>"
+                "label": "買いません"
               },
               {
                 "value": "<ruby>食べません<rt>たべません</rt></ruby>",
-                "label": "<ruby>食べません<rt>たべません</rt></ruby>"
+                "label": "食べません"
               }
             ]
           }
         ]
       },
       {
-        "label": "② <ruby>問<rt>とい</rt></ruby>２",
+        "label": "② 問２",
         "audio_src": "audio/3-2.mp3",
         "fields": [
           {
@@ -201,27 +201,27 @@
             "options": [
               {
                 "value": "a",
-                "label": "a. お<ruby>金<rt>きん</rt></ruby>"
+                "label": "a. お金"
               },
               {
                 "value": "b",
-                "label": "b. <ruby>仕事<rt>しごと</rt></ruby>"
+                "label": "b. 仕事"
               },
               {
                 "value": "c",
-                "label": "c. <ruby>休み<rt>やすみ</rt></ruby>"
+                "label": "c. 休み"
               },
               {
                 "value": "d",
-                "label": "d. <ruby>用事<rt>ようじ</rt></ruby>"
+                "label": "d. 用事"
               },
               {
                 "value": "e",
-                "label": "e. <ruby>約束<rt>やくそく</rt></ruby>"
+                "label": "e. 約束"
               },
               {
                 "value": "f",
-                "label": "f. <ruby>時間<rt>じかん</rt></ruby>"
+                "label": "f. 時間"
               }
             ]
           },
@@ -232,19 +232,19 @@
             "options": [
               {
                 "value": "タクシーで<ruby>行きます<rt>いきます</rt></ruby>",
-                "label": "タクシーで<ruby>行きます<rt>いきます</rt></ruby>"
+                "label": "タクシーで行きます"
               },
               {
                 "value": "バスで<ruby>行きます<rt>いきます</rt></ruby>",
-                "label": "バスで<ruby>行きます<rt>いきます</rt></ruby>"
+                "label": "バスで行きます"
               },
               {
                 "value": "<ruby>歩いて<rt>あるいて</rt></ruby><ruby>行きます<rt>いきます</rt></ruby>",
-                "label": "<ruby>歩いて<rt>あるいて</rt></ruby><ruby>行きます<rt>いきます</rt></ruby>"
+                "label": "歩いて行きます"
               },
               {
                 "value": "<ruby>電車<rt>でんしゃ</rt></ruby>で<ruby>行きます<rt>いきます</rt></ruby>",
-                "label": "<ruby>電車<rt>でんしゃ</rt></ruby>で<ruby>行きます<rt>いきます</rt></ruby>"
+                "label": "電車で行きます"
               }
             ]
           }
@@ -255,7 +255,7 @@
   {
     "id": "c4",
     "type": "audio_image_radio",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>４．リーさんは<ruby>今<rt>いま</rt></ruby><ruby>何<rt>なに</rt></ruby>をしますか　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×2<ruby>問<rt>とい</rt></ruby>＝6<ruby>点<rt>てん</rt></ruby>＞",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>４．リーさんは今何をしますか　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×2問＝6<ruby>点<rt>てん</rt></ruby>＞",
     "points_each": 3,
     "total_points": 6,
     "intro_audio": "audio/4-0.mp3",
@@ -263,7 +263,7 @@
     "items": [
       {
         "field_id": "c4_1",
-        "label": "① <ruby>問<rt>とい</rt></ruby>１",
+        "label": "① 問１",
         "audio_src": "audio/4-1.mp3",
         "choices": [
           {
@@ -285,7 +285,7 @@
       },
       {
         "field_id": "c4_2",
-        "label": "② <ruby>問<rt>とい</rt></ruby>２",
+        "label": "② 問２",
         "audio_src": "audio/4-2.mp3",
         "choices": [
           {
@@ -310,7 +310,7 @@
   {
     "id": "c5",
     "type": "audio_image_radio",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>５．<ruby>何<rt>なに</rt></ruby>を<ruby>買いました<rt>かいました</rt></ruby>か　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×2<ruby>問<rt>とい</rt></ruby>＝6<ruby>点<rt>てん</rt></ruby>＞",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>５．<ruby>何<rt>なに</rt></ruby>を<ruby>買<rt>か</rt></ruby>いましたか　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×2問＝6<ruby>点<rt>てん</rt></ruby>＞",
     "points_each": 3,
     "total_points": 6,
     "intro_audio": "audio/5-0.mp3",
@@ -318,7 +318,7 @@
     "items": [
       {
         "field_id": "c5_1",
-        "label": "① <ruby>問<rt>とい</rt></ruby>１",
+        "label": "① 問１",
         "audio_src": "audio/5-1.mp3",
         "choices": [
           {
@@ -340,7 +340,7 @@
       },
       {
         "field_id": "c5_2",
-        "label": "② <ruby>問<rt>とい</rt></ruby>２",
+        "label": "② 問２",
         "audio_src": "audio/5-2.mp3",
         "choices": [
           {
@@ -365,43 +365,43 @@
   {
     "id": "c6",
     "type": "audio_select",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>６．グプタさんは<ruby>何<rt>なに</rt></ruby>と<ruby>言いました<rt>いいました</rt></ruby>か　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×2<ruby>問<rt>とい</rt></ruby>＝6<ruby>点<rt>てん</rt></ruby>＞",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>６．グプタさんは<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>いましたか　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×2問＝6<ruby>点<rt>てん</rt></ruby>＞",
     "points_each": 3,
     "total_points": 6,
     "items": [
       {
         "field_id": "c6_1",
-        "label": "① <ruby>問<rt>とい</rt></ruby>１",
+        "label": "① 問１",
         "audio_src": "audio/6-1.mp3",
         "input_type": "select",
         "options": [
           {
             "value": "a",
-            "label": "a. <ruby>大きい<rt>おおきい</rt></ruby><ruby>町<rt>まち</rt></ruby>です"
+            "label": "a. 大きい町です"
           },
           {
             "value": "b",
-            "label": "b. にぎやかな<ruby>町<rt>まち</rt></ruby>です"
+            "label": "b. にぎやかな町です"
           },
           {
             "value": "c",
-            "label": "c. <ruby>古い<rt>ふるい</rt></ruby><ruby>町<rt>まち</rt></ruby>です"
+            "label": "c. 古い町です"
           }
         ]
       },
       {
         "field_id": "c6_2",
-        "label": "② <ruby>問<rt>とい</rt></ruby>２",
+        "label": "② 問２",
         "audio_src": "audio/6-2.mp3",
         "input_type": "select",
         "options": [
           {
             "value": "a",
-            "label": "a. おもしろい<ruby>人<rt>ひと</rt></ruby>です"
+            "label": "a. おもしろい人です"
           },
           {
             "value": "b",
-            "label": "b. ハンサムな<ruby>人<rt>ひと</rt></ruby>です"
+            "label": "b. ハンサムな人です"
           }
         ]
       }
@@ -410,8 +410,8 @@
   {
     "id": "c7",
     "type": "audio_select",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>７．どうやって<ruby>行きます<rt>いきます</rt></ruby>か　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×6<ruby>問<rt>とい</rt></ruby>＝12<ruby>点<rt>てん</rt></ruby>＞",
-    "instruction": "ルートごとに<ruby>交通手段<rt>こうつうしゅだん</rt></ruby>を<ruby>選んで<rt>えらんで</rt></ruby>ください。",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>７．どうやって<ruby>行<rt>い</rt></ruby>きますか　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×6問＝12<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "ルートごとに<ruby>交通手段<rt>こうつうしゅだん</rt></ruby>を<ruby>選<rt>えら</rt></ruby>んでください。",
     "points_each": 2,
     "total_points": 12,
     "option_pool_html": "a. バス　　b. <ruby>地下鉄<rt>ちかてつ</rt></ruby>　　c. <ruby>船<rt>ふね</rt></ruby>　　d. <ruby>新幹線<rt>しんかんせん</rt></ruby>　　e. <ruby>飛行機<rt>ひこうき</rt></ruby>　　f. タクシー",
@@ -431,19 +431,19 @@
           },
           {
             "value": "b",
-            "label": "b. <ruby>地下鉄<rt>ちかてつ</rt></ruby>"
+            "label": "b. 地下鉄"
           },
           {
             "value": "c",
-            "label": "c. <ruby>船<rt>ふね</rt></ruby>"
+            "label": "c. 船"
           },
           {
             "value": "d",
-            "label": "d. <ruby>新幹線<rt>しんかんせん</rt></ruby>"
+            "label": "d. 新幹線"
           },
           {
             "value": "e",
-            "label": "e. <ruby>飛行機<rt>ひこうき</rt></ruby>"
+            "label": "e. 飛行機"
           },
           {
             "value": "f",
@@ -462,19 +462,19 @@
           },
           {
             "value": "b",
-            "label": "b. <ruby>地下鉄<rt>ちかてつ</rt></ruby>"
+            "label": "b. 地下鉄"
           },
           {
             "value": "c",
-            "label": "c. <ruby>船<rt>ふね</rt></ruby>"
+            "label": "c. 船"
           },
           {
             "value": "d",
-            "label": "d. <ruby>新幹線<rt>しんかんせん</rt></ruby>"
+            "label": "d. 新幹線"
           },
           {
             "value": "e",
-            "label": "e. <ruby>飛行機<rt>ひこうき</rt></ruby>"
+            "label": "e. 飛行機"
           },
           {
             "value": "f",
@@ -493,19 +493,19 @@
           },
           {
             "value": "b",
-            "label": "b. <ruby>地下鉄<rt>ちかてつ</rt></ruby>"
+            "label": "b. 地下鉄"
           },
           {
             "value": "c",
-            "label": "c. <ruby>船<rt>ふね</rt></ruby>"
+            "label": "c. 船"
           },
           {
             "value": "d",
-            "label": "d. <ruby>新幹線<rt>しんかんせん</rt></ruby>"
+            "label": "d. 新幹線"
           },
           {
             "value": "e",
-            "label": "e. <ruby>飛行機<rt>ひこうき</rt></ruby>"
+            "label": "e. 飛行機"
           },
           {
             "value": "f",
@@ -524,19 +524,19 @@
           },
           {
             "value": "b",
-            "label": "b. <ruby>地下鉄<rt>ちかてつ</rt></ruby>"
+            "label": "b. 地下鉄"
           },
           {
             "value": "c",
-            "label": "c. <ruby>船<rt>ふね</rt></ruby>"
+            "label": "c. 船"
           },
           {
             "value": "d",
-            "label": "d. <ruby>新幹線<rt>しんかんせん</rt></ruby>"
+            "label": "d. 新幹線"
           },
           {
             "value": "e",
-            "label": "e. <ruby>飛行機<rt>ひこうき</rt></ruby>"
+            "label": "e. 飛行機"
           },
           {
             "value": "f",
@@ -555,19 +555,19 @@
           },
           {
             "value": "b",
-            "label": "b. <ruby>地下鉄<rt>ちかてつ</rt></ruby>"
+            "label": "b. 地下鉄"
           },
           {
             "value": "c",
-            "label": "c. <ruby>船<rt>ふね</rt></ruby>"
+            "label": "c. 船"
           },
           {
             "value": "d",
-            "label": "d. <ruby>新幹線<rt>しんかんせん</rt></ruby>"
+            "label": "d. 新幹線"
           },
           {
             "value": "e",
-            "label": "e. <ruby>飛行機<rt>ひこうき</rt></ruby>"
+            "label": "e. 飛行機"
           },
           {
             "value": "f",
@@ -586,19 +586,19 @@
           },
           {
             "value": "b",
-            "label": "b. <ruby>地下鉄<rt>ちかてつ</rt></ruby>"
+            "label": "b. 地下鉄"
           },
           {
             "value": "c",
-            "label": "c. <ruby>船<rt>ふね</rt></ruby>"
+            "label": "c. 船"
           },
           {
             "value": "d",
-            "label": "d. <ruby>新幹線<rt>しんかんせん</rt></ruby>"
+            "label": "d. 新幹線"
           },
           {
             "value": "e",
-            "label": "e. <ruby>飛行機<rt>ひこうき</rt></ruby>"
+            "label": "e. 飛行機"
           },
           {
             "value": "f",
@@ -611,7 +611,7 @@
   {
     "id": "c8",
     "type": "audio_image_radio",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>８．<ruby>女<rt>おんな</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>は<ruby>今<rt>いま</rt></ruby>どこにいますか　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×2<ruby>問<rt>とい</rt></ruby>＝6<ruby>点<rt>てん</rt></ruby>＞",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>８．<ruby>女<rt>おんな</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>は<ruby>今<rt>いま</rt></ruby>どこにいますか　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×2問＝6<ruby>点<rt>てん</rt></ruby>＞",
     "points_each": 3,
     "total_points": 6,
     "intro_audio": "audio/8-0.mp3",
@@ -619,7 +619,7 @@
     "items": [
       {
         "field_id": "c8_1",
-        "label": "① <ruby>問<rt>とい</rt></ruby>１",
+        "label": "① 問１",
         "audio_src": "audio/8-1.mp3",
         "choices": [
           {
@@ -646,7 +646,7 @@
       },
       {
         "field_id": "c8_2",
-        "label": "② <ruby>問<rt>とい</rt></ruby>２",
+        "label": "② 問２",
         "audio_src": "audio/8-2.mp3",
         "choices": [
           {
@@ -676,20 +676,20 @@
   {
     "id": "c9",
     "type": "audio_select",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>９．スケジュールを<ruby>聞いて<rt>きいて</rt></ruby><ruby>答えて<rt>こたえて</rt></ruby>ください　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×3<ruby>問<rt>とい</rt></ruby>＝9<ruby>点<rt>てん</rt></ruby>＞",
-    "instruction": "※ <ruby>下<rt>した</rt></ruby>のスケジュール<ruby>表<rt>ひょう</rt></ruby>を<ruby>見て<rt>みて</rt></ruby>、<ruby>音声<rt>おんせい</rt></ruby>を<ruby>聞いて<rt>きいて</rt></ruby><ruby>答えて<rt>こたえて</rt></ruby>ください。",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>９．スケジュールを<ruby>聞<rt>き</rt></ruby>いて<ruby>答<rt>こた</rt></ruby>えてください　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×3問＝9<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "※ <ruby>下<rt>した</rt></ruby>のスケジュール<ruby>表<rt>ひょう</rt></ruby>を<ruby>見<rt>み</rt></ruby>て、<ruby>音声<rt>おんせい</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて<ruby>答<rt>こた</rt></ruby>えてください。",
     "total_points": 9,
     "points_each": 3,
     "schedule_table": {
       "headers": [
         "",
-        "<ruby>月<rt>つき</rt></ruby>",
-        "<ruby>火<rt>か</rt></ruby>",
-        "<ruby>水<rt>すい</rt></ruby>",
-        "<ruby>木<rt>もく</rt></ruby>",
-        "<ruby>金<rt>きん</rt></ruby>",
-        "<ruby>土<rt>ど</rt></ruby>",
-        "<ruby>日<rt>にち</rt></ruby>"
+        "月",
+        "火",
+        "水",
+        "木",
+        "金",
+        "土",
+        "日"
       ],
       "rows": [
         {
@@ -757,31 +757,31 @@
         "options": [
           {
             "value": "a",
-            "label": "a. <ruby>月曜日<rt>げつようび</rt></ruby>"
+            "label": "a. 月曜日"
           },
           {
             "value": "b",
-            "label": "b. <ruby>火曜日<rt>かようび</rt></ruby>"
+            "label": "b. 火曜日"
           },
           {
             "value": "c",
-            "label": "c. <ruby>水曜日<rt>すいようび</rt></ruby>"
+            "label": "c. 水曜日"
           },
           {
             "value": "d",
-            "label": "d. <ruby>木曜日<rt>もくようび</rt></ruby>"
+            "label": "d. 木曜日"
           },
           {
             "value": "e",
-            "label": "e. <ruby>金曜日<rt>きんようび</rt></ruby>"
+            "label": "e. 金曜日"
           },
           {
             "value": "f",
-            "label": "f. <ruby>土曜日<rt>どようび</rt></ruby>"
+            "label": "f. 土曜日"
           },
           {
             "value": "g",
-            "label": "g. <ruby>日曜日<rt>にちようび</rt></ruby>"
+            "label": "g. 日曜日"
           }
         ],
         "audio_src": "audio/9.mp3"
@@ -793,31 +793,31 @@
         "options": [
           {
             "value": "a",
-            "label": "a. <ruby>月曜日<rt>げつようび</rt></ruby>"
+            "label": "a. 月曜日"
           },
           {
             "value": "b",
-            "label": "b. <ruby>火曜日<rt>かようび</rt></ruby>"
+            "label": "b. 火曜日"
           },
           {
             "value": "c",
-            "label": "c. <ruby>水曜日<rt>すいようび</rt></ruby>"
+            "label": "c. 水曜日"
           },
           {
             "value": "d",
-            "label": "d. <ruby>木曜日<rt>もくようび</rt></ruby>"
+            "label": "d. 木曜日"
           },
           {
             "value": "e",
-            "label": "e. <ruby>金曜日<rt>きんようび</rt></ruby>"
+            "label": "e. 金曜日"
           },
           {
             "value": "f",
-            "label": "f. <ruby>土曜日<rt>どようび</rt></ruby>"
+            "label": "f. 土曜日"
           },
           {
             "value": "g",
-            "label": "g. <ruby>日曜日<rt>にちようび</rt></ruby>"
+            "label": "g. 日曜日"
           }
         ],
         "audio_src": "audio/9.mp3"
@@ -829,31 +829,31 @@
         "options": [
           {
             "value": "a",
-            "label": "a. <ruby>月曜日<rt>げつようび</rt></ruby>"
+            "label": "a. 月曜日"
           },
           {
             "value": "b",
-            "label": "b. <ruby>火曜日<rt>かようび</rt></ruby>"
+            "label": "b. 火曜日"
           },
           {
             "value": "c",
-            "label": "c. <ruby>水曜日<rt>すいようび</rt></ruby>"
+            "label": "c. 水曜日"
           },
           {
             "value": "d",
-            "label": "d. <ruby>木曜日<rt>もくようび</rt></ruby>"
+            "label": "d. 木曜日"
           },
           {
             "value": "e",
-            "label": "e. <ruby>金曜日<rt>きんようび</rt></ruby>"
+            "label": "e. 金曜日"
           },
           {
             "value": "f",
-            "label": "f. <ruby>土曜日<rt>どようび</rt></ruby>"
+            "label": "f. 土曜日"
           },
           {
             "value": "g",
-            "label": "g. <ruby>日曜日<rt>にちようび</rt></ruby>"
+            "label": "g. 日曜日"
           }
         ],
         "audio_src": "audio/9.mp3"
@@ -863,14 +863,14 @@
   {
     "id": "c10",
     "type": "audio_select",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>１０．<ruby>絵<rt>え</rt></ruby>と<ruby>音声<rt>おんせい</rt></ruby>を<ruby>合わせて<rt>あわせて</rt></ruby>ください　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×4<ruby>問<rt>とい</rt></ruby>＝8<ruby>点<rt>てん</rt></ruby>＞",
-    "instruction": "<ruby>音声<rt>おんせい</rt></ruby>を<ruby>聞いて<rt>きいて</rt></ruby>、<ruby>正<rt>せい</rt></ruby>しい<ruby>絵<rt>え</rt></ruby>を<ruby>選んで<rt>えらんで</rt></ruby>ください。",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>１０．<ruby>絵<rt>え</rt></ruby>と<ruby>音声<rt>おんせい</rt></ruby>を<ruby>合<rt>あ</rt></ruby>わせてください　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×4問＝8<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "<ruby>音声<rt>おんせい</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて、<ruby>正<rt>せい</rt></ruby>しい<ruby>絵<rt>え</rt></ruby>を<ruby>選<rt>えら</rt></ruby>んでください。",
     "points_each": 2,
     "total_points": 8,
     "items": [
       {
         "field_id": "c10_1",
-        "label": "① <ruby>問<rt>とい</rt></ruby>１",
+        "label": "① 問１",
         "audio_src": "audio/10-1.mp3",
         "input_type": "select",
         "options": [
@@ -894,7 +894,7 @@
       },
       {
         "field_id": "c10_2",
-        "label": "② <ruby>問<rt>とい</rt></ruby>２",
+        "label": "② 問２",
         "audio_src": "audio/10-2.mp3",
         "input_type": "select",
         "options": [
@@ -918,7 +918,7 @@
       },
       {
         "field_id": "c10_3",
-        "label": "③ <ruby>問<rt>とい</rt></ruby>３",
+        "label": "③ 問３",
         "audio_src": "audio/10-3.mp3",
         "input_type": "select",
         "options": [
@@ -942,7 +942,7 @@
       },
       {
         "field_id": "c10_4",
-        "label": "④ <ruby>問<rt>とい</rt></ruby>４",
+        "label": "④ 問４",
         "audio_src": "audio/10-4.mp3",
         "input_type": "select",
         "options": [
@@ -969,7 +969,7 @@
   {
     "id": "c11",
     "type": "audio_ox",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>１１．○・✕で<ruby>答えて<rt>こたえて</rt></ruby>ください　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×5<ruby>問<rt>とい</rt></ruby>＝10<ruby>点<rt>てん</rt></ruby>＞",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>１１．○・✕で<ruby>答<rt>こた</rt></ruby>えてください　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×5問＝10<ruby>点<rt>てん</rt></ruby>＞",
     "instruction": "Nghe đoạn hội thoại, xem câu kế tiếp đúng hay sai → ○（đúng）/ ✕（sai）",
     "points_each": 2,
     "total_points": 10,
@@ -1029,8 +1029,8 @@
   {
     "id": "c12",
     "type": "radio_choice",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>１２．<ruby>正<rt>せい</rt></ruby>しい<ruby>答え<rt>こたえ</rt></ruby>を<ruby>選んで<rt>えらんで</rt></ruby>ください　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×5<ruby>問<rt>とい</rt></ruby>＝15<ruby>点<rt>てん</rt></ruby>＞",
-    "instruction": "<ruby>質問<rt>しつもん</rt></ruby>を<ruby>読んで<rt>よんで</rt></ruby>、1から3の<ruby>中<rt>なか</rt></ruby>から<ruby>正<rt>せい</rt></ruby>しい<ruby>答え<rt>こたえ</rt></ruby>を<ruby>選んで<rt>えらんで</rt></ruby>ください。",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>１２．<ruby>正<rt>せい</rt></ruby>しい<ruby>答<rt>こた</rt></ruby>えを<ruby>選<rt>えら</rt></ruby>んでください　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×5問＝15<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "<ruby>質問<rt>しつもん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>んで、1から3の<ruby>中<rt>なか</rt></ruby>から<ruby>正<rt>せい</rt></ruby>しい<ruby>答<rt>こた</rt></ruby>えを<ruby>選<rt>えら</rt></ruby>んでください。",
     "points_each": 3,
     "total_points": 15,
     "items": [
