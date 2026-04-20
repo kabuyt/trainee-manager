@@ -6,28 +6,218 @@
     "points_each": 1,
     "total_points": 10,
     "images": [
-      {"label": "①", "src": "images/goii/image1.jpeg"},
-      {"label": "②", "src": "images/goii/image2.jpeg"},
-      {"label": "③", "src": "images/goii/image3.jpeg"},
-      {"label": "④", "src": "images/goii/image4.jpeg"},
-      {"label": "⑤", "src": "images/goii/image5.png"},
-      {"label": "⑥", "src": "images/goii/image6.png"},
-      {"label": "⑦", "src": "images/goii/image7.jpeg"},
-      {"label": "⑧", "src": "images/goii/image8.png"},
-      {"label": "⑨", "src": "images/goii/image9.png"},
-      {"label": "⑩", "src": "images/goii/image10.jpeg"}
+      {
+        "label": "①",
+        "src": "images/goii/image1.jpeg"
+      },
+      {
+        "label": "②",
+        "src": "images/goii/image2.jpeg"
+      },
+      {
+        "label": "③",
+        "src": "images/goii/image3.jpeg"
+      },
+      {
+        "label": "④",
+        "src": "images/goii/image4.jpeg"
+      },
+      {
+        "label": "⑤",
+        "src": "images/goii/image5.png"
+      },
+      {
+        "label": "⑥",
+        "src": "images/goii/image6.png"
+      },
+      {
+        "label": "⑦",
+        "src": "images/goii/image7.jpeg"
+      },
+      {
+        "label": "⑧",
+        "src": "images/goii/image8.png"
+      },
+      {
+        "label": "⑨",
+        "src": "images/goii/image9.png"
+      },
+      {
+        "label": "⑩",
+        "src": "images/goii/image10.jpeg"
+      }
     ],
     "items": [
-      {"field_id": "g1_1",  "label": "①", "input_type": "select", "options": ["牛乳","野菜","魚","肉","卵","やま","せんぷうき","スプーン","でんち","バレーボール"]},
-      {"field_id": "g1_2",  "label": "②", "input_type": "select", "options": ["牛乳","野菜","魚","肉","卵","やま","せんぷうき","スプーン","でんち","バレーボール"]},
-      {"field_id": "g1_3",  "label": "③", "input_type": "select", "options": ["牛乳","野菜","魚","肉","卵","やま","せんぷうき","スプーン","でんち","バレーボール"]},
-      {"field_id": "g1_4",  "label": "④", "input_type": "select", "options": ["牛乳","野菜","魚","肉","卵","やま","せんぷうき","スプーン","でんち","バレーボール"]},
-      {"field_id": "g1_5",  "label": "⑤", "input_type": "select", "options": ["牛乳","野菜","魚","肉","卵","やま","せんぷうき","スプーン","でんち","バレーボール"]},
-      {"field_id": "g1_6",  "label": "⑥", "input_type": "select", "options": ["牛乳","野菜","魚","肉","卵","やま","せんぷうき","スプーン","でんち","バレーボール"]},
-      {"field_id": "g1_7",  "label": "⑦", "input_type": "select", "options": ["牛乳","野菜","魚","肉","卵","やま","せんぷうき","スプーン","でんち","バレーボール"]},
-      {"field_id": "g1_8",  "label": "⑧", "input_type": "select", "options": ["牛乳","野菜","魚","肉","卵","やま","せんぷうき","スプーン","でんち","バレーボール"]},
-      {"field_id": "g1_9",  "label": "⑨", "input_type": "select", "options": ["牛乳","野菜","魚","肉","卵","やま","せんぷうき","スプーン","でんち","バレーボール"]},
-      {"field_id": "g1_10", "label": "⑩", "input_type": "select", "options": ["牛乳","野菜","魚","肉","卵","やま","せんぷうき","スプーン","でんち","バレーボール"]}
+      {
+        "field_id": "g1_1",
+        "label": "①",
+        "input_type": "select",
+        "options": [
+          "牛乳",
+          "野菜",
+          "魚",
+          "肉",
+          "卵",
+          "やま",
+          "せんぷうき",
+          "スプーン",
+          "でんち",
+          "バレーボール"
+        ]
+      },
+      {
+        "field_id": "g1_2",
+        "label": "②",
+        "input_type": "select",
+        "options": [
+          "牛乳",
+          "野菜",
+          "魚",
+          "肉",
+          "卵",
+          "やま",
+          "せんぷうき",
+          "スプーン",
+          "でんち",
+          "バレーボール"
+        ]
+      },
+      {
+        "field_id": "g1_3",
+        "label": "③",
+        "input_type": "select",
+        "options": [
+          "牛乳",
+          "野菜",
+          "魚",
+          "肉",
+          "卵",
+          "やま",
+          "せんぷうき",
+          "スプーン",
+          "でんち",
+          "バレーボール"
+        ]
+      },
+      {
+        "field_id": "g1_4",
+        "label": "④",
+        "input_type": "select",
+        "options": [
+          "牛乳",
+          "野菜",
+          "魚",
+          "肉",
+          "卵",
+          "やま",
+          "せんぷうき",
+          "スプーン",
+          "でんち",
+          "バレーボール"
+        ]
+      },
+      {
+        "field_id": "g1_5",
+        "label": "⑤",
+        "input_type": "select",
+        "options": [
+          "牛乳",
+          "野菜",
+          "魚",
+          "肉",
+          "卵",
+          "やま",
+          "せんぷうき",
+          "スプーン",
+          "でんち",
+          "バレーボール"
+        ]
+      },
+      {
+        "field_id": "g1_6",
+        "label": "⑥",
+        "input_type": "select",
+        "options": [
+          "牛乳",
+          "野菜",
+          "魚",
+          "肉",
+          "卵",
+          "やま",
+          "せんぷうき",
+          "スプーン",
+          "でんち",
+          "バレーボール"
+        ]
+      },
+      {
+        "field_id": "g1_7",
+        "label": "⑦",
+        "input_type": "select",
+        "options": [
+          "牛乳",
+          "野菜",
+          "魚",
+          "肉",
+          "卵",
+          "やま",
+          "せんぷうき",
+          "スプーン",
+          "でんち",
+          "バレーボール"
+        ]
+      },
+      {
+        "field_id": "g1_8",
+        "label": "⑧",
+        "input_type": "select",
+        "options": [
+          "牛乳",
+          "野菜",
+          "魚",
+          "肉",
+          "卵",
+          "やま",
+          "せんぷうき",
+          "スプーン",
+          "でんち",
+          "バレーボール"
+        ]
+      },
+      {
+        "field_id": "g1_9",
+        "label": "⑨",
+        "input_type": "select",
+        "options": [
+          "牛乳",
+          "野菜",
+          "魚",
+          "肉",
+          "卵",
+          "やま",
+          "せんぷうき",
+          "スプーン",
+          "でんち",
+          "バレーボール"
+        ]
+      },
+      {
+        "field_id": "g1_10",
+        "label": "⑩",
+        "input_type": "select",
+        "options": [
+          "牛乳",
+          "野菜",
+          "魚",
+          "肉",
+          "卵",
+          "やま",
+          "せんぷうき",
+          "スプーン",
+          "でんち",
+          "バレーボール"
+        ]
+      }
     ]
   },
   {
@@ -37,36 +227,102 @@
     "points_each": 3,
     "total_points": 24,
     "dynamic_options": true,
-    "correct_pool": ["すし","サッカー","スイッチ","セロテープ","はさみ","じてんしゃ","アイスクリーム","ビール"],
-    "extra_pool": ["おちゃ","パン","ぎゅうにゅう","ケーキ","テニス","やきゅう","ラジオ","テレビ"],
+    "correct_pool": [
+      "すし",
+      "サッカー",
+      "スイッチ",
+      "セロテープ",
+      "はさみ",
+      "じてんしゃ",
+      "アイスクリーム",
+      "ビール"
+    ],
+    "extra_pool": [
+      "おちゃ",
+      "パン",
+      "ぎゅうにゅう",
+      "ケーキ",
+      "テニス",
+      "やきゅう",
+      "ラジオ",
+      "テレビ"
+    ],
     "distractors_per_item": 3,
     "rows": [
       {
         "images": [
-          {"src": "images/goii/image11.png"},
-          {"src": "images/goii/image12.jpeg"},
-          {"src": "images/goii/image13.png"},
-          {"src": "images/goii/image14.jpeg"}
+          {
+            "src": "images/goii/image11.png"
+          },
+          {
+            "src": "images/goii/image12.jpeg"
+          },
+          {
+            "src": "images/goii/image13.png"
+          },
+          {
+            "src": "images/goii/image14.jpeg"
+          }
         ],
         "items": [
-          {"field_id": "g2_1", "label": "１）", "input_type": "select"},
-          {"field_id": "g2_2", "label": "２）", "input_type": "select"},
-          {"field_id": "g2_3", "label": "３）", "input_type": "select"},
-          {"field_id": "g2_4", "label": "４）", "input_type": "select"}
+          {
+            "field_id": "g2_1",
+            "label": "１）",
+            "input_type": "select"
+          },
+          {
+            "field_id": "g2_2",
+            "label": "２）",
+            "input_type": "select"
+          },
+          {
+            "field_id": "g2_3",
+            "label": "３）",
+            "input_type": "select"
+          },
+          {
+            "field_id": "g2_4",
+            "label": "４）",
+            "input_type": "select"
+          }
         ]
       },
       {
         "images": [
-          {"src": "images/goii/image15.jpeg"},
-          {"src": "images/goii/image16.jpeg"},
-          {"src": "images/goii/image17.jpeg"},
-          {"src": "images/goii/image18.jpeg"}
+          {
+            "src": "images/goii/image15.jpeg"
+          },
+          {
+            "src": "images/goii/image16.jpeg"
+          },
+          {
+            "src": "images/goii/image17.jpeg"
+          },
+          {
+            "src": "images/goii/image18.jpeg"
+          }
         ],
         "items": [
-          {"field_id": "g2_5", "label": "５）", "input_type": "select"},
-          {"field_id": "g2_6", "label": "６）", "input_type": "select"},
-          {"field_id": "g2_7", "label": "７）", "input_type": "select"},
-          {"field_id": "g2_8", "label": "８）", "input_type": "select"}
+          {
+            "field_id": "g2_5",
+            "label": "５）",
+            "input_type": "select"
+          },
+          {
+            "field_id": "g2_6",
+            "label": "６）",
+            "input_type": "select"
+          },
+          {
+            "field_id": "g2_7",
+            "label": "７）",
+            "input_type": "select"
+          },
+          {
+            "field_id": "g2_8",
+            "label": "８）",
+            "input_type": "select"
+          }
         ]
       }
     ]
@@ -82,48 +338,167 @@
       {
         "sub_title": "月の読み方",
         "sub_instruction": "読みかたを日本語で書いてください",
-        "headers": ["4月","5月","6月","7月","8月"],
+        "headers": [
+          "4月",
+          "5月",
+          "6月",
+          "7月",
+          "8月"
+        ],
         "items": [
-          {"field_id": "g3_1", "col": 0, "input_type": "text"},
-          {"field_id": null, "col": 1, "fixed_value": "ごがつ"},
-          {"field_id": null, "col": 2, "fixed_value": "ろくがつ"},
-          {"field_id": "g3_2", "col": 3, "input_type": "text"},
-          {"field_id": null, "col": 4, "fixed_value": "はちがつ"}
+          {
+            "field_id": "g3_1",
+            "col": 0,
+            "input_type": "text"
+          },
+          {
+            "field_id": null,
+            "col": 1,
+            "fixed_value": "ごがつ"
+          },
+          {
+            "field_id": null,
+            "col": 2,
+            "fixed_value": "ろくがつ"
+          },
+          {
+            "field_id": "g3_2",
+            "col": 3,
+            "input_type": "text"
+          },
+          {
+            "field_id": null,
+            "col": 4,
+            "fixed_value": "はちがつ"
+          }
         ]
       },
       {
         "sub_title": "時の言葉",
-        "headers": ["おととい","きのう","今日","明日","あさって"],
+        "headers": [
+          "おととい",
+          "きのう",
+          "今日",
+          "明日",
+          "あさって"
+        ],
         "items": [
-          {"field_id": "g3_3", "col": 0, "input_type": "text"},
-          {"field_id": null, "col": 1, "fixed_value": "きのう"},
-          {"field_id": "g3_4", "col": 2, "input_type": "text"},
-          {"field_id": null, "col": 3, "fixed_value": "あした"},
-          {"field_id": null, "col": 4, "fixed_value": "あさって"}
+          {
+            "field_id": "g3_3",
+            "col": 0,
+            "input_type": "text"
+          },
+          {
+            "field_id": null,
+            "col": 1,
+            "fixed_value": "きのう"
+          },
+          {
+            "field_id": "g3_4",
+            "col": 2,
+            "input_type": "text"
+          },
+          {
+            "field_id": null,
+            "col": 3,
+            "fixed_value": "あした"
+          },
+          {
+            "field_id": null,
+            "col": 4,
+            "fixed_value": "あさって"
+          }
         ]
       },
       {
-        "headers": ["一昨年","去年","今年","来年","再来年"],
+        "headers": [
+          "一昨年",
+          "去年",
+          "今年",
+          "来年",
+          "再来年"
+        ],
         "items": [
-          {"field_id": null, "col": 0, "fixed_value": "おととし"},
-          {"field_id": "g3_5", "col": 1, "input_type": "text"},
-          {"field_id": null, "col": 2, "fixed_value": "ことし"},
-          {"field_id": "g3_6", "col": 3, "input_type": "text"},
-          {"field_id": null, "col": 4, "fixed_value": "さらいねん"}
+          {
+            "field_id": null,
+            "col": 0,
+            "fixed_value": "おととし"
+          },
+          {
+            "field_id": "g3_5",
+            "col": 1,
+            "input_type": "text"
+          },
+          {
+            "field_id": null,
+            "col": 2,
+            "fixed_value": "ことし"
+          },
+          {
+            "field_id": "g3_6",
+            "col": 3,
+            "input_type": "text"
+          },
+          {
+            "field_id": null,
+            "col": 4,
+            "fixed_value": "さらいねん"
+          }
         ]
       },
       {
         "sub_title": "日の読み方",
-        "headers": ["1日","5日","7日","8日","9日","14日","20日","31日"],
+        "headers": [
+          "1日",
+          "5日",
+          "7日",
+          "8日",
+          "9日",
+          "14日",
+          "20日",
+          "31日"
+        ],
         "items": [
-          {"field_id": null, "col": 0, "fixed_value": "ついたち"},
-          {"field_id": "g3_7", "col": 1, "input_type": "text"},
-          {"field_id": "g3_8", "col": 2, "input_type": "text"},
-          {"field_id": "g3_9", "col": 3, "input_type": "text"},
-          {"field_id": "g3_10", "col": 4, "input_type": "text"},
-          {"field_id": "g3_11", "col": 5, "input_type": "text"},
-          {"field_id": "g3_12", "col": 6, "input_type": "text"},
-          {"field_id": "g3_13", "col": 7, "input_type": "text"}
+          {
+            "field_id": null,
+            "col": 0,
+            "fixed_value": "ついたち"
+          },
+          {
+            "field_id": "g3_7",
+            "col": 1,
+            "input_type": "text"
+          },
+          {
+            "field_id": "g3_8",
+            "col": 2,
+            "input_type": "text"
+          },
+          {
+            "field_id": "g3_9",
+            "col": 3,
+            "input_type": "text"
+          },
+          {
+            "field_id": "g3_10",
+            "col": 4,
+            "input_type": "text"
+          },
+          {
+            "field_id": "g3_11",
+            "col": 5,
+            "input_type": "text"
+          },
+          {
+            "field_id": "g3_12",
+            "col": 6,
+            "input_type": "text"
+          },
+          {
+            "field_id": "g3_13",
+            "col": 7,
+            "input_type": "text"
+          }
         ]
       }
     ]
@@ -133,63 +508,138 @@
     "type": "radio_choice",
     "title_html": "問題４．正しいものを選んでください　＜各2点×5問＝10点＞",
     "instruction": "Hãy khoanh tròn đáp án đúng.",
-    "example_html": "例）　けさ9時に（　①　）を食べました。<br>　　①朝ごはん　　②昼ごはん　　③夜ごはん　　④ジュース　　⑤お茶",
+    "example_html": "例）　けさ9<ruby>時<rt>じ</rt></ruby>に（　①　）を<ruby>食べました<rt>たべました</rt></ruby>。<br>　　①<ruby>朝ごはん<rt>あさごはん</rt></ruby>　　②<ruby>昼ごはん<rt>ひるごはん</rt></ruby>　　③<ruby>夜ごはん<rt>よるごはん</rt></ruby>　　④ジュース　　⑤<ruby>お茶<rt>おちゃ</rt></ruby>",
     "points_each": 2,
     "total_points": 10,
     "items": [
       {
         "field_id": "g4_1",
-        "question": "１）　明日1時から公園で（　　）をします。リンさんも来ますか。",
+        "question": "１）　<ruby>明日<rt>あした</rt></ruby>1<ruby>時<rt>じ</rt></ruby>から<ruby>公園<rt>こうえん</rt></ruby>で（　　）をします。リンさんも<ruby>来ます<rt>きます</rt></ruby>か。",
         "choices": [
-          {"value": "①", "label": "① 手紙"},
-          {"value": "②", "label": "② なに"},
-          {"value": "③", "label": "③ お花見"},
-          {"value": "④", "label": "④ 新聞"},
-          {"value": "⑤", "label": "⑤ 旅行"}
+          {
+            "value": "①",
+            "label": "① <ruby>手紙<rt>てがみ</rt></ruby>"
+          },
+          {
+            "value": "②",
+            "label": "② なに"
+          },
+          {
+            "value": "③",
+            "label": "③ <ruby>お花見<rt>おはなみ</rt></ruby>"
+          },
+          {
+            "value": "④",
+            "label": "④ <ruby>新聞<rt>しんぶん</rt></ruby>"
+          },
+          {
+            "value": "⑤",
+            "label": "⑤ <ruby>旅行<rt>りょこう</rt></ruby>"
+          }
         ]
       },
       {
         "field_id": "g4_2",
-        "question": "２）　細かいお金を（　　）貸してください。",
+        "question": "２）　<ruby>細かい<rt>こまかい</rt></ruby><ruby>お金<rt>おかね</rt></ruby>を（　　）<ruby>貸して<rt>かして</rt></ruby>ください。",
         "choices": [
-          {"value": "①", "label": "① ぜんぜん"},
-          {"value": "②", "label": "② よく"},
-          {"value": "③", "label": "③ もう"},
-          {"value": "④", "label": "④ すこし"},
-          {"value": "⑤", "label": "⑤ まだ"}
+          {
+            "value": "①",
+            "label": "① ぜんぜん"
+          },
+          {
+            "value": "②",
+            "label": "② よく"
+          },
+          {
+            "value": "③",
+            "label": "③ もう"
+          },
+          {
+            "value": "④",
+            "label": "④ すこし"
+          },
+          {
+            "value": "⑤",
+            "label": "⑤ まだ"
+          }
         ]
       },
       {
         "field_id": "g4_3",
         "question": "３）　ねぎを3本とたまねぎを３つ、（　　）で６つください。",
         "choices": [
-          {"value": "①", "label": "① 全部"},
-          {"value": "②", "label": "② ひとり"},
-          {"value": "③", "label": "③ それから"},
-          {"value": "④", "label": "④ いっしょ"},
-          {"value": "⑤", "label": "⑤ ちょっと"}
+          {
+            "value": "①",
+            "label": "① <ruby>全部<rt>ぜんぶ</rt></ruby>"
+          },
+          {
+            "value": "②",
+            "label": "② ひとり"
+          },
+          {
+            "value": "③",
+            "label": "③ それから"
+          },
+          {
+            "value": "④",
+            "label": "④ いっしょ"
+          },
+          {
+            "value": "⑤",
+            "label": "⑤ ちょっと"
+          }
         ]
       },
       {
         "field_id": "g4_4",
-        "question": "４）　わたしは日本語を1年ぐらい勉強しましたから、日本語が（　　）わかります。",
+        "question": "４）　わたしは<ruby>日本語<rt>にほんご</rt></ruby>を1<ruby>年<rt>ねん</rt></ruby>ぐらい<ruby>勉強<rt>べんきょう</rt></ruby>しましたから、<ruby>日本語<rt>にほんご</rt></ruby>が（　　）わかります。",
         "choices": [
-          {"value": "①", "label": "① あまり"},
-          {"value": "②", "label": "② だいたい"},
-          {"value": "③", "label": "③ まだ"},
-          {"value": "④", "label": "④ いつも"},
-          {"value": "⑤", "label": "⑤ もう"}
+          {
+            "value": "①",
+            "label": "① あまり"
+          },
+          {
+            "value": "②",
+            "label": "② だいたい"
+          },
+          {
+            "value": "③",
+            "label": "③ まだ"
+          },
+          {
+            "value": "④",
+            "label": "④ いつも"
+          },
+          {
+            "value": "⑤",
+            "label": "⑤ もう"
+          }
         ]
       },
       {
         "field_id": "g4_5",
-        "question": "５）　今日は（　　）仕事が終わりました。",
+        "question": "５）　<ruby>今日<rt>きょう</rt></ruby>は（　　）<ruby>仕事<rt>しごと</rt></ruby>が<ruby>終わりました<rt>おわりました</rt></ruby>。",
         "choices": [
-          {"value": "①", "label": "① あまり"},
-          {"value": "②", "label": "② いつ"},
-          {"value": "③", "label": "③ はやく"},
-          {"value": "④", "label": "④ ずっと"},
-          {"value": "⑤", "label": "⑤ ぜんぜん"}
+          {
+            "value": "①",
+            "label": "① あまり"
+          },
+          {
+            "value": "②",
+            "label": "② いつ"
+          },
+          {
+            "value": "③",
+            "label": "③ はやく"
+          },
+          {
+            "value": "④",
+            "label": "④ ずっと"
+          },
+          {
+            "value": "⑤",
+            "label": "⑤ ぜんぜん"
+          }
         ]
       }
     ]
@@ -203,15 +653,53 @@
     "total_points": 7,
     "tables": [
       {
-        "headers": ["形容詞", "反対の言葉"],
+        "headers": [
+          "形容詞",
+          "反対の言葉"
+        ],
         "items": [
-          {"field_id": "g5_1", "col": 1, "label": "１）おおきい", "input_type": "text"},
-          {"field_id": "g5_2", "col": 1, "label": "２）やさしい", "input_type": "text"},
-          {"field_id": "g5_3", "col": 1, "label": "３）やすい", "input_type": "text"},
-          {"field_id": "g5_4", "col": 1, "label": "４）いそがしい", "input_type": "text"},
-          {"field_id": "g5_5", "col": 1, "label": "５）わるい", "input_type": "text"},
-          {"field_id": "g5_6", "col": 1, "label": "６）ふるい", "input_type": "text"},
-          {"field_id": "g5_7", "col": 1, "label": "７）にぎやかな", "input_type": "text"}
+          {
+            "field_id": "g5_1",
+            "col": 1,
+            "label": "１）おおきい",
+            "input_type": "text"
+          },
+          {
+            "field_id": "g5_2",
+            "col": 1,
+            "label": "２）やさしい",
+            "input_type": "text"
+          },
+          {
+            "field_id": "g5_3",
+            "col": 1,
+            "label": "３）やすい",
+            "input_type": "text"
+          },
+          {
+            "field_id": "g5_4",
+            "col": 1,
+            "label": "４）いそがしい",
+            "input_type": "text"
+          },
+          {
+            "field_id": "g5_5",
+            "col": 1,
+            "label": "５）わるい",
+            "input_type": "text"
+          },
+          {
+            "field_id": "g5_6",
+            "col": 1,
+            "label": "６）ふるい",
+            "input_type": "text"
+          },
+          {
+            "field_id": "g5_7",
+            "col": 1,
+            "label": "７）にぎやかな",
+            "input_type": "text"
+          }
         ]
       }
     ]
@@ -246,24 +734,78 @@
     "pool_extra": [],
     "distractors_per_item": 3,
     "items": [
-      {"field_id": "g6_1",  "label": "１．たな"},
-      {"field_id": "g6_10", "label": "１．もらいます"},
-      {"field_id": "g6_2",  "label": "２．やくそく"},
-      {"field_id": "g6_11", "label": "２．おんなのこ"},
-      {"field_id": "g6_3",  "label": "３．からい"},
-      {"field_id": "g6_12", "label": "３．せいかつ"},
-      {"field_id": "g6_4",  "label": "４．いそがしい"},
-      {"field_id": "g6_13", "label": "４．のみもの"},
-      {"field_id": "g6_5",  "label": "５．りょう"},
-      {"field_id": "g6_14", "label": "５．れいぞうこ"},
-      {"field_id": "g6_6",  "label": "６．にもつ"},
-      {"field_id": "g6_15", "label": "６．きょうだい"},
-      {"field_id": "g6_7",  "label": "７．かします"},
-      {"field_id": "g6_16", "label": "７．となり"},
-      {"field_id": "g6_8",  "label": "８．しごと"},
-      {"field_id": "g6_17", "label": "８．わかります"},
-      {"field_id": "g6_9",  "label": "９．じょうずな"},
-      {"field_id": "g6_18", "label": "９．のりば"}
+      {
+        "field_id": "g6_1",
+        "label": "１．たな"
+      },
+      {
+        "field_id": "g6_10",
+        "label": "１．もらいます"
+      },
+      {
+        "field_id": "g6_2",
+        "label": "２．やくそく"
+      },
+      {
+        "field_id": "g6_11",
+        "label": "２．おんなのこ"
+      },
+      {
+        "field_id": "g6_3",
+        "label": "３．からい"
+      },
+      {
+        "field_id": "g6_12",
+        "label": "３．せいかつ"
+      },
+      {
+        "field_id": "g6_4",
+        "label": "４．いそがしい"
+      },
+      {
+        "field_id": "g6_13",
+        "label": "４．のみもの"
+      },
+      {
+        "field_id": "g6_5",
+        "label": "５．りょう"
+      },
+      {
+        "field_id": "g6_14",
+        "label": "５．れいぞうこ"
+      },
+      {
+        "field_id": "g6_6",
+        "label": "６．にもつ"
+      },
+      {
+        "field_id": "g6_15",
+        "label": "６．きょうだい"
+      },
+      {
+        "field_id": "g6_7",
+        "label": "７．かします"
+      },
+      {
+        "field_id": "g6_16",
+        "label": "７．となり"
+      },
+      {
+        "field_id": "g6_8",
+        "label": "８．しごと"
+      },
+      {
+        "field_id": "g6_17",
+        "label": "８．わかります"
+      },
+      {
+        "field_id": "g6_9",
+        "label": "９．じょうずな"
+      },
+      {
+        "field_id": "g6_18",
+        "label": "９．のりば"
+      }
     ],
     "layout": "two_column",
     "input_type": "text"
