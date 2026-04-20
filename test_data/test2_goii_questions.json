@@ -330,8 +330,8 @@
   {
     "id": "g3",
     "type": "table_fill",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>３．<ruby>読み方<rt>よみかた</rt></ruby>を<ruby>書<rt>か</rt></ruby>いてください　＜<ruby>各<rt>かく</rt></ruby>1<ruby>点<rt>てん</rt></ruby>×13問＝13<ruby>点<rt>てん</rt></ruby>＞",
-    "instruction": "Hãy viết cách đọc bằng Hiragana.",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>３．Điền từ thích hợp vào ô trống　＜<ruby>各<rt>かく</rt></ruby>1<ruby>点<rt>てん</rt></ruby>×13問＝13<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "Điền từ vào ô trống bằng Hiragana.",
     "points_each": 1,
     "total_points": 13,
     "tables": [
