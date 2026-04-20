@@ -18,27 +18,27 @@
         "options": [
           {
             "value": "a",
-            "label": "a"
+            "label": "a. 友だちに会います"
           },
           {
             "value": "b",
-            "label": "b"
+            "label": "b. 花見をします"
           },
           {
             "value": "c",
-            "label": "c"
+            "label": "c. 日本語を勉強します"
           },
           {
             "value": "d",
-            "label": "d"
+            "label": "d. 昼ごはんを食べます"
           },
           {
             "value": "e",
-            "label": "e"
+            "label": "e. ビールを飲みます"
           },
           {
             "value": "f",
-            "label": "f"
+            "label": "f. 映画を見ます"
           }
         ]
       },
@@ -50,27 +50,27 @@
         "options": [
           {
             "value": "a",
-            "label": "a"
+            "label": "a. 友だちに会います"
           },
           {
             "value": "b",
-            "label": "b"
+            "label": "b. 花見をします"
           },
           {
             "value": "c",
-            "label": "c"
+            "label": "c. 日本語を勉強します"
           },
           {
             "value": "d",
-            "label": "d"
+            "label": "d. 昼ごはんを食べます"
           },
           {
             "value": "e",
-            "label": "e"
+            "label": "e. ビールを飲みます"
           },
           {
             "value": "f",
-            "label": "f"
+            "label": "f. 映画を見ます"
           }
         ]
       }
@@ -171,20 +171,12 @@
             "input_type": "select",
             "options": [
               {
-                "value": "<ruby>飲みません<rt>のみません</rt></ruby>",
+                "value": "飲みません",
                 "label": "飲みません"
               },
               {
-                "value": "<ruby>行きません<rt>いきません</rt></ruby>",
-                "label": "行きません"
-              },
-              {
-                "value": "<ruby>買いません<rt>かいません</rt></ruby>",
-                "label": "買いません"
-              },
-              {
-                "value": "<ruby>食べません<rt>たべません</rt></ruby>",
-                "label": "食べません"
+                "value": "飲みます",
+                "label": "飲みます"
               }
             ]
           }
@@ -231,20 +223,12 @@
             "input_type": "select",
             "options": [
               {
-                "value": "タクシーで<ruby>行きます<rt>いきます</rt></ruby>",
-                "label": "タクシーで行きます"
+                "value": "行きます",
+                "label": "行きます"
               },
               {
-                "value": "バスで<ruby>行きます<rt>いきます</rt></ruby>",
-                "label": "バスで行きます"
-              },
-              {
-                "value": "<ruby>歩いて<rt>あるいて</rt></ruby><ruby>行きます<rt>いきます</rt></ruby>",
-                "label": "歩いて行きます"
-              },
-              {
-                "value": "<ruby>電車<rt>でんしゃ</rt></ruby>で<ruby>行きます<rt>いきます</rt></ruby>",
-                "label": "電車で行きます"
+                "value": "行きません",
+                "label": "行きません"
               }
             ]
           }
