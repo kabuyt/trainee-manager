@@ -237,7 +237,7 @@
   {
     "id": "c4",
     "type": "audio_image_radio",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>４．リーさんは今何をしますか　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×2問＝6<ruby>点<rt>てん</rt></ruby>＞",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>４．イーさんは<ruby>今<rt>いま</rt></ruby>から<ruby>何<rt>なに</rt></ruby>をしますか　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×2問＝6<ruby>点<rt>てん</rt></ruby>＞",
     "points_each": 3,
     "total_points": 6,
     "intro_audio": "audio/4-0.mp3",
@@ -257,11 +257,6 @@
             "value": "b",
             "label": "ｂ",
             "image_src": "images/chokkai/image2.png"
-          },
-          {
-            "value": "c",
-            "label": "ｃ",
-            "image_src": "images/chokkai/image3.png"
           }
         ]
       },
@@ -279,11 +274,6 @@
             "value": "b",
             "label": "ｂ",
             "image_src": "images/chokkai/image5.png"
-          },
-          {
-            "value": "c",
-            "label": "ｃ",
-            "image_src": "images/chokkai/image6.png"
           }
         ]
       }
