@@ -167,7 +167,7 @@ def main():
     print(f'  フィルタ後: {len(trainees)}名')
     print(f'  作成可能（birth_date有り）: {len(valid)}名')
     if invalid:
-        print(f'  ⚠ 作成不可（birth_date欠落）: {len(invalid)}名')
+        print(f'  [WARN] 作成不可（birth_date欠落）: {len(invalid)}名')
         for t in invalid[:5]:
             sid = t.get("student_id", "?")
             nm = t.get("name_katakana", "?")
@@ -219,11 +219,11 @@ def main():
                     print(f'  [{i}/{len(valid)}] {sid}: 既存ユーザーと紐付け')
                 else:
                     success += 1
-                    print(f'  [{i}/{len(valid)}] {sid}: ✓')
+                    print(f'  [{i}/{len(valid)}] {sid}: OK')
         else:
             fail += 1
             fail_list.append((sid, err))
-            print(f'  [{i}/{len(valid)}] {sid}: ✗ {err}')
+            print(f'  [{i}/{len(valid)}] {sid}: NG {err}')
 
     print('\n=== 結果 ===')
     print(f'  新規作成: {success}名')
