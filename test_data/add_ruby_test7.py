@@ -378,8 +378,8 @@ def main():
     skip_keys = {'options', 'day_options', 'country_options',
                  'pool_correct', 'pool_extra', 'correct_pool', 'extra_pool'}
     missing = set()
-    for sec in ['goii', 'bunpo', 'chokkai']:
-        path = f'test4_{sec}_questions.json'
+    for sec in ['bunpo', 'chokkai']:
+        path = f'test7_{sec}_questions.json'
         with open(path, encoding='utf-8') as f:
             data = json.load(f)
         walk_and_apply(data, missing, skip_keys=skip_keys)

@@ -2,44 +2,127 @@
   {
     "id": "c1",
     "type": "audio_image_select",
-    "title_html": "問題１．a.b.cのどれですか　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×3<ruby>問<rt>もん</rt></ruby>＝6<ruby>点<rt>てん</rt></ruby>＞",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>１．a.b.cのどれですか　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×3<ruby>問<rt>とい</rt></ruby>＝6<ruby>点<rt>てん</rt></ruby>＞",
     "instruction": "Nghe va chon dap an dung.",
-    "intro_audio": "audio/1-33 N4第２回 もんだい１ せつめいぶん.mp3",
+    "intro_audio": "audio/1-33 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい１ せつめいぶん.mp3",
     "image_src": "images/chokkai/img_4.jpg",
     "points_each": 2,
     "total_points": 6,
     "items": [
-      {"field_id": "c1_1", "label": "①", "audio_src": "audio/1-34 N4第２回 もんだい１-１.mp3", "input_type": "select", "options": ["a","b","c"]},
-      {"field_id": "c1_2", "label": "②", "audio_src": "audio/1-35 N4第２回 もんだい１-２ (1).mp3", "input_type": "select", "options": ["a","b","c"]},
-      {"field_id": "c1_3", "label": "③", "audio_src": "audio/1-36 N4第２回 もんだい１-３.mp3", "input_type": "select", "options": ["a","b","c"]}
+      {
+        "field_id": "c1_1",
+        "label": "①",
+        "audio_src": "audio/1-34 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい１-１.mp3",
+        "input_type": "select",
+        "options": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      {
+        "field_id": "c1_2",
+        "label": "②",
+        "audio_src": "audio/1-35 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい１-２ (1).mp3",
+        "input_type": "select",
+        "options": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      {
+        "field_id": "c1_3",
+        "label": "③",
+        "audio_src": "audio/1-36 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい１-３.mp3",
+        "input_type": "select",
+        "options": [
+          "a",
+          "b",
+          "c"
+        ]
+      }
     ]
   },
   {
     "id": "c2",
     "type": "audio_select",
-    "title_html": "問題２．シュミットさんは<ruby>日本<rt>にほん</rt></ruby>へ<ruby>来<rt>き</rt></ruby>ました。どうしたらいいですか　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×4<ruby>問<rt>もん</rt></ruby>＝12<ruby>点<rt>てん</rt></ruby>＞",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>２．シュミットさんは<ruby>日本<rt>にほん</rt></ruby>へ<ruby>来<rt>き</rt></ruby>ました。どうしたらいいですか　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×4<ruby>問<rt>とい</rt></ruby>＝12<ruby>点<rt>てん</rt></ruby>＞",
     "points_each": 3,
     "total_points": 12,
     "items": [
-      {"field_id": "c2_1", "label": "①", "audio_src": "audio/1-37 N4第２回 もんだい１-４.mp3", "input_type": "select", "options": ["a","b","c"]},
-      {"field_id": "c2_2", "label": "②", "audio_src": "audio/1-38 N4第２回 もんだい１-５.mp3", "input_type": "select", "options": ["a","b","c"]},
-      {"field_id": "c2_3", "label": "③", "audio_src": "audio/1-39 N4第２回 もんだい１-６.mp3", "input_type": "select", "options": ["a","b","c"]},
-      {"field_id": "c2_4", "label": "④", "audio_src": "audio/1-40 N4第２回 もんだい１-７.mp3", "input_type": "select", "options": ["a","b","c"]}
+      {
+        "field_id": "c2_1",
+        "label": "①",
+        "audio_src": "audio/1-37 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい１-４.mp3",
+        "input_type": "select",
+        "options": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      {
+        "field_id": "c2_2",
+        "label": "②",
+        "audio_src": "audio/1-38 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい１-５.mp3",
+        "input_type": "select",
+        "options": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      {
+        "field_id": "c2_3",
+        "label": "③",
+        "audio_src": "audio/1-39 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい１-６.mp3",
+        "input_type": "select",
+        "options": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      {
+        "field_id": "c2_4",
+        "label": "④",
+        "audio_src": "audio/1-40 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい１-７.mp3",
+        "input_type": "select",
+        "options": [
+          "a",
+          "b",
+          "c"
+        ]
+      }
     ]
   },
   {
     "id": "c3",
     "type": "audio_select_text",
-    "title_html": "問題３．うちを<ruby>探<rt>さが</rt></ruby>しています。どれを<ruby>借<rt>か</rt></ruby>りますか　＜1<ruby>点<rt>てん</rt></ruby>+2<ruby>点<rt>てん</rt></ruby>＝3<ruby>点<rt>てん</rt></ruby>＞",
-    "audio_src": "audio/1-41 N4第２回 もんだい１-８.mp3",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>３．うちを<ruby>探<rt>さが</rt></ruby>しています。どれを<ruby>借<rt>か</rt></ruby>りますか　＜1<ruby>点<rt>てん</rt></ruby>+2<ruby>点<rt>てん</rt></ruby>＝3<ruby>点<rt>てん</rt></ruby>＞",
+    "audio_src": "audio/1-41 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい１-８.mp3",
     "image_src": "images/chokkai/img_2.jpg",
     "total_points": 3,
     "items": [
       {
         "template_html": "（{c3_1}）を<ruby>借<rt>か</rt></ruby>ります。<ruby>家賃<rt>やちん</rt></ruby>は（{c3_2}）<ruby>円<rt>えん</rt></ruby>です。",
         "fields": [
-          {"field_id": "c3_1", "input_type": "select", "options": ["a","b","c"], "points": 1},
-          {"field_id": "c3_2", "input_type": "text", "points": 2}
+          {
+            "field_id": "c3_1",
+            "input_type": "select",
+            "options": [
+              "a",
+              "b",
+              "c"
+            ],
+            "points": 1
+          },
+          {
+            "field_id": "c3_2",
+            "input_type": "text",
+            "points": 2
+          }
         ]
       }
     ]
@@ -47,97 +130,286 @@
   {
     "id": "c4",
     "type": "audio_ox",
-    "title_html": "問題４．<ruby>正<rt>ただ</rt></ruby>しければ〇、<ruby>正<rt>ただ</rt></ruby>しくなければ×　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×5<ruby>問<rt>もん</rt></ruby>＝10<ruby>点<rt>てん</rt></ruby>＞",
-    "intro_audio": "audio/1-56 N4第２回 もんだい４ せつめいぶん.mp3",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>４．正しければ〇、<ruby>正<rt>ただ</rt></ruby>しくなければ×　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×5<ruby>問<rt>とい</rt></ruby>＝10<ruby>点<rt>てん</rt></ruby>＞",
+    "intro_audio": "audio/1-56 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい４ せつめいぶん.mp3",
     "points_each": 2,
     "total_points": 10,
     "items": [
-      {"field_id": "c4_1", "label": "１）", "audio_src": "audio/1-58 N4第２回 もんだい４-２.mp3", "input_type": "select", "options": ["○","×"]},
-      {"field_id": "c4_2", "label": "２）", "audio_src": "audio/1-59 N4第２回 もんだい４-３.mp3", "input_type": "select", "options": ["○","×"]},
-      {"field_id": "c4_3", "label": "３）", "audio_src": "audio/1-60 N4第２回 もんだい４-４.mp3", "input_type": "select", "options": ["○","×"]},
-      {"field_id": "c4_4", "label": "４）", "audio_src": "audio/1-61 N4第２回 もんだい４-５.mp3", "input_type": "select", "options": ["○","×"]},
-      {"field_id": "c4_5", "label": "５）", "audio_src": "audio/1-62 N4第２回 もんだい４-６.mp3", "input_type": "select", "options": ["○","×"]}
+      {
+        "field_id": "c4_1",
+        "label": "１）",
+        "audio_src": "audio/1-58 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい４-２.mp3",
+        "input_type": "select",
+        "options": [
+          "○",
+          "×"
+        ]
+      },
+      {
+        "field_id": "c4_2",
+        "label": "２）",
+        "audio_src": "audio/1-59 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい４-３.mp3",
+        "input_type": "select",
+        "options": [
+          "○",
+          "×"
+        ]
+      },
+      {
+        "field_id": "c4_3",
+        "label": "３）",
+        "audio_src": "audio/1-60 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい４-４.mp3",
+        "input_type": "select",
+        "options": [
+          "○",
+          "×"
+        ]
+      },
+      {
+        "field_id": "c4_4",
+        "label": "４）",
+        "audio_src": "audio/1-61 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい４-５.mp3",
+        "input_type": "select",
+        "options": [
+          "○",
+          "×"
+        ]
+      },
+      {
+        "field_id": "c4_5",
+        "label": "５）",
+        "audio_src": "audio/1-62 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい４-６.mp3",
+        "input_type": "select",
+        "options": [
+          "○",
+          "×"
+        ]
+      }
     ]
   },
   {
     "id": "c5",
     "type": "audio_free_text",
-    "title_html": "問題５．<ruby>音声<rt>おんせい</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて<ruby>書<rt>か</rt></ruby>いてください　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×10<ruby>問<rt>もん</rt></ruby>＝20<ruby>点<rt>てん</rt></ruby>＞",
-    "instruction": "この問題は先生が採点します。音声を聞いて書いてください。",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>５．<ruby>音声<rt>おんせい</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて<ruby>書<rt>か</rt></ruby>いてください　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×10<ruby>問<rt>とい</rt></ruby>＝20<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "この<ruby>問題<rt>もんだい</rt></ruby>は<ruby>先生<rt>せんせい</rt></ruby>が<ruby>採点<rt>さいてん</rt></ruby>します。<ruby>音声<rt>おんせい</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて<ruby>書<rt>か</rt></ruby>いてください。",
     "grading": "manual",
-    "audio_src": "audio/1-63 N4第２回 もんだい４-７.mp3",
+    "audio_src": "audio/1-63 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい４-７.mp3",
     "points_each": 2,
     "total_points": 20,
     "items": [
-      {"field_id": "c5_1", "template_html": "１．ほんとう、{c5_1}なりましたね。", "input_type": "text"},
-      {"field_id": "c5_2", "template_html": "２．ええ、{c5_2}なりましたね。", "input_type": "text"},
-      {"field_id": "c5_3", "template_html": "３．ええ、{c5_3}なりました。", "input_type": "text"},
-      {"field_id": "c5_4", "template_html": "４．ええ、{c5_4}なりました。", "input_type": "text"},
-      {"field_id": "c5_5", "template_html": "５．ええ、{c5_5}なりました。", "input_type": "text"},
-      {"field_id": "c5_6", "template_html": "６．ええ、ずいぶん{c5_6}なりました。", "input_type": "text"},
-      {"field_id": "c5_7", "template_html": "７．ええ、きのうから、{c5_7}なりました。", "input_type": "text"},
-      {"field_id": "c5_8", "template_html": "８．ええ、{c5_8}なりましたよ。", "input_type": "text"},
-      {"field_id": "c5_9", "template_html": "９．あ、{c5_9}なるまで<ruby>煮<rt>に</rt></ruby>るんですね。（<ruby>煮<rt>に</rt></ruby>ます：nau）", "input_type": "text"},
-      {"field_id": "c5_10", "template_html": "10．うん、よく{c5_10}なったよ。", "input_type": "text"}
+      {
+        "field_id": "c5_1",
+        "template_html": "１．ほんとう、{c5_1}なりましたね。",
+        "input_type": "text"
+      },
+      {
+        "field_id": "c5_2",
+        "template_html": "２．ええ、{c5_2}なりましたね。",
+        "input_type": "text"
+      },
+      {
+        "field_id": "c5_3",
+        "template_html": "３．ええ、{c5_3}なりました。",
+        "input_type": "text"
+      },
+      {
+        "field_id": "c5_4",
+        "template_html": "４．ええ、{c5_4}なりました。",
+        "input_type": "text"
+      },
+      {
+        "field_id": "c5_5",
+        "template_html": "５．ええ、{c5_5}なりました。",
+        "input_type": "text"
+      },
+      {
+        "field_id": "c5_6",
+        "template_html": "６．ええ、ずいぶん{c5_6}なりました。",
+        "input_type": "text"
+      },
+      {
+        "field_id": "c5_7",
+        "template_html": "７．ええ、きのうから、{c5_7}なりました。",
+        "input_type": "text"
+      },
+      {
+        "field_id": "c5_8",
+        "template_html": "８．ええ、{c5_8}なりましたよ。",
+        "input_type": "text"
+      },
+      {
+        "field_id": "c5_9",
+        "template_html": "９．あ、{c5_9}なるまで<ruby>煮<rt>に</rt></ruby>るんですね。（<ruby>煮<rt>に</rt></ruby>ます：nau）",
+        "input_type": "text"
+      },
+      {
+        "field_id": "c5_10",
+        "template_html": "10．うん、よく{c5_10}なったよ。",
+        "input_type": "text"
+      }
     ]
   },
   {
     "id": "c6",
     "type": "audio_select",
-    "title_html": "問題６．おじいさんと<ruby>孫<rt>まご</rt></ruby>が<ruby>話<rt>はな</rt></ruby>しています。2<ruby>人<rt>り</rt></ruby>はどうですか　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×3<ruby>問<rt>もん</rt></ruby>＝6<ruby>点<rt>てん</rt></ruby>＞",
-    "audio_src": "audio/1-64 N4第２回 もんだい４-８ (1).mp3",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>６．おじいさんと<ruby>孫<rt>まご</rt></ruby>が<ruby>話<rt>はな</rt></ruby>しています。2<ruby>人<rt>ふたり</rt></ruby>はどうですか　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×3<ruby>問<rt>とい</rt></ruby>＝6<ruby>点<rt>てん</rt></ruby>＞",
+    "audio_src": "audio/1-64 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい４-８ (1).mp3",
     "image_src": "images/chokkai/img_1.jpg",
     "points_each": 2,
     "total_points": 6,
     "items": [
-      {"field_id": "c6_1", "label": "１）", "input_type": "select", "options": ["a","b"]},
-      {"field_id": "c6_2", "label": "２）", "input_type": "select", "options": ["a","b"]},
-      {"field_id": "c6_3", "label": "３）", "input_type": "select", "options": ["a","b"]}
+      {
+        "field_id": "c6_1",
+        "label": "１）",
+        "input_type": "select",
+        "options": [
+          "a",
+          "b"
+        ]
+      },
+      {
+        "field_id": "c6_2",
+        "label": "２）",
+        "input_type": "select",
+        "options": [
+          "a",
+          "b"
+        ]
+      },
+      {
+        "field_id": "c6_3",
+        "label": "３）",
+        "input_type": "select",
+        "options": [
+          "a",
+          "b"
+        ]
+      }
     ]
   },
   {
     "id": "c7",
     "type": "audio_double_select",
-    "title_html": "問題７．<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>会社<rt>かいしゃ</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>と<ruby>話<rt>はな</rt></ruby>しています。<ruby>田中<rt>たなか</rt></ruby>さんに<ruby>何<rt>なに</rt></ruby>がありましたか　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×2×4<ruby>問<rt>もん</rt></ruby>＝16<ruby>点<rt>てん</rt></ruby>＞",
-    "intro_audio": "audio/1-43 N4第２回 もんだい２-１.mp3",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>７．<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>会社<rt>かいしゃ</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>と<ruby>話<rt>はな</rt></ruby>しています。<ruby>田中<rt>たなか</rt></ruby>さんに<ruby>何<rt>なに</rt></ruby>がありましたか　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×2×4<ruby>問<rt>とい</rt></ruby>＝16<ruby>点<rt>てん</rt></ruby>＞",
+    "intro_audio": "audio/1-43 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい２-１.mp3",
     "example_html": "<ruby>例<rt>れい</rt></ruby>）<ruby>田中<rt>たなか</rt></ruby>さんは（a. <ruby>遅刻<rt>ちこく</rt></ruby>　　b. <ruby>欠席<rt>けっせき</rt></ruby>）しました。それで、<ruby>部長<rt>ぶちょう</rt></ruby>は<ruby>高橋<rt>たかはし</rt></ruby>さんを<br>（a. しかりました　　b. しかられました。）",
     "points_each": 2,
     "total_points": 16,
     "items": [
       {
         "label": "１）",
-        "audio_src": "audio/1-44 N4第２回 もんだい２-２.mp3",
+        "audio_src": "audio/1-44 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい２-２.mp3",
         "template_html": "（{c7_1a}）<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>映画<rt>えいが</rt></ruby>のチケットをもらいました。<br>それで、（{c7_1b}）<ruby>田中<rt>たなか</rt></ruby>さんを<ruby>映画<rt>えいが</rt></ruby>に<ruby>誘<rt>さそ</rt></ruby>いました。",
         "fields": [
-          {"field_id": "c7_1a", "input_type": "select", "options": ["a","b"]},
-          {"field_id": "c7_1b", "input_type": "select", "options": ["a","b"]}
+          {
+            "field_id": "c7_1a",
+            "input_type": "select",
+            "options": [
+              "a",
+              "b"
+            ]
+          },
+          {
+            "field_id": "c7_1b",
+            "input_type": "select",
+            "options": [
+              "a",
+              "b"
+            ]
+          }
         ]
       },
       {
         "label": "２）",
-        "audio_src": "audio/1-45 N4第２回 もんだい２-３.mp3",
+        "audio_src": "audio/1-45 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい２-３.mp3",
         "template_html": "<ruby>犬<rt>いぬ</rt></ruby>が<ruby>田中<rt>たなか</rt></ruby>さんを（{c7_2a}）しました。<br>それで、<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>山田<rt>やまだ</rt></ruby>さんのうちへ（{c7_2b}）",
         "fields": [
-          {"field_id": "c7_2a", "input_type": "select", "options": ["a","b"]},
-          {"field_id": "c7_2b", "input_type": "select", "options": [{"value":"a","label":"a. 行きます"},{"value":"b","label":"b. 行きません"}]}
+          {
+            "field_id": "c7_2a",
+            "input_type": "select",
+            "options": [
+              "a",
+              "b"
+            ]
+          },
+          {
+            "field_id": "c7_2b",
+            "input_type": "select",
+            "options": [
+              {
+                "value": "a",
+                "label": "a. 行きます"
+              },
+              {
+                "value": "b",
+                "label": "b. 行きません"
+              }
+            ]
+          }
         ]
       },
       {
         "label": "３）",
-        "audio_src": "audio/1-46 N4第２回 もんだい２-４.mp3",
+        "audio_src": "audio/1-46 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい２-４.mp3",
         "template_html": "<ruby>部長<rt>ぶちょう</rt></ruby>は<ruby>田中<rt>たなか</rt></ruby>さんにアメリカで<ruby>新<rt>あたら</rt></ruby>しい<ruby>仕事<rt>しごと</rt></ruby>を<ruby>始<rt>はじ</rt></ruby>めろと<br>（{c7_3a}）。<br>それで、<ruby>田中<rt>たなか</rt></ruby>さんは（{c7_3b}）します。",
         "fields": [
-          {"field_id": "c7_3a", "input_type": "select", "options": [{"value":"a","label":"a. 言いました"},{"value":"b","label":"b. 言われました"}]},
-          {"field_id": "c7_3b", "input_type": "select", "options": ["a","b"]}
+          {
+            "field_id": "c7_3a",
+            "input_type": "select",
+            "options": [
+              {
+                "value": "a",
+                "label": "a. 言いました"
+              },
+              {
+                "value": "b",
+                "label": "b. 言われました"
+              }
+            ]
+          },
+          {
+            "field_id": "c7_3b",
+            "input_type": "select",
+            "options": [
+              "a",
+              "b"
+            ]
+          }
         ]
       },
       {
         "label": "４）",
-        "audio_src": "audio/1-47 N4第２回 もんだい２-５ (1).mp3",
+        "audio_src": "audio/1-47 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい２-５ (1).mp3",
         "template_html": "<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>奥<rt>おく</rt></ruby>さんに<ruby>旅行<rt>りょこう</rt></ruby>を（{c7_4a}）が<br>いっしょにアメリカへ<ruby>行<rt>い</rt></ruby>きたくないと（{c7_4b}）。",
         "fields": [
-          {"field_id": "c7_4a", "input_type": "select", "options": [{"value":"a","label":"a. 楽しみました"},{"value":"b","label":"b. 楽しまれました"}]},
-          {"field_id": "c7_4b", "input_type": "select", "options": [{"value":"a","label":"a. 言いました"},{"value":"b","label":"b. 言われました"}]}
+          {
+            "field_id": "c7_4a",
+            "input_type": "select",
+            "options": [
+              {
+                "value": "a",
+                "label": "a. 楽しみました"
+              },
+              {
+                "value": "b",
+                "label": "b. 楽しまれました"
+              }
+            ]
+          },
+          {
+            "field_id": "c7_4b",
+            "input_type": "select",
+            "options": [
+              {
+                "value": "a",
+                "label": "a. 言いました"
+              },
+              {
+                "value": "b",
+                "label": "b. 言われました"
+              }
+            ]
+          }
         ]
       }
     ]
@@ -145,37 +417,115 @@
   {
     "id": "c8",
     "type": "audio_select_text",
-    "title_html": "問題８．<ruby>田中<rt>たなか</rt></ruby>さんはどうしますか。どうしてですか　＜（2<ruby>点<rt>てん</rt></ruby>+3<ruby>点<rt>てん</rt></ruby>）×3<ruby>問<rt>もん</rt></ruby>＝15<ruby>点<rt>てん</rt></ruby>＞",
-    "instruction": "この問題は先生が採点します。",
-    "intro_audio": "audio/1-48 N4第２回 もんだい２-６.mp3",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>８．<ruby>田中<rt>たなか</rt></ruby>さんはどうしますか。どうしてですか　＜（2<ruby>点<rt>てん</rt></ruby>+3<ruby>点<rt>てん</rt></ruby>）×3<ruby>問<rt>とい</rt></ruby>＝15<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "この<ruby>問題<rt>もんだい</rt></ruby>は<ruby>先生<rt>せんせい</rt></ruby>が<ruby>採点<rt>さいてん</rt></ruby>します。",
+    "intro_audio": "audio/1-48 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい２-６.mp3",
     "example_html": "<ruby>例<rt>れい</rt></ruby>）・・・（a. <ruby>海<rt>うみ</rt></ruby>に<ruby>行<rt>い</rt></ruby>く　　b. <ruby>海<rt>うみ</rt></ruby>に<ruby>行<rt>い</rt></ruby>かない）<br>（ずっと<ruby>同<rt>おな</rt></ruby>じで<ruby>退屈<rt>たいくつ</rt></ruby>）のは（おもしろくない）から。",
     "total_points": 15,
     "items": [
       {
         "label": "１）",
-        "audio_src": "audio/1-49 N4第２回 もんだい２-７.mp3",
+        "audio_src": "audio/1-49 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい２-７.mp3",
         "fields": [
-          {"field_id": "c8_1a", "input_type": "select", "options": [{"value":"a","label":"a. ある"},{"value":"b","label":"b. ない"}], "points": 2},
-          {"field_id": "c8_1b", "input_type": "text", "label": "（　　）のは", "grading": "manual", "points": 1.5},
-          {"field_id": "c8_1c", "input_type": "text", "label": "（　　）から。", "grading": "manual", "points": 1.5}
+          {
+            "field_id": "c8_1a",
+            "input_type": "select",
+            "options": [
+              {
+                "value": "a",
+                "label": "a. ある"
+              },
+              {
+                "value": "b",
+                "label": "b. ない"
+              }
+            ],
+            "points": 2
+          },
+          {
+            "field_id": "c8_1b",
+            "input_type": "text",
+            "label": "（　　）のは",
+            "grading": "manual",
+            "points": 1.5
+          },
+          {
+            "field_id": "c8_1c",
+            "input_type": "text",
+            "label": "（　　）から。",
+            "grading": "manual",
+            "points": 1.5
+          }
         ]
       },
       {
         "label": "２）",
-        "audio_src": "audio/1-51 N4第２回 もんだい３-１.mp3",
+        "audio_src": "audio/1-51 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい３-１.mp3",
         "fields": [
-          {"field_id": "c8_2a", "input_type": "select", "options": [{"value":"a","label":"a. する"},{"value":"b","label":"b. しない"}], "points": 2},
-          {"field_id": "c8_2b", "input_type": "text", "label": "（　　）のは", "grading": "manual", "points": 1.5},
-          {"field_id": "c8_2c", "input_type": "text", "label": "（　　）から。", "grading": "manual", "points": 1.5}
+          {
+            "field_id": "c8_2a",
+            "input_type": "select",
+            "options": [
+              {
+                "value": "a",
+                "label": "a. する"
+              },
+              {
+                "value": "b",
+                "label": "b. しない"
+              }
+            ],
+            "points": 2
+          },
+          {
+            "field_id": "c8_2b",
+            "input_type": "text",
+            "label": "（　　）のは",
+            "grading": "manual",
+            "points": 1.5
+          },
+          {
+            "field_id": "c8_2c",
+            "input_type": "text",
+            "label": "（　　）から。",
+            "grading": "manual",
+            "points": 1.5
+          }
         ]
       },
       {
         "label": "３）",
-        "audio_src": "audio/1-52 N4第２回 もんだい３-２.mp3",
+        "audio_src": "audio/1-52 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい３-２.mp3",
         "fields": [
-          {"field_id": "c8_3a", "input_type": "select", "options": [{"value":"a","label":"a. ほしい"},{"value":"b","label":"b. ほしくない"}], "points": 2},
-          {"field_id": "c8_3b", "input_type": "text", "label": "（　　）のは", "grading": "manual", "points": 1.5},
-          {"field_id": "c8_3c", "input_type": "text", "label": "（　　）から。", "grading": "manual", "points": 1.5}
+          {
+            "field_id": "c8_3a",
+            "input_type": "select",
+            "options": [
+              {
+                "value": "a",
+                "label": "a. ほしい"
+              },
+              {
+                "value": "b",
+                "label": "b. ほしくない"
+              }
+            ],
+            "points": 2
+          },
+          {
+            "field_id": "c8_3b",
+            "input_type": "text",
+            "label": "（　　）のは",
+            "grading": "manual",
+            "points": 1.5
+          },
+          {
+            "field_id": "c8_3c",
+            "input_type": "text",
+            "label": "（　　）から。",
+            "grading": "manual",
+            "points": 1.5
+          }
         ]
       }
     ]
@@ -183,27 +533,78 @@
   {
     "id": "c9",
     "type": "audio_select",
-    "title_html": "問題９．いろいろなことをした<ruby>人<rt>ひと</rt></ruby>が<ruby>話<rt>はな</rt></ruby>します。その<ruby>人<rt>ひと</rt></ruby>に<ruby>何<rt>なん</rt></ruby>と<ruby>言<rt>い</rt></ruby>ったらいいですか　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×3<ruby>問<rt>もん</rt></ruby>＝6<ruby>点<rt>てん</rt></ruby>＞",
-    "audio_src": "audio/1-55 N4第２回 もんだい３-５.mp3",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>９．いろいろなことをした<ruby>人<rt>ひと</rt></ruby>が<ruby>話<rt>はな</rt></ruby>します。その<ruby>人<rt>ひと</rt></ruby>に<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>ったらいいですか　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×3<ruby>問<rt>とい</rt></ruby>＝6<ruby>点<rt>てん</rt></ruby>＞",
+    "audio_src": "audio/1-55 N4<ruby>第<rt>だい</rt></ruby>２<ruby>回<rt>かい</rt></ruby> もんだい３-５.mp3",
     "image_src": "images/chokkai/img_3.jpg",
     "points_each": 2,
     "total_points": 6,
     "items": [
-      {"field_id": "c9_1", "label": "１）", "input_type": "select", "options": ["a","b","c"]},
-      {"field_id": "c9_2", "label": "２）", "input_type": "select", "options": ["a","b","c"]},
-      {"field_id": "c9_3", "label": "３）", "input_type": "select", "options": ["a","b","c"]}
+      {
+        "field_id": "c9_1",
+        "label": "１）",
+        "input_type": "select",
+        "options": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      {
+        "field_id": "c9_2",
+        "label": "２）",
+        "input_type": "select",
+        "options": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      {
+        "field_id": "c9_3",
+        "label": "３）",
+        "input_type": "select",
+        "options": [
+          "a",
+          "b",
+          "c"
+        ]
+      }
     ]
   },
   {
     "id": "c10",
     "type": "audio_select",
-    "title_html": "問題１０．キムさんはジャンさんにどちらのアドバイスをしますか　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×3<ruby>問<rt>もん</rt></ruby>＝6<ruby>点<rt>てん</rt></ruby>＞",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>１０．キムさんはジャンさんにどちらのアドバイスをしますか　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×3<ruby>問<rt>とい</rt></ruby>＝6<ruby>点<rt>てん</rt></ruby>＞",
     "points_each": 2,
     "total_points": 6,
     "items": [
-      {"field_id": "c10_1", "label": "１）", "input_type": "select", "options": ["a","b"]},
-      {"field_id": "c10_2", "label": "２）", "input_type": "select", "options": ["a","b"]},
-      {"field_id": "c10_3", "label": "３）", "input_type": "select", "options": ["a","b"]}
+      {
+        "field_id": "c10_1",
+        "label": "１）",
+        "input_type": "select",
+        "options": [
+          "a",
+          "b"
+        ]
+      },
+      {
+        "field_id": "c10_2",
+        "label": "２）",
+        "input_type": "select",
+        "options": [
+          "a",
+          "b"
+        ]
+      },
+      {
+        "field_id": "c10_3",
+        "label": "３）",
+        "input_type": "select",
+        "options": [
+          "a",
+          "b"
+        ]
+      }
     ]
   }
 ]
