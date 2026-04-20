@@ -336,48 +336,60 @@
   },
   {
     "id": "c6",
-    "type": "audio_select",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>６．グプタさんは<ruby>何<rt>なに</rt></ruby>と<ruby>言<rt>い</rt></ruby>いましたか　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×2問＝6<ruby>点<rt>てん</rt></ruby>＞",
+    "type": "audio_multi_select",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>６．グプタさんは<ruby>何<rt>なに</rt></ruby>をしましたか。<ruby>何<rt>なに</rt></ruby>を<ruby>話<rt>はな</rt></ruby>しましたか。　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×2問＝6<ruby>点<rt>てん</rt></ruby>＞",
     "points_each": 3,
     "total_points": 6,
     "items": [
       {
-        "field_id": "c6_1",
-        "label": "① 問１",
+        "label": "① 問1",
         "audio_src": "audio/6-1.mp3",
-        "input_type": "select",
-        "options": [
+        "sentence_html": "インドのアグラは（{c6_1}）<ruby>町<rt>まち</rt></ruby>です。",
+        "fields": [
           {
-            "value": "a",
-            "label": "a. 大きい町です"
-          },
-          {
-            "value": "b",
-            "label": "b. にぎやかな町です"
-          },
-          {
-            "value": "c",
-            "label": "c. 古い町です"
+            "field_id": "c6_1",
+            "input_type": "select",
+            "options": [
+              {
+                "value": "a",
+                "label": "a. おおきい"
+              },
+              {
+                "value": "b",
+                "label": "b. にぎやかな"
+              },
+              {
+                "value": "c",
+                "label": "c. ふるい"
+              }
+            ]
           }
         ]
       },
       {
-        "field_id": "c6_2",
-        "label": "② 問２",
-        "audio_src": "audio/6-2.mp3",
-        "input_type": "select",
-        "options": [
+        "label": "② 問2",
+        "sentence_html": "<ruby>日本語<rt>にほんご</rt></ruby>の<ruby>先生<rt>せんせい</rt></ruby>は（{c6_2}）<ruby>人<rt>ひと</rt></ruby>です。",
+        "fields": [
           {
-            "value": "a",
-            "label": "a. おもしろい人です"
-          },
-          {
-            "value": "b",
-            "label": "b. ハンサムな人です"
+            "field_id": "c6_2",
+            "input_type": "select",
+            "options": [
+              {
+                "value": "a",
+                "label": "a. おもしろい"
+              },
+              {
+                "value": "b",
+                "label": "b. ハンサムな"
+              }
+            ]
           }
         ]
       }
-    ]
+    ],
+    "instruction": "* Câu 1) và 2) cùng chung một đoạn hội thoại",
+    "intro_audio": "audio/6-0.mp3",
+    "intro_label": "しつもん（Câu hỏi mẫu）"
   },
   {
     "id": "c7",
@@ -582,7 +594,7 @@
   },
   {
     "id": "c8",
-    "type": "audio_image_radio",
+    "type": "audio_select",
     "title_html": "<ruby>問題<rt>もんだい</rt></ruby>８．<ruby>女<rt>おんな</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>は<ruby>今<rt>いま</rt></ruby>どこにいますか　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×2問＝6<ruby>点<rt>てん</rt></ruby>＞",
     "points_each": 3,
     "total_points": 6,
@@ -591,59 +603,78 @@
     "items": [
       {
         "field_id": "c8_1",
-        "label": "① 問１",
+        "label": "① 問1",
         "audio_src": "audio/8-1.mp3",
-        "choices": [
+        "input_type": "select",
+        "options": [
           {
             "value": "a",
-            "label": "ａ",
-            "image_src": "images/chokkai/image13.png"
+            "label": "a"
           },
           {
             "value": "b",
-            "label": "ｂ",
-            "image_src": "images/chokkai/image14.png"
+            "label": "b"
           },
           {
             "value": "c",
-            "label": "ｃ",
-            "image_src": "images/chokkai/image15.png"
+            "label": "c"
           },
           {
             "value": "d",
-            "label": "ｄ",
-            "image_src": "images/chokkai/image16.png"
+            "label": "d"
+          },
+          {
+            "value": "e",
+            "label": "e"
+          },
+          {
+            "value": "f",
+            "label": "f"
+          },
+          {
+            "value": "g",
+            "label": "g"
           }
         ]
       },
       {
         "field_id": "c8_2",
-        "label": "② 問２",
+        "label": "② 問2",
         "audio_src": "audio/8-2.mp3",
-        "choices": [
+        "input_type": "select",
+        "options": [
           {
             "value": "a",
-            "label": "ａ",
-            "image_src": "images/chokkai/image17.png"
+            "label": "a"
           },
           {
             "value": "b",
-            "label": "ｂ",
-            "image_src": "images/chokkai/image18.png"
+            "label": "b"
           },
           {
             "value": "c",
-            "label": "ｃ",
-            "image_src": "images/chokkai/image19.png"
+            "label": "c"
           },
           {
             "value": "d",
-            "label": "ｄ",
-            "image_src": "images/chokkai/image20.png"
+            "label": "d"
+          },
+          {
+            "value": "e",
+            "label": "e"
+          },
+          {
+            "value": "f",
+            "label": "f"
+          },
+          {
+            "value": "g",
+            "label": "g"
           }
         ]
       }
-    ]
+    ],
+    "image_src": "images/chokkai/image17.png"
   },
   {
     "id": "c9",
