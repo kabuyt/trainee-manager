@@ -18,27 +18,27 @@
         "options": [
           {
             "value": "a",
-            "label": "a. 友だちに会います"
+            "label": "a. ともだちにあいます"
           },
           {
             "value": "b",
-            "label": "b. 花見をします"
+            "label": "b. はなみをします"
           },
           {
             "value": "c",
-            "label": "c. 日本語を勉強します"
+            "label": "c. にほんごをべんきょうします"
           },
           {
             "value": "d",
-            "label": "d. 昼ごはんを食べます"
+            "label": "d. ひるごはんをたべます"
           },
           {
             "value": "e",
-            "label": "e. ビールを飲みます"
+            "label": "e. ビールをのみます"
           },
           {
             "value": "f",
-            "label": "f. 映画を見ます"
+            "label": "f. えいがをみます"
           }
         ]
       },
@@ -50,27 +50,27 @@
         "options": [
           {
             "value": "a",
-            "label": "a. 友だちに会います"
+            "label": "a. ともだちにあいます"
           },
           {
             "value": "b",
-            "label": "b. 花見をします"
+            "label": "b. はなみをします"
           },
           {
             "value": "c",
-            "label": "c. 日本語を勉強します"
+            "label": "c. にほんごをべんきょうします"
           },
           {
             "value": "d",
-            "label": "d. 昼ごはんを食べます"
+            "label": "d. ひるごはんをたべます"
           },
           {
             "value": "e",
-            "label": "e. ビールを飲みます"
+            "label": "e. ビールをのみます"
           },
           {
             "value": "f",
-            "label": "f. 映画を見ます"
+            "label": "f. えいがをみます"
           }
         ]
       }
@@ -109,11 +109,11 @@
         "options": [
           {
             "value": "a",
-            "label": "a. 借りました"
+            "label": "a. かりました"
           },
           {
             "value": "b",
-            "label": "b. 貸しました"
+            "label": "b. かしました"
           }
         ]
       }
@@ -141,27 +141,27 @@
             "options": [
               {
                 "value": "a",
-                "label": "a. お金"
+                "label": "a. おかね"
               },
               {
                 "value": "b",
-                "label": "b. 仕事"
+                "label": "b. しごと"
               },
               {
                 "value": "c",
-                "label": "c. 休み"
+                "label": "c. やすみ"
               },
               {
                 "value": "d",
-                "label": "d. 用事"
+                "label": "d. ようじ"
               },
               {
                 "value": "e",
-                "label": "e. 約束"
+                "label": "e. やくそく"
               },
               {
                 "value": "f",
-                "label": "f. 時間"
+                "label": "f. じかん"
               }
             ]
           },
@@ -172,11 +172,11 @@
             "options": [
               {
                 "value": "飲みません",
-                "label": "飲みません"
+                "label": "のみません"
               },
               {
                 "value": "飲みます",
-                "label": "飲みます"
+                "label": "のみます"
               }
             ]
           }
@@ -193,27 +193,27 @@
             "options": [
               {
                 "value": "a",
-                "label": "a. お金"
+                "label": "a. おかね"
               },
               {
                 "value": "b",
-                "label": "b. 仕事"
+                "label": "b. しごと"
               },
               {
                 "value": "c",
-                "label": "c. 休み"
+                "label": "c. やすみ"
               },
               {
                 "value": "d",
-                "label": "d. 用事"
+                "label": "d. ようじ"
               },
               {
                 "value": "e",
-                "label": "e. 約束"
+                "label": "e. やくそく"
               },
               {
                 "value": "f",
-                "label": "f. 時間"
+                "label": "f. じかん"
               }
             ]
           },
@@ -224,11 +224,11 @@
             "options": [
               {
                 "value": "行きます",
-                "label": "行きます"
+                "label": "いきます"
               },
               {
                 "value": "行きません",
-                "label": "行きません"
+                "label": "いきません"
               }
             ]
           }

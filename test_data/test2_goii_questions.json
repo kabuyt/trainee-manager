@@ -501,7 +501,7 @@
         "choices": [
           {
             "value": "①",
-            "label": "① <ruby>手紙<rt>てがみ</rt></ruby>"
+            "label": "① てがみ"
           },
           {
             "value": "②",
@@ -509,15 +509,15 @@
           },
           {
             "value": "③",
-            "label": "③ お<ruby>花見<rt>はなみ</rt></ruby>"
+            "label": "③ おはなみ"
           },
           {
             "value": "④",
-            "label": "④ <ruby>新聞<rt>しんぶん</rt></ruby>"
+            "label": "④ しんぶん"
           },
           {
             "value": "⑤",
-            "label": "⑤ <ruby>旅行<rt>りょこう</rt></ruby>"
+            "label": "⑤ 旅行"
           }
         ]
       },
@@ -553,7 +553,7 @@
         "choices": [
           {
             "value": "①",
-            "label": "① <ruby>全部<rt>ぜんぶ</rt></ruby>"
+            "label": "① 全部"
           },
           {
             "value": "②",
