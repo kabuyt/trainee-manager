@@ -251,12 +251,12 @@
           {
             "value": "a",
             "label": "ａ",
-            "image_src": "images/chokkai/image1.png"
+            "image_src": "images/chokkai/image14.png"
           },
           {
             "value": "b",
             "label": "ｂ",
-            "image_src": "images/chokkai/image2.png"
+            "image_src": "images/chokkai/image15.png"
           }
         ]
       },
@@ -268,12 +268,12 @@
           {
             "value": "a",
             "label": "ａ",
-            "image_src": "images/chokkai/image4.png"
+            "image_src": "images/chokkai/image17.png"
           },
           {
             "value": "b",
             "label": "ｂ",
-            "image_src": "images/chokkai/image5.png"
+            "image_src": "images/chokkai/image19.png"
           }
         ]
       }
