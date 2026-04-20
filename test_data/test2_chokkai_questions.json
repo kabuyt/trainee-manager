@@ -722,31 +722,31 @@
     "day_options": [
       {
         "value": "a",
-        "label": "a. <ruby>月曜日<rt>げつようび</rt></ruby>"
+        "label": "a. 月曜日"
       },
       {
         "value": "b",
-        "label": "b. <ruby>火曜日<rt>かようび</rt></ruby>"
+        "label": "b. 火曜日"
       },
       {
         "value": "c",
-        "label": "c. <ruby>水曜日<rt>すいようび</rt></ruby>"
+        "label": "c. 水曜日"
       },
       {
         "value": "d",
-        "label": "d. <ruby>木曜日<rt>もくようび</rt></ruby>"
+        "label": "d. 木曜日"
       },
       {
         "value": "e",
-        "label": "e. <ruby>金曜日<rt>きんようび</rt></ruby>"
+        "label": "e. 金曜日"
       },
       {
         "value": "f",
-        "label": "f. <ruby>土曜日<rt>どようび</rt></ruby>"
+        "label": "f. 土曜日"
       },
       {
         "value": "g",
-        "label": "g. <ruby>日曜日<rt>にちようび</rt></ruby>"
+        "label": "g. 日曜日"
       }
     ],
     "items": [
