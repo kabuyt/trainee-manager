@@ -1,0 +1,20 @@
+# Supabase service_role キーキャッシュ（絶対にコミットしない）
+test_data/.service_key.cache
+**/.service_key.cache
+
+# 一時ファイル
+*.tmp
+*.log
+__pycache__/
+*.pyc
+
+# Claude
+.claude/
+
+# 個人作業ファイル
+all_data.txt
+answers_data.txt
+scores_data.txt
+ranks.txt
+diagnosis.json
+rank_report_tmp.docx
