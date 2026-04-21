@@ -6,13 +6,13 @@
     "instruction": "Nghe va chon dap an dung（1/2/3）.",
     "points_each": 3,
     "total_points": 15,
-    "intro_audio": "audio/<ruby>問題<rt>もんだい</rt></ruby>1-0 <ruby>例題<rt>れいだい</rt></ruby>.mp3",
+    "intro_audio": "audio/問題1-0 例題.mp3",
     "intro_label": "（<ruby>例<rt>れい</rt></ruby>）",
     "items": [
       {
         "field_id": "c1_1",
         "label": "① <ruby>問<rt>とい</rt></ruby>１",
-        "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>1-1.mp3",
+        "audio_src": "audio/問題1-1.mp3",
         "input_type": "select",
         "options": [
           "1",
@@ -23,7 +23,7 @@
       {
         "field_id": "c1_2",
         "label": "② <ruby>問<rt>とい</rt></ruby>２",
-        "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>1-2.mp3",
+        "audio_src": "audio/問題1-2.mp3",
         "input_type": "select",
         "options": [
           "1",
@@ -34,7 +34,7 @@
       {
         "field_id": "c1_3",
         "label": "③ <ruby>問<rt>とい</rt></ruby>３",
-        "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>1-3.mp3",
+        "audio_src": "audio/問題1-3.mp3",
         "input_type": "select",
         "options": [
           "1",
@@ -45,7 +45,7 @@
       {
         "field_id": "c1_4",
         "label": "④ <ruby>問<rt>とい</rt></ruby>４",
-        "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>1-4.mp3",
+        "audio_src": "audio/問題1-4.mp3",
         "input_type": "select",
         "options": [
           "1",
@@ -56,7 +56,7 @@
       {
         "field_id": "c1_5",
         "label": "⑤ <ruby>問<rt>とい</rt></ruby>５",
-        "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>1-5.mp3",
+        "audio_src": "audio/問題1-5.mp3",
         "input_type": "select",
         "options": [
           "1",
@@ -69,15 +69,14 @@
   {
     "id": "c2",
     "type": "audio_select",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>２．⚠ <ruby>音声<rt>おんせい</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて<ruby>空欄<rt>くうらん</rt></ruby>を<ruby>埋<rt>う</rt></ruby>めてください　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×5<ruby>問<rt>とい</rt></ruby>＝15<ruby>点<rt>てん</rt></ruby>＞",
-    "instruction": "この<ruby>問題<rt>もんだい</rt></ruby>は<ruby>先生<rt>せんせい</rt></ruby>が<ruby>採点<rt>さいてん</rt></ruby>します。<ruby>音声<rt>おんせい</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて、（　）に<ruby>入<rt>はい</rt></ruby>る<ruby>言葉<rt>ことば</rt></ruby>を<ruby>書<rt>か</rt></ruby>いてください。",
-    "grading": "manual",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>２．<ruby>音声<rt>おんせい</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて<ruby>空欄<rt>くうらん</rt></ruby>を<ruby>埋<rt>う</rt></ruby>めてください　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×5<ruby>問<rt>とい</rt></ruby>＝15<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "<ruby>音声<rt>おんせい</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて、（　）に<ruby>入<rt>はい</rt></ruby>る<ruby>言葉<rt>ことば</rt></ruby>をひらがなで<ruby>書<rt>か</rt></ruby>いてください。",
     "points_each": 3,
     "total_points": 15,
     "items": [
       {
         "label": "① <ruby>問<rt>とい</rt></ruby>１",
-        "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>2-1.mp3",
+        "audio_src": "audio/問題2-1.mp3",
         "fields": [
           {
             "field_id": "c2_1",
@@ -93,7 +92,7 @@
       },
       {
         "label": "② <ruby>問<rt>とい</rt></ruby>２",
-        "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>2-2.mp3",
+        "audio_src": "audio/問題2-2.mp3",
         "fields": [
           {
             "field_id": "c2_3",
@@ -124,7 +123,7 @@
     "parts": [
       {
         "label": "Part 1（5<ruby>問<rt>とい</rt></ruby>）",
-        "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>3-1.mp3",
+        "audio_src": "audio/問題3-1.mp3",
         "items": [
           {
             "field_id": "c3_1",
@@ -205,7 +204,7 @@
       },
       {
         "label": "Part 2（5<ruby>問<rt>とい</rt></ruby>）",
-        "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>3-2.mp3",
+        "audio_src": "audio/問題3-2.mp3",
         "items": [
           {
             "field_id": "c3_6",
@@ -248,7 +247,7 @@
               },
               {
                 "value": "b",
-                "label": "b ワインを持ってきました"
+                "label": "b ワインを<ruby>買<rt>か</rt></ruby>ってきました"
               }
             ]
           },
@@ -274,11 +273,11 @@
             "options": [
               {
                 "value": "a",
-                "label": "a 友達に会いました"
+                "label": "a <ruby>人<rt>ひと</rt></ruby>に<ruby>会<rt>あ</rt></ruby>いました"
               },
               {
                 "value": "b",
-                "label": "b 本を読みました"
+                "label": "b <ruby>英語<rt>えいご</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えました"
               }
             ]
           }
@@ -293,13 +292,13 @@
     "instruction": "Nghe va chon dap an tot nhat（1-4）.",
     "points_each": 5,
     "total_points": 20,
-    "intro_audio": "audio/<ruby>問題<rt>もんだい</rt></ruby>4-0 イントロ.mp3",
+    "intro_audio": "audio/問題4-0 イントロ.mp3",
     "intro_label": "（イントロ）",
     "items": [
       {
         "field_id": "c4_1",
         "label": "① <ruby>問<rt>とい</rt></ruby>１",
-        "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>4-1.mp3",
+        "audio_src": "audio/問題4-1.mp3",
         "input_type": "radio",
         "choices": [
           {
@@ -323,7 +322,7 @@
       {
         "field_id": "c4_2",
         "label": "② <ruby>問<rt>とい</rt></ruby>２",
-        "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>4-2.mp3",
+        "audio_src": "audio/問題4-2.mp3",
         "input_type": "radio",
         "choices": [
           {
@@ -336,18 +335,18 @@
           },
           {
             "value": "3",
-            "label": "3. <ruby>赤<rt>あか</rt></ruby>のボールペン"
+            "label": "3. <ruby>黒<rt>くろ</rt></ruby>のボールペン"
           },
           {
             "value": "4",
-            "label": "4. <ruby>青<rt>あお</rt></ruby>のボールペン"
+            "label": "4. <ruby>赤<rt>あか</rt></ruby>のボールペン"
           }
         ]
       },
       {
         "field_id": "c4_3",
         "label": "③ <ruby>問<rt>とい</rt></ruby>３",
-        "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>4-3.mp3",
+        "audio_src": "audio/問題4-3.mp3",
         "input_type": "radio",
         "choices": [
           {
@@ -371,7 +370,7 @@
       {
         "field_id": "c4_4",
         "label": "④ <ruby>問<rt>とい</rt></ruby>４",
-        "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>4-4.mp3",
+        "audio_src": "audio/問題4-4.mp3",
         "input_type": "radio",
         "choices": [
           {
@@ -384,11 +383,11 @@
           },
           {
             "value": "3",
-            "label": "3. <ruby>冷<rt>つめ</rt></ruby>たいお<ruby>茶<rt>ちゃ</rt></ruby>"
+            "label": "3. <ruby>冷<rt>つめ</rt></ruby>たい<ruby>紅茶<rt>こうちゃ</rt></ruby>"
           },
           {
             "value": "4",
-            "label": "4. <ruby>温<rt>あたた</rt></ruby>かいお<ruby>茶<rt>ちゃ</rt></ruby>"
+            "label": "4. <ruby>温<rt>あたた</rt></ruby>かい<ruby>紅茶<rt>こうちゃ</rt></ruby>"
           }
         ]
       }
@@ -401,7 +400,7 @@
     "instruction": "Nghe va chon ○ hoac ×.",
     "points_each": 2,
     "total_points": 10,
-    "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>5.mp3",
+    "audio_src": "audio/問題5.mp3",
     "items": [
       {
         "field_id": "c5_1",
@@ -458,7 +457,7 @@
     "grading": "manual",
     "points_each": 4,
     "total_points": 20,
-    "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>6.mp3",
+    "audio_src": "audio/問題6.mp3",
     "items": [
       {
         "field_id": "c6_1",

@@ -1,689 +1,187 @@
 [
   {
     "id": "g1",
-    "type": "image_select",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>１．Hãy chọn từ đúng cho mỗi hình　＜<ruby>各<rt>かく</rt></ruby>1<ruby>点<rt>てん</rt></ruby>×10<ruby>問<rt>とい</rt></ruby>＝10<ruby>点<rt>てん</rt></ruby>＞",
-    "points_each": 1,
+    "type": "select_choice",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>１．Nối tranh và từ thích hợp　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×5<ruby>問<rt>とい</rt></ruby>＝10<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "<ruby>絵<rt>え</rt></ruby>と<ruby>言葉<rt>ことば</rt></ruby>を<ruby>合<rt>あ</rt></ruby>わせてください。",
+    "points_each": 2,
     "total_points": 10,
-    "images": [
-      {
-        "label": "①",
-        "src": "images/goii/goii_mondai_001.jpeg"
-      },
-      {
-        "label": "②",
-        "src": "images/goii/goii_mondai_002.jpeg"
-      },
-      {
-        "label": "③",
-        "src": "images/goii/goii_mondai_003.jpeg"
-      },
-      {
-        "label": "④",
-        "src": "images/goii/goii_mondai_004.png"
-      },
-      {
-        "label": "⑤",
-        "src": "images/goii/goii_mondai_005.png"
-      },
-      {
-        "label": "⑥",
-        "src": "images/goii/goii_mondai_006.png"
-      },
-      {
-        "label": "⑦",
-        "src": "images/goii/goii_mondai_007.jpeg"
-      },
-      {
-        "label": "⑧",
-        "src": "images/goii/goii_mondai_008.png"
-      },
-      {
-        "label": "⑨",
-        "src": "images/goii/goii_mondai_009.jpeg"
-      },
-      {
-        "label": "⑩",
-        "src": "images/goii/goii_mondai_010.png"
-      }
+    "options_pool": [
+      { "value": "やけどをします", "label": "やけどをします" },
+      { "value": "あたまがいたい", "label": "<ruby>頭<rt>あたま</rt></ruby>が<ruby>痛<rt>いた</rt></ruby>い" },
+      { "value": "かゆい", "label": "かゆい" },
+      { "value": "しょくよくがありません", "label": "<ruby>食欲<rt>しょくよく</rt></ruby>がありません" },
+      { "value": "こっせつ", "label": "<ruby>骨折<rt>こっせつ</rt></ruby>" }
     ],
     "items": [
-      {
-        "field_id": "g1_1",
-        "label": "①",
-        "input_type": "select",
-        "options": [
-          "コート",
-          "セーター",
-          "くつした",
-          "くつ",
-          "ぼうし",
-          "かさ",
-          "ネクタイ",
-          "シャツ",
-          "スカート",
-          "ズボン"
-        ]
-      },
-      {
-        "field_id": "g1_2",
-        "label": "②",
-        "input_type": "select",
-        "options": [
-          "コート",
-          "セーター",
-          "くつした",
-          "くつ",
-          "ぼうし",
-          "かさ",
-          "ネクタイ",
-          "シャツ",
-          "スカート",
-          "ズボン"
-        ]
-      },
-      {
-        "field_id": "g1_3",
-        "label": "③",
-        "input_type": "select",
-        "options": [
-          "コート",
-          "セーター",
-          "くつした",
-          "くつ",
-          "ぼうし",
-          "かさ",
-          "ネクタイ",
-          "シャツ",
-          "スカート",
-          "ズボン"
-        ]
-      },
-      {
-        "field_id": "g1_4",
-        "label": "④",
-        "input_type": "select",
-        "options": [
-          "コート",
-          "セーター",
-          "くつした",
-          "くつ",
-          "ぼうし",
-          "かさ",
-          "ネクタイ",
-          "シャツ",
-          "スカート",
-          "ズボン"
-        ]
-      },
-      {
-        "field_id": "g1_5",
-        "label": "⑤",
-        "input_type": "select",
-        "options": [
-          "コート",
-          "セーター",
-          "くつした",
-          "くつ",
-          "ぼうし",
-          "かさ",
-          "ネクタイ",
-          "シャツ",
-          "スカート",
-          "ズボン"
-        ]
-      },
-      {
-        "field_id": "g1_6",
-        "label": "⑥",
-        "input_type": "select",
-        "options": [
-          "コート",
-          "セーター",
-          "くつした",
-          "くつ",
-          "ぼうし",
-          "かさ",
-          "ネクタイ",
-          "シャツ",
-          "スカート",
-          "ズボン"
-        ]
-      },
-      {
-        "field_id": "g1_7",
-        "label": "⑦",
-        "input_type": "select",
-        "options": [
-          "コート",
-          "セーター",
-          "くつした",
-          "くつ",
-          "ぼうし",
-          "かさ",
-          "ネクタイ",
-          "シャツ",
-          "スカート",
-          "ズボン"
-        ]
-      },
-      {
-        "field_id": "g1_8",
-        "label": "⑧",
-        "input_type": "select",
-        "options": [
-          "コート",
-          "セーター",
-          "くつした",
-          "くつ",
-          "ぼうし",
-          "かさ",
-          "ネクタイ",
-          "シャツ",
-          "スカート",
-          "ズボン"
-        ]
-      },
-      {
-        "field_id": "g1_9",
-        "label": "⑨",
-        "input_type": "select",
-        "options": [
-          "コート",
-          "セーター",
-          "くつした",
-          "くつ",
-          "ぼうし",
-          "かさ",
-          "ネクタイ",
-          "シャツ",
-          "スカート",
-          "ズボン"
-        ]
-      },
-      {
-        "field_id": "g1_10",
-        "label": "⑩",
-        "input_type": "select",
-        "options": [
-          "コート",
-          "セーター",
-          "くつした",
-          "くつ",
-          "ぼうし",
-          "かさ",
-          "ネクタイ",
-          "シャツ",
-          "スカート",
-          "ズボン"
-        ]
-      }
+      { "field_id": "g1_1", "label": "１）", "image_src": "images/goii/goii_mondai_001.jpeg" },
+      { "field_id": "g1_2", "label": "２）", "image_src": "images/goii/goii_mondai_002.jpeg" },
+      { "field_id": "g1_3", "label": "３）", "image_src": "images/goii/goii_mondai_003.jpeg" },
+      { "field_id": "g1_4", "label": "４）", "image_src": "images/goii/goii_mondai_004.png" },
+      { "field_id": "g1_5", "label": "５）", "image_src": "images/goii/goii_mondai_005.png" }
     ]
   },
   {
     "id": "g2",
-    "type": "image_select_grid",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>２．Chuyển sang tiếng Nhật（<ruby>日本語<rt>にほんご</rt></ruby>で<ruby>書<rt>か</rt></ruby>いてください）　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×8<ruby>問<rt>とい</rt></ruby>＝24<ruby>点<rt>てん</rt></ruby>＞",
-    "points_each": 3,
-    "total_points": 24,
-    "dynamic_options": true,
-    "pool_correct": [
-      "のります",
-      "おります",
-      "のりかえます",
-      "わたります",
-      "あるきます",
-      "はしります",
-      "とまります",
-      "まがります"
+    "type": "select_choice",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>２．（　　）に<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>入<rt>い</rt></ruby>れなさい。　＜<ruby>各<rt>かく</rt></ruby>1<ruby>点<rt>てん</rt></ruby>×3<ruby>問<rt>とい</rt></ruby>＝3<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "A/B/C の<ruby>絵<rt>え</rt></ruby>にあう<ruby>言葉<rt>ことば</rt></ruby>を<ruby>選<rt>えら</rt></ruby>んでください。",
+    "points_each": 1,
+    "total_points": 3,
+    "options_pool": [
+      { "value": "ぶたにく", "label": "ぶたにく（<ruby>豚肉<rt>ぶたにく</rt></ruby>）" },
+      { "value": "ぎゅうにく", "label": "ぎゅうにく（<ruby>牛肉<rt>ぎゅうにく</rt></ruby>）" },
+      { "value": "とりにく", "label": "とりにく（<ruby>鶏肉<rt>とりにく</rt></ruby>）" }
     ],
-    "pool_extra": [
-      "きります",
-      "おぼえます",
-      "わすれます",
-      "でかけます",
-      "つきます"
-    ],
-    "distractors_per_item": 3,
-    "rows": [
-      {
-        "images": [
-          {
-            "src": "images/goii/goii_mondai_011.jpeg"
-          },
-          {
-            "src": "images/goii/goii_mondai_012.png"
-          },
-          {
-            "src": "images/goii/goii_mondai_013.png"
-          },
-          {
-            "src": "images/goii/goii_mondai_014.png"
-          }
-        ],
-        "items": [
-          {
-            "field_id": "g2_1",
-            "label": "１）",
-            "input_type": "select"
-          },
-          {
-            "field_id": "g2_2",
-            "label": "２）",
-            "input_type": "select"
-          },
-          {
-            "field_id": "g2_3",
-            "label": "３）",
-            "input_type": "select"
-          },
-          {
-            "field_id": "g2_4",
-            "label": "４）",
-            "input_type": "select"
-          }
-        ]
-      },
-      {
-        "images": [
-          {
-            "src": "images/goii/goii_mondai_015.jpeg"
-          },
-          {
-            "src": "images/goii/goii_mondai_016.png"
-          },
-          {
-            "src": "images/goii/image17.jpeg"
-          },
-          {
-            "src": "images/goii/image18.jpeg"
-          }
-        ],
-        "items": [
-          {
-            "field_id": "g2_5",
-            "label": "５）",
-            "input_type": "select"
-          },
-          {
-            "field_id": "g2_6",
-            "label": "６）",
-            "input_type": "select"
-          },
-          {
-            "field_id": "g2_7",
-            "label": "７）",
-            "input_type": "select"
-          },
-          {
-            "field_id": "g2_8",
-            "label": "８）",
-            "input_type": "select"
-          }
-        ]
-      }
+    "items": [
+      { "field_id": "g2_1", "label": "A", "image_src": "images/goii/goii_mondai_008.png" },
+      { "field_id": "g2_2", "label": "B", "image_src": "images/goii/goii_mondai_009.jpeg" },
+      { "field_id": "g2_3", "label": "C", "image_src": "images/goii/goii_mondai_010.png" }
     ]
   },
   {
     "id": "g3",
     "type": "table_fill",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>３．<ruby>読み方<rt>よみかた</rt></ruby>を<ruby>書<rt>か</rt></ruby>いてください　＜<ruby>各<rt>かく</rt></ruby>1<ruby>点<rt>てん</rt></ruby>×10<ruby>問<rt>とい</rt></ruby>＝10<ruby>点<rt>てん</rt></ruby>＞",
-    "instruction": "Hãy viết cách đọc bằng Hiragana.",
-    "points_each": 1,
-    "total_points": 10,
-    "tables": [
-      {
-        "headers": [
-          "<ruby>簡単<rt>かんたん</rt></ruby>",
-          "<ruby>背<rt>せ</rt></ruby>",
-          "<ruby>季節<rt>きせつ</rt></ruby>",
-          "<ruby>世界<rt>せかい</rt></ruby>",
-          "<ruby>経験<rt>けいけん</rt></ruby>"
-        ],
-        "header_label": "<ruby>漢字<rt>かんじ</rt></ruby>",
-        "row_label": "<ruby>読<rt>よ</rt></ruby>み",
-        "items": [
-          {
-            "field_id": "g3_1",
-            "col": 0,
-            "input_type": "text"
-          },
-          {
-            "field_id": "g3_2",
-            "col": 1,
-            "input_type": "text"
-          },
-          {
-            "field_id": "g3_3",
-            "col": 2,
-            "input_type": "text"
-          },
-          {
-            "field_id": "g3_4",
-            "col": 3,
-            "input_type": "text"
-          },
-          {
-            "field_id": "g3_5",
-            "col": 4,
-            "input_type": "text"
-          }
-        ]
-      },
-      {
-        "headers": [
-          "<ruby>広<rt>ひろ</rt></ruby>い",
-          "<ruby>着<rt>き</rt></ruby>ます",
-          "<ruby>降<rt>ふ</rt></ruby>ります",
-          "<ruby>遊<rt>あそ</rt></ruby>びます",
-          "<ruby>届<rt>とど</rt></ruby>けます"
-        ],
-        "header_label": "<ruby>漢字<rt>かんじ</rt></ruby>",
-        "row_label": "<ruby>読<rt>よ</rt></ruby>み",
-        "items": [
-          {
-            "field_id": "g3_6",
-            "col": 0,
-            "input_type": "text"
-          },
-          {
-            "field_id": "g3_7",
-            "col": 1,
-            "input_type": "text"
-          },
-          {
-            "field_id": "g3_8",
-            "col": 2,
-            "input_type": "text"
-          },
-          {
-            "field_id": "g3_9",
-            "col": 3,
-            "input_type": "text"
-          },
-          {
-            "field_id": "g3_10",
-            "col": 4,
-            "input_type": "text"
-          }
-        ]
-      }
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>３．<ruby>日本語<rt>にほんご</rt></ruby>で<ruby>書<rt>か</rt></ruby>きなさい。　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×8<ruby>問<rt>とい</rt></ruby>＝24<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "<ruby>絵<rt>え</rt></ruby>の<ruby>言葉<rt>ことば</rt></ruby>をひらがなまたはカタカナで<ruby>書<rt>か</rt></ruby>いてください。",
+    "points_each": 3,
+    "total_points": 24,
+    "items": [
+      { "field_id": "g3_1", "label": "１）", "image_src": "images/goii/goii_mondai_011.jpeg", "input_type": "text" },
+      { "field_id": "g3_2", "label": "２）", "image_src": "images/goii/goii_mondai_012.png",  "input_type": "text" },
+      { "field_id": "g3_3", "label": "３）", "image_src": "images/goii/goii_mondai_013.png",  "input_type": "text" },
+      { "field_id": "g3_4", "label": "４）", "image_src": "images/goii/goii_mondai_014.png",  "input_type": "text" },
+      { "field_id": "g3_5", "label": "５）", "image_src": "images/goii/goii_mondai_015.jpeg", "input_type": "text" },
+      { "field_id": "g3_6", "label": "６）", "image_src": "images/goii/goii_mondai_016.png",  "input_type": "text" },
+      { "field_id": "g3_7", "label": "７）", "image_src": "images/goii/image17.jpeg",         "input_type": "text" },
+      { "field_id": "g3_8", "label": "８）", "image_src": "images/goii/image18.jpeg",         "input_type": "text" }
     ]
   },
   {
     "id": "g4",
-    "type": "radio_choice",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>４．<ruby>正<rt>ただ</rt></ruby>しいものを<ruby>選<rt>えら</rt></ruby>んでください　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×5<ruby>問<rt>とい</rt></ruby>＝10<ruby>点<rt>てん</rt></ruby>＞",
-    "instruction": "Hãy khoanh tròn đáp án đúng.",
-    "points_each": 2,
-    "total_points": 10,
+    "type": "table_fill",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>４．<ruby>反対<rt>はんたい</rt></ruby>の<ruby>言葉<rt>ことば</rt></ruby>を<ruby>書<rt>か</rt></ruby>いてください。　＜<ruby>各<rt>かく</rt></ruby>1<ruby>点<rt>てん</rt></ruby>×7<ruby>問<rt>とい</rt></ruby>＝7<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "<ruby>反対<rt>はんたい</rt></ruby>の<ruby>意味<rt>いみ</rt></ruby>の<ruby>言葉<rt>ことば</rt></ruby>をひらがなで<ruby>書<rt>か</rt></ruby>いてください。",
+    "points_each": 1,
+    "total_points": 7,
     "items": [
-      {
-        "field_id": "g4_1",
-        "question": "１）　<ruby>日本<rt>にほん</rt></ruby>は<ruby>今<rt>いま</rt></ruby>（　　）です。<ruby>毎日雪<rt>まいにちゆき</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>ります。",
-        "choices": [
-          {
-            "value": "①",
-            "label": "① あたたかい"
-          },
-          {
-            "value": "②",
-            "label": "② すずしい"
-          },
-          {
-            "value": "③",
-            "label": "③ さむい"
-          },
-          {
-            "value": "④",
-            "label": "④ あつい"
-          }
-        ]
-      },
-      {
-        "field_id": "g4_2",
-        "question": "２）　<ruby>今日<rt>きょう</rt></ruby>は<ruby>何<rt>なに</rt></ruby>も（　　）たくないです。",
-        "choices": [
-          {
-            "value": "①",
-            "label": "① <ruby>食<rt>た</rt></ruby>べ"
-          },
-          {
-            "value": "②",
-            "label": "② <ruby>食<rt>た</rt></ruby>べます"
-          },
-          {
-            "value": "③",
-            "label": "③ <ruby>食<rt>た</rt></ruby>べる"
-          },
-          {
-            "value": "④",
-            "label": "④ <ruby>食<rt>た</rt></ruby>べて"
-          }
-        ]
-      },
-      {
-        "field_id": "g4_3",
-        "question": "３）　<ruby>昨日<rt>きのう</rt></ruby>は<ruby>雨<rt>あめ</rt></ruby>でした。そして、<ruby>風<rt>かぜ</rt></ruby>も（　　）です。",
-        "choices": [
-          {
-            "value": "①",
-            "label": "① <ruby>強<rt>つよ</rt></ruby>い"
-          },
-          {
-            "value": "②",
-            "label": "② <ruby>強<rt>つよ</rt></ruby>かった"
-          },
-          {
-            "value": "③",
-            "label": "③ <ruby>強<rt>つよ</rt></ruby>くない"
-          },
-          {
-            "value": "④",
-            "label": "④ <ruby>強<rt>つよ</rt></ruby>くて"
-          }
-        ]
-      },
-      {
-        "field_id": "g4_4",
-        "question": "４）　<ruby>日本語<rt>にほんご</rt></ruby>が<ruby>上手<rt>じょうず</rt></ruby>に（　　）たいです。",
-        "choices": [
-          {
-            "value": "①",
-            "label": "① なります"
-          },
-          {
-            "value": "②",
-            "label": "② なり"
-          },
-          {
-            "value": "③",
-            "label": "③ なる"
-          },
-          {
-            "value": "④",
-            "label": "④ なって"
-          }
-        ]
-      },
-      {
-        "field_id": "g4_5",
-        "question": "５）　<ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>髪<rt>かみ</rt></ruby>が（　　）、きれいな<ruby>人<rt>ひと</rt></ruby>です。",
-        "choices": [
-          {
-            "value": "①",
-            "label": "① <ruby>長<rt>なが</rt></ruby>い"
-          },
-          {
-            "value": "②",
-            "label": "② <ruby>長<rt>なが</rt></ruby>くて"
-          },
-          {
-            "value": "③",
-            "label": "③ <ruby>長<rt>なが</rt></ruby>かった"
-          },
-          {
-            "value": "④",
-            "label": "④ <ruby>長<rt>なが</rt></ruby>く"
-          }
-        ]
-      }
+      { "field_id": "g4_1", "label": "せまい　⇔", "input_type": "text" },
+      { "field_id": "g4_2", "label": "<ruby>涼<rt>すず</rt></ruby>しい　⇔", "input_type": "text" },
+      { "field_id": "g4_3", "label": "<ruby>重<rt>おも</rt></ruby>い　⇔", "input_type": "text" },
+      { "field_id": "g4_4", "label": "<ruby>多<rt>おお</rt></ruby>い　⇔", "input_type": "text" },
+      { "field_id": "g4_5", "label": "<ruby>遠<rt>とお</rt></ruby>い　⇔", "input_type": "text" },
+      { "field_id": "g4_6", "label": "<ruby>長<rt>なが</rt></ruby>い　⇔", "input_type": "text" },
+      { "field_id": "g4_7", "label": "<ruby>暗<rt>くら</rt></ruby>い　⇔", "input_type": "text" }
     ]
   },
   {
     "id": "g5",
-    "type": "table_fill",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>５．<ruby>動詞<rt>どうし</rt></ruby>のて<ruby>形<rt>かたち</rt></ruby>を<ruby>書<rt>か</rt></ruby>いてください　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×10<ruby>問<rt>とい</rt></ruby>＝20<ruby>点<rt>てん</rt></ruby>＞",
-    "instruction": "Hãy viết dạng て của động từ bằng Hiragana.",
+    "type": "radio_choice",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>５．<ruby>正<rt>ただ</rt></ruby>しいものを<ruby>選<rt>えら</rt></ruby>んでください。　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×5<ruby>問<rt>とい</rt></ruby>＝10<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "（　）に<ruby>入<rt>はい</rt></ruby>る<ruby>言葉<rt>ことば</rt></ruby>を<ruby>選<rt>えら</rt></ruby>んでください。",
     "points_each": 2,
-    "total_points": 20,
-    "tables": [
+    "total_points": 10,
+    "example_html": "<ruby>例<rt>れい</rt></ruby>）　けさ9<ruby>時<rt>じ</rt></ruby>に（ <b>①</b> ）を<ruby>食<rt>た</rt></ruby>べました。<br>①<ruby>朝<rt>あさ</rt></ruby>ごはん　②<ruby>昼<rt>ひる</rt></ruby>ごはん　③<ruby>夜<rt>よる</rt></ruby>ごはん　④ジュース　⑤お<ruby>茶<rt>ちゃ</rt></ruby>",
+    "items": [
       {
-        "headers": [
-          "<ruby>辞書形<rt>じしょけい</rt></ruby>",
-          "て<ruby>形<rt>かたち</rt></ruby>"
-        ],
-        "items": [
-          {
-            "field_id": "g5_1",
-            "prompt": "１）かきます",
-            "input_type": "text"
-          },
-          {
-            "field_id": "g5_2",
-            "prompt": "２）のみます",
-            "input_type": "text"
-          },
-          {
-            "field_id": "g5_3",
-            "prompt": "３）あそびます",
-            "input_type": "text"
-          },
-          {
-            "field_id": "g5_4",
-            "prompt": "４）まちます",
-            "input_type": "text"
-          },
-          {
-            "field_id": "g5_5",
-            "prompt": "５）つかいます",
-            "input_type": "text"
-          },
-          {
-            "field_id": "g5_6",
-            "prompt": "６）もちます",
-            "input_type": "text"
-          },
-          {
-            "field_id": "g5_7",
-            "prompt": "７）とります",
-            "input_type": "text"
-          },
-          {
-            "field_id": "g5_8",
-            "prompt": "８）はなします",
-            "input_type": "text"
-          },
-          {
-            "field_id": "g5_9",
-            "prompt": "９）きます（<ruby>来<rt>き</rt></ruby>ます）",
-            "input_type": "text"
-          },
-          {
-            "field_id": "g5_10",
-            "prompt": "１０）します",
-            "input_type": "text"
-          }
+        "field_id": "g5_1",
+        "question": "１）　<ruby>昨日<rt>きのう</rt></ruby>（　　）<ruby>日本<rt>にほん</rt></ruby><ruby>料理<rt>りょうり</rt></ruby>のレストランへ<ruby>行<rt>い</rt></ruby>きました。またい行きたいです。",
+        "choices": [
+          { "value": "1", "label": "① いちばん" },
+          { "value": "2", "label": "② ずっと" },
+          { "value": "3", "label": "③ だけ" },
+          { "value": "4", "label": "④ はじめて" },
+          { "value": "5", "label": "⑤ よく" }
+        ]
+      },
+      {
+        "field_id": "g5_2",
+        "question": "２）　いつも5<ruby>時<rt>じ</rt></ruby>に<ruby>仕事<rt>しごと</rt></ruby>が<ruby>終<rt>お</rt></ruby>わります。<ruby>今日<rt>きょう</rt></ruby>は、7<ruby>時<rt>じ</rt></ruby>まで（　　）します。",
+        "choices": [
+          { "value": "1", "label": "① <ruby>美術<rt>びじゅつ</rt></ruby>" },
+          { "value": "2", "label": "② <ruby>心配<rt>しんぱい</rt></ruby>" },
+          { "value": "3", "label": "③ <ruby>残業<rt>ざんぎょう</rt></ruby>" },
+          { "value": "4", "label": "④ <ruby>電話<rt>でんわ</rt></ruby>" },
+          { "value": "5", "label": "⑤ <ruby>下痢<rt>げり</rt></ruby>" }
+        ]
+      },
+      {
+        "field_id": "g5_3",
+        "question": "３）　ここは（　　）ですから、あちらへ<ruby>行<rt>い</rt></ruby>ってください。",
+        "choices": [
+          { "value": "1", "label": "① すっぱい" },
+          { "value": "2", "label": "② ゆっくり" },
+          { "value": "3", "label": "③ <ruby>欲<rt>ほ</rt></ruby>しい" },
+          { "value": "4", "label": "④ <ruby>危<rt>あぶ</rt></ruby>ない" },
+          { "value": "5", "label": "⑤ <ruby>大切<rt>たいせつ</rt></ruby>" }
+        ]
+      },
+      {
+        "field_id": "g5_4",
+        "question": "４）　バスの（　　）を<ruby>見<rt>み</rt></ruby>てください。あと3<ruby>分<rt>ぷん</rt></ruby>でバスが<ruby>来<rt>き</rt></ruby>ますよ。",
+        "choices": [
+          { "value": "1", "label": "① <ruby>時刻表<rt>じこくひょう</rt></ruby>" },
+          { "value": "2", "label": "② <ruby>運転手<rt>うんてんしゅ</rt></ruby>" },
+          { "value": "3", "label": "③ カタログ" },
+          { "value": "4", "label": "④ <ruby>定期券<rt>ていきけん</rt></ruby>" },
+          { "value": "5", "label": "⑤ <ruby>名前<rt>なまえ</rt></ruby>" }
+        ]
+      },
+      {
+        "field_id": "g5_5",
+        "question": "５）　マイケル・ジョーダンはとても（　　）が<ruby>高<rt>たか</rt></ruby>い<ruby>人<rt>ひと</rt></ruby>です。198センチメートルです。",
+        "choices": [
+          { "value": "1", "label": "① <ruby>足<rt>あし</rt></ruby>" },
+          { "value": "2", "label": "② <ruby>体<rt>からだ</rt></ruby>" },
+          { "value": "3", "label": "③ <ruby>骨<rt>ほね</rt></ruby>" },
+          { "value": "4", "label": "④ <ruby>耳<rt>みみ</rt></ruby>" },
+          { "value": "5", "label": "⑤ <ruby>背<rt>せ</rt></ruby>" }
         ]
       }
     ]
   },
   {
     "id": "g6",
-    "type": "select_dynamic_pool",
-    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>６．Tiếng Nhật ⇔ Tiếng Việt　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×13<ruby>問<rt>とい</rt></ruby>＝26<ruby>点<rt>てん</rt></ruby>＞",
-    "instruction": "Hãy chọn nghĩa tiếng Việt đúng.（ベトナム<ruby>語<rt>ご</rt></ruby>の<ruby>意味<rt>いみ</rt></ruby>を<ruby>選<rt>えら</rt></ruby>んでください）",
+    "type": "table_fill",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>６．カテゴリーに<ruby>合<rt>あ</rt></ruby>うものを<ruby>選<rt>えら</rt></ruby>んでください。　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×4<ruby>問<rt>とい</rt></ruby>＝8<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "<ruby>各<rt>かく</rt></ruby>カテゴリーに<ruby>属<rt>ぞく</rt></ruby>する3<ruby>つ<rt>つ</rt></ruby>を A〜O の<ruby>中<rt>なか</rt></ruby>から<ruby>選<rt>えら</rt></ruby>んで、「, 」で<ruby>区切<rt>くぎ</rt></ruby>って<ruby>書<rt>か</rt></ruby>いてください。",
     "points_each": 2,
-    "total_points": 26,
-    "pool_correct": [
-      "đang sống",
-      "đang làm việc",
-      "nhớ, ghi nhớ",
-      "quên",
-      "rẽ, quẹo",
-      "lên (xe)",
-      "xuống (xe)",
-      "đã kết hôn",
-      "thẳng",
-      "ngã tư",
-      "đèn giao thông",
-      "cầu",
-      "cảnh sát"
-    ],
-    "pool_extra": [
-      "chạy",
-      "đi bộ",
-      "dừng lại",
-      "bắt đầu",
-      "kết thúc",
-      "nguy hiểm",
-      "an toàn"
-    ],
-    "distractors_per_item": 3,
+    "total_points": 8,
+    "reference_html": "<p>A ティエンさん　B <ruby>雨<rt>あめ</rt></ruby>　C <ruby>銀行員<rt>ぎんこういん</rt></ruby>　D <ruby>佐藤<rt>さとう</rt></ruby>さん　E <ruby>秋<rt>あき</rt></ruby>　F <ruby>山田<rt>やまだ</rt></ruby>さん　G <ruby>警察署<rt>けいさつしょ</rt></ruby>　H <ruby>図書館<rt>としょかん</rt></ruby>　I くもり　J <ruby>春<rt>はる</rt></ruby>　K エンジニア　L <ruby>神社<rt>じんじゃ</rt></ruby>　M <ruby>雪<rt>ゆき</rt></ruby>　N <ruby>駅員<rt>えきいん</rt></ruby>　O <ruby>夏<rt>なつ</rt></ruby></p><p><ruby>例<rt>れい</rt></ruby>）　<ruby>名前<rt>なまえ</rt></ruby>：A, D, F</p>",
     "items": [
-      {
-        "field_id": "g6_1",
-        "label": "１．すんでいます"
-      },
-      {
-        "field_id": "g6_8",
-        "label": "１．けっこんしています"
-      },
-      {
-        "field_id": "g6_2",
-        "label": "２．はたらいています"
-      },
-      {
-        "field_id": "g6_9",
-        "label": "２．まっすぐ"
-      },
-      {
-        "field_id": "g6_3",
-        "label": "３．おぼえます"
-      },
-      {
-        "field_id": "g6_10",
-        "label": "３．こうさてん"
-      },
-      {
-        "field_id": "g6_4",
-        "label": "４．わすれます"
-      },
-      {
-        "field_id": "g6_11",
-        "label": "４．しんごう"
-      },
-      {
-        "field_id": "g6_5",
-        "label": "５．まがります"
-      },
-      {
-        "field_id": "g6_12",
-        "label": "５．はし"
-      },
-      {
-        "field_id": "g6_6",
-        "label": "６．のります"
-      },
-      {
-        "field_id": "g6_13",
-        "label": "６．けいさつ"
-      },
-      {
-        "field_id": "g6_7",
-        "label": "７．おります"
-      }
-    ],
-    "layout": "two_column"
+      { "field_id": "g6_1", "label": "１）　<ruby>天気<rt>てんき</rt></ruby>", "input_type": "text", "placeholder": "例: B, I, M" },
+      { "field_id": "g6_2", "label": "２）　<ruby>季節<rt>きせつ</rt></ruby>", "input_type": "text" },
+      { "field_id": "g6_3", "label": "３）　<ruby>職業<rt>しょくぎょう</rt></ruby> (nghề nghiệp)", "input_type": "text" },
+      { "field_id": "g6_4", "label": "４）　<ruby>町<rt>まち</rt></ruby>の<ruby>中<rt>なか</rt></ruby>", "input_type": "text" }
+    ]
+  },
+  {
+    "id": "g7",
+    "type": "table_fill",
+    "title_html": "<ruby>問題<rt>もんだい</rt></ruby>７．<ruby>日本語<rt>にほんご</rt></ruby> ⇔ ベトナム<ruby>語<rt>ご</rt></ruby>　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×19<ruby>問<rt>とい</rt></ruby>＝38<ruby>点<rt>てん</rt></ruby>＞",
+    "instruction": "<ruby>対応<rt>たいおう</rt></ruby>する<ruby>言葉<rt>ことば</rt></ruby>に<ruby>訳<rt>やく</rt></ruby>してください。",
+    "points_each": 2,
+    "total_points": 38,
+    "items": [
+      { "field_id": "g7_1",  "label": "１．<ruby>砂糖<rt>さとう</rt></ruby>", "input_type": "text" },
+      { "field_id": "g7_2",  "label": "２．<ruby>製品<rt>せいひん</rt></ruby>", "input_type": "text" },
+      { "field_id": "g7_3",  "label": "３．<ruby>暗証番号<rt>あんしょうばんごう</rt></ruby>", "input_type": "text" },
+      { "field_id": "g7_4",  "label": "４．<ruby>社長<rt>しゃちょう</rt></ruby>", "input_type": "text" },
+      { "field_id": "g7_5",  "label": "５．<ruby>現金<rt>げんきん</rt></ruby>", "input_type": "text" },
+      { "field_id": "g7_6",  "label": "６．<ruby>使<rt>つか</rt></ruby>い<ruby>方<rt>かた</rt></ruby>", "input_type": "text" },
+      { "field_id": "g7_7",  "label": "７．<ruby>見<rt>み</rt></ruby>せます", "input_type": "text" },
+      { "field_id": "g7_8",  "label": "８．<ruby>答<rt>こた</rt></ruby>え", "input_type": "text" },
+      { "field_id": "g7_9",  "label": "９．<ruby>熱<rt>ねつ</rt></ruby>", "input_type": "text" },
+      { "field_id": "g7_10", "label": "１０．<ruby>保険証<rt>ほけんしょう</rt></ruby>", "input_type": "text" },
+      { "field_id": "g7_11", "label": "１１．Nhớ, ghi nhớ", "input_type": "text" },
+      { "field_id": "g7_12", "label": "１２．Áo khoác", "input_type": "text" },
+      { "field_id": "g7_13", "label": "１３．Độc thân", "input_type": "text" },
+      { "field_id": "g7_14", "label": "１４．Đặt, để", "input_type": "text" },
+      { "field_id": "g7_15", "label": "１５．Bản đồ", "input_type": "text" },
+      { "field_id": "g7_16", "label": "１６．Tiền thừa", "input_type": "text" },
+      { "field_id": "g7_17", "label": "１７．Vứt, bỏ", "input_type": "text" },
+      { "field_id": "g7_18", "label": "１８．Xuống (xe, tàu)", "input_type": "text" },
+      { "field_id": "g7_19", "label": "１９．Khẩn trương, vội vàng", "input_type": "text" }
+    ]
   }
 ]

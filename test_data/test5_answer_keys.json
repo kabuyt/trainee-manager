@@ -76,11 +76,14 @@
         "c4_2a": "e", "c4_2b": "1",
         "c4_3a": "b", "c4_3b": "5"
       },
+      "c5": {"c5_1": "a", "c5_2": "b", "c5_3": "a"},
       "c6": {
         "c6_1a": "5", "c6_1b": "a",
-        "c6_2a": "4", "c6_2b": "b",
-        "c6_3a": "2", "c6_3b": "a"
+        "c6_2a": "4", "c6_2b": "a",
+        "c6_3a": "2", "c6_3b": "b"
       },
+      "c8": {"c8_1": "a", "c8_2": "b", "c8_3": "b", "c8_4": "a"},
+      "c9": {"c9_1": "e", "c9_2": "a", "c9_3": "c"},
       "c10": {"c10_1": "×", "c10_2": "○", "c10_3": "×", "c10_4": "○", "c10_5": "○"}
     },
     "scoring_rules": {
@@ -88,22 +91,29 @@
       "c2": {"method": "exact_match", "points_each": 4, "field_ids": ["c2_1","c2_2"]},
       "c3": {"method": "mixed_text_select", "select_points": 2, "text_points": 3, "select_field_ids": ["c3_1b","c3_2b"], "manual_field_ids": ["c3_1a","c3_2a"]},
       "c4": {"method": "exact_match", "points_each": 2, "field_ids": ["c4_1a","c4_1b","c4_2a","c4_2b","c4_3a","c4_3b"]},
-      "c5": {"method": "manual", "points_each": 2, "field_ids": ["c5_1","c5_2","c5_3"]},
+      "c5": {"method": "exact_match", "points_each": 2, "field_ids": ["c5_1","c5_2","c5_3"]},
       "c6": {"method": "exact_match", "points_each": 2, "field_ids": ["c6_1a","c6_1b","c6_2a","c6_2b","c6_3a","c6_3b"]},
       "c7": {"method": "manual", "total_points": 15, "field_ids": ["c7_1a","c7_1b","c7_1c","c7_2a","c7_2b","c7_2c","c7_3a","c7_3b","c7_3c"]},
-      "c8": {"method": "manual", "points_each": 2, "field_ids": ["c8_1","c8_2","c8_3","c8_4"]},
-      "c9": {"method": "manual", "points_each": 3, "field_ids": ["c9_1","c9_2","c9_3"]},
+      "c8": {"method": "exact_match", "points_each": 2, "field_ids": ["c8_1","c8_2","c8_3","c8_4"]},
+      "c9": {"method": "exact_match", "points_each": 3, "field_ids": ["c9_1","c9_2","c9_3"]},
       "c10": {"method": "ox_match", "points_each": 1, "field_ids": ["c10_1","c10_2","c10_3","c10_4","c10_5"]}
     },
     "manual_fields": [
       "c1_1b","c1_2b","c1_3b",
       "c3_1a","c3_2a",
-      "c5_1","c5_2","c5_3",
       "c7_1a","c7_1b","c7_1c","c7_2a","c7_2b","c7_2c","c7_3a","c7_3b","c7_3c",
-      "c8_1","c8_2","c8_3","c8_4",
-      "c9_1","c9_2","c9_3",
       "b2_1","b2_2","b2_3","b2_4",
       "b9_1"
-    ]
+    ],
+    "sample_answers": {
+      "c1_1b": "食堂のとなりの小さいキッチンを使う",
+      "c1_2b": "食堂でする",
+      "c1_3b": "他の部屋に泊まる",
+      "c3_1a": "雨がふる",
+      "c3_2a": "富士山が見えない",
+      "c7_1a": "1", "c7_1b": "スピーチ", "c7_1c": "覚えた",
+      "c7_2a": "土曜日と日曜", "c7_2b": "富士山についてレポート", "c7_2c": "書いた",
+      "c7_3a": "1", "c7_3b": "本", "c7_3c": "読んだ"
+    }
   }
 }

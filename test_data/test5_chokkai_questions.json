@@ -4,7 +4,7 @@
     "type": "audio_table_ox_text",
     "title_html": "<ruby>問題<rt>もんだい</rt></ruby>１．<ruby>寮<rt>りょう</rt></ruby>でできること　＜(○×2<ruby>点<rt>てん</rt></ruby>＋3<ruby>点<rt>てん</rt></ruby>)×3<ruby>問<rt>とい</rt></ruby>＝15<ruby>点<rt>てん</rt></ruby>＞",
     "instruction": "Nghe va tra loi cau hoi ve ky tuc xa.",
-    "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>１.mp3",
+    "audio_src": "audio/問題１.mp3",
     "points_each_ox": 2,
     "points_each_text": 3,
     "total_points": 15,
@@ -75,14 +75,14 @@
     "title_html": "<ruby>問題<rt>もんだい</rt></ruby>２．<ruby>困<rt>こま</rt></ruby>っていること　＜<ruby>各<rt>かく</rt></ruby>4<ruby>点<rt>てん</rt></ruby>×2<ruby>問<rt>とい</rt></ruby>＝8<ruby>点<rt>てん</rt></ruby>＞",
     "instruction": "Nghe va chon dap an phu hop.",
     "choice_bank_html": "①調べる　②<ruby>連<rt>つ</rt></ruby>れてもらう　③<ruby>買<rt>か</rt></ruby>う　④<ruby>捨<rt>す</rt></ruby>てる　⑤<ruby>荷物<rt>にもつ</rt></ruby>をロビーに<ruby>置<rt>お</rt></ruby>く　⑥<ruby>送<rt>おく</rt></ruby>る",
-    "intro_audio": "audio/<ruby>問題<rt>もんだい</rt></ruby>2.mp3",
+    "intro_audio": "audio/問題2.mp3",
     "points_each": 4,
     "total_points": 8,
     "items": [
       {
         "field_id": "c2_1",
         "label": "① <ruby>問<rt>とい</rt></ruby>１",
-        "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>2-1.mp3",
+        "audio_src": "audio/問題2-1.mp3",
         "input_type": "select",
         "options": [
           {
@@ -114,7 +114,7 @@
       {
         "field_id": "c2_2",
         "label": "② <ruby>問<rt>とい</rt></ruby>２",
-        "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>2-2.mp3",
+        "audio_src": "audio/問題2-2.mp3",
         "input_type": "select",
         "options": [
           {
@@ -181,7 +181,7 @@
     "items": [
       {
         "label": "① <ruby>問<rt>とい</rt></ruby>１",
-        "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>3-1.mp3",
+        "audio_src": "audio/問題3-1.mp3",
         "fields": [
           {
             "field_id": "c3_1a",
@@ -205,7 +205,7 @@
       },
       {
         "label": "② <ruby>問<rt>とい</rt></ruby>２",
-        "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>3-2.mp3",
+        "audio_src": "audio/問題3-2.mp3",
         "fields": [
           {
             "field_id": "c3_2a",
@@ -234,7 +234,7 @@
     "type": "audio_double_select",
     "title_html": "<ruby>問題<rt>もんだい</rt></ruby>４．<ruby>体調<rt>たいちょう</rt></ruby>：どうですか＋どうして　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×6＝12<ruby>点<rt>てん</rt></ruby>＞",
     "instruction": "Nghe va chon tinh trang + ly do.",
-    "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>４.mp3",
+    "audio_src": "audio/問題４.mp3",
     "points_each": 2,
     "total_points": 12,
     "condition_images": [
@@ -406,7 +406,7 @@
     "title_html": "<ruby>問題<rt>もんだい</rt></ruby>５．<ruby>母<rt>はは</rt></ruby>が<ruby>怒<rt>おこ</rt></ruby>ります　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×3<ruby>問<rt>とい</rt></ruby>＝6<ruby>点<rt>てん</rt></ruby>＞",
     "instruction": "Nghe va tra loi: lam gi?",
     "grading": "manual",
-    "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>５.mp3",
+    "audio_src": "audio/問題５.mp3",
     "points_each": 2,
     "total_points": 6,
     "items": [
@@ -432,7 +432,7 @@
     "type": "audio_double_select",
     "title_html": "<ruby>問題<rt>もんだい</rt></ruby>６．<ruby>困<rt>こま</rt></ruby>りごと　＜<ruby>各<rt>かく</rt></ruby>(2＋2)<ruby>点<rt>てん</rt></ruby>×3<ruby>問<rt>とい</rt></ruby>＝12<ruby>点<rt>てん</rt></ruby>＞",
     "instruction": "Nghe va chon so + a hoac b.",
-    "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>６.mp3",
+    "audio_src": "audio/問題６.mp3",
     "points_each": 2,
     "total_points": 12,
     "trouble_images": [
@@ -546,7 +546,7 @@
     "title_html": "<ruby>問題<rt>もんだい</rt></ruby>７．タワポンさんはすごい<ruby>人<rt>ひと</rt></ruby>　＜<ruby>各<rt>かく</rt></ruby>(2＋3)<ruby>点<rt>てん</rt></ruby>×3＝15<ruby>点<rt>てん</rt></ruby>＞",
     "instruction": "Nghe va dien vao cho trong.",
     "grading": "manual",
-    "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>７.mp3",
+    "audio_src": "audio/問題７.mp3",
     "total_points": 15,
     "example_html": "<ruby>例<rt>れい</rt></ruby>）（ <b>10</b> ）分で（ <b><ruby>昼<rt>ひる</rt></ruby>ごはん</b> ）を（ <b><ruby>食<rt>た</rt></ruby>べた</b> ）！",
     "items": [
@@ -612,7 +612,7 @@
     "title_html": "<ruby>問題<rt>もんだい</rt></ruby>８．<ruby>山<rt>やま</rt></ruby>に<ruby>行<rt>い</rt></ruby>く　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×4＝8<ruby>点<rt>てん</rt></ruby>＞",
     "instruction": "Nghe va chon a hoac b.",
     "grading": "manual",
-    "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>８.mp3",
+    "audio_src": "audio/問題８.mp3",
     "points_each": 2,
     "total_points": 8,
     "items": [
@@ -660,7 +660,7 @@
     "title_html": "<ruby>問題<rt>もんだい</rt></ruby>９．オノマトペ　＜<ruby>各<rt>かく</rt></ruby>3<ruby>点<rt>てん</rt></ruby>×3<ruby>問<rt>とい</rt></ruby>＝9<ruby>点<rt>てん</rt></ruby>＞",
     "instruction": "Nghe va noi tu onomatope voi hinh phu hop.",
     "grading": "manual",
-    "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>９.mp3",
+    "audio_src": "audio/問題９.mp3",
     "points_each": 3,
     "total_points": 9,
     "images": [
@@ -718,7 +718,7 @@
     "type": "audio_ox",
     "title_html": "<ruby>問題<rt>もんだい</rt></ruby>１０．○か×で<ruby>答<rt>こた</rt></ruby>えてください　＜<ruby>各<rt>かく</rt></ruby>1<ruby>点<rt>てん</rt></ruby>×5<ruby>問<rt>とい</rt></ruby>＝5<ruby>点<rt>てん</rt></ruby>＞",
     "instruction": "Nghe va chon O (dung) / X (sai).",
-    "audio_src": "audio/<ruby>問題<rt>もんだい</rt></ruby>10.mp3",
+    "audio_src": "audio/問題10.mp3",
     "points_each": 1,
     "total_points": 5,
     "items": [

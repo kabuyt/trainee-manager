@@ -106,6 +106,151 @@ function filterTrainees(query) {
   applyFilters();
 }
 
+// ===== ログインカード出力 =====
+function getFilteredTrainees() {
+  const searchEl = document.getElementById('searchInput');
+  const orgEl = document.getElementById('orgFilter');
+  const q = (searchEl ? searchEl.value : '').toLowerCase();
+  const orgId = orgEl ? orgEl.value : '';
+
+  let filtered = allTrainees;
+  if (q) {
+    filtered = filtered.filter(t =>
+      (t.name_romaji || '').toLowerCase().includes(q) ||
+      (t.name_katakana || '').includes(q) ||
+      (t.company || '').toLowerCase().includes(q)
+    );
+  }
+  if (orgId) {
+    filtered = filtered.filter(t => t.organization_id === orgId);
+  }
+  return filtered;
+}
+
+function exportLoginCards() {
+  const trainees = getFilteredTrainees().filter(t => t.auth_user_id);
+  if (trainees.length === 0) {
+    alert('ログインアカウントのある実習生がいません。');
+    return;
+  }
+
+  const LOGIN_URL = 'https://kabuyt.github.io/nihongo-test-1-4ka/login.html';
+  const EMAIL_DOMAIN = '@student.trainee.local';
+
+  // 送り出し機関名（フィルタ中ならその名前、なければ「全送り出し」）
+  const orgEl = document.getElementById('orgFilter');
+  const orgId = orgEl ? orgEl.value : '';
+  let orgName = '全送り出し機関';
+  if (orgId) {
+    const org = allOrgs.find(o => o.id === orgId);
+    if (org) orgName = org.name;
+  } else if (trainees.length && trainees[0].organizations?.name) {
+    // 管理者以外（機関ユーザー）の場合、実習生は全員同じ機関
+    const uniqueOrgs = [...new Set(trainees.map(t => t.organizations?.name).filter(Boolean))];
+    if (uniqueOrgs.length === 1) orgName = uniqueOrgs[0];
+  }
+
+  const today = new Date();
+  const dateStr = `${today.getFullYear()}年${today.getMonth()+1}月${today.getDate()}日`;
+
+  const escape = s => String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  const cards = trainees.map(t => {
+    const sid = t.student_id || '';
+    const pw = (t.birth_date || '').replace(/-/g, '');
+    return `
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">日本語月間テスト ログイン情報</span>
+    <span class="card-id">${escape(sid)}</span>
+  </div>
+  <div class="card-body">
+    <table>
+      <tr><th>名前 (Katakana)</th><td>${escape(t.name_katakana)}</td></tr>
+      <tr><th>名前 (Romaji)</th><td>${escape(t.name_romaji)}</td></tr>
+      <tr><th>クラス / 会社</th><td>${escape(t.class_group)} / ${escape(t.company)}</td></tr>
+      <tr class="login-row"><th>サイト URL</th><td class="big">${LOGIN_URL}</td></tr>
+      <tr class="login-row"><th>学生 ID</th><td class="big mono">${escape(sid)}</td></tr>
+      <tr class="login-row"><th>パスワード</th><td class="big mono">${escape(pw)}</td></tr>
+    </table>
+    <div class="note">
+      ※ パスワードは生年月日 (YYYYMMDD) です。<br>
+      ※ Mật khẩu là ngày sinh (YYYYMMDD).
+    </div>
+  </div>
+</div>`;
+  }).join('\n');
+
+  const html = `<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ログインカード - ${escape(orgName)} (${trainees.length}名)</title>
+<style>
+@page { size: A4 portrait; margin: 8mm; }
+* { box-sizing: border-box; }
+body { font-family: "Yu Gothic", "Meiryo", sans-serif; margin: 0; padding: 8px; background: #f0f0f0; }
+.toolbar {
+  position: sticky; top: 0; background: #2c3e50; color: #fff; padding: 10px 16px;
+  margin: -8px -8px 12px; display: flex; gap: 12px; align-items: center; z-index: 100;
+}
+.toolbar button {
+  padding: 6px 16px; background: #27ae60; color: #fff; border: none; border-radius: 4px;
+  cursor: pointer; font-size: 14px;
+}
+.toolbar .info { margin-left: auto; font-size: 13px; }
+.page-header { max-width: 210mm; margin: 0 auto 10px; padding: 0 4mm; font-size: 13px; color: #555; }
+.cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-width: 210mm; margin: 0 auto; }
+.card {
+  background: #fff; border: 1.5px solid #2c3e50; border-radius: 6px; padding: 10px 12px;
+  page-break-inside: avoid; min-height: 80mm; display: flex; flex-direction: column;
+}
+.card-header {
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 2px solid #2c3e50; padding-bottom: 6px; margin-bottom: 8px;
+}
+.card-title { font-size: 13px; font-weight: bold; color: #2c3e50; }
+.card-id { font-size: 16px; font-weight: bold; color: #c0392b; font-family: monospace; }
+.card-body { flex: 1; }
+.card table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.card th { text-align: left; padding: 3px 6px; color: #555; font-weight: normal; width: 35%; vertical-align: top; }
+.card td { padding: 3px 6px; word-break: break-word; }
+.login-row { background: #fffde7; }
+.login-row th { font-weight: bold; color: #333; }
+.big { font-size: 14px; font-weight: bold; }
+.mono { font-family: monospace; }
+.note { font-size: 10px; color: #777; margin-top: 8px; padding-top: 6px; border-top: 1px dashed #ccc; }
+@media print {
+  body { background: #fff; padding: 0; }
+  .toolbar { display: none; }
+  .cards-grid { gap: 4mm; }
+  .card { box-shadow: none; }
+}
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <button onclick="window.print()">🖨 印刷 / PDF保存 (Ctrl+P)</button>
+  <span class="info">${escape(orgName)} ・ ${trainees.length}名 ・ ${dateStr}</span>
+</div>
+<div class="page-header"><strong>${escape(orgName)}</strong> ログインカード ー ${trainees.length}名 ー 出力日: ${dateStr}</div>
+<div class="cards-grid">
+${cards}
+</div>
+</body>
+</html>`;
+
+  // 新しいタブで開く
+  const win = window.open('', '_blank');
+  if (!win) {
+    alert('ポップアップがブロックされました。ブラウザ設定で許可してください。');
+    return;
+  }
+  win.document.open();
+  win.document.write(html);
+  win.document.close();
+}
+
 async function deleteTrainee(id) {
   if (!confirm('この実習生を削除しますか？')) return;
 

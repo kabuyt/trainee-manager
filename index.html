@@ -26,7 +26,10 @@
             <option value="">全送り出し機関</option>
           </select>
         </div>
-        <a href="register.html" class="btn btn-primary">+ 新規登録</a>
+        <div class="toolbar-right" style="display:flex;gap:8px">
+          <button id="exportLoginCardsBtn" class="btn btn-secondary" onclick="exportLoginCards()">📇 ログインカード出力</button>
+          <a href="register.html" class="btn btn-primary">+ 新規登録</a>
+        </div>
       </div>
 
       <div id="loadingMsg" class="loading">読み込み中...</div>
