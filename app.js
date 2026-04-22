@@ -676,9 +676,9 @@ function renderMonthScores(result) {
 }
 
 function renderMonthComments(report) {
-  const fields = ['lifeGood','lifeBad','lifeMeasure','lifeImprove',
+  const fields = ['lifeGood','lifeBad','lifeMeasure','lifeImprove','lifePersonality',
                   'learnGood','learnBad','learnMeasure','learnImprove'];
-  const dbFields = ['life_good','life_bad','life_measure','life_improve',
+  const dbFields = ['life_good','life_bad','life_measure','life_improve','life_personality',
                     'learn_good','learn_bad','learn_measure','learn_improve'];
 
   fields.forEach((id, i) => {
@@ -750,6 +750,7 @@ async function saveReport() {
     life_bad: getHtml('lifeBad'),
     life_measure: getHtml('lifeMeasure'),
     life_improve: getHtml('lifeImprove'),
+    life_personality: getHtml('lifePersonality'),
     learn_good: getHtml('learnGood'),
     learn_bad: getHtml('learnBad'),
     learn_measure: getHtml('learnMeasure'),
