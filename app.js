@@ -14,9 +14,17 @@ async function loadTrainees() {
     const { data, error } = await supabase
       .from('trainees')
       .select('*, organizations(name)')
-      .order('created_at', { ascending: false });
+      .order('student_id', { ascending: true, nullsFirst: false });
 
     if (error) throw error;
+
+    // VJC を先頭にして、その後は student_id 昇順
+    const sortKey = (id) => {
+      if (!id) return 'Z~' + '~~~';
+      if (id.startsWith('VJC')) return 'A' + id;
+      return 'B' + id;
+    };
+    data.sort((a, b) => sortKey(a.student_id).localeCompare(sortKey(b.student_id)));
 
     allTrainees = data;
     renderTrainees(data);
