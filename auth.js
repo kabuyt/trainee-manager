@@ -68,8 +68,15 @@ async function logout() {
  * ヘッダーにユーザー情報とログアウトボタンを追加
  */
 function setupAuthUI() {
+  if (!_currentProfile) return;
+
+  // admin-only 要素の表示制御（ヘッダー有無に関わらず実行）
+  document.querySelectorAll('.admin-only').forEach(el => {
+    el.style.display = isAdmin() ? '' : 'none';
+  });
+
   const nav = document.querySelector('header nav');
-  if (!nav || !_currentProfile) return;
+  if (!nav) return;
 
   // 既存のauth UIがあれば何もしない
   if (document.getElementById('authInfo')) return;
@@ -97,9 +104,4 @@ function setupAuthUI() {
     subBar.textContent = orgName + ' 用管理画面';
     document.querySelector('header').after(subBar);
   }
-
-  // admin-only 要素の表示制御
-  document.querySelectorAll('.admin-only').forEach(el => {
-    el.style.display = isAdmin() ? '' : 'none';
-  });
 }
