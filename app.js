@@ -515,6 +515,7 @@ function renderTraineeDetail(t, results) {
               <th>聴解</th>
               <th>会話</th>
               <th>合計</th>
+              <th>離脱</th>
             </tr>
           </thead>
           <tbody>
@@ -522,6 +523,11 @@ function renderTraineeDetail(t, results) {
               const total = [r.score_vocab, r.score_grammar, r.score_listening, r.score_conversation]
                 .filter(s => s !== null)
                 .reduce((a, b) => a + b, 0);
+              const leaveCell = r.leave_count == null
+                ? '-'
+                : (r.leave_count > 0
+                    ? `<span style="color:#c0392b;font-weight:bold">${r.leave_count}回</span>`
+                    : '0');
               return `
                 <tr>
                   <td>${r.test_name || '-'}</td>
@@ -531,6 +537,7 @@ function renderTraineeDetail(t, results) {
                   <td>${r.score_listening ?? '-'}</td>
                   <td>${r.score_conversation ?? '-'}</td>
                   <td><strong>${total}</strong></td>
+                  <td>${leaveCell}</td>
                 </tr>
               `;
             }).join('')}
