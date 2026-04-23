@@ -398,7 +398,7 @@
     "instruction": "ルートごとに<ruby>交通手段<rt>こうつうしゅだん</rt></ruby>を<ruby>選<rt>えら</rt></ruby>んでください。",
     "points_each": 2,
     "total_points": 12,
-    "option_pool_html": "a. バス　　b. <ruby>地下鉄<rt>ちかてつ</rt></ruby>　　c. <ruby>船<rt>ふね</rt></ruby>　　d. <ruby>新幹線<rt>しんかんせん</rt></ruby>　　e. <ruby>飛行機<rt>ひこうき</rt></ruby>　　f. タクシー",
+    "option_pool_html": "a. バス　　b. <ruby>地下鉄<rt>ちかてつ</rt></ruby>　　c. <ruby>船<rt>ふね</rt></ruby>　　d. <ruby>新幹線<rt>しんかんせん</rt></ruby>　　e. <ruby>飛行機<rt>ひこうき</rt></ruby>　　f. タクシー　　g. <ruby>歩<rt>ある</rt></ruby>きます",
     "audio_files": [
       "audio/7-0.mp3",
       "audio/7-1.mp3"
@@ -432,6 +432,10 @@
           {
             "value": "f",
             "label": "f. タクシー"
+          },
+          {
+            "value": "g",
+            "label": "g. あるきます"
           }
         ]
       },
@@ -463,6 +467,10 @@
           {
             "value": "f",
             "label": "f. タクシー"
+          },
+          {
+            "value": "g",
+            "label": "g. あるきます"
           }
         ]
       },
@@ -494,6 +502,10 @@
           {
             "value": "f",
             "label": "f. タクシー"
+          },
+          {
+            "value": "g",
+            "label": "g. あるきます"
           }
         ]
       },
@@ -525,6 +537,10 @@
           {
             "value": "f",
             "label": "f. タクシー"
+          },
+          {
+            "value": "g",
+            "label": "g. あるきます"
           }
         ]
       },
@@ -556,6 +572,10 @@
           {
             "value": "f",
             "label": "f. タクシー"
+          },
+          {
+            "value": "g",
+            "label": "g. あるきます"
           }
         ]
       },
@@ -587,6 +607,10 @@
           {
             "value": "f",
             "label": "f. タクシー"
+          },
+          {
+            "value": "g",
+            "label": "g. あるきます"
           }
         ]
       }
