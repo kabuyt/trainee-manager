@@ -272,6 +272,29 @@ def g_bucket_sort(rule, ak, answers):
     return max(0, score)
 
 
+def g_unordered_tokens(rule, ak, answers):
+    pts = rule.get('points_each', 1)
+    score = 0
+    field_ids = rule.get('field_ids', [])
+    for i, fid in enumerate(field_ids):
+        if isinstance(ak, list):
+            expected = ak[i] if i < len(ak) else None
+        else:
+            expected = ak.get(fid) if isinstance(ak, dict) else None
+        actual = answers.get(fid)
+        if not expected or not actual: continue
+        exp_list = expected if isinstance(expected, list) else [expected]
+        opts = {'case_insensitive': True}
+        act_norm = normalize(actual, opts)
+        act_sorted = ''.join(sorted(act_norm))
+        for e in exp_list:
+            e_norm = normalize(e, opts)
+            if e_norm == act_norm or ''.join(sorted(e_norm)) == act_sorted:
+                score += pts
+                break
+    return score
+
+
 def g_price_country(rule, ak, answers):
     p_price = rule.get('price_points', 2)
     p_country = rule.get('country_points', 1)
@@ -301,6 +324,7 @@ METHOD_MAP = {
     'multi_field_match': g_multi_field_match,
     'pair_match': g_pair_match,
     'bucket_sort': g_bucket_sort,
+    'unordered_tokens': g_unordered_tokens,
     'price_country': g_price_country,
     'manual': lambda r, a, u: 0,
 }

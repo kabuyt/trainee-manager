@@ -312,7 +312,7 @@
         ]
       },
       "b3": {
-        "method": "manual",
+        "method": "unordered_tokens",
         "points_each": 3,
         "field_ids": [
           "b3_1",
