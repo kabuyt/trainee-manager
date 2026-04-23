@@ -915,16 +915,14 @@ function renderTrendChart(results) {
   const ctx = document.getElementById('trendChart');
   if (!ctx) return;
 
-  // 全8回分のラベルを固定
-  const allLabels = ['第1-4課','第5-11課','第12-18課','第19-25課','第26-33課','第34-40課','第41-45課','第46-50課'];
-  const resultMap = {};
-  results.forEach(r => { resultMap[r.test_name] = r; });
+  // 全8回分のラベルを固定（MONTH_TEST_MAP の順序）
+  const labels = MONTH_TEST_MAP.map(m => m.testLabel);
+  const resolved = MONTH_TEST_MAP.map(m => results.find(r => matchTest(r, m)) || null);
 
-  const labels = allLabels;
-  const vocabData = allLabels.map(l => resultMap[l] ? (resultMap[l].score_vocab ?? 0) : null);
-  const grammarData = allLabels.map(l => resultMap[l] ? (resultMap[l].score_grammar ?? 0) : null);
-  const listenData = allLabels.map(l => resultMap[l] ? (resultMap[l].score_listening ?? 0) : null);
-  const convData = allLabels.map(l => resultMap[l] ? (resultMap[l].score_conversation ?? 0) : null);
+  const vocabData = resolved.map(r => r ? (r.score_vocab ?? 0) : null);
+  const grammarData = resolved.map(r => r ? (r.score_grammar ?? 0) : null);
+  const listenData = resolved.map(r => r ? (r.score_listening ?? 0) : null);
+  const convData = resolved.map(r => r ? (r.score_conversation ?? 0) : null);
   new Chart(ctx, {
     type: 'line',
     data: {
