@@ -389,7 +389,7 @@
       },
       "b7": {
         "method": "exact_match",
-        "points_each": 2,
+        "points_each": 1,
         "field_ids": [
           "b7_1a",
           "b7_1b",
