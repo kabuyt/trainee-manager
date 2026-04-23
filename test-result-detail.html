@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>回答詳細</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Hiragino Sans','Meiryo',sans-serif;background:#f5f6fa;color:#333;font-size:14px;padding-bottom:40px}
+  .nav{background:#2c3e50;color:#fff;padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;position:sticky;top:0;z-index:100}
+  .nav a{color:#bdc3c7;text-decoration:none;font-size:13px;padding:4px 10px;border-radius:4px}
+  .nav a:hover{background:#34495e;color:#fff}
+  .nav h1{font-size:16px;font-weight:bold}
+
+  .container{padding:14px;max-width:900px;margin:0 auto}
+
+  .card{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.08);padding:14px 18px;margin-bottom:12px}
+  .card h2{font-size:15px;color:#2c3e50;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #eaf0fb}
+
+  .info-grid{display:grid;grid-template-columns:110px 1fr;gap:6px 14px;font-size:13px}
+  .info-grid dt{color:#777}
+
+  .scores{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+  .score-card{flex:1;min-width:120px;background:#eaf0fb;padding:10px 14px;border-radius:6px;text-align:center}
+  .score-card b{display:block;font-size:22px;color:#1a5276}
+  .score-card span{font-size:11px;color:#777}
+
+  .section-title{font-size:14px;font-weight:bold;color:#1a5276;margin:12px 0 8px;padding:6px 10px;background:#eaf0fb;border-radius:4px}
+
+  .q-item{background:#f8f9fa;border-left:4px solid #ccc;padding:8px 12px;margin:6px 0;border-radius:4px;font-size:13px}
+  .q-item.correct{border-left-color:#27ae60;background:#e8f5e9}
+  .q-item.wrong{border-left-color:#e74c3c;background:#ffebee}
+  .q-item.unanswered{border-left-color:#f39c12;background:#fffde7}
+  .q-item.manual{border-left-color:#3498db;background:#e3f2fd}
+  .q-item .qlabel{font-weight:bold;font-size:12px;color:#555}
+  .q-item .userAns{margin-top:4px;font-size:14px;padding:4px 8px;background:#fff;border-radius:3px;border:1px solid #ddd}
+  .q-item .correctAns{margin-top:3px;font-size:12px;color:#27ae60}
+  .q-item .correctAns.wrong{color:#e74c3c}
+  .badge-ok{background:#27ae60;color:#fff;padding:1px 6px;border-radius:8px;font-size:11px}
+  .badge-ng{background:#e74c3c;color:#fff;padding:1px 6px;border-radius:8px;font-size:11px}
+  .badge-na{background:#95a5a6;color:#fff;padding:1px 6px;border-radius:8px;font-size:11px}
+  .badge-mn{background:#3498db;color:#fff;padding:1px 6px;border-radius:8px;font-size:11px}
+
+  .raw{background:#263238;color:#aed581;padding:10px;border-radius:5px;font-family:monospace;font-size:11px;max-height:200px;overflow:auto;white-space:pre-wrap;word-break:break-all}
+  .toggle{font-size:12px;color:#3498db;cursor:pointer;margin-top:8px;display:inline-block}
+  .btn{padding:6px 14px;border:none;border-radius:5px;font-size:13px;cursor:pointer;background:#3498db;color:#fff}
+  .btn:hover{background:#2980b9}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <h1>📝 回答詳細</h1>
+  <a href="test-results.html">← 一覧に戻る</a>
+  <span style="margin-left:auto">
+    <button class="btn" onclick="window.print()">🖨 印刷</button>
+  </span>
+</div>
+
+<div class="container">
+  <div id="content">
+    <div class="card">
+      <p>読み込み中…</p>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script>
+const params = new URLSearchParams(location.search);
+const RESULT_ID = params.get('id');
+
+(async () => {
+  // 認証確認
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) {
+    location.href = 'test-results.html';
+    return;
+  }
+
+  if (!RESULT_ID) {
+    document.getElementById('content').innerHTML = '<div class="card"><p style="color:red">?id=xxx が必要です</p></div>';
+    return;
+  }
+
+  // 結果取得
+  const { data: result, error } = await supabase
+    .from('test_results')
+    .select('*,trainees(student_id,name_katakana,name_romaji,class_group,company)')
+    .eq('id', RESULT_ID)
+    .single();
+
+  if (error || !result) {
+    document.getElementById('content').innerHTML = `<div class="card"><p style="color:red">取得失敗: ${error?.message || '不明'}</p></div>`;
+    return;
+  }
+
+  // 問題データと答え・採点ルールを取得
+  const { data: sections } = await supabase
+    .from('test_sections')
+    .select('section_type,questions,answer_key,scoring_rules')
+    .eq('test_id', result.test_name);
+
+  // テスト定義
+  const { data: testDef } = await supabase
+    .from('test_definitions').select('*').eq('id', result.test_name).single();
+
+  renderDetail(result, sections || [], testDef || {});
+})();
+
+function renderDetail(result, sections, testDef) {
+  const t = result.trainees || {};
+  const answers = result.answers_json || {};
+  const total = (result.score_vocab||0) + (result.score_grammar||0) + (result.score_listening||0);
+  const max = (testDef.sections || ['goii','bunpo','chokkai']).length * 100;
+
+  let html = '';
+
+  // 基本情報
+  html += `<div class="card">
+    <h2>基本情報</h2>
+    <dl class="info-grid">
+      <dt>学生ID</dt><dd>${t.student_id || '-'}</dd>
+      <dt>名前</dt><dd>${t.name_katakana || ''} ${t.name_romaji ? '('+t.name_romaji+')' : ''}</dd>
+      <dt>クラス / 会社</dt><dd>${t.class_group || '-'} / ${t.company || '-'}</dd>
+      <dt>テスト</dt><dd>${result.test_name} - ${testDef.display_name || ''}</dd>
+      <dt>受験日</dt><dd>${result.test_date}</dd>
+      <dt>提出日時</dt><dd>${result.created_at}</dd>
+      <dt>採点方式</dt><dd>${result.auto_scored ? '自動採点' : '先生手動'}</dd>
+    </dl>
+    <div class="scores">
+      ${result.score_vocab !== null ? `<div class="score-card"><b>${result.score_vocab}</b><span>語彙 /100</span></div>` : ''}
+      ${result.score_grammar !== null ? `<div class="score-card"><b>${result.score_grammar}</b><span>文法 /100</span></div>` : ''}
+      ${result.score_listening !== null ? `<div class="score-card"><b>${result.score_listening}</b><span>聴解 /100</span></div>` : ''}
+      <div class="score-card" style="background:#1a5276;color:#fff"><b style="color:#fff">${total}</b><span style="color:#eee">合計 /${max}</span></div>
+    </div>
+  </div>`;
+
+  // セクション別
+  const secNames = { goii: '語彙テスト', bunpo: '文法テスト', chokkai: '聴解テスト' };
+  sections.sort((a,b)=> ['goii','bunpo','chokkai'].indexOf(a.section_type) - ['goii','bunpo','chokkai'].indexOf(b.section_type));
+  sections.forEach(sec => {
+    html += `<div class="card"><h2>${secNames[sec.section_type] || sec.section_type}</h2>`;
+    html += renderQuestions(sec.questions || [], sec.answer_key || {}, sec.scoring_rules || {}, answers);
+    html += `</div>`;
+  });
+
+  // 生データ
+  html += `<div class="card">
+    <h2>生データ（デバッグ用）</h2>
+    <span class="toggle" onclick="document.getElementById('raw').style.display = document.getElementById('raw').style.display==='none'?'block':'none'">▼ 表示切替</span>
+    <div id="raw" class="raw" style="display:none;margin-top:8px">${escapeHtml(JSON.stringify(answers, null, 2))}</div>
+  </div>`;
+
+  document.getElementById('content').innerHTML = html;
+}
+
+function renderQuestions(questions, answerKey, scoringRules, userAnswers) {
+  let html = '';
+  questions.forEach(q => {
+    html += `<div style="margin-top:14px"><div class="section-title">${stripRuby(q.title_html || q.id)}</div>`;
+    // block の採点ルールと答え
+    const rule = scoringRules[q.id] || {};
+    const ak = answerKey[q.id] || {};
+
+    // field_id を抽出
+    const fieldIds = collectFieldIds(q);
+    fieldIds.forEach(fid => {
+      const userVal = userAnswers[fid];
+      let expected;
+      if (typeof ak === 'object' && !Array.isArray(ak)) {
+        expected = ak[fid];
+      }
+      const isManual = rule.method === 'manual';
+      const isAnswered = userVal !== undefined && userVal !== '';
+      let status = 'unanswered';
+      let badge = '';
+      if (isManual) {
+        status = 'manual';
+        badge = '<span class="badge-mn">先生採点</span>';
+      } else if (!isAnswered) {
+        status = 'unanswered';
+        badge = '<span class="badge-na">未回答</span>';
+      } else if (expected !== undefined) {
+        const ok = normalize(userVal) === normalize(expected);
+        status = ok ? 'correct' : 'wrong';
+        badge = ok ? '<span class="badge-ok">○</span>' : '<span class="badge-ng">×</span>';
+      } else {
+        status = 'manual';
+        badge = '<span class="badge-mn">要確認</span>';
+      }
+      html += `<div class="q-item ${status}">
+        <div class="qlabel">${fid} ${badge}</div>
+        <div class="userAns">${escapeHtml(String(userVal ?? '(未回答)'))}</div>
+        ${expected !== undefined ? `<div class="correctAns ${status==='wrong'?'wrong':''}">正解: ${escapeHtml(String(Array.isArray(expected)?expected.join(' / '):expected))}</div>` : ''}
+      </div>`;
+    });
+    html += `</div>`;
+  });
+  return html;
+}
+
+function collectFieldIds(q) {
+  const ids = [];
+  function walk(o) {
+    if (!o) return;
+    if (Array.isArray(o)) { o.forEach(walk); return; }
+    if (typeof o !== 'object') return;
+    if (o.field_id && typeof o.field_id === 'string') ids.push(o.field_id);
+    for (const k in o) if (typeof o[k] === 'object') walk(o[k]);
+  }
+  walk(q);
+  // 重複除去
+  return [...new Set(ids)];
+}
+
+function stripRuby(s) {
+  return String(s || '').replace(/<ruby>([^<]*?)<rt>[^<]*<\/rt><\/ruby>/g, '$1');
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function normalize(s) {
+  return String(s ?? '').trim().toLowerCase().replace(/\s+/g, ' ');
+}
+</script>
+</body>
+</html>

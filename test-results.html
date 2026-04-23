@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>テスト結果一覧</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Hiragino Sans','Meiryo',sans-serif;background:#f5f6fa;color:#333;font-size:14px}
+  .nav{background:#2c3e50;color:#fff;padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .nav a{color:#bdc3c7;text-decoration:none;font-size:13px;padding:4px 10px;border-radius:4px}
+  .nav a:hover,.nav a.active{background:#34495e;color:#fff}
+  .nav h1{font-size:16px;font-weight:bold}
+
+  .container{padding:16px;max-width:100%}
+  .toolbar{background:#fff;padding:10px 14px;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .toolbar label{font-size:13px;color:#555}
+  .toolbar select,.toolbar input{padding:5px 10px;border:1px solid #ccc;border-radius:5px;font-size:13px}
+  .btn{padding:5px 14px;border:none;border-radius:5px;font-size:13px;cursor:pointer;background:#3498db;color:#fff}
+  .btn:hover{background:#2980b9}
+  .btn-green{background:#27ae60}
+  .btn-green:hover{background:#229954}
+  .btn-warn{background:#e67e22}
+
+  .stats{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+  .stat{background:#fff;padding:8px 14px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.08);font-size:13px}
+  .stat b{color:#2c3e50;font-size:18px;display:block}
+
+  .table-wrap{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.08);overflow:auto;max-height:75vh}
+  table{width:100%;border-collapse:separate;border-spacing:0;font-size:12px}
+  th,td{padding:6px 10px;border-bottom:1px solid #eee;text-align:left;white-space:nowrap}
+  thead th{background:#34495e;color:#fff;position:sticky;top:0;z-index:10}
+  tbody tr:hover{background:#fafbfc}
+  td.score{text-align:right;font-family:monospace}
+  td.total{font-weight:bold;color:#2c3e50}
+  .mini{font-size:11px;color:#777}
+  .badge-auto{background:#27ae60;color:#fff;padding:1px 6px;border-radius:8px;font-size:10px}
+  .badge-manual{background:#e67e22;color:#fff;padding:1px 6px;border-radius:8px;font-size:10px}
+  td a{color:#3498db;text-decoration:none}
+  td a:hover{text-decoration:underline}
+
+  .login-box{max-width:400px;margin:80px auto;padding:30px;background:#fff;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.1);text-align:center}
+  .login-box input{width:100%;padding:8px;margin:5px 0;border:1px solid #ddd;border-radius:5px;font-size:14px}
+  .login-box button{width:100%;padding:10px;margin-top:10px;background:#2c3e50;color:#fff;border:none;border-radius:5px;cursor:pointer}
+
+  .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+  .modal-bg.show{display:flex}
+  .modal{background:#fff;border-radius:8px;padding:20px;max-width:600px;width:92%;max-height:80vh;overflow:auto}
+  .modal h3{margin-bottom:10px;color:#2c3e50}
+  .modal textarea{width:100%;height:250px;font-family:monospace;font-size:11px;padding:8px;border:1px solid #ccc;border-radius:5px;resize:vertical}
+  .modal .actions{text-align:right;margin-top:10px}
+</style>
+</head>
+<body>
+
+<div id="login-page">
+  <div class="login-box">
+    <h2>🔐 管理者ログイン</h2>
+    <input type="email" id="login-email" placeholder="メール" value="admin@trainee.local">
+    <input type="password" id="login-pass" placeholder="パスワード">
+    <button onclick="doLogin()">ログイン</button>
+    <p id="login-error" style="color:#e74c3c;margin-top:8px"></p>
+  </div>
+</div>
+
+<div id="main-page" style="display:none">
+  <div class="nav">
+    <h1>📊 テスト結果一覧</h1>
+    <a href="index.html">学生一覧</a>
+    <a href="test-results.html" class="active">成績</a>
+    <span style="margin-left:auto;font-size:13px" id="user-email"></span>
+    <button class="btn" onclick="doLogout()">ログアウト</button>
+  </div>
+
+  <div class="container">
+    <div class="stats" id="stats"></div>
+
+    <div class="toolbar">
+      <label>テスト:
+        <select id="filter-test" onchange="render()">
+          <option value="">全部</option>
+        </select>
+      </label>
+      <label>クラス:
+        <select id="filter-class" onchange="render()">
+          <option value="">全部</option>
+        </select>
+      </label>
+      <label>検索:
+        <input type="text" id="filter-search" oninput="render()" placeholder="ID/名前" style="width:140px">
+      </label>
+      <span style="margin-left:auto;display:flex;gap:6px">
+        <button class="btn" onclick="copyTSV()">📋 TSVコピー(貼付用)</button>
+        <button class="btn btn-green" onclick="downloadCSV()">💾 CSV保存</button>
+        <button class="btn btn-warn" onclick="reload()">🔄 再読込</button>
+      </span>
+    </div>
+
+    <div class="table-wrap">
+      <table id="results-table">
+        <thead>
+          <tr>
+            <th>学生ID</th>
+            <th>名前</th>
+            <th>クラス</th>
+            <th>テスト</th>
+            <th>受験日</th>
+            <th>語彙</th>
+            <th>文法</th>
+            <th>聴解</th>
+            <th>合計</th>
+            <th>採点</th>
+            <th>詳細</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- TSV コピーモーダル -->
+<div class="modal-bg" id="tsv-modal">
+  <div class="modal">
+    <h3>📋 Google Sheets に貼り付け</h3>
+    <p style="font-size:12px;color:#777;margin-bottom:8px">
+      下のテキストをコピーして、Google Sheetsのセルに貼り付けると表になります。
+    </p>
+    <textarea id="tsv-text" readonly></textarea>
+    <div class="actions">
+      <button class="btn" onclick="doCopyTSV()">クリップボードにコピー</button>
+      <button class="btn btn-warn" onclick="document.getElementById('tsv-modal').classList.remove('show')">閉じる</button>
+    </div>
+    <p id="copy-status" style="font-size:12px;color:#27ae60;margin-top:8px"></p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script>
+let _data = [];
+let _testDefs = {};
+
+async function doLogin() {
+  const email = document.getElementById('login-email').value;
+  const pass = document.getElementById('login-pass').value;
+  const errEl = document.getElementById('login-error');
+  errEl.textContent = '';
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
+  if (error) { errEl.textContent = error.message; return; }
+  const { data: profile } = await supabase
+    .from('user_profiles').select('role').eq('id', data.user.id).single();
+  if (!profile || !['admin','org'].includes(profile.role)) {
+    errEl.textContent = '管理者アカウントではありません';
+    await supabase.auth.signOut();
+    return;
+  }
+  document.getElementById('login-page').style.display = 'none';
+  document.getElementById('main-page').style.display = 'block';
+  document.getElementById('user-email').textContent = email;
+  await reload();
+}
+
+async function doLogout() {
+  await supabase.auth.signOut();
+  location.reload();
+}
+
+async function reload() {
+  const [trRes, tdRes, resRes] = await Promise.all([
+    supabase.from('trainees').select('id,student_id,name_katakana,class_group,company'),
+    supabase.from('test_definitions').select('id,display_name,sections,sort_order').order('sort_order'),
+    supabase.from('test_results').select('id,trainee_id,test_name,test_date,score_vocab,score_grammar,score_listening,auto_scored,created_at').order('created_at', { ascending: false })
+  ]);
+  if (trRes.error) { alert(trRes.error.message); return; }
+
+  const tmap = {};
+  (trRes.data||[]).forEach(t => { tmap[t.id] = t; });
+  _testDefs = {};
+  (tdRes.data||[]).forEach(d => { _testDefs[d.id] = d; });
+
+  _data = (resRes.data||[]).map(r => {
+    const t = tmap[r.trainee_id] || {};
+    return {
+      result_id: r.id,
+      student_id: t.student_id || '?',
+      name: t.name_katakana || '',
+      class_group: t.class_group || '',
+      company: t.company || '',
+      test_name: r.test_name,
+      test_date: r.test_date,
+      created_at: r.created_at,
+      score_vocab: r.score_vocab,
+      score_grammar: r.score_grammar,
+      score_listening: r.score_listening,
+      auto_scored: r.auto_scored,
+    };
+  });
+
+  // フィルタドロップダウン
+  const tests = [...new Set(_data.map(d => d.test_name))].sort();
+  const classes = [...new Set(_data.map(d => d.class_group).filter(Boolean))].sort();
+  fillSelect('filter-test', tests);
+  fillSelect('filter-class', classes);
+
+  render();
+}
+
+function fillSelect(id, items) {
+  const sel = document.getElementById(id);
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">全部</option>';
+  items.forEach(v => {
+    const label = id === 'filter-test' && _testDefs[v] ? `${v} - ${_testDefs[v].display_name}` : v;
+    sel.innerHTML += `<option value="${v}">${label}</option>`;
+  });
+  sel.value = cur;
+}
+
+function getFiltered() {
+  const fTest = document.getElementById('filter-test').value;
+  const fClass = document.getElementById('filter-class').value;
+  const fSearch = (document.getElementById('filter-search').value || '').toLowerCase();
+  return _data.filter(d => {
+    if (fTest && d.test_name !== fTest) return false;
+    if (fClass && d.class_group !== fClass) return false;
+    if (fSearch && !((d.student_id.toLowerCase().includes(fSearch)) || (d.name.toLowerCase().includes(fSearch)))) return false;
+    return true;
+  });
+}
+
+function render() {
+  const filtered = getFiltered();
+  // 統計
+  const totalCount = filtered.length;
+  const avgTotal = totalCount === 0 ? 0 : Math.round(filtered.reduce((s, d) => s + (d.score_vocab||0) + (d.score_grammar||0) + (d.score_listening||0), 0) / totalCount);
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><b>${totalCount}</b>件</div>
+    <div class="stat"><b>${avgTotal}</b>平均合計</div>
+  `;
+
+  const tbody = document.getElementById('rows');
+  tbody.innerHTML = '';
+  filtered.forEach(d => {
+    const tr = document.createElement('tr');
+    const tdef = _testDefs[d.test_name] || {};
+    const max = (tdef.sections || ['goii','bunpo','chokkai']).length * 100;
+    const total = (d.score_vocab||0) + (d.score_grammar||0) + (d.score_listening||0);
+    tr.innerHTML = `
+      <td>${d.student_id}</td>
+      <td>${d.name}</td>
+      <td>${d.class_group}</td>
+      <td>${d.test_name}<br><span class="mini">${tdef.display_name||''}</span></td>
+      <td>${d.test_date}</td>
+      <td class="score">${d.score_vocab ?? '-'}</td>
+      <td class="score">${d.score_grammar ?? '-'}</td>
+      <td class="score">${d.score_listening ?? '-'}</td>
+      <td class="score total">${total}/${max}</td>
+      <td>${d.auto_scored ? '<span class="badge-auto">自動</span>' : '<span class="badge-manual">手動</span>'}</td>
+      <td><a href="test-result-detail.html?id=${d.result_id}">→詳細</a></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function rowsToTSV(filtered) {
+  const header = ['学生ID','名前','クラス','会社','テストID','テスト名','受験日','語彙','文法','聴解','合計','最大','採点方式','提出日時'];
+  const rows = [header.join('\t')];
+  filtered.forEach(d => {
+    const tdef = _testDefs[d.test_name] || {};
+    const max = (tdef.sections || ['goii','bunpo','chokkai']).length * 100;
+    const total = (d.score_vocab||0) + (d.score_grammar||0) + (d.score_listening||0);
+    rows.push([
+      d.student_id, d.name, d.class_group, d.company || '',
+      d.test_name, tdef.display_name || '',
+      d.test_date,
+      d.score_vocab ?? '', d.score_grammar ?? '', d.score_listening ?? '',
+      total, max,
+      d.auto_scored ? '自動' : '手動',
+      d.created_at || ''
+    ].map(v => String(v).replace(/\t/g,' ').replace(/\n/g,' ')).join('\t'));
+  });
+  return rows.join('\n');
+}
+
+function copyTSV() {
+  const tsv = rowsToTSV(getFiltered());
+  document.getElementById('tsv-text').value = tsv;
+  document.getElementById('tsv-modal').classList.add('show');
+}
+
+async function doCopyTSV() {
+  const ta = document.getElementById('tsv-text');
+  try {
+    await navigator.clipboard.writeText(ta.value);
+    document.getElementById('copy-status').textContent = '✓ クリップボードにコピーしました。Google Sheetsに貼り付けてください。';
+  } catch (e) {
+    ta.select();
+    document.execCommand('copy');
+    document.getElementById('copy-status').textContent = '✓ コピー済（fallback）';
+  }
+}
+
+function downloadCSV() {
+  const filtered = getFiltered();
+  const tsv = rowsToTSV(filtered);
+  const csv = tsv.split('\n').map(line => line.split('\t').map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
+  const bom = '\uFEFF';
+  const blob = new Blob([bom + csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `test_results_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// 自動ログイン
+(async () => {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session) {
+    const { data: profile } = await supabase
+      .from('user_profiles').select('role').eq('id', session.user.id).single();
+    if (profile && ['admin','org'].includes(profile.role)) {
+      document.getElementById('login-page').style.display = 'none';
+      document.getElementById('main-page').style.display = 'block';
+      document.getElementById('user-email').textContent = session.user.email;
+      await reload();
+    }
+  }
+})();
+</script>
+</body>
+</html>
