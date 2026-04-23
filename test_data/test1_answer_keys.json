@@ -404,19 +404,51 @@
       "c12": {
         "c12_1": "6じはん",
         "c12_2": "しょくどう",
-        "c12_3": "6じ",
+        "c12_3": "5じはん",
         "c12_4": "にほんごを べんきょうします",
         "c12_5": "にちようび"
+      },
+      "c1": {
+        "c1_1": "a",
+        "c1_2": "b"
+      },
+      "c3": {
+        "c3_1": "c",
+        "c3_2": "c"
+      },
+      "c4": {
+        "c4_1": "a",
+        "c4_2": "a"
+      },
+      "c5": {
+        "c5_1": "b",
+        "c5_2": "e"
+      },
+      "c6": {
+        "c6_1a": "b",
+        "c6_1b": "a",
+        "c6_2a": "a",
+        "c6_2b": "b"
+      },
+      "c9": {
+        "c9_1s": "9",
+        "c9_1e": "18",
+        "c9_1d": "かようび",
+        "c9_2sa": "9",
+        "c9_2ea": "12",
+        "c9_2sb": "16:30",
+        "c9_2eb": "19:30",
+        "c9_2d": "にちようび"
       }
     },
     "scoring_rules": {
       "c1": {
-        "method": "manual",
-        "points_each": 3,
+        "method": "exact_match",
         "field_ids": [
           "c1_1",
           "c1_2"
-        ]
+        ],
+        "points_each": 3
       },
       "c2": {
         "method": "exact_match",
@@ -427,37 +459,44 @@
         ]
       },
       "c3": {
-        "method": "manual",
-        "points_each": 3,
+        "method": "exact_match",
         "field_ids": [
           "c3_1",
           "c3_2"
-        ]
+        ],
+        "points_each": 3
       },
       "c4": {
-        "method": "manual",
-        "points_each": 3,
+        "method": "exact_match",
         "field_ids": [
           "c4_1",
           "c4_2"
-        ]
+        ],
+        "points_each": 3
       },
       "c5": {
-        "method": "manual",
-        "points_each": 3,
+        "method": "exact_match",
         "field_ids": [
           "c5_1",
           "c5_2"
-        ]
+        ],
+        "points_each": 3
       },
       "c6": {
-        "method": "manual",
-        "points_each": 3,
-        "field_ids": [
-          "c6_1a",
-          "c6_1b",
-          "c6_2a",
-          "c6_2b"
+        "method": "multi_field_group",
+        "groups": [
+          [
+            "c6_1a",
+            "c6_1b"
+          ],
+          [
+            "c6_2a",
+            "c6_2b"
+          ]
+        ],
+        "group_points": [
+          3,
+          3
         ]
       },
       "c7": {
@@ -484,16 +523,30 @@
         ]
       },
       "c9": {
-        "method": "manual",
-        "field_ids": [
-          "c9_1s",
-          "c9_1e",
-          "c9_1d",
-          "c9_2sa",
-          "c9_2ea",
-          "c9_2sb",
-          "c9_2eb",
-          "c9_2d"
+        "method": "multi_field_group",
+        "groups": [
+          [
+            "c9_1s",
+            "c9_1e"
+          ],
+          [
+            "c9_1d"
+          ],
+          [
+            "c9_2sa",
+            "c9_2ea",
+            "c9_2sb",
+            "c9_2eb"
+          ],
+          [
+            "c9_2d"
+          ]
+        ],
+        "group_points": [
+          2,
+          1,
+          2,
+          1
         ]
       },
       "c10": {
