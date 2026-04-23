@@ -168,6 +168,13 @@ function renderQuestions(questions, answerKey, scoringRules, userAnswers) {
     const blockLevelMethods = ['pair_match','bucket_sort','price_country','multi_field_group'];
     const isBlockLevel = blockLevelMethods.includes(method);
 
+    // tile_sort_buckets: bucket単位で回答と正解を並べる
+    if (q.type === 'tile_sort_buckets') {
+      html += renderTileSortBuckets(q, ak, userAnswers);
+      html += `</div>`;
+      return;
+    }
+
     const fieldIds = collectFieldIds(q);
     fieldIds.forEach((fid, idx) => {
       const userVal = userAnswers[fid];
@@ -257,6 +264,35 @@ function normalizeDetail(s, opts) {
     r = r.replace(/đ/g, 'd').replace(/Đ/g, 'D');
   }
   return r;
+}
+
+function renderTileSortBuckets(q, ak, userAnswers) {
+  const tileLabels = {};
+  (q.tiles || []).forEach(t => { tileLabels[t.key] = (t.label || t.key).replace(/^[A-Z]\.\s*/, ''); });
+  const expectedBuckets = Array.isArray(ak) ? ak : [];
+  let html = '';
+  (q.buckets || []).forEach((bk, i) => {
+    const fid = bk.id;
+    const userRaw = userAnswers[fid];
+    let userKeys = [];
+    try { userKeys = typeof userRaw === 'string' ? JSON.parse(userRaw) : (userRaw || []); }
+    catch(e) { userKeys = []; }
+    if (!Array.isArray(userKeys)) userKeys = [];
+    const expected = expectedBuckets[i] || [];
+    const userStr = userKeys.map(k => `${k.toUpperCase()}. ${tileLabels[k] || '?'}`).join(' / ') || '(未回答)';
+    const expStr = expected.map(k => `${k.toUpperCase()}. ${tileLabels[k] || '?'}`).join(' / ');
+    const exact = userKeys.length === expected.length && expected.every(k => userKeys.includes(k));
+    const status = userKeys.length === 0 ? 'unanswered' : (exact ? 'correct' : 'wrong');
+    const badge = status === 'correct' ? '<span class="badge-ok">○</span>' :
+                  status === 'wrong' ? '<span class="badge-ng">×</span>' :
+                  '<span class="badge-na">未回答</span>';
+    html += `<div class="q-item ${status}">
+      <div class="qlabel">${stripRuby(bk.label || fid)} ${badge}</div>
+      <div class="userAns">${escapeHtml(userStr)}</div>
+      <div class="correctAns ${status==='wrong'?'wrong':''}">正解: ${escapeHtml(expStr)}</div>
+    </div>`;
+  });
+  return html;
 }
 
 function collectFieldIds(q) {
