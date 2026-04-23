@@ -810,8 +810,7 @@
             "value": "g",
             "label": "g. 日曜日"
           }
-        ],
-        "audio_src": "audio/9.mp3"
+        ]
       },
       {
         "field_id": "c9_2",
@@ -846,8 +845,7 @@
             "value": "g",
             "label": "g. 日曜日"
           }
-        ],
-        "audio_src": "audio/9.mp3"
+        ]
       },
       {
         "field_id": "c9_3",
@@ -882,8 +880,7 @@
             "value": "g",
             "label": "g. 日曜日"
           }
-        ],
-        "audio_src": "audio/9.mp3"
+        ]
       }
     ]
   },
