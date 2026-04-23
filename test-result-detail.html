@@ -160,30 +160,44 @@ function renderQuestions(questions, answerKey, scoringRules, userAnswers) {
   let html = '';
   questions.forEach(q => {
     html += `<div style="margin-top:14px"><div class="section-title">${stripRuby(q.title_html || q.id)}</div>`;
-    // block の採点ルールと答え
     const rule = scoringRules[q.id] || {};
-    const ak = answerKey[q.id] || {};
+    const ak = answerKey[q.id];
+    const method = rule.method;
 
-    // field_id を抽出
+    // pair_match / bucket_sort / price_country / multi_field_group はブロック単位採点
+    const blockLevelMethods = ['pair_match','bucket_sort','price_country','multi_field_group'];
+    const isBlockLevel = blockLevelMethods.includes(method);
+
     const fieldIds = collectFieldIds(q);
-    fieldIds.forEach(fid => {
+    fieldIds.forEach((fid, idx) => {
       const userVal = userAnswers[fid];
+      // 配列ak対応（test1 旧形式）
       let expected;
-      if (typeof ak === 'object' && !Array.isArray(ak)) {
+      if (typeof ak === 'object' && !Array.isArray(ak) && ak !== null) {
         expected = ak[fid];
+      } else if (Array.isArray(ak)) {
+        // index ベース（g1,g2等）
+        const m = fid.match(/(\d+)$/);
+        if (m) {
+          const i = parseInt(m[1], 10) - 1;
+          if (i >= 0 && i < ak.length) expected = ak[i];
+        }
       }
-      const isManual = rule.method === 'manual';
-      const isAnswered = userVal !== undefined && userVal !== '';
+
+      const isAnswered = userVal !== undefined && userVal !== '' && userVal !== null;
       let status = 'unanswered';
       let badge = '';
-      if (isManual) {
+      if (method === 'manual') {
         status = 'manual';
         badge = '<span class="badge-mn">先生採点</span>';
+      } else if (isBlockLevel && expected === undefined) {
+        status = 'manual';
+        badge = '<span class="badge-mn">ブロック採点</span>';
       } else if (!isAnswered) {
         status = 'unanswered';
         badge = '<span class="badge-na">未回答</span>';
       } else if (expected !== undefined) {
-        const ok = normalize(userVal) === normalize(expected);
+        const ok = matchAnswer(userVal, expected, method, rule);
         status = ok ? 'correct' : 'wrong';
         badge = ok ? '<span class="badge-ok">○</span>' : '<span class="badge-ng">×</span>';
       } else {
@@ -199,6 +213,50 @@ function renderQuestions(questions, answerKey, scoringRules, userAnswers) {
     html += `</div>`;
   });
   return html;
+}
+
+// grading.js と同じロジックで個別fieldをマッチ判定
+function matchAnswer(userVal, expected, method, rule) {
+  const opts = {
+    strip_accents: method === 'flex_match' || method === 'vietnamese_fuzzy',
+    case_insensitive: true,
+    normalize_spaces: true,
+  };
+  const sep = (rule && rule.separator) || '／';
+  const sepRegex = new RegExp('[' + sep.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '、/,]');
+
+  // 期待値を配列化
+  const expArr = Array.isArray(expected) ? expected : [expected];
+  const expVariants = [];
+  expArr.forEach(e => {
+    String(e).split(sepRegex).forEach(v => {
+      const n = normalizeDetail(v, opts);
+      if (n) expVariants.push(n);
+    });
+  });
+  // ユーザー回答も分割
+  const actVariants = String(userVal || '').split(sepRegex)
+    .map(v => normalizeDetail(v, opts))
+    .filter(Boolean);
+  if (!actVariants.length) return false;
+
+  // flex_match / vietnamese_fuzzy は部分一致OK
+  const allowPartial = method === 'flex_match' || method === 'vietnamese_fuzzy';
+  return expVariants.some(e =>
+    actVariants.some(a => a === e || (allowPartial && (a.includes(e) || e.includes(a))))
+  );
+}
+
+function normalizeDetail(s, opts) {
+  if (s == null) return '';
+  let r = String(s).trim();
+  if (opts.normalize_spaces) r = r.replace(/\s+/g, ' ');
+  if (opts.case_insensitive) r = r.toLowerCase();
+  if (opts.strip_accents) {
+    r = r.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    r = r.replace(/đ/g, 'd').replace(/Đ/g, 'D');
+  }
+  return r;
 }
 
 function collectFieldIds(q) {
