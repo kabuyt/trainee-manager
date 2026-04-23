@@ -549,15 +549,63 @@ function renderTraineeDetail(t, results) {
 
 // ===== 教育報告書 =====
 const MONTH_TEST_MAP = [
-  { month: 1, test: '第1-4課',   scope: '第4課迄' },
-  { month: 2, test: '第5-11課',  scope: '第11課迄' },
-  { month: 3, test: '第12-18課', scope: '第18課迄' },
-  { month: 4, test: '第19-25課', scope: '第25課迄' },
-  { month: 5, test: '第26-33課', scope: '第33課迄' },
-  { month: 6, test: '第34-40課', scope: '第40課迄' },
-  { month: 7, test: '第41-45課', scope: '第45課迄' },
-  { month: 8, test: '第46-50課', scope: '第50課迄' },
+  { month: 1, test: 'test1', testLabel: '第1-4課',   scope: '第4課迄' },
+  { month: 2, test: 'test2', testLabel: '第5-11課',  scope: '第11課迄' },
+  { month: 3, test: 'test3', testLabel: '第12-18課', scope: '第18課迄' },
+  { month: 4, test: 'test4', testLabel: '第19-25課', scope: '第25課迄' },
+  { month: 5, test: 'test5', testLabel: '第26-33課', scope: '第33課迄' },
+  { month: 6, test: 'test6', testLabel: '第34-40課', scope: '第40課迄' },
+  { month: 7, test: 'test7', testLabel: '第41-45課', scope: '第45課迄' },
+  { month: 8, test: 'test8', testLabel: '第46-50課', scope: '第50課迄' },
 ];
+
+// test_name を検索する（新旧両フォーマット対応）
+function matchTest(row, map) {
+  return row.test_name === map.test || row.test_name === map.testLabel;
+}
+
+// 会話スコアを DB に保存（報告書画面から呼ばれる）
+async function saveConversationScore(value) {
+  const map = MONTH_TEST_MAP.find(m => m.month === _currentMonth);
+  if (!map || !_reportTrainee) return;
+  const existing = _reportResults.find(r => matchTest(r, map));
+  const convCell = document.getElementById('sConv');
+
+  if (existing) {
+    // UPDATE
+    const { error } = await supabase.from('test_results')
+      .update({ score_conversation: value })
+      .eq('id', existing.id);
+    if (error) {
+      alert('保存失敗: ' + error.message);
+      return;
+    }
+    existing.score_conversation = value;
+  } else {
+    // 会話スコアだけの行を作成（他のスコアはNULL）
+    const { data, error } = await supabase.from('test_results').insert({
+      trainee_id: _reportTrainee.id,
+      test_name: map.test,
+      test_date: new Date().toISOString().slice(0, 10),
+      score_conversation: value,
+    }).select().single();
+    if (error) {
+      alert('保存失敗: ' + error.message);
+      return;
+    }
+    _reportResults.push(data);
+  }
+
+  // 表示再計算
+  convCell.style.background = '#d4edda';
+  setTimeout(() => { convCell.style.background = ''; }, 1000);
+  // 合計を更新
+  const row = _reportResults.find(r => matchTest(r, map));
+  if (row) {
+    const t = (row.score_vocab ?? 0) + (row.score_grammar ?? 0) + (row.score_listening ?? 0) + (row.score_conversation ?? 0);
+    document.getElementById('sTotal').textContent = t + '/400';
+  }
+}
 
 // 報告書のグローバル状態
 let _reportTrainee = null;
@@ -627,7 +675,7 @@ function switchMonth(month) {
   document.getElementById('scopeLabel').textContent = map.scope;
 
   // 該当月のテスト結果を表示
-  const result = _reportResults.find(r => r.test_name === map.test);
+  const result = _reportResults.find(r => matchTest(r, map));
   renderMonthScores(result);
 
   // 該当月のコメントを表示
@@ -649,7 +697,11 @@ function renderMonthScores(result) {
     document.getElementById('sTotal').textContent = total + '/400';
 
     // 統計
-    const sameTest = _reportClassResults.filter(r => r.test_name === result.test_name);
+    // 新旧両フォーマットの test_name を同一視（test2 <-> 第5-11課）
+    const map = MONTH_TEST_MAP.find(m => matchTest(result, m));
+    const sameTest = map
+      ? _reportClassResults.filter(r => matchTest(r, map))
+      : _reportClassResults.filter(r => r.test_name === result.test_name);
     const stats = calcStats(sameTest, result);
     document.getElementById('avgVocab').textContent = stats.avg.vocab;
     document.getElementById('avgGrammar').textContent = stats.avg.grammar;

@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="report.css?v=17">
+<link rel="stylesheet" href="report.css?v=18">
 </head>
 <body>
 <div class="print-footer">GROP VIETNAM CO., LTD</div>
@@ -79,7 +79,7 @@
         <td id="sVocab">-</td>
         <td id="sGrammar">-</td>
         <td id="sListen">-</td>
-        <td id="sConv">-</td>
+        <td id="sConv" contenteditable="true" data-placeholder="入力" class="editable-score" title="クリックして会話の点数を入力（0-100）">-</td>
         <td id="sTotal" class="total-cell">-</td>
       </tr>
       <tr class="row-avg">
@@ -248,7 +248,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="auth.js?v=5"></script>
-<script src="app.js?v=7"></script>
+<script src="app.js?v=8"></script>
 <script>
   (async function() {
     const auth = await checkAuth();
@@ -267,6 +267,23 @@
   });
   document.getElementById('learnEnv').addEventListener('change', function() {
     document.getElementById('envPrint').textContent = this.value;
+  });
+
+  // 会話スコアの手動入力（blur or Enterで保存）
+  const convCell = document.getElementById('sConv');
+  convCell.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); convCell.blur(); }
+  });
+  convCell.addEventListener('blur', async function() {
+    const text = convCell.textContent.trim();
+    const val = text === '' || text === '-' ? null : parseInt(text, 10);
+    if (text !== '' && text !== '-' && (isNaN(val) || val < 0 || val > 100)) {
+      alert('0〜100の数値を入力してください');
+      return;
+    }
+    if (typeof saveConversationScore === 'function') {
+      await saveConversationScore(val);
+    }
   });
 </script>
 </body>

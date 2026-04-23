@@ -455,3 +455,31 @@ select.no-print-select:focus { border-color: #2563eb; outline: none; }
 
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
+
+/* 会話スコア手動入力セル */
+.editable-score {
+  background: #fffde7;
+  cursor: text;
+  outline: none;
+  border: 1px dashed #f39c12 !important;
+  transition: background .2s;
+}
+.editable-score:hover {
+  background: #fff3cd;
+}
+.editable-score:focus {
+  background: #ffffff;
+  border: 2px solid #f39c12 !important;
+}
+.editable-score:empty::before {
+  content: attr(data-placeholder);
+  color: #aaa;
+  font-size: 0.85em;
+}
+@media print {
+  .editable-score {
+    background: transparent !important;
+    border: none !important;
+  }
+  .editable-score:empty::before { content: '-'; }
+}
