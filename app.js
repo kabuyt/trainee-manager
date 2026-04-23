@@ -875,12 +875,10 @@ function renderReport(t, results, classResults) {
 
   // 成績推移テーブル + グラフ（全8回分表示）
   {
-    const allLabels = ['第1-4課','第5-11課','第12-18課','第19-25課','第26-33課','第34-40課','第41-45課','第46-50課'];
-    const resultMap = {};
-    results.forEach(r => { resultMap[r.test_name] = r; });
     const tbody = document.getElementById('trendBody');
-    tbody.innerHTML = allLabels.map(label => {
-      const r = resultMap[label];
+    tbody.innerHTML = MONTH_TEST_MAP.map(m => {
+      const label = m.testLabel;
+      const r = results.find(row => matchTest(row, m));
       if (r) {
         const tot = (r.score_vocab ?? 0) + (r.score_grammar ?? 0) +
                     (r.score_listening ?? 0) + (r.score_conversation ?? 0);
@@ -936,7 +934,9 @@ function renderTrendChart(results) {
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
       animation: false,
+      layout: { padding: { top: 6, right: 6, bottom: 2, left: 2 } },
       plugins: {
         legend: { position: 'bottom', labels: { font: { size: 11 } } },
         title: { display: false },

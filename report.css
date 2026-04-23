@@ -246,13 +246,13 @@ body {
 /* ===== グラフ ===== */
 .chart-container {
   margin: 4px 0 6px;
-  padding: 6px;
+  padding: 8px;
   background: #f8fafc;
   border: 1px solid #cbd5e1;
-  max-height: 240px;
+  height: 300px;
 }
 .chart-container canvas {
-  max-height: 220px;
+  max-height: 100%;
 }
 
 /* ===== コメント欄 ===== */
