@@ -89,10 +89,12 @@
       <label>検索:
         <input type="text" id="filter-search" oninput="render()" placeholder="ID/名前" style="width:140px">
       </label>
-      <span style="margin-left:auto;display:flex;gap:6px">
-        <button class="btn" onclick="copyTSV()">📋 TSVコピー(貼付用)</button>
+      <span style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn" onclick="copyTSV()">📋 TSVコピー</button>
         <button class="btn btn-green" onclick="downloadCSV()">💾 CSV保存</button>
-        <button class="btn btn-warn" onclick="reload()">🔄 再読込</button>
+        <button class="btn btn-green" onclick="sendToSheets()">📤 Sheetsへ送信</button>
+        <button class="btn" style="background:#95a5a6" onclick="openSheetsSettings()">⚙</button>
+        <button class="btn btn-warn" onclick="reload()">🔄</button>
       </span>
     </div>
 
@@ -116,6 +118,37 @@
         <tbody id="rows"></tbody>
       </table>
     </div>
+  </div>
+</div>
+
+<!-- Sheets設定モーダル -->
+<div class="modal-bg" id="sheets-modal">
+  <div class="modal">
+    <h3>⚙ Google Sheets 連携設定</h3>
+    <p style="font-size:12px;color:#777;margin-bottom:10px">
+      Apps Script Web App URL と Secret を設定します。<br>
+      未設定の場合、<code style="background:#eee;padding:2px 4px">apps-script/sync-to-sheets.gs</code> の手順に従ってください。
+    </p>
+    <div style="margin:8px 0">
+      <label style="font-size:12px;display:block;margin-bottom:3px">Web App URL</label>
+      <input type="text" id="sheets-url" style="width:100%;padding:6px" placeholder="https://script.google.com/macros/s/XXXX/exec">
+    </div>
+    <div style="margin:8px 0">
+      <label style="font-size:12px;display:block;margin-bottom:3px">Secret (GASコード内の SECRET と一致)</label>
+      <input type="text" id="sheets-secret" style="width:100%;padding:6px" placeholder="任意のパスワード文字列">
+    </div>
+    <div style="margin:8px 0">
+      <label style="font-size:12px">
+        <input type="checkbox" id="sheets-replace" checked>
+        シート全体を上書き（既存データをクリア）
+      </label>
+    </div>
+    <div class="actions">
+      <button class="btn" onclick="testSheetsConnection()">🔌 接続テスト</button>
+      <button class="btn btn-green" onclick="saveSheetsSettings()">保存</button>
+      <button class="btn btn-warn" onclick="document.getElementById('sheets-modal').classList.remove('show')">閉じる</button>
+    </div>
+    <p id="sheets-test-status" style="font-size:12px;margin-top:8px"></p>
   </div>
 </div>
 
@@ -298,6 +331,80 @@ async function doCopyTSV() {
     ta.select();
     document.execCommand('copy');
     document.getElementById('copy-status').textContent = '✓ コピー済（fallback）';
+  }
+}
+
+// ====== Google Sheets 連携 ======
+function openSheetsSettings() {
+  const u = localStorage.getItem('sheets_url') || '';
+  const s = localStorage.getItem('sheets_secret') || '';
+  document.getElementById('sheets-url').value = u;
+  document.getElementById('sheets-secret').value = s;
+  document.getElementById('sheets-test-status').textContent = '';
+  document.getElementById('sheets-modal').classList.add('show');
+}
+
+function saveSheetsSettings() {
+  const u = document.getElementById('sheets-url').value.trim();
+  const s = document.getElementById('sheets-secret').value.trim();
+  localStorage.setItem('sheets_url', u);
+  localStorage.setItem('sheets_secret', s);
+  document.getElementById('sheets-test-status').textContent = '✓ 保存しました';
+  document.getElementById('sheets-test-status').style.color = '#27ae60';
+}
+
+async function testSheetsConnection() {
+  const url = document.getElementById('sheets-url').value.trim();
+  const secret = document.getElementById('sheets-secret').value.trim();
+  const status = document.getElementById('sheets-test-status');
+  if (!url) { status.textContent = 'URLを入力してください'; status.style.color = '#e74c3c'; return; }
+  status.textContent = '接続中...';
+  status.style.color = '#777';
+  try {
+    // 小さなペイロードでテスト
+    const res = await fetch(url, {
+      method: 'POST',
+      mode: 'no-cors',  // Apps Script は CORS制限で詳細取得できないケースあり
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ secret, rows: [['TEST', new Date().toISOString()]], replace: false })
+    });
+    // no-cors だとレスポンス読めないので、成功として表示
+    status.textContent = '✓ 送信しました。Sheetsを確認してください (test_results シートに TEST 行が追加されているはず)';
+    status.style.color = '#27ae60';
+  } catch (err) {
+    status.textContent = '✗ 失敗: ' + err.message;
+    status.style.color = '#e74c3c';
+  }
+}
+
+async function sendToSheets() {
+  const url = localStorage.getItem('sheets_url') || '';
+  const secret = localStorage.getItem('sheets_secret') || '';
+  if (!url) {
+    alert('先に「⚙」から Sheets URL を設定してください');
+    openSheetsSettings();
+    return;
+  }
+  const filtered = getFiltered();
+  if (filtered.length === 0) {
+    alert('送信するデータがありません');
+    return;
+  }
+  const replace = true;  // 常に上書き（ユーザーの期待値）
+  const tsv = rowsToTSV(filtered);
+  const rows = tsv.split('\n').map(line => line.split('\t'));
+  if (!confirm(`${filtered.length}件をGoogle Sheetsに送信します（既存データは上書き）。続行しますか？`)) return;
+
+  try {
+    await fetch(url, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ secret, rows, replace })
+    });
+    alert('✓ 送信完了！Google Sheetsを確認してください。\n\n※ エラーがあっても no-cors モードでは検知できません。Sheets側を確認して失敗していれば「⚙接続テスト」で確認してください。');
+  } catch (err) {
+    alert('✗ 送信失敗: ' + err.message);
   }
 }
 
