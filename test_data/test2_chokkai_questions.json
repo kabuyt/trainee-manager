@@ -891,7 +891,7 @@
     "id": "c10",
     "type": "audio_select",
     "title_html": "<ruby>問題<rt>もんだい</rt></ruby>１０．<ruby>絵<rt>え</rt></ruby>と<ruby>音声<rt>おんせい</rt></ruby>を<ruby>合<rt>あ</rt></ruby>わせてください　＜<ruby>各<rt>かく</rt></ruby>2<ruby>点<rt>てん</rt></ruby>×4問＝8<ruby>点<rt>てん</rt></ruby>＞",
-    "instruction": "<ruby>音声<rt>おんせい</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて、<ruby>正<rt>せい</rt></ruby>しい<ruby>絵<rt>え</rt></ruby>を<ruby>選<rt>えら</rt></ruby>んでください。",
+    "instruction": "Nghe hội thoại, sau đó chọn tranh phù hợp",
     "points_each": 2,
     "total_points": 8,
     "items": [
