@@ -6,7 +6,7 @@ grading.js の採点ロジックを Python にポート。
 
 実行: SUPABASE_SERVICE_KEY=xxx python regrade_all.py [--dry-run]
 """
-import os, sys, json, re, urllib.request, urllib.error
+import os, sys, json, re, unicodedata, urllib.request, urllib.error
 if sys.stdout.encoding != 'utf-8':
     sys.stdout.reconfigure(encoding='utf-8')
 
@@ -37,6 +37,11 @@ def normalize(s, opts=None):
         s = re.sub(r'\s+', ' ', s)
     if opts.get('case_insensitive'):
         s = s.lower()
+    if opts.get('strip_accents'):
+        # ベトナム語等のアクセント除去
+        s = unicodedata.normalize('NFD', s)
+        s = ''.join(c for c in s if unicodedata.category(c) != 'Mn')
+        s = s.replace('đ', 'd').replace('Đ', 'D')
     if opts.get('strip_punctuation'):
         s = re.sub(r'[、。，．・,\.\s]+', '', s)
     if opts.get('strip_suffix'):
@@ -71,17 +76,24 @@ def g_flex_match(rule, ak, answers):
     opts = {
         'case_insensitive': rule.get('case_insensitive', True),
         'normalize_spaces': rule.get('normalize_spaces', True),
+        'strip_accents': rule.get('strip_accents', True),  # デフォルトON
         'strip_suffix': rule.get('strip_suffix'),
     }
     sep = rule.get('separator', '／')
+    # separatorは複数文字対応（指定文字 + 全角読点+半角スラッシュ）
+    sep_pattern = '[' + re.escape(sep) + '、/]'
     score = 0
     for fid in rule.get('field_ids', []):
         expected = ak.get(fid) if isinstance(ak, dict) else None
         if expected is None: continue
-        variants = [normalize(v, opts) for v in str(expected).split(sep)]
-        actN = normalize(answers.get(fid), opts)
-        if not actN: continue
-        if any(v == actN or v in actN or actN in v for v in variants if v):
+        exp_variants = [normalize(v, opts) for v in re.split(sep_pattern, str(expected))]
+        exp_variants = [v for v in exp_variants if v]
+        actual = answers.get(fid) or ''
+        act_variants = [normalize(v, opts) for v in re.split(sep_pattern, str(actual))]
+        act_variants = [v for v in act_variants if v]
+        if not act_variants: continue
+        matched = any(e == a or a in e or e in a for e in exp_variants for a in act_variants)
+        if matched:
             score += pts
     return score
 
