@@ -81,7 +81,7 @@
         "g6_2": "Lời hứa, cuộc hẹn",
         "g6_3": "Cay",
         "g6_4": "Bận",
-        "g6_5": "Ký túc xá",
+        "g6_5": "Ký túc xá／Kí túc xá",
         "g6_6": "Hành lý, đồ đạc",
         "g6_7": "Cho mượn, cho vay",
         "g6_8": "Công việc",
@@ -90,11 +90,11 @@
         "g6_11": "Con gái",
         "g6_12": "Cuộc sống",
         "g6_13": "Đồ uống",
-        "g6_14": "Tủ lạnh",
-        "g6_15": "Anh em",
+        "g6_14": "Tủ lạnh／Tủ đông",
+        "g6_15": "Anh em／Anh chị em",
         "g6_16": "Bên cạnh",
         "g6_17": "Hiểu",
-        "g6_18": "Điểm lên xe"
+        "g6_18": "Điểm lên xe／Bến xe"
       }
     },
     "scoring_rules": {
@@ -178,7 +178,7 @@
         "points_each": 2,
         "case_insensitive": true,
         "normalize_spaces": true,
-        "separator": ",",
+        "separator": "／",
         "field_ids": [
           "g6_1",
           "g6_2",

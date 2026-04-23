@@ -80,8 +80,8 @@ def g_flex_match(rule, ak, answers):
         'strip_suffix': rule.get('strip_suffix'),
     }
     sep = rule.get('separator', '／')
-    # separatorは複数文字対応（指定文字 + 全角読点+半角スラッシュ）
-    sep_pattern = '[' + re.escape(sep) + '、/]'
+    # separatorは複数文字対応（指定文字 + よく使う区切り記号）
+    sep_pattern = '[' + re.escape(sep) + '、/,，]'
     score = 0
     for fid in rule.get('field_ids', []):
         expected = ak.get(fid) if isinstance(ak, dict) else None

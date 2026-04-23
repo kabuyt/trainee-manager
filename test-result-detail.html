@@ -223,7 +223,7 @@ function matchAnswer(userVal, expected, method, rule) {
     normalize_spaces: true,
   };
   const sep = (rule && rule.separator) || '／';
-  const sepRegex = new RegExp('[' + sep.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '、/,]');
+  const sepRegex = new RegExp('[' + sep.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '、/,，]');
 
   // 期待値を配列化
   const expArr = Array.isArray(expected) ? expected : [expected];
