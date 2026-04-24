@@ -1259,44 +1259,66 @@ function renderDiagnosis(diagArea, results) {
     ? JSON.parse(withAnswers.answers_json)
     : withAnswers.answers_json;
 
-  // test1/test2 は セクション別正答率ベースの診断
+  // test1/test2 は セクション別正答率ベースの診断（文章形式）
   if (withAnswers.test_name === 'test1' || withAnswers.test_name === 'test2') {
     const secDiag = generateSectionDiagnosis(answers, withAnswers.test_name);
     if (secDiag) {
       const stypeJp = { goii:'語彙', bunpo:'文法', chokkai:'聴解' };
-      const weak = [], medium = [], strong = [];
+      const weakByType = {goii:[], bunpo:[], chokkai:[]};
+      const strongByType = {goii:[], bunpo:[], chokkai:[]};
       ['goii','bunpo','chokkai'].forEach(st => {
         (secDiag[st]||[]).forEach(x => {
-          const entry = {...x, stype: st, stypeJp: stypeJp[st]||st};
-          if (x.rate < 0.6) weak.push(entry);
-          else if (x.rate < 0.8) medium.push(entry);
-          else strong.push(entry);
+          if (x.rate < 0.6) weakByType[st].push({name:x.label, rate:Math.round(x.rate*100)});
+          else if (x.rate >= 0.8) strongByType[st].push({name:x.label, rate:Math.round(x.rate*100)});
         });
       });
-      let html = '<div style="margin-bottom:10px;line-height:1.8">';
-      if (weak.length===0 && medium.length<=2) html += '全体的に良好な理解度です。';
-      else if (weak.length<=1) html += 'おおむね理解できていますが、一部の分野で補強が必要です。';
-      else html += '複数の分野で課題が見られます。重点指導を推奨します。';
-      html += `<span style="color:#888;font-size:12px;margin-left:10px">（${withAnswers.test_name}, ${withAnswers.test_date}）</span></div>`;
-      if (weak.length) {
-        html += '<div style="margin-bottom:6px;font-weight:bold;color:#c0392b">【重点課題】正答率60%未満</div>';
-        html += '<ul style="margin:0 0 10px;padding-left:20px;line-height:1.8">';
-        weak.forEach(x => html += `<li><b>${x.stypeJp}</b>「${x.label}」: ${Math.round(x.rate*100)}% (${x.correct}/${x.total})</li>`);
-        html += '</ul>';
+
+      const strongCount = Object.values(strongByType).reduce((s,a)=>s+a.length,0);
+      const weakCount = Object.values(weakByType).reduce((s,a)=>s+a.length,0);
+
+      // 理解できている点（文章）
+      let goodSentences = [];
+      ['goii','bunpo','chokkai'].forEach(st => {
+        if (strongByType[st].length > 0) {
+          const names = strongByType[st].slice(0,4).map(x => `「${x.name}」`).join('、');
+          goodSentences.push(`${stypeJp[st]}では、${names}${strongByType[st].length>4 ? 'など' : ''}の分野で高い正答率を示しており、しっかり理解できています`);
+        }
+      });
+
+      // 間違いが多い点（文章）
+      let badSentences = [];
+      ['goii','bunpo','chokkai'].forEach(st => {
+        if (weakByType[st].length > 0) {
+          const details = weakByType[st].map(x => `「${x.name}」(${x.rate}%)`).join('、');
+          badSentences.push(`${stypeJp[st]}では、${details}で正答率が低く、基礎の定着が不十分です`);
+        }
+      });
+
+      // 総評
+      let summary = '';
+      if (weakCount === 0 && strongCount >= 5) {
+        summary = '全体を通して安定した理解度を示しており、基礎がしっかり身についています。このまま学習を継続すれば、更に力が伸びることが期待できます。';
+      } else if (weakCount <= 1) {
+        summary = '全体としてはおおむね良好な理解度ですが、一部に弱点が見られます。次回のテストまでに重点的な復習で克服できるレベルです。';
+      } else if (weakCount <= 3) {
+        summary = '複数の分野で課題が見られます。得意な分野の維持と並行して、弱点分野の基礎固めを優先的に進める必要があります。';
+      } else {
+        summary = '多くの分野で正答率が低く、広範囲にわたる復習が必要な状況です。まずは基本語彙と基礎文法を中心に、段階的に学習計画を立て直すことを推奨します。';
       }
-      if (medium.length) {
-        html += '<div style="margin-bottom:6px;font-weight:bold;color:#e67e22">【注意項目】正答率60-80%</div>';
-        html += '<ul style="margin:0 0 10px;padding-left:20px;line-height:1.8">';
-        medium.forEach(x => html += `<li><b>${x.stypeJp}</b>「${x.label}」: ${Math.round(x.rate*100)}% (${x.correct}/${x.total})</li>`);
-        html += '</ul>';
+
+      let html = '<div style="line-height:1.8;margin-bottom:8px">';
+      html += `<p style="margin-bottom:10px">${summary}</p>`;
+      if (goodSentences.length > 0) {
+        html += `<p style="margin-bottom:8px"><span style="font-weight:bold;color:#27ae60">理解できている点：</span>${goodSentences.join('。')}。</p>`;
       }
-      if (strong.length && weak.length+medium.length < 5) {
-        html += '<div style="margin-bottom:6px;font-weight:bold;color:#27ae60">【良好な分野】正答率80%以上</div>';
-        html += '<ul style="margin:0;padding-left:20px;line-height:1.8;color:#555">';
-        strong.slice(0,6).forEach(x => html += `<li>${x.stypeJp}「${x.label}」: ${Math.round(x.rate*100)}%</li>`);
-        if (strong.length>6) html += `<li style="color:#999">...他${strong.length-6}分野</li>`;
-        html += '</ul>';
+      if (badSentences.length > 0) {
+        html += `<p style="margin-bottom:8px"><span style="font-weight:bold;color:#c0392b">間違いが多い点：</span>${badSentences.join('。')}。</p>`;
       }
+      if (goodSentences.length === 0 && badSentences.length === 0) {
+        html += '<p style="color:#888">特筆すべき弱点も際立った強みも見られませんでした。</p>';
+      }
+      html += `<p style="font-size:11px;color:#999;margin-top:10px">（${withAnswers.test_name} / ${withAnswers.test_date} の解答を基に自動分析）</p>`;
+      html += '</div>';
       diagArea.innerHTML = html;
       return;
     }
