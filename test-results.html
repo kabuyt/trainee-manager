@@ -89,6 +89,14 @@
       <label>検索:
         <input type="text" id="filter-search" oninput="render()" placeholder="ID/名前" style="width:140px">
       </label>
+      <label style="font-size:12px"><input type="checkbox" id="filter-noconv" onchange="render()"> 会話未入力のみ</label>
+      <label style="font-size:12px">満点:
+        <select id="filter-maxmode" onchange="render()">
+          <option value="400">/400（会話含）</option>
+          <option value="300">/300（自動採点のみ）</option>
+        </select>
+      </label>
+      <label style="font-size:12px"><input type="checkbox" id="mode-conv" onchange="render()"> 会話採点モード</label>
       <span style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap">
         <button class="btn" onclick="copyTSV()">📋 TSVコピー</button>
         <button class="btn btn-green" onclick="downloadCSV()">💾 CSV保存</button>
@@ -101,17 +109,18 @@
     <div class="table-wrap">
       <table id="results-table">
         <thead>
-          <tr>
+          <tr id="thead-row">
             <th>学生ID</th>
             <th>名前</th>
             <th>クラス</th>
             <th>テスト</th>
             <th>受験日</th>
-            <th>語彙</th>
-            <th>文法</th>
-            <th>聴解</th>
+            <th class="col-auto">語彙</th>
+            <th class="col-auto">文法</th>
+            <th class="col-auto">聴解</th>
+            <th>会話<span class="mini" style="color:#bbb">（クリックで編集）</span></th>
             <th>合計</th>
-            <th>採点</th>
+            <th class="col-auto">採点</th>
             <th>詳細</th>
           </tr>
         </thead>
@@ -203,7 +212,7 @@ async function reload() {
   const [trRes, tdRes, resRes] = await Promise.all([
     supabase.from('trainees').select('id,student_id,name_katakana,class_group,company'),
     supabase.from('test_definitions').select('id,display_name,sections,sort_order').order('sort_order'),
-    supabase.from('test_results').select('id,trainee_id,test_name,test_date,score_vocab,score_grammar,score_listening,auto_scored,created_at').order('created_at', { ascending: false })
+    supabase.from('test_results').select('id,trainee_id,test_name,test_date,score_vocab,score_grammar,score_listening,score_conversation,auto_scored,created_at').order('created_at', { ascending: false })
   ]);
   if (trRes.error) { alert(trRes.error.message); return; }
 
@@ -226,6 +235,7 @@ async function reload() {
       score_vocab: r.score_vocab,
       score_grammar: r.score_grammar,
       score_listening: r.score_listening,
+      score_conversation: r.score_conversation,
       auto_scored: r.auto_scored,
     };
   });
@@ -254,60 +264,159 @@ function getFiltered() {
   const fTest = document.getElementById('filter-test').value;
   const fClass = document.getElementById('filter-class').value;
   const fSearch = (document.getElementById('filter-search').value || '').toLowerCase();
+  const fNoConv = document.getElementById('filter-noconv').checked;
   return _data.filter(d => {
     if (fTest && d.test_name !== fTest) return false;
     if (fClass && d.class_group !== fClass) return false;
     if (fSearch && !((d.student_id.toLowerCase().includes(fSearch)) || (d.name.toLowerCase().includes(fSearch)))) return false;
+    if (fNoConv && d.score_conversation !== null && d.score_conversation !== undefined) return false;
     return true;
   });
 }
 
 function render() {
   const filtered = getFiltered();
+  const maxMode = document.getElementById('filter-maxmode').value; // '400' or '300'
+  const convMode = document.getElementById('mode-conv').checked;
+
+  // 会話採点モード: 自動採点列を隠す
+  document.querySelectorAll('.col-auto').forEach(el => {
+    el.style.display = convMode ? 'none' : '';
+  });
+
   // 統計
   const totalCount = filtered.length;
-  const avgTotal = totalCount === 0 ? 0 : Math.round(filtered.reduce((s, d) => s + (d.score_vocab||0) + (d.score_grammar||0) + (d.score_listening||0), 0) / totalCount);
+  const sumTotal = filtered.reduce((s, d) => s + (d.score_vocab||0) + (d.score_grammar||0) + (d.score_listening||0) + (maxMode==='400' ? (d.score_conversation||0) : 0), 0);
+  const avgTotal = totalCount === 0 ? 0 : Math.round(sumTotal / totalCount);
+  const convScores = filtered.map(d => d.score_conversation).filter(v => v !== null && v !== undefined);
+  const convCount = convScores.length;
+  const convAvg = convCount === 0 ? 0 : Math.round(convScores.reduce((s,v)=>s+v,0)/convCount);
+  const convMissing = totalCount - convCount;
+  const totalsArr = filtered.map(d => (d.score_vocab||0)+(d.score_grammar||0)+(d.score_listening||0)+(maxMode==='400' ? (d.score_conversation||0) : 0));
+  const tMax = totalsArr.length ? Math.max(...totalsArr) : 0;
+  const tMin = totalsArr.length ? Math.min(...totalsArr) : 0;
   document.getElementById('stats').innerHTML = `
     <div class="stat"><b>${totalCount}</b>件</div>
-    <div class="stat"><b>${avgTotal}</b>平均合計</div>
+    <div class="stat"><b>${avgTotal}</b>平均合計/${maxMode}</div>
+    <div class="stat"><b>${tMax}</b>最高</div>
+    <div class="stat"><b>${tMin}</b>最低</div>
+    <div class="stat"><b>${convAvg}</b>会話平均（${convCount}件入力済）</div>
+    ${convMissing > 0 ? `<div class="stat" style="background:#fff3cd"><b>${convMissing}</b>会話未入力</div>` : ''}
   `;
 
   const tbody = document.getElementById('rows');
   tbody.innerHTML = '';
-  filtered.forEach(d => {
+  filtered.forEach((d, i) => {
     const tr = document.createElement('tr');
     const tdef = _testDefs[d.test_name] || {};
-    const max = (tdef.sections || ['goii','bunpo','chokkai']).length * 100;
-    const total = (d.score_vocab||0) + (d.score_grammar||0) + (d.score_listening||0);
+    const autoMax = (tdef.sections || ['goii','bunpo','chokkai']).length * 100;
+    const max = maxMode === '400' ? autoMax + 100 : autoMax;
+    const convVal = (d.score_conversation === null || d.score_conversation === undefined) ? '' : d.score_conversation;
+    const autoTotal = (d.score_vocab||0)+(d.score_grammar||0)+(d.score_listening||0);
+    const total = maxMode === '400' ? autoTotal + (d.score_conversation || 0) : autoTotal;
     tr.innerHTML = `
       <td>${d.student_id}</td>
       <td>${d.name}</td>
       <td>${d.class_group}</td>
       <td>${d.test_name}<br><span class="mini">${tdef.display_name||''}</span></td>
       <td>${d.test_date}</td>
-      <td class="score">${d.score_vocab ?? '-'}</td>
-      <td class="score">${d.score_grammar ?? '-'}</td>
-      <td class="score">${d.score_listening ?? '-'}</td>
+      <td class="score col-auto">${d.score_vocab ?? '-'}</td>
+      <td class="score col-auto">${d.score_grammar ?? '-'}</td>
+      <td class="score col-auto">${d.score_listening ?? '-'}</td>
+      <td class="score"><input type="number" min="0" max="100" class="conv-input" data-result-id="${d.result_id}" data-row="${i}" value="${convVal}" placeholder="-" style="width:56px;padding:3px 4px;text-align:right;border:1px solid #ddd;border-radius:3px;font-family:monospace"></td>
       <td class="score total">${total}/${max}</td>
-      <td>${d.auto_scored ? '<span class="badge-auto">自動</span>' : '<span class="badge-manual">手動</span>'}</td>
+      <td class="col-auto">${d.auto_scored ? '<span class="badge-auto">自動</span>' : '<span class="badge-manual">手動</span>'}</td>
       <td><a href="test-result-detail.html?id=${d.result_id}">→詳細</a></td>
     `;
     tbody.appendChild(tr);
   });
+
+  // 会話入力のイベントハンドラ設定
+  document.querySelectorAll('.conv-input').forEach(inp => {
+    inp.addEventListener('change', onConvChange);
+    inp.addEventListener('keydown', onConvKey);
+  });
+}
+
+async function onConvChange(e) {
+  const inp = e.target;
+  const rid = inp.dataset.resultId;
+  const raw = inp.value.trim();
+  const val = raw === '' ? null : Math.max(0, Math.min(100, parseInt(raw, 10) || 0));
+  inp.disabled = true;
+  inp.style.background = '#fff8dc';
+  const { error } = await supabase.from('test_results').update({ score_conversation: val }).eq('id', rid);
+  inp.disabled = false;
+  if (error) {
+    inp.style.background = '#f8d7da';
+    alert('保存失敗: ' + error.message);
+    return;
+  }
+  inp.style.background = '#d4edda';
+  setTimeout(() => { inp.style.background = ''; }, 800);
+  // _dataも更新
+  const d = _data.find(x => x.result_id === rid);
+  if (d) d.score_conversation = val;
+  // 合計セルを更新 + 統計再計算（全部再レンダは遅いので当該行だけ合計更新）
+  const tr = inp.closest('tr');
+  const maxMode = document.getElementById('filter-maxmode').value;
+  const totalCell = tr.querySelector('td.total');
+  if (totalCell && d) {
+    const auto = (d.score_vocab||0)+(d.score_grammar||0)+(d.score_listening||0);
+    const total = maxMode==='400' ? auto + (val||0) : auto;
+    const tdef = _testDefs[d.test_name] || {};
+    const max = maxMode==='400' ? (tdef.sections||['goii','bunpo','chokkai']).length*100+100 : (tdef.sections||['goii','bunpo','chokkai']).length*100;
+    totalCell.textContent = `${total}/${max}`;
+  }
+  // 統計だけ軽く更新
+  refreshStatsOnly();
+}
+
+function refreshStatsOnly() {
+  const filtered = getFiltered();
+  const maxMode = document.getElementById('filter-maxmode').value;
+  const totalCount = filtered.length;
+  const sumTotal = filtered.reduce((s, d) => s + (d.score_vocab||0)+(d.score_grammar||0)+(d.score_listening||0)+(maxMode==='400' ? (d.score_conversation||0) : 0), 0);
+  const avgTotal = totalCount === 0 ? 0 : Math.round(sumTotal/totalCount);
+  const convScores = filtered.map(d => d.score_conversation).filter(v => v !== null && v !== undefined);
+  const convAvg = convScores.length === 0 ? 0 : Math.round(convScores.reduce((s,v)=>s+v,0)/convScores.length);
+  const convMissing = totalCount - convScores.length;
+  const totalsArr = filtered.map(d => (d.score_vocab||0)+(d.score_grammar||0)+(d.score_listening||0)+(maxMode==='400' ? (d.score_conversation||0) : 0));
+  const tMax = totalsArr.length ? Math.max(...totalsArr) : 0;
+  const tMin = totalsArr.length ? Math.min(...totalsArr) : 0;
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><b>${totalCount}</b>件</div>
+    <div class="stat"><b>${avgTotal}</b>平均合計/${maxMode}</div>
+    <div class="stat"><b>${tMax}</b>最高</div>
+    <div class="stat"><b>${tMin}</b>最低</div>
+    <div class="stat"><b>${convAvg}</b>会話平均（${convScores.length}件入力済）</div>
+    ${convMissing > 0 ? `<div class="stat" style="background:#fff3cd"><b>${convMissing}</b>会話未入力</div>` : ''}
+  `;
+}
+
+function onConvKey(e) {
+  if (e.key === 'Enter' || e.key === 'Tab') {
+    e.preventDefault();
+    const row = parseInt(e.target.dataset.row, 10);
+    const next = document.querySelector(`.conv-input[data-row="${row+1}"]`);
+    e.target.blur();
+    if (next) { next.focus(); next.select(); }
+  }
 }
 
 function rowsToTSV(filtered) {
-  const header = ['学生ID','名前','クラス','会社','テストID','テスト名','受験日','語彙','文法','聴解','合計','最大','採点方式','提出日時'];
+  const header = ['学生ID','名前','クラス','会社','テストID','テスト名','受験日','語彙','文法','聴解','会話','合計','最大','採点方式','提出日時'];
   const rows = [header.join('\t')];
   filtered.forEach(d => {
     const tdef = _testDefs[d.test_name] || {};
-    const max = (tdef.sections || ['goii','bunpo','chokkai']).length * 100;
-    const total = (d.score_vocab||0) + (d.score_grammar||0) + (d.score_listening||0);
+    const autoMax = (tdef.sections || ['goii','bunpo','chokkai']).length * 100;
+    const max = autoMax + 100;
+    const total = (d.score_vocab||0) + (d.score_grammar||0) + (d.score_listening||0) + (d.score_conversation||0);
     rows.push([
       d.student_id, d.name, d.class_group, d.company || '',
       d.test_name, tdef.display_name || '',
       d.test_date,
-      d.score_vocab ?? '', d.score_grammar ?? '', d.score_listening ?? '',
+      d.score_vocab ?? '', d.score_grammar ?? '', d.score_listening ?? '', d.score_conversation ?? '',
       total, max,
       d.auto_scored ? '自動' : '手動',
       d.created_at || ''
