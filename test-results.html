@@ -31,8 +31,11 @@
   th,td{padding:9px 12px;border-bottom:1px solid #eee;text-align:left;white-space:nowrap}
   thead th{background:#34495e;color:#fff;position:sticky;top:0;z-index:10;font-size:13px}
   tbody tr:hover{background:#fafbfc}
-  td.score{text-align:right;font-family:monospace;font-size:15px}
-  td.total{font-weight:bold;color:#2c3e50}
+  th.score,td.score{text-align:center;font-family:monospace;font-size:15px;min-width:70px}
+  th.score-total,td.total{text-align:center;font-weight:bold;color:#2c3e50;min-width:90px}
+  td.total{font-family:monospace;font-size:15px}
+  /* conversation入力セルは中央揃えで input を配置 */
+  td.score .conv-input{display:inline-block;text-align:center}
   .mini{font-size:12px;color:#777}
   .badge-auto{background:#27ae60;color:#fff;padding:2px 8px;border-radius:8px;font-size:11px}
   .badge-manual{background:#e67e22;color:#fff;padding:2px 8px;border-radius:8px;font-size:11px}
@@ -121,11 +124,11 @@
             <th>クラス</th>
             <th>テスト</th>
             <th>受験日</th>
-            <th class="col-auto">語彙</th>
-            <th class="col-auto">文法</th>
-            <th class="col-auto">聴解</th>
-            <th>会話<span class="mini" style="color:#bbb">（クリックで編集）</span></th>
-            <th>合計</th>
+            <th class="col-auto score">語彙</th>
+            <th class="col-auto score">文法</th>
+            <th class="col-auto score">聴解</th>
+            <th class="score">会話<br><span class="mini" style="color:#bbb;font-weight:normal">（クリックで編集）</span></th>
+            <th class="score-total">合計</th>
             <th class="col-auto">採点</th>
             <th>詳細</th>
           </tr>
@@ -334,7 +337,7 @@ function render() {
       <td class="score col-auto">${d.score_vocab ?? '-'}</td>
       <td class="score col-auto">${d.score_grammar ?? '-'}</td>
       <td class="score col-auto">${d.score_listening ?? '-'}</td>
-      <td class="score"><input type="number" min="0" max="100" class="conv-input" data-result-id="${d.result_id}" data-row="${i}" value="${convVal}" placeholder="-" style="width:64px;padding:5px 6px;text-align:right;border:1px solid #ddd;border-radius:4px;font-family:monospace;font-size:14px"></td>
+      <td class="score"><input type="number" min="0" max="100" class="conv-input" data-result-id="${d.result_id}" data-row="${i}" value="${convVal}" placeholder="-" style="width:64px;padding:5px 6px;text-align:center;border:1px solid #ddd;border-radius:4px;font-family:monospace;font-size:14px"></td>
       <td class="score total">${total}/${max}</td>
       <td class="col-auto">${d.auto_scored ? '<span class="badge-auto">自動</span>' : '<span class="badge-manual">手動</span>'}</td>
       <td><a href="test-result-detail.html?id=${d.result_id}">→詳細</a></td>
