@@ -140,20 +140,22 @@
   </div>
 
   <!-- ===== 成績推移 ===== -->
-  <div class="section-header">成績推移</div>
-  <div class="chart-container">
-    <canvas id="trendChart"></canvas>
+  <div id="trendSection">
+    <div class="section-header">成績推移</div>
+    <div class="chart-container">
+      <canvas id="trendChart"></canvas>
+    </div>
+    <table class="trend-table">
+      <thead>
+        <tr>
+          <th>試験範囲</th><th>語彙</th><th>文法</th><th>聴解</th><th>会話</th><th>合計</th>
+        </tr>
+      </thead>
+      <tbody id="trendBody">
+        <tr><td colspan="6" style="color:#999;text-align:center">データなし</td></tr>
+      </tbody>
+    </table>
   </div>
-  <table class="trend-table">
-    <thead>
-      <tr>
-        <th>試験範囲</th><th>語彙</th><th>文法</th><th>聴解</th><th>会話</th><th>合計</th>
-      </tr>
-    </thead>
-    <tbody id="trendBody">
-      <tr><td colspan="6" style="color:#999;text-align:center">データなし</td></tr>
-    </tbody>
-  </table>
 
   <!-- ===== 学習状況 ===== -->
   <div class="section-header page-break-before">学習状況</div>
@@ -251,7 +253,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="auth.js?v=5"></script>
-<script src="app.js?v=24"></script>
+<script src="app.js?v=25"></script>
 <script>
   (async function() {
     const auth = await checkAuth();

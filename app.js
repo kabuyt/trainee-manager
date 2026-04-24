@@ -937,7 +937,11 @@ function renderReport(t, results, classResults) {
   }
 
   // 成績推移テーブル + グラフ（全8回分表示）
-  {
+  // 第1回（test1/第1-4課）未受験の場合はセクション全体を非表示
+  const hasTest1 = (results || []).some(r => r.test_name === 'test1' || r.test_name === '第1-4課');
+  const trendSection = document.getElementById('trendSection');
+  if (trendSection) trendSection.style.display = hasTest1 ? '' : 'none';
+  if (hasTest1) {
     const tbody = document.getElementById('trendBody');
     tbody.innerHTML = MONTH_TEST_MAP.map(m => {
       const label = m.testLabel;
