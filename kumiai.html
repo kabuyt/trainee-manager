@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>教育報告書 - GROP VIETNAM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Noto Sans JP',sans-serif;background:#edf1f7;color:#1e3a5f;padding:20px;max-width:900px;margin:0 auto;font-size:14px}
+  .logo{height:32px;margin-bottom:12px;display:block}
+  h1{color:#1e3a5f;font-size:20px;margin-bottom:8px;font-weight:700}
+  h2{font-size:15px;margin:18px 0 4px;color:#1e3a5f;font-weight:600}
+  .meta{color:#64748b;font-size:13px;margin-bottom:16px}
+  .toolbar{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+  .toolbar label{color:#64748b;font-size:13px}
+  .toolbar select{padding:6px 12px;border:1px solid #cbd5e1;border-radius:5px;font-size:14px;background:#fff}
+  .btn-dl{display:inline-block;background:#2563eb;color:#fff;padding:10px 24px;border-radius:6px;font-size:14px;font-weight:600;text-decoration:none;box-shadow:0 2px 6px rgba(37,99,235,0.3);cursor:pointer;border:none;font-family:inherit}
+  .btn-dl:hover{background:#1d4ed8}
+  .btn-dl:disabled{opacity:.6;cursor:not-allowed}
+  .list{background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.08);margin-bottom:20px}
+  .item{display:flex;align-items:center;padding:12px 20px;border-bottom:1px solid #e8edf5;text-decoration:none;color:inherit;gap:8px}
+  .item:last-child{border-bottom:none}
+  .item:hover{background:#f1f5f9}
+  .num{color:#64748b;font-size:12px;width:30px}
+  .sid{color:#1e3a5f;font-weight:600;font-size:12px;font-family:monospace;width:75px}
+  .name-jp{font-weight:600;font-size:14px;color:#1e3a5f;min-width:180px}
+  .name-en{color:#64748b;font-size:12px;flex:1}
+  .btn{background:#1e3a5f;color:#fff;padding:4px 12px;border-radius:4px;font-size:12px;white-space:nowrap;border:none;cursor:pointer;font-family:inherit;text-decoration:none}
+  .btn:hover{background:#0f2440}
+  .footer{text-align:center;color:#94a3b8;font-size:11px;margin-top:30px;padding:10px}
+  .progress{display:none;background:#e2e8f0;height:6px;border-radius:3px;margin-top:10px;overflow:hidden}
+  .progress-bar{height:100%;background:#2563eb;transition:width .3s;width:0%}
+  .status-msg{font-size:12px;color:#64748b;margin-top:6px;font-family:monospace}
+  .loading{text-align:center;padding:50px;color:#94a3b8}
+  .login-box{max-width:400px;margin:80px auto;padding:30px;background:#fff;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.1);text-align:center}
+  .login-box input{width:100%;padding:8px;margin:5px 0;border:1px solid #ddd;border-radius:5px;font-size:14px}
+  .login-box button{width:100%;padding:10px;margin-top:10px;background:#1e3a5f;color:#fff;border:none;border-radius:5px;cursor:pointer}
+  .hidden-frame{position:fixed;left:-9999px;top:0;width:900px;height:1400px;border:none}
+</style>
+</head>
+<body>
+
+<div id="login-page" style="display:none">
+  <div class="login-box">
+    <img src="logo.png" alt="GROP VIETNAM" style="height:40px;margin-bottom:16px">
+    <h2 style="color:#1e3a5f;font-size:18px;margin-bottom:8px">教育報告書 閲覧</h2>
+    <p style="color:#64748b;font-size:13px;margin-bottom:12px">ログインしてください</p>
+    <input type="email" id="login-email" placeholder="メールアドレス">
+    <input type="password" id="login-pass" placeholder="パスワード">
+    <button onclick="doLogin()">ログイン</button>
+    <p id="login-error" style="color:#e74c3c;margin-top:8px;font-size:13px"></p>
+  </div>
+</div>
+
+<div id="main-page" style="display:none">
+  <img src="logo.png" alt="GROP VIETNAM" class="logo">
+  <h1 id="title">教育報告書一覧</h1>
+  <p class="meta" id="meta">読み込み中...</p>
+
+  <div class="toolbar">
+    <label>月度:
+      <select id="monthSelect" onchange="render()">
+        <option value="1">1ヶ月目</option><option value="2">2ヶ月目</option>
+        <option value="3">3ヶ月目</option><option value="4">4ヶ月目</option>
+        <option value="5">5ヶ月目</option><option value="6">6ヶ月目</option>
+        <option value="7">7ヶ月目</option><option value="8">8ヶ月目</option>
+      </select>
+    </label>
+    <span style="margin-left:auto;display:flex;gap:8px">
+      <button class="btn-dl" id="bulkZipBtn" onclick="bulkZip()">📥 組合一括ダウンロード (ZIP)</button>
+    </span>
+  </div>
+  <div class="progress" id="progress"><div class="progress-bar" id="progressBar"></div></div>
+  <div class="status-msg" id="status"></div>
+
+  <div id="list"><div class="loading">読み込み中...</div></div>
+
+  <div class="footer">GROP VIETNAM CO., LTD · 日本語教育報告書</div>
+</div>
+
+<iframe id="renderFrame" class="hidden-frame" sandbox="allow-same-origin allow-scripts"></iframe>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3/dist/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10/dist/html2pdf.bundle.min.js"></script>
+<script src="config.js"></script>
+<script>
+// 組合スラッグ→表示名マッピング
+const KUMIAI_MAP = {
+  globalway: 'グローバルウェイ協同組合',
+  cic: 'CIC協同組合',
+  hiroshimaworld: '広島ワールド協同組合',
+  akane: 'AKANE',
+};
+
+const params = new URLSearchParams(location.search);
+const kumiaiSlug = params.get('k') || '';
+const kumiaiName = KUMIAI_MAP[kumiaiSlug] || kumiaiSlug;
+
+let _trainees = [];
+
+async function doLogin() {
+  const email = document.getElementById('login-email').value;
+  const pass = document.getElementById('login-pass').value;
+  const errEl = document.getElementById('login-error');
+  errEl.textContent = '';
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
+  if (error) { errEl.textContent = error.message; return; }
+  location.reload();
+}
+
+async function init() {
+  if (!kumiaiSlug || !KUMIAI_MAP[kumiaiSlug]) {
+    document.body.innerHTML = '<div class="loading">URL に組合が指定されていません<br>例: ?k=globalway</div>';
+    return;
+  }
+  // セッション確認
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) {
+    document.getElementById('login-page').style.display = 'block';
+    return;
+  }
+  document.getElementById('main-page').style.display = 'block';
+  document.title = `教育報告書 - ${kumiaiName}`;
+  document.getElementById('title').textContent = `教育報告書一覧　${kumiaiName}`;
+  // データ取得
+  const { data: trainees } = await supabase
+    .from('trainees')
+    .select('id,student_id,name_katakana,name_romaji,class_group,company,supervising_org')
+    .eq('supervising_org', kumiaiName)
+    .order('student_id');
+  _trainees = trainees || [];
+  // 最新テストで自動月選択
+  if (_trainees.length) {
+    const ids = _trainees.map(t => t.id);
+    const { data: results } = await supabase
+      .from('test_results').select('trainee_id,test_name,test_date')
+      .in('trainee_id', ids).order('test_date', { ascending: false }).limit(1);
+    if (results && results.length) {
+      const testName = results[0].test_name;
+      const m = testName.match(/test(\d)/);
+      if (m) document.getElementById('monthSelect').value = m[1];
+    }
+  }
+  render();
+}
+
+function render() {
+  const month = document.getElementById('monthSelect').value;
+  const now = new Date();
+  const yyyymm = `${now.getFullYear()}年${now.getMonth()+1}月度`;
+  document.getElementById('meta').textContent = `全${_trainees.length}名 / ${new Set(_trainees.map(t=>t.company)).size}社 · ${month}ヶ月目`;
+
+  if (_trainees.length === 0) {
+    document.getElementById('list').innerHTML = '<div class="loading">該当者なし</div>';
+    return;
+  }
+
+  // 会社別グループ化
+  const byCompany = {};
+  _trainees.forEach(t => {
+    const c = t.company || '(未設定)';
+    if (!byCompany[c]) byCompany[c] = [];
+    byCompany[c].push(t);
+  });
+
+  let html = '';
+  Object.entries(byCompany).forEach(([company, arr]) => {
+    html += `<h2>🏢 ${company}（${arr.length}名）</h2><div class="list">`;
+    arr.forEach((t, i) => {
+      html += `
+        <a href="report.html?id=${t.id}#m=${month}" target="_blank" class="item">
+          <span class="num">${i+1}</span>
+          <span class="sid">${t.student_id}</span>
+          <span class="name-jp">${t.name_katakana||''}</span>
+          <span class="name-en">${t.name_romaji||''}</span>
+          <span class="btn">📄 開く</span>
+        </a>`;
+    });
+    html += '</div>';
+  });
+  document.getElementById('list').innerHTML = html;
+}
+
+async function bulkZip() {
+  const month = document.getElementById('monthSelect').value;
+  if (_trainees.length === 0) { alert('該当者なし'); return; }
+  const btn = document.getElementById('bulkZipBtn');
+  btn.disabled = true;
+  const origText = btn.textContent;
+  btn.textContent = '⏳ 生成中...';
+  const prog = document.getElementById('progress');
+  const bar = document.getElementById('progressBar');
+  const status = document.getElementById('status');
+  prog.style.display = 'block';
+
+  const zip = new JSZip();
+  const frame = document.getElementById('renderFrame');
+
+  for (let i = 0; i < _trainees.length; i++) {
+    const t = _trainees[i];
+    status.textContent = `[${i+1}/${_trainees.length}] ${t.student_id} ${t.name_romaji||''}`;
+    try {
+      frame.src = `report.html?id=${t.id}#m=${month}&bulk=1`;
+      await new Promise((resolve, reject) => {
+        const onLoad = () => {
+          frame.removeEventListener('load', onLoad);
+          setTimeout(resolve, 4500);
+        };
+        frame.addEventListener('load', onLoad);
+        setTimeout(() => reject(new Error('timeout')), 30000);
+      });
+      const doc = frame.contentDocument;
+      const reportPage = doc.getElementById('reportPage');
+      if (!reportPage) throw new Error('reportPage not found');
+      const pdfBlob = await html2pdf().set({
+        margin: [8, 8, 8, 8],
+        image: { type: 'jpeg', quality: 0.95 },
+        html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      }).from(reportPage).outputPdf('blob');
+      const fname = `${t.company||'unknown'}/${t.student_id}_${(t.name_romaji||'unknown').replace(/[^A-Za-z0-9_]/g,'_')}.pdf`;
+      zip.file(fname, pdfBlob);
+    } catch (err) {
+      console.error(t.student_id, err);
+      status.textContent = `✗ ${t.student_id}: ${err.message}`;
+    }
+    bar.style.width = `${Math.round((i+1)/_trainees.length*100)}%`;
+  }
+  status.textContent = 'ZIP生成中...';
+  const content = await zip.generateAsync({ type: 'blob' });
+  const dateStr = new Date().toISOString().slice(0,7).replace('-','');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(content);
+  a.download = `教育報告書_${kumiaiName}_${dateStr}.zip`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  status.textContent = '✓ ダウンロード完了';
+  btn.disabled = false;
+  btn.textContent = origText;
+  frame.src = 'about:blank';
+}
+
+init();
+</script>
+</body>
+</html>
