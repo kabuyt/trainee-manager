@@ -1334,17 +1334,34 @@ function renderDiagnosis(diagArea, results) {
         narrative += ` 特に${strongFragments.join('、')}で高い正答率を示しており、しっかり理解できている。`;
       }
 
-      // 弱み（教科ごとに独立、全教科を必ず含めて漏れがないように）
+      // 弱み（教科ごとに独立、すべて列挙）
       const weakFragments = [];
       ['goii','bunpo','chokkai'].forEach(st => {
         if (byType[st].weak.length > 0) {
-          const items = byType[st].weak.slice(0,3).map(x => `「${x}」`).join('・');
-          const more = byType[st].weak.length > 3 ? 'など' : '';
+          // 全件列挙（ただし5件超は など で省略）
+          const items = byType[st].weak.slice(0,5).map(x => `「${x}」`).join('・');
+          const more = byType[st].weak.length > 5 ? 'など' : '';
           weakFragments.push(`${stypeJp[st]}の${items}${more}`);
         }
       });
       if (weakFragments.length > 0) {
-        narrative += ` 一方で${weakFragments.join('、')}では理解不足が目立ち、今後重点的な復習と個別指導が必要。`;
+        narrative += ` 一方で${weakFragments.join('、')}では理解不足が目立つ。`;
+      }
+
+      // 教科別の具体的アドバイス（弱点がある教科に対して）
+      const adviceMap = {
+        goii: '語彙は日常使う単語の反復学習（フラッシュカード・単語アプリ）が有効',
+        bunpo: '文法は基本パターンを例文で繰り返し音読し、助詞の使い分けを意識する',
+        chokkai: '聴解は音声を何度も聞き、ディクテーション（書き取り）や音読練習で耳を慣らす'
+      };
+      const adviceParts = [];
+      ['goii','bunpo','chokkai'].forEach(st => {
+        if (byType[st].weak.length > 0) adviceParts.push(adviceMap[st]);
+      });
+      if (adviceParts.length > 0) {
+        narrative += ` 指導面では、${adviceParts.join('。また、')}。`;
+      } else {
+        narrative += ' 現状の学習ペースを維持し、新出項目の積み上げを継続する。';
       }
 
       let html = '<div>';
