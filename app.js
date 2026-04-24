@@ -619,6 +619,14 @@ async function loadReport() {
   const id = new URLSearchParams(location.search).get('id');
   if (!id) { window.location.href = 'index.html'; return; }
 
+  // URL hash から ro=1 (readonly) / bulk=1 を取得
+  const hash = (location.hash || '').replace(/^#/, '');
+  const hashParams = new URLSearchParams(hash.replace(/&/g, '&'));
+  const isReadonly = hashParams.get('ro') === '1' || hashParams.get('bulk') === '1';
+  if (isReadonly) {
+    window._REPORT_READONLY = true;
+  }
+
   try {
     // 対象実習生 + テスト結果 + 月別報告書 + テストセクション情報を取得
     const [{ data: trainee, error: tErr }, { data: results, error: rErr }, { data: monthly }, { data: sections }] = await Promise.all([
@@ -666,7 +674,33 @@ async function loadReport() {
     // 月を設定して切替
     document.getElementById('monthSelect').value = String(initMonth);
     document.getElementById('monthPrint').textContent = String(initMonth);
-    switchMonth(initMonth);
+    // URL hash に指定されていればその月に切替
+    const hashP = new URLSearchParams((location.hash||'').replace(/^#/, ''));
+    const urlMonth = parseInt(hashP.get('m'), 10);
+    if (urlMonth >= 1 && urlMonth <= 8) {
+      document.getElementById('monthSelect').value = String(urlMonth);
+      document.getElementById('monthPrint').textContent = String(urlMonth);
+      switchMonth(urlMonth);
+    } else {
+      switchMonth(initMonth);
+    }
+
+    // 閲覧専用モード適用
+    if (window._REPORT_READONLY) {
+      document.body.classList.add('readonly-view');
+      // 全ての contenteditable を無効化
+      document.querySelectorAll('[contenteditable="true"]').forEach(el => el.setAttribute('contenteditable', 'false'));
+      // select の現在値を *-print に反映
+      const msel = document.getElementById('monthSelect');
+      const mprint = document.getElementById('monthPrint');
+      if (msel && mprint) mprint.textContent = msel.value;
+      const asel = document.getElementById('evalAttitude');
+      const aprint = document.getElementById('attitudePrint');
+      if (asel && aprint) aprint.textContent = asel.value;
+      const esel = document.getElementById('learnEnv');
+      const eprint = document.getElementById('envPrint');
+      if (esel && eprint) eprint.textContent = esel.value;
+    }
   } catch (err) {
     document.getElementById('reportPage').innerHTML =
       '<p style="color:red;padding:20px">読み込みに失敗しました: ' + err.message + '</p>';

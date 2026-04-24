@@ -400,6 +400,17 @@ select.no-print-select:focus { border-color: #2563eb; outline: none; }
 /* 印刷時に表示するテキスト（画面では非表示） */
 .month-print, .scope-print, .attitude-print, .env-print { display: none; }
 
+/* ===== 閲覧専用モード (readonly-view) ===== */
+.readonly-view .no-print { display: none !important; }
+.readonly-view select.no-print-select { display: none !important; }
+.readonly-view .month-print,
+.readonly-view .scope-print,
+.readonly-view .attitude-print,
+.readonly-view .env-print { display: inline; font-weight: bold; }
+.readonly-view [contenteditable] { outline: none !important; background: transparent !important; cursor: default !important; }
+.readonly-view [contenteditable]:empty::before { content: none !important; }
+.readonly-view .editable-score { cursor: default !important; }
+
 /* ===== 印刷用スタイル ===== */
 @media print {
   body { background: white !important; margin: 0; padding: 0; }
