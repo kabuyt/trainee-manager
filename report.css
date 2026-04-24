@@ -402,18 +402,29 @@ select.no-print-select:focus { border-color: #2563eb; outline: none; }
 
 /* ===== テスト未受験時の表示 ===== */
 .score-table-wrap { position: relative; }
-.score-table-wrap.no-test .score-table { opacity: 0.35; filter: grayscale(1); pointer-events: none; }
+.score-table-wrap.no-test .score-table { opacity: 0.55; filter: grayscale(0.9); pointer-events: none; }
 .score-table-wrap.no-test [contenteditable] { pointer-events: none; }
 .no-test-notice {
-  background: #f3f4f6;
-  color: #6b7280;
-  border: 1px dashed #9ca3af;
-  padding: 8px 14px;
+  background: #fff7e6;
+  color: #8a5a00;
+  border: 1px solid #f0c36d;
+  padding: 10px 16px;
   border-radius: 6px;
-  font-size: 12px;
+  font-size: 13px;
   text-align: center;
-  margin-bottom: 6px;
-  font-weight: 500;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+/* PDF/印刷時はグレースケールを控えめに */
+@media print {
+  .score-table-wrap.no-test .score-table { opacity: 0.6; filter: grayscale(0.7); }
+}
+
+/* 成績推移セクションが非表示なら 学習状況 の改ページを解除 */
+body.no-trend .section-header.page-break-before {
+  break-before: auto !important;
+  page-break-before: auto !important;
 }
 
 /* ===== 閲覧専用モード (readonly-view) ===== */

@@ -941,6 +941,8 @@ function renderReport(t, results, classResults) {
   const hasTest1 = (results || []).some(r => r.test_name === 'test1' || r.test_name === '第1-4課');
   const trendSection = document.getElementById('trendSection');
   if (trendSection) trendSection.style.display = hasTest1 ? '' : 'none';
+  // 改ページ制御用のbodyクラス
+  document.body.classList.toggle('no-trend', !hasTest1);
   if (hasTest1) {
     const tbody = document.getElementById('trendBody');
     tbody.innerHTML = MONTH_TEST_MAP.map(m => {
