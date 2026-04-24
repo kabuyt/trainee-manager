@@ -221,7 +221,7 @@ async function doLogout() {
 
 async function reload() {
   const [trRes, tdRes, resRes] = await Promise.all([
-    supabase.from('trainees').select('id,student_id,name_katakana,class_group,company'),
+    supabase.from('trainees').select('id,student_id,name_katakana,name_romaji,class_group,company'),
     supabase.from('test_definitions').select('id,display_name,sections,sort_order').order('sort_order'),
     supabase.from('test_results').select('id,trainee_id,test_name,test_date,score_vocab,score_grammar,score_listening,score_conversation,auto_scored,created_at').order('created_at', { ascending: false })
   ]);
@@ -236,8 +236,10 @@ async function reload() {
     const t = tmap[r.trainee_id] || {};
     return {
       result_id: r.id,
+      trainee_id: r.trainee_id,
       student_id: t.student_id || '?',
       name: t.name_katakana || '',
+      name_romaji: t.name_romaji || '',
       class_group: t.class_group || '',
       company: t.company || '',
       test_name: r.test_name,
@@ -330,8 +332,8 @@ function render() {
     const autoTotal = (d.score_vocab||0)+(d.score_grammar||0)+(d.score_listening||0);
     const total = maxMode === '400' ? autoTotal + (d.score_conversation || 0) : autoTotal;
     tr.innerHTML = `
-      <td>${d.student_id}</td>
-      <td>${d.name}</td>
+      <td><a href="trainee.html?id=${d.trainee_id}">${d.student_id}</a></td>
+      <td><a href="trainee.html?id=${d.trainee_id}">${d.name || d.name_romaji || '?'}</a></td>
       <td>${d.company || '-'}</td>
       <td>${d.class_group}</td>
       <td>${d.test_name}<br><span class="mini">${tdef.display_name||''}</span></td>
