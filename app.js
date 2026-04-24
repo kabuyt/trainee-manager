@@ -769,9 +769,21 @@ function renderMonthComments(report) {
     }
   }
 
-  // 学習進捗
+  // 学習進捗: DB保存値があればそれを優先、なければ 第4週 から「第N課」を抽出
   const progEl = document.getElementById('learnProgress');
-  if (progEl) progEl.textContent = (report && report.learn_progress) || '-';
+  if (progEl) {
+    let progText = (report && report.learn_progress) || '';
+    if (!progText && report && report.week4) {
+      // 週4の内容から「第X課」「X課」「L.X」「Lesson X」「第X」等を抽出
+      const w4 = String(report.week4).replace(/<[^>]+>/g, ' ');
+      const m = w4.match(/第\s*(\d+)\s*課/) ||
+                w4.match(/(\d+)\s*課/) ||
+                w4.match(/L\.?\s*(\d+)/i) ||
+                w4.match(/Lesson\s+(\d+)/i);
+      if (m) progText = `第${m[1]}課`;
+    }
+    progEl.textContent = progText || '-';
+  }
 
   // 態度評価
   const attEl = document.getElementById('evalAttitude');
