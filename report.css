@@ -277,8 +277,6 @@ body {
 }
 .comment-block.good .comment-label { background: #dbeafe; color: #1e3a8a; }
 .comment-block.bad .comment-label { background: #fee2e2; color: #991b1b; }
-.comment-block.good .comment-text { color: #1e3a8a; }
-.comment-block.bad .comment-text { color: #991b1b; }
 .comment-text {
   padding: 6px 8px;
   font-size: 11px;
