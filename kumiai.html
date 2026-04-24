@@ -28,6 +28,11 @@
   .sid{color:#1e3a5f;font-weight:600;font-size:12px;font-family:monospace;width:75px}
   .name-jp{font-weight:600;font-size:14px;color:#1e3a5f;min-width:180px}
   .name-en{color:#64748b;font-size:12px;flex:1}
+  .month-badge{display:inline-block;background:#dbeafe;color:#1e3a8a;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600;margin-left:8px}
+  .month-badge.skip{background:#fee2e2;color:#991b1b}
+  .company-group.skip{opacity:.55}
+  .company-group.skip .item{pointer-events:none}
+  .skip-note{color:#991b1b;font-size:12px;margin-left:10px}
   .btn{background:#1e3a5f;color:#fff;padding:4px 12px;border-radius:4px;font-size:12px;white-space:nowrap;border:none;cursor:pointer;font-family:inherit;text-decoration:none}
   .btn:hover{background:#0f2440}
   .footer{text-align:center;color:#94a3b8;font-size:11px;margin-top:30px;padding:10px}
@@ -61,13 +66,8 @@
   <p class="meta" id="meta">読み込み中...</p>
 
   <div class="toolbar">
-    <label>月度:
-      <select id="monthSelect" onchange="render()">
-        <option value="1">1ヶ月目</option><option value="2">2ヶ月目</option>
-        <option value="3">3ヶ月目</option><option value="4">4ヶ月目</option>
-        <option value="5">5ヶ月目</option><option value="6">6ヶ月目</option>
-        <option value="7">7ヶ月目</option><option value="8">8ヶ月目</option>
-      </select>
+    <label>報告月度:
+      <select id="reportMonth" onchange="render()"></select>
     </label>
     <span style="margin-left:auto;display:flex;gap:8px">
       <button class="btn-dl" id="bulkZipBtn" onclick="bulkZip()">📥 組合一括ダウンロード (ZIP)</button>
@@ -112,12 +112,46 @@ async function doLogin() {
   location.reload();
 }
 
+// 教育月計算: 報告月末 - training_start_date
+function calcEducationMonth(startDateStr, reportYear, reportMonth) {
+  if (!startDateStr) return null;
+  const start = new Date(startDateStr);
+  if (isNaN(start.getTime())) return null;
+  // 報告月の末日
+  const reportEnd = new Date(reportYear, reportMonth, 0);
+  if (start > reportEnd) return null; // 開始前
+  // 経過日数
+  const diffDays = Math.floor((reportEnd - start) / (1000 * 60 * 60 * 24)) + 1;
+  // 3週間未満なら対象外
+  if (diffDays < 21) return null;
+  // 経過月数 (カレンダー月ベース) + 1
+  const diffMonths = (reportYear - start.getFullYear()) * 12 + (reportMonth - (start.getMonth() + 1));
+  const eduMonth = diffMonths + 1;
+  if (eduMonth < 1 || eduMonth > 8) return null;
+  return eduMonth;
+}
+
+function populateReportMonthSelect() {
+  const sel = document.getElementById('reportMonth');
+  const now = new Date();
+  const cur = { y: now.getFullYear(), m: now.getMonth() + 1 };
+  // 現在月 + 前後6ヶ月
+  const options = [];
+  for (let i = 6; i >= -2; i--) {
+    const d = new Date(cur.y, cur.m - 1 - i, 1);
+    options.push({ y: d.getFullYear(), m: d.getMonth() + 1 });
+  }
+  sel.innerHTML = options.map(o =>
+    `<option value="${o.y}-${String(o.m).padStart(2,'0')}">${o.y}年${o.m}月度</option>`
+  ).join('');
+  sel.value = `${cur.y}-${String(cur.m).padStart(2,'0')}`;
+}
+
 async function init() {
   if (!kumiaiSlug || !KUMIAI_MAP[kumiaiSlug]) {
     document.body.innerHTML = '<div class="loading">URL に組合が指定されていません<br>例: ?k=globalway</div>';
     return;
   }
-  // セッション確認
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) {
     document.getElementById('login-page').style.display = 'block';
@@ -126,40 +160,35 @@ async function init() {
   document.getElementById('main-page').style.display = 'block';
   document.title = `教育報告書 - ${kumiaiName}`;
   document.getElementById('title').textContent = `教育報告書一覧　${kumiaiName}`;
-  // データ取得
+  populateReportMonthSelect();
+
   const { data: trainees } = await supabase
     .from('trainees')
-    .select('id,student_id,name_katakana,name_romaji,class_group,company,supervising_org')
+    .select('id,student_id,name_katakana,name_romaji,class_group,company,supervising_org,training_start_date')
     .eq('supervising_org', kumiaiName)
     .order('student_id');
   _trainees = trainees || [];
-  // 最新テストで自動月選択
-  if (_trainees.length) {
-    const ids = _trainees.map(t => t.id);
-    const { data: results } = await supabase
-      .from('test_results').select('trainee_id,test_name,test_date')
-      .in('trainee_id', ids).order('test_date', { ascending: false }).limit(1);
-    if (results && results.length) {
-      const testName = results[0].test_name;
-      const m = testName.match(/test(\d)/);
-      if (m) document.getElementById('monthSelect').value = m[1];
-    }
-  }
   render();
 }
 
 function render() {
-  const month = document.getElementById('monthSelect').value;
-  const now = new Date();
-  const yyyymm = `${now.getFullYear()}年${now.getMonth()+1}月度`;
-  document.getElementById('meta').textContent = `全${_trainees.length}名 / ${new Set(_trainees.map(t=>t.company)).size}社 · ${month}ヶ月目`;
+  const [ry, rm] = document.getElementById('reportMonth').value.split('-').map(Number);
+  // 各学生の教育月を計算
+  _trainees.forEach(t => {
+    t._eduMonth = calcEducationMonth(t.training_start_date, ry, rm);
+  });
+  const reportable = _trainees.filter(t => t._eduMonth !== null);
+  const skipped = _trainees.filter(t => t._eduMonth === null);
+  document.getElementById('meta').textContent =
+    `${ry}年${rm}月度報告 · 対象 ${reportable.length}名 / ${new Set(reportable.map(t=>t.company)).size}社` +
+    (skipped.length ? ` (対象外 ${skipped.length}名)` : '');
 
   if (_trainees.length === 0) {
     document.getElementById('list').innerHTML = '<div class="loading">該当者なし</div>';
     return;
   }
 
-  // 会社別グループ化
+  // 会社別グループ化（対象・対象外両方）
   const byCompany = {};
   _trainees.forEach(t => {
     const c = t.company || '(未設定)';
@@ -169,25 +198,45 @@ function render() {
 
   let html = '';
   Object.entries(byCompany).forEach(([company, arr]) => {
-    html += `<h2>🏢 ${company}（${arr.length}名）</h2><div class="list">`;
+    // 会社内の学生の教育月（全員同じ開始日なら揃う）
+    const monthsInCompany = [...new Set(arr.map(t => t._eduMonth))];
+    const allSkipped = monthsInCompany.every(m => m === null);
+    const companyClass = allSkipped ? 'company-group skip' : 'company-group';
+
+    let badge;
+    if (allSkipped) {
+      badge = `<span class="month-badge skip">対象外</span><span class="skip-note">（教育開始から3週間未満）</span>`;
+    } else if (monthsInCompany.length === 1 && monthsInCompany[0] !== null) {
+      badge = `<span class="month-badge">${monthsInCompany[0]}ヶ月目</span>`;
+    } else {
+      // 混在ケース
+      const parts = monthsInCompany.filter(m => m !== null).map(m => `${m}ヶ月目`);
+      badge = `<span class="month-badge">${parts.join('/')}</span>`;
+    }
+
+    html += `<div class="${companyClass}"><h2>🏢 ${company}（${arr.length}名）${badge}</h2><div class="list">`;
     arr.forEach((t, i) => {
+      const em = t._eduMonth;
+      const href = em ? `report.html?id=${t.id}#m=${em}` : '#';
+      const btnText = em ? `📄 ${em}ヶ月目を開く` : '対象外';
       html += `
-        <a href="report.html?id=${t.id}#m=${month}" target="_blank" class="item">
+        <a href="${href}" ${em ? 'target="_blank"' : 'onclick="return false"'} class="item">
           <span class="num">${i+1}</span>
           <span class="sid">${t.student_id}</span>
           <span class="name-jp">${t.name_katakana||''}</span>
           <span class="name-en">${t.name_romaji||''}</span>
-          <span class="btn">📄 開く</span>
+          <span class="btn">${btnText}</span>
         </a>`;
     });
-    html += '</div>';
+    html += '</div></div>';
   });
   document.getElementById('list').innerHTML = html;
 }
 
 async function bulkZip() {
-  const month = document.getElementById('monthSelect').value;
-  if (_trainees.length === 0) { alert('該当者なし'); return; }
+  const [ry, rm] = document.getElementById('reportMonth').value.split('-').map(Number);
+  const targets = _trainees.filter(t => t._eduMonth !== null);
+  if (targets.length === 0) { alert('対象者なし（全員が開始3週間未満）'); return; }
   const btn = document.getElementById('bulkZipBtn');
   btn.disabled = true;
   const origText = btn.textContent;
@@ -200,9 +249,10 @@ async function bulkZip() {
   const zip = new JSZip();
   const frame = document.getElementById('renderFrame');
 
-  for (let i = 0; i < _trainees.length; i++) {
-    const t = _trainees[i];
-    status.textContent = `[${i+1}/${_trainees.length}] ${t.student_id} ${t.name_romaji||''}`;
+  for (let i = 0; i < targets.length; i++) {
+    const t = targets[i];
+    const month = t._eduMonth;
+    status.textContent = `[${i+1}/${targets.length}] ${t.student_id} ${t.name_romaji||''} (${month}ヶ月目)`;
     try {
       frame.src = `report.html?id=${t.id}#m=${month}&bulk=1`;
       await new Promise((resolve, reject) => {
@@ -228,11 +278,11 @@ async function bulkZip() {
       console.error(t.student_id, err);
       status.textContent = `✗ ${t.student_id}: ${err.message}`;
     }
-    bar.style.width = `${Math.round((i+1)/_trainees.length*100)}%`;
+    bar.style.width = `${Math.round((i+1)/targets.length*100)}%`;
   }
   status.textContent = 'ZIP生成中...';
   const content = await zip.generateAsync({ type: 'blob' });
-  const dateStr = new Date().toISOString().slice(0,7).replace('-','');
+  const dateStr = `${ry}${String(rm).padStart(2,'0')}`;
   const a = document.createElement('a');
   a.href = URL.createObjectURL(content);
   a.download = `教育報告書_${kumiaiName}_${dateStr}.zip`;
