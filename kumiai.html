@@ -101,10 +101,11 @@ const KUMIAI_MAP = {
 };
 
 const params = new URLSearchParams(location.search);
-const kumiaiSlug = params.get('k') || '';
-const kumiaiName = KUMIAI_MAP[kumiaiSlug] || kumiaiSlug;
+let kumiaiSlug = params.get('k') || '';
+let kumiaiName = KUMIAI_MAP[kumiaiSlug] || '';
 
 let _trainees = [];
+let _userRole = null;
 
 async function doLogin() {
   const email = document.getElementById('login-email').value;
@@ -113,6 +114,11 @@ async function doLogin() {
   errEl.textContent = '';
   const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
   if (error) { errEl.textContent = error.message; return; }
+  location.reload();
+}
+
+async function doLogout() {
+  await supabase.auth.signOut();
   location.reload();
 }
 
@@ -147,15 +153,37 @@ function populateReportMonthSelect() {
 }
 
 async function init() {
-  if (!kumiaiSlug || !KUMIAI_MAP[kumiaiSlug]) {
-    document.body.innerHTML = '<div class="loading">URL に組合が指定されていません<br>例: ?k=globalway</div>';
-    return;
-  }
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) {
     document.getElementById('login-page').style.display = 'block';
     return;
   }
+  // ログインユーザーのプロファイル取得
+  const { data: profile } = await supabase
+    .from('user_profiles')
+    .select('role,supervising_org,display_name')
+    .eq('id', session.user.id)
+    .single();
+  _userRole = profile?.role;
+
+  // 組合ユーザーは自組合のみ表示（URL?k=を無視）
+  if (_userRole === 'customer' && profile?.supervising_org) {
+    kumiaiName = profile.supervising_org;
+    // スラッグも逆引き
+    const slug = Object.entries(KUMIAI_MAP).find(([s,n]) => n === kumiaiName)?.[0];
+    kumiaiSlug = slug || '';
+  } else if (_userRole === 'admin' || _userRole === 'org') {
+    // admin/org は URL?k= で指定された組合を表示
+    if (!kumiaiSlug || !KUMIAI_MAP[kumiaiSlug]) {
+      document.body.innerHTML = '<div class="loading">URL に組合が指定されていません<br>例: ?k=globalway<br><br><a href="index.html">一覧に戻る</a></div>';
+      return;
+    }
+    kumiaiName = KUMIAI_MAP[kumiaiSlug];
+  } else {
+    document.body.innerHTML = `<div class="loading">権限がありません (role=${_userRole||'none'})<br><br><button onclick="doLogout()">ログアウト</button></div>`;
+    return;
+  }
+
   document.getElementById('main-page').style.display = 'block';
   document.title = `教育報告書 - ${kumiaiName}`;
   document.getElementById('title').textContent = `教育報告書一覧　${kumiaiName}`;
