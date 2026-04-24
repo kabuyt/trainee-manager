@@ -1313,21 +1313,33 @@ function renderDiagnosis(diagArea, results) {
       if (gLevel) parts.push(`文法は${gLevel.word}`);
       if (lLevel) parts.push(`聴解は${lLevel.word}`);
 
-      // 強み・弱みのピック
-      const allWeak = [];
-      ['goii','bunpo','chokkai'].forEach(st => byType[st].weak.forEach(w => allWeak.push({stype:st, label:w})));
-      const allStrong = [];
-      ['goii','bunpo','chokkai'].forEach(st => byType[st].strong.forEach(s => allStrong.push({stype:st, label:s})));
-
       // 最終まとめ文（常体）
       let narrative = `${overall} 個別に見ると、${parts.join('、')}という状況。`;
-      if (allStrong.length > 0) {
-        const topStrong = allStrong.slice(0,3).map(x => `${stypeJp[x.stype]}の${x.label}`).join('・');
-        narrative += ` 特に${topStrong}${allStrong.length>3 ? 'など' : ''}では高い正答率を示しており、しっかり理解できている。`;
+
+      // 強み（教科ごとに独立、最大2件/教科）
+      const strongFragments = [];
+      ['goii','bunpo','chokkai'].forEach(st => {
+        if (byType[st].strong.length > 0) {
+          const items = byType[st].strong.slice(0,2).map(x => `「${x}」`).join('・');
+          const more = byType[st].strong.length > 2 ? 'など' : '';
+          strongFragments.push(`${stypeJp[st]}の${items}${more}`);
+        }
+      });
+      if (strongFragments.length > 0) {
+        narrative += ` 特に${strongFragments.join('、')}で高い正答率を示しており、しっかり理解できている。`;
       }
-      if (allWeak.length > 0) {
-        const topWeak = allWeak.slice(0,3).map(x => `${stypeJp[x.stype]}の${x.label}`).join('・');
-        narrative += ` 一方で${topWeak}${allWeak.length>3 ? 'など' : ''}では理解不足が目立ち、今後重点的な復習と個別指導が必要。`;
+
+      // 弱み（教科ごとに独立、全教科を必ず含めて漏れがないように）
+      const weakFragments = [];
+      ['goii','bunpo','chokkai'].forEach(st => {
+        if (byType[st].weak.length > 0) {
+          const items = byType[st].weak.slice(0,3).map(x => `「${x}」`).join('・');
+          const more = byType[st].weak.length > 3 ? 'など' : '';
+          weakFragments.push(`${stypeJp[st]}の${items}${more}`);
+        }
+      });
+      if (weakFragments.length > 0) {
+        narrative += ` 一方で${weakFragments.join('、')}では理解不足が目立ち、今後重点的な復習と個別指導が必要。`;
       }
 
       let html = '<div>';
