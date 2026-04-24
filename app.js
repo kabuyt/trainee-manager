@@ -943,13 +943,22 @@ function renderTrendChart(results) {
       responsive: true,
       maintainAspectRatio: false,
       animation: false,
-      layout: { padding: { top: 6, right: 6, bottom: 2, left: 2 } },
+      layout: { padding: { top: 14, right: 10, bottom: 2, left: 2 } },
       plugins: {
         legend: { position: 'bottom', labels: { font: { size: 11 } } },
         title: { display: false },
       },
       scales: {
-        y: { beginAtZero: true, max: 100, ticks: { font: { size: 9 } } },
+        y: {
+          beginAtZero: true,
+          min: 0,
+          max: 110,
+          ticks: {
+            font: { size: 9 },
+            stepSize: 20,
+            callback: v => v > 100 ? '' : v
+          }
+        },
         x: { ticks: { font: { size: 9 } } },
       },
     },
