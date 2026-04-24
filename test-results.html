@@ -29,13 +29,14 @@
   .table-wrap{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.08);overflow:auto;max-height:75vh}
   table{width:100%;border-collapse:separate;border-spacing:0;font-size:14px}
   th,td{padding:9px 12px;border-bottom:1px solid #eee;text-align:left;white-space:nowrap}
-  thead th{background:#34495e;color:#fff;position:sticky;top:0;z-index:10;font-size:13px}
+  thead th{background:#34495e;color:#fff;position:sticky;top:0;z-index:10;font-size:13px;text-align:center}
   tbody tr:hover{background:#fafbfc}
-  th.score,td.score{text-align:center;font-family:monospace;font-size:15px;min-width:70px}
-  th.score-total,td.total{text-align:center;font-weight:bold;color:#2c3e50;min-width:90px}
-  td.total{font-family:monospace;font-size:15px}
-  /* conversation入力セルは中央揃えで input を配置 */
-  td.score .conv-input{display:inline-block;text-align:center}
+  /* 点数列: ヘッダー/本体とも同じ幅・中央揃えで完全一致させる */
+  th.score,td.score{text-align:center;vertical-align:middle;width:80px;min-width:80px;max-width:80px;padding-left:4px;padding-right:4px}
+  td.score{font-family:monospace;font-size:15px}
+  th.score-total,td.total{text-align:center;vertical-align:middle;width:100px;min-width:100px;font-family:monospace;font-size:15px}
+  td.total{font-weight:bold;color:#2c3e50}
+  td.score .conv-input{display:block;margin:0 auto;width:64px}
   .mini{font-size:12px;color:#777}
   .badge-auto{background:#27ae60;color:#fff;padding:2px 8px;border-radius:8px;font-size:11px}
   .badge-manual{background:#e67e22;color:#fff;padding:2px 8px;border-radius:8px;font-size:11px}
@@ -105,6 +106,7 @@
         </select>
       </label>
       <label style="font-size:12px"><input type="checkbox" id="mode-conv" onchange="render()"> 会話採点モード</label>
+      <span style="font-size:11px;color:#888">💡 会話点は一覧から直接入力できます（Enter/Tabで次行）</span>
       <span style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap">
         <button class="btn" onclick="copyTSV()">📋 TSVコピー</button>
         <button class="btn btn-green" onclick="downloadCSV()">💾 CSV保存</button>
@@ -127,7 +129,7 @@
             <th class="col-auto score">語彙</th>
             <th class="col-auto score">文法</th>
             <th class="col-auto score">聴解</th>
-            <th class="score">会話<br><span class="mini" style="color:#bbb;font-weight:normal">（クリックで編集）</span></th>
+            <th class="score">会話</th>
             <th class="score-total">合計</th>
             <th class="col-auto">採点</th>
             <th>詳細</th>
