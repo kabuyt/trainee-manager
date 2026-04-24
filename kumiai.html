@@ -33,6 +33,13 @@
   .company-group.skip{opacity:.55}
   .company-group.skip .item{pointer-events:none}
   .skip-note{color:#991b1b;font-size:12px;margin-left:10px}
+  .company-actions{margin:4px 0 10px}
+  .btn-company-dl{background:#2563eb;color:#fff;padding:8px 16px;border-radius:5px;font-size:13px;font-weight:500;border:none;cursor:pointer;font-family:inherit}
+  .btn-company-dl:hover{background:#1d4ed8}
+  .btn-company-dl:disabled{opacity:.6;cursor:not-allowed}
+  .btn-open{background:#e2e8f0;color:#1e3a5f;padding:4px 10px;border-radius:4px;font-size:12px;text-decoration:none}
+  .btn-open:hover{background:#cbd5e1}
+  .btn.disabled{opacity:.4;cursor:not-allowed}
   .btn{background:#1e3a5f;color:#fff;padding:4px 12px;border-radius:4px;font-size:12px;white-space:nowrap;border:none;cursor:pointer;font-family:inherit;text-decoration:none}
   .btn:hover{background:#0f2440}
   .footer{text-align:center;color:#94a3b8;font-size:11px;margin-top:30px;padding:10px}
@@ -69,9 +76,6 @@
     <label>報告月度:
       <select id="reportMonth" onchange="render()"></select>
     </label>
-    <span style="margin-left:auto;display:flex;gap:8px">
-      <button class="btn-dl" id="bulkZipBtn" onclick="bulkZip()">📥 組合一括ダウンロード (ZIP)</button>
-    </span>
   </div>
   <div class="progress" id="progress"><div class="progress-bar" id="progressBar"></div></div>
   <div class="status-msg" id="status"></div>
@@ -225,69 +229,114 @@ function render() {
       badge = `<span class="month-badge">${parts.join('/')}</span>`;
     }
 
-    html += `<div class="${companyClass}"><h2>🏢 ${company}（${arr.length}名）${badge}</h2><div class="list">`;
+    // 会社一括DLボタン（対象がいる場合のみ表示）
+    const targetCount = arr.filter(x => x._eduMonth !== null).length;
+    const companyBulkBtn = (!allSkipped && targetCount > 0)
+      ? `<button class="btn-company-dl" onclick="bulkCompany(${JSON.stringify(company).replace(/"/g,'&quot;')})">📥 ${company} 一括ダウンロード (${targetCount}名)</button>`
+      : '';
+
+    html += `<div class="${companyClass}"><h2>🏢 ${company}（${arr.length}名）${badge}</h2>${companyBulkBtn ? '<div class="company-actions">'+companyBulkBtn+'</div>' : ''}<div class="list">`;
     arr.forEach((t, i) => {
       const em = t._eduMonth;
-      const href = em ? `report.html?id=${t.id}#m=${em}` : '#';
-      const btnText = em ? `📄 ${em}ヶ月目を開く` : '対象外';
+      const dataAttr = em ? `data-trainee-id="${t.id}" data-month="${em}" data-name="${(t.name_romaji||'unknown').replace(/[^A-Za-z0-9_]/g,'_')}" data-sid="${t.student_id}" data-company="${company}"` : '';
+      const btnClass = em ? 'btn' : 'btn disabled';
+      const btnOnclick = em ? `onclick="downloadSingle(this); return false;"` : 'onclick="return false"';
       html += `
-        <a href="${href}" ${em ? 'target="_blank"' : 'onclick="return false"'} class="item">
+        <div class="item" ${dataAttr}>
           <span class="num">${i+1}</span>
           <span class="sid">${t.student_id}</span>
           <span class="name-jp">${t.name_katakana||''}</span>
           <span class="name-en">${t.name_romaji||''}</span>
-          <span class="btn">${btnText}</span>
-        </a>`;
+          ${em ? `<a href="report.html?id=${t.id}#m=${em}" target="_blank" class="btn-open">📄 開く</a>` : ''}
+          <button class="${btnClass}" ${btnOnclick}>📥 ダウンロード</button>
+        </div>`;
     });
     html += '</div></div>';
   });
   document.getElementById('list').innerHTML = html;
 }
 
-async function bulkZip() {
+// 個別PDFをiframeで描画→PDF化して返す
+async function renderPdfBlob(traineeId, month) {
+  const frame = document.getElementById('renderFrame');
+  frame.src = `report.html?id=${traineeId}#m=${month}&bulk=1`;
+  await new Promise((resolve, reject) => {
+    const onLoad = () => {
+      frame.removeEventListener('load', onLoad);
+      setTimeout(resolve, 4500);
+    };
+    frame.addEventListener('load', onLoad);
+    setTimeout(() => reject(new Error('timeout')), 30000);
+  });
+  const doc = frame.contentDocument;
+  const reportPage = doc.getElementById('reportPage');
+  if (!reportPage) throw new Error('reportPage not found');
+  return await html2pdf().set({
+    margin: [8, 8, 8, 8],
+    image: { type: 'jpeg', quality: 0.95 },
+    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+  }).from(reportPage).outputPdf('blob');
+}
+
+function fileNameOf(t) {
+  const nm = (t.name_romaji || 'unknown').replace(/[^A-Za-z0-9_]/g, '_');
+  return `${t.student_id}_${nm}.pdf`;
+}
+
+// 個別ダウンロード
+async function downloadSingle(btnEl) {
+  const row = btnEl.closest('.item');
+  const tid = row.dataset.traineeId;
+  const month = parseInt(row.dataset.month, 10);
+  const sid = row.dataset.sid;
+  const nm = row.dataset.name;
+  const origText = btnEl.textContent;
+  btnEl.disabled = true;
+  btnEl.textContent = '⏳';
+  try {
+    const blob = await renderPdfBlob(tid, month);
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `${sid}_${nm}.pdf`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  } catch (err) {
+    alert('ダウンロード失敗: ' + err.message);
+  }
+  btnEl.disabled = false;
+  btnEl.textContent = origText;
+  document.getElementById('renderFrame').src = 'about:blank';
+}
+
+// 企業別一括
+async function bulkCompany(companyName) {
   const [ry, rm] = document.getElementById('reportMonth').value.split('-').map(Number);
-  const targets = _trainees.filter(t => t._eduMonth !== null);
-  if (targets.length === 0) { alert('対象者なし（全員が開始3週間未満）'); return; }
-  const btn = document.getElementById('bulkZipBtn');
-  btn.disabled = true;
-  const origText = btn.textContent;
-  btn.textContent = '⏳ 生成中...';
+  const targets = _trainees.filter(t => t.company === companyName && t._eduMonth !== null);
+  if (targets.length === 0) { alert('対象者なし'); return; }
+
+  // クリックされたボタン特定（会社名で検索）
+  const btns = [...document.querySelectorAll('.btn-company-dl')];
+  const btn = btns.find(b => b.textContent.includes(companyName));
+  const origText = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ 生成中...'; }
+
   const prog = document.getElementById('progress');
   const bar = document.getElementById('progressBar');
   const status = document.getElementById('status');
   prog.style.display = 'block';
+  bar.style.width = '0%';
 
   const zip = new JSZip();
-  const frame = document.getElementById('renderFrame');
-
   for (let i = 0; i < targets.length; i++) {
     const t = targets[i];
-    const month = t._eduMonth;
-    status.textContent = `[${i+1}/${targets.length}] ${t.student_id} ${t.name_romaji||''} (${month}ヶ月目)`;
+    status.textContent = `[${i+1}/${targets.length}] ${t.student_id} ${t.name_romaji||''} (${t._eduMonth}ヶ月目)`;
     try {
-      frame.src = `report.html?id=${t.id}#m=${month}&bulk=1`;
-      await new Promise((resolve, reject) => {
-        const onLoad = () => {
-          frame.removeEventListener('load', onLoad);
-          setTimeout(resolve, 4500);
-        };
-        frame.addEventListener('load', onLoad);
-        setTimeout(() => reject(new Error('timeout')), 30000);
-      });
-      const doc = frame.contentDocument;
-      const reportPage = doc.getElementById('reportPage');
-      if (!reportPage) throw new Error('reportPage not found');
-      const pdfBlob = await html2pdf().set({
-        margin: [8, 8, 8, 8],
-        image: { type: 'jpeg', quality: 0.95 },
-        html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      }).from(reportPage).outputPdf('blob');
-      const fname = `${t.company||'unknown'}/${t.student_id}_${(t.name_romaji||'unknown').replace(/[^A-Za-z0-9_]/g,'_')}.pdf`;
-      zip.file(fname, pdfBlob);
+      const blob = await renderPdfBlob(t.id, t._eduMonth);
+      zip.file(fileNameOf(t), blob);
     } catch (err) {
-      console.error(t.student_id, err);
       status.textContent = `✗ ${t.student_id}: ${err.message}`;
+      console.error(t.student_id, err);
     }
     bar.style.width = `${Math.round((i+1)/targets.length*100)}%`;
   }
@@ -296,13 +345,12 @@ async function bulkZip() {
   const dateStr = `${ry}${String(rm).padStart(2,'0')}`;
   const a = document.createElement('a');
   a.href = URL.createObjectURL(content);
-  a.download = `教育報告書_${kumiaiName}_${dateStr}.zip`;
+  a.download = `教育報告書_${companyName}_${dateStr}.zip`;
   a.click();
   URL.revokeObjectURL(a.href);
   status.textContent = '✓ ダウンロード完了';
-  btn.disabled = false;
-  btn.textContent = origText;
-  frame.src = 'about:blank';
+  if (btn) { btn.disabled = false; btn.textContent = origText; }
+  document.getElementById('renderFrame').src = 'about:blank';
 }
 
 init();
