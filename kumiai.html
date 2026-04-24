@@ -173,9 +173,18 @@ async function init() {
     const slug = Object.entries(KUMIAI_MAP).find(([s,n]) => n === kumiaiName)?.[0];
     kumiaiSlug = slug || '';
   } else if (_userRole === 'admin' || _userRole === 'org') {
-    // admin/org は URL?k= で指定された組合を表示
+    // admin/org は URL?k= で指定された組合を表示（未指定なら選択UI）
     if (!kumiaiSlug || !KUMIAI_MAP[kumiaiSlug]) {
-      document.body.innerHTML = '<div class="loading">URL に組合が指定されていません<br>例: ?k=globalway<br><br><a href="index.html">一覧に戻る</a></div>';
+      const links = Object.entries(KUMIAI_MAP).map(([slug, name]) =>
+        `<a href="?k=${slug}" style="display:block;padding:12px 20px;margin:8px 0;background:#fff;border-radius:6px;text-decoration:none;color:#1e3a5f;font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,0.08)">🏢 ${name}</a>`
+      ).join('');
+      document.body.innerHTML = `
+        <div style="max-width:500px;margin:60px auto;padding:20px;font-family:'Noto Sans JP',sans-serif">
+          <img src="logo.png" alt="GROP" style="height:32px;margin-bottom:16px">
+          <h2 style="color:#1e3a5f;margin-bottom:16px">組合を選択</h2>
+          ${links}
+          <p style="margin-top:20px"><a href="index.html" style="color:#2563eb">← 管理画面トップに戻る</a></p>
+        </div>`;
       return;
     }
     kumiaiName = KUMIAI_MAP[kumiaiSlug];
