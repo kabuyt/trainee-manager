@@ -768,8 +768,13 @@ function renderMonthScores(result) {
     const grade = getGrade(total);
     document.getElementById('evalJapanese').textContent = grade.label;
     document.getElementById('evalJapaneseDesc').textContent = grade.desc;
+    // テスト成績あり → 未受験通知を消す
+    const wrap = document.getElementById('scoreTableWrap');
+    const notice = document.getElementById('noTestNotice');
+    if (wrap) wrap.classList.remove('no-test');
+    if (notice) notice.style.display = 'none';
   } else {
-    // データなし
+    // データなし → 未受験表示
     ['sVocab','sGrammar','sListen','sConv','sTotal',
      'avgVocab','avgGrammar','avgListen','avgConv','avgTotal',
      'devVocab','devGrammar','devListen','devConv','devTotal',
@@ -780,6 +785,11 @@ function renderMonthScores(result) {
     document.getElementById('rExamDate').textContent = '-';
     document.getElementById('evalJapanese').textContent = '-';
     document.getElementById('evalJapaneseDesc').textContent = '-';
+    // 未受験通知を表示
+    const wrap = document.getElementById('scoreTableWrap');
+    const notice = document.getElementById('noTestNotice');
+    if (wrap) wrap.classList.add('no-test');
+    if (notice) notice.style.display = 'block';
   }
 }
 

@@ -400,6 +400,22 @@ select.no-print-select:focus { border-color: #2563eb; outline: none; }
 /* 印刷時に表示するテキスト（画面では非表示） */
 .month-print, .scope-print, .attitude-print, .env-print { display: none; }
 
+/* ===== テスト未受験時の表示 ===== */
+.score-table-wrap { position: relative; }
+.score-table-wrap.no-test .score-table { opacity: 0.35; filter: grayscale(1); pointer-events: none; }
+.score-table-wrap.no-test [contenteditable] { pointer-events: none; }
+.no-test-notice {
+  background: #f3f4f6;
+  color: #6b7280;
+  border: 1px dashed #9ca3af;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  text-align: center;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
 /* ===== 閲覧専用モード (readonly-view) ===== */
 .readonly-view .no-print { display: none !important; }
 .readonly-view select.no-print-select { display: none !important; }
