@@ -610,6 +610,7 @@ async function saveConversationScore(value) {
 // 報告書のグローバル状態
 let _reportTrainee = null;
 let _reportResults = [];
+let _reportSections = {};
 let _reportClassResults = [];
 let _reportMonthly = {};  // { month: row }
 let _currentMonth = 1;
@@ -619,11 +620,12 @@ async function loadReport() {
   if (!id) { window.location.href = 'index.html'; return; }
 
   try {
-    // 対象実習生 + テスト結果 + 月別報告書を取得
-    const [{ data: trainee, error: tErr }, { data: results, error: rErr }, { data: monthly }] = await Promise.all([
+    // 対象実習生 + テスト結果 + 月別報告書 + テストセクション情報を取得
+    const [{ data: trainee, error: tErr }, { data: results, error: rErr }, { data: monthly }, { data: sections }] = await Promise.all([
       supabase.from('trainees').select('*').eq('id', id).single(),
       supabase.from('test_results').select('*').eq('trainee_id', id).order('test_date', { ascending: true }),
       supabase.from('monthly_reports').select('*').eq('trainee_id', id),
+      supabase.from('test_sections').select('test_id,section_type,answer_key,scoring_rules'),
     ]);
     if (tErr) throw tErr;
 
@@ -646,6 +648,11 @@ async function loadReport() {
     _reportClassResults = classResults;
     _reportMonthly = {};
     (monthly || []).forEach(r => { _reportMonthly[r.month] = r; });
+    _reportSections = {};
+    (sections || []).forEach(s => {
+      if (!_reportSections[s.test_id]) _reportSections[s.test_id] = {};
+      _reportSections[s.test_id][s.section_type] = { answer_key: s.answer_key, scoring_rules: s.scoring_rules };
+    });
 
     // 最新テスト結果の月を自動選択
     let initMonth = 1;
@@ -1114,6 +1121,130 @@ function generateDiagnosis(answers, testName) {
   }));
 }
 
+// 各テストのセクション表示名（診断用）
+const SECTION_LABELS = {
+  test1: {
+    g1:'基本語彙（食べ物・物）', g2:'基本語彙（カタカナ含む）', g3:'カテゴリー分類（国/部屋/仕事）', g4:'語彙選択', g5:'和訳（日→ベトナム語）',
+    b1:'助詞の使い方', b2:'語彙選択', b3:'文並び替え', b4:'時間・金額の読み方', b5:'疑問文・否定文', b6:'会話の定型表現', b7:'正しい文の選択',
+    c1:'職業の聞き取り', c2:'年齢の聞き取り', c3:'これ/それ/あれ', c4:'物の名前', c5:'所有（だれの）', c6:'ここ/そこ/あそこ',
+    c7:'場所（どこ）', c8:'値段と国', c9:'時間・曜日', c10:'電話番号', c11:'会話の真偽判定', c12:'田中さんの一日'
+  },
+  test2: {
+    g1:'基本語彙（食べ物・日用品）', g2:'カタカナ語', g3:'時間表現（月・日付）', g4:'語彙選択', g5:'反対語', g6:'和訳（日→ベトナム語）',
+    b1:'助詞の使い方', b2:'語彙選択', b3:'文並び替え', b4:'会話文完成', b5:'位置表現', b6:'正誤判定', b7:'同意文の判定', b8:'正しい答えの選択',
+    c1:'行動の聞き取り', c2:'A or B 判定', c3:'理由（どうして）', c4:'行動予定', c5:'買い物', c6:'形容詞', c7:'交通手段',
+    c8:'女性の居場所', c9:'スケジュール', c10:'絵と音声のマッチ', c11:'○×判定', c12:'選択式応答'
+  }
+};
+
+// 正規化（ベトナム語声調を除去）
+function _diagNorm(s){ return String(s||'').trim().toLowerCase().replace(/\s+/g,'').replace(/\u3000/g,''); }
+function _diagNormVi(s){
+  let x = _diagNorm(s);
+  try { x = x.normalize('NFD').replace(/[\u0300-\u036f]/g,''); } catch(e){}
+  return x.replace(/đ/g,'d');
+}
+
+// ルール別・単一フィールドの正誤判定
+function _diagIsCorrect(userVal, expected, method) {
+  if (expected === null || expected === undefined) return null;
+  if (userVal === null || userVal === undefined || String(userVal).trim()==='') return false;
+  const exps = Array.isArray(expected) ? expected : [expected];
+  if (method === 'ox_match') {
+    const ox = s => { s=String(s).trim(); if('○Oo〇'.includes(s)) return '○'; if('✕×XxⅩ'.includes(s)) return '×'; return s; };
+    return exps.some(e => ox(userVal)===ox(e));
+  }
+  if (method === 'phone_match') {
+    const ph = s => String(s).replace(/\D/g,'');
+    return exps.some(e => ph(userVal)===ph(e));
+  }
+  if (method === 'unordered_tokens') {
+    const us = _diagNorm(userVal).split('').sort().join('');
+    return exps.some(e => _diagNorm(e).split('').sort().join('')===us);
+  }
+  if (method === 'flex_match' || method === 'split_match' || method === 'vietnamese_fuzzy') {
+    const split = s => String(s||'').split(/[／、,，/]/).map(x=>x.trim()).filter(Boolean);
+    const uv = split(userVal).map(_diagNormVi).concat([_diagNormVi(userVal)]);
+    const ev = [];
+    exps.forEach(e => { if(e) split(e).forEach(v => ev.push(_diagNormVi(v))); });
+    return ev.some(e => uv.some(u => u===e));
+  }
+  if (method === 'substring_match') {
+    const u = _diagNorm(userVal);
+    return exps.some(e => { const en=_diagNorm(e); return u.length>=3 && (u.includes(en)||en.includes(u)); });
+  }
+  return exps.some(e => _diagNorm(userVal) === _diagNorm(e));
+}
+
+function _diagGetExpected(ak, fid, idx) {
+  if (Array.isArray(ak)) {
+    if (typeof idx === 'number' && idx>=0 && idx<ak.length) return ak[idx];
+    const m = /(\d+)[a-z]*$/.exec(fid||'');
+    if (m) { const i=parseInt(m[1],10)-1; if (i>=0 && i<ak.length) {
+      const v=ak[i]; if (v&&typeof v==='object'&&!Array.isArray(v)) { const last=fid[fid.length-1]; return v[last]; } return v; }}
+    return undefined;
+  }
+  if (ak && typeof ak==='object') {
+    if (fid in ak) return ak[fid];
+    for (const k in ak) { if (ak[k]&&typeof ak[k]==='object'&&fid in ak[k]) return ak[k][fid]; }
+  }
+  return undefined;
+}
+
+// セクション別の正答率ベース診断（test1/test2用）
+function generateSectionDiagnosis(answers, testName) {
+  const sections = _reportSections[testName];
+  if (!sections) return null;
+  const labels = SECTION_LABELS[testName] || {};
+  const bySecType = {};
+  for (const stype in sections) {
+    const { answer_key, scoring_rules } = sections[stype];
+    if (!scoring_rules) continue;
+    const secResults = [];
+    for (const sid in scoring_rules) {
+      const rule = scoring_rules[sid];
+      if (!rule || rule.method === 'manual') continue;
+      const method = rule.method;
+      const sectionAk = (answer_key||{})[sid];
+      let correct=0, total=0;
+      // bucket_sort は特殊
+      if (method === 'bucket_sort') {
+        (rule.field_ids||[]).forEach((fid,i) => {
+          total++;
+          const exp = Array.isArray(sectionAk)&&i<sectionAk.length ? sectionAk[i] : [];
+          let userKeys = answers[fid]||'[]';
+          try { userKeys = typeof userKeys==='string' ? JSON.parse(userKeys) : userKeys; } catch(e){userKeys=[];}
+          if (!Array.isArray(userKeys)) userKeys=[];
+          const hasAll = exp.every(k => userKeys.includes(k));
+          const trapCount = userKeys.filter(k => (rule.trap_keys||[]).includes(k)).length;
+          if (hasAll && trapCount===0) correct++;
+        });
+      } else {
+        // field_ids を列挙
+        let fids = rule.field_ids || [];
+        if (method==='multi_field_group') fids = (rule.groups||[]).flat();
+        if (method==='pair_match') {
+          (rule.items||[]).forEach(p => { if(p.a_field) fids.push(p.a_field); if(p.b_field) fids.push(p.b_field); });
+        }
+        if (method==='price_country') {
+          (rule.items||[]).forEach(p => { if(p.price_field) fids.push(p.price_field); if(p.country_field) fids.push(p.country_field); });
+        }
+        fids.forEach((fid,i) => {
+          const exp = _diagGetExpected(sectionAk, fid, i);
+          if (exp === undefined) return;
+          total++;
+          if (_diagIsCorrect(answers[fid], exp, method)) correct++;
+        });
+      }
+      if (total > 0) {
+        secResults.push({ sid, label: labels[sid]||sid, correct, total, rate: correct/total });
+      }
+    }
+    if (secResults.length) bySecType[stype] = secResults;
+  }
+  return bySecType;
+}
+
 function renderDiagnosis(diagArea, results) {
   if (!diagArea) return;
 
@@ -1127,6 +1258,49 @@ function renderDiagnosis(diagArea, results) {
   const answers = typeof withAnswers.answers_json === 'string'
     ? JSON.parse(withAnswers.answers_json)
     : withAnswers.answers_json;
+
+  // test1/test2 は セクション別正答率ベースの診断
+  if (withAnswers.test_name === 'test1' || withAnswers.test_name === 'test2') {
+    const secDiag = generateSectionDiagnosis(answers, withAnswers.test_name);
+    if (secDiag) {
+      const stypeJp = { goii:'語彙', bunpo:'文法', chokkai:'聴解' };
+      const weak = [], medium = [], strong = [];
+      ['goii','bunpo','chokkai'].forEach(st => {
+        (secDiag[st]||[]).forEach(x => {
+          const entry = {...x, stype: st, stypeJp: stypeJp[st]||st};
+          if (x.rate < 0.6) weak.push(entry);
+          else if (x.rate < 0.8) medium.push(entry);
+          else strong.push(entry);
+        });
+      });
+      let html = '<div style="margin-bottom:10px;line-height:1.8">';
+      if (weak.length===0 && medium.length<=2) html += '全体的に良好な理解度です。';
+      else if (weak.length<=1) html += 'おおむね理解できていますが、一部の分野で補強が必要です。';
+      else html += '複数の分野で課題が見られます。重点指導を推奨します。';
+      html += `<span style="color:#888;font-size:12px;margin-left:10px">（${withAnswers.test_name}, ${withAnswers.test_date}）</span></div>`;
+      if (weak.length) {
+        html += '<div style="margin-bottom:6px;font-weight:bold;color:#c0392b">【重点課題】正答率60%未満</div>';
+        html += '<ul style="margin:0 0 10px;padding-left:20px;line-height:1.8">';
+        weak.forEach(x => html += `<li><b>${x.stypeJp}</b>「${x.label}」: ${Math.round(x.rate*100)}% (${x.correct}/${x.total})</li>`);
+        html += '</ul>';
+      }
+      if (medium.length) {
+        html += '<div style="margin-bottom:6px;font-weight:bold;color:#e67e22">【注意項目】正答率60-80%</div>';
+        html += '<ul style="margin:0 0 10px;padding-left:20px;line-height:1.8">';
+        medium.forEach(x => html += `<li><b>${x.stypeJp}</b>「${x.label}」: ${Math.round(x.rate*100)}% (${x.correct}/${x.total})</li>`);
+        html += '</ul>';
+      }
+      if (strong.length && weak.length+medium.length < 5) {
+        html += '<div style="margin-bottom:6px;font-weight:bold;color:#27ae60">【良好な分野】正答率80%以上</div>';
+        html += '<ul style="margin:0;padding-left:20px;line-height:1.8;color:#555">';
+        strong.slice(0,6).forEach(x => html += `<li>${x.stypeJp}「${x.label}」: ${Math.round(x.rate*100)}%</li>`);
+        if (strong.length>6) html += `<li style="color:#999">...他${strong.length-6}分野</li>`;
+        html += '</ul>';
+      }
+      diagArea.innerHTML = html;
+      return;
+    }
+  }
 
   const diagnosis = generateDiagnosis(answers, withAnswers.test_name);
   if (!diagnosis || diagnosis.length === 0) {
