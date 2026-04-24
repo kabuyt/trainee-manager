@@ -1330,9 +1330,9 @@ function renderDiagnosis(diagArea, results) {
         narrative += ` 一方で${topWeak}${allWeak.length>3 ? 'など' : ''}では理解不足が目立ち、今後重点的な復習と個別指導が必要。`;
       }
 
-      let html = '<div style="line-height:1.9;font-size:14px;margin-bottom:6px">';
-      html += `<p>${narrative}</p>`;
-      html += `<p style="font-size:11px;color:#999;margin-top:10px">（${withAnswers.test_name} / ${withAnswers.test_date} の解答を基に自動分析・全体正答率 ${Math.round(avgRate*100)}%）</p>`;
+      let html = '<div>';
+      html += `<p style="margin:0 0 6px">${narrative}</p>`;
+      html += `<p style="font-size:10px;color:#94a3b8;margin:0">（${withAnswers.test_name} / ${withAnswers.test_date} の解答を基に自動分析・全体正答率 ${Math.round(avgRate*100)}%）</p>`;
       html += '</div>';
       diagArea.innerHTML = html;
       return;
