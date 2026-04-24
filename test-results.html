@@ -13,29 +13,29 @@
   .nav h1{font-size:16px;font-weight:bold}
 
   .container{padding:16px;max-width:100%}
-  .toolbar{background:#fff;padding:10px 14px;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-  .toolbar label{font-size:13px;color:#555}
-  .toolbar select,.toolbar input{padding:5px 10px;border:1px solid #ccc;border-radius:5px;font-size:13px}
-  .btn{padding:5px 14px;border:none;border-radius:5px;font-size:13px;cursor:pointer;background:#3498db;color:#fff}
+  .toolbar{background:#fff;padding:12px 16px;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:12px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .toolbar label{font-size:14px;color:#555}
+  .toolbar select,.toolbar input{padding:6px 10px;border:1px solid #ccc;border-radius:5px;font-size:14px}
+  .btn{padding:7px 14px;border:none;border-radius:5px;font-size:14px;cursor:pointer;background:#3498db;color:#fff}
   .btn:hover{background:#2980b9}
   .btn-green{background:#27ae60}
   .btn-green:hover{background:#229954}
   .btn-warn{background:#e67e22}
 
   .stats{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap}
-  .stat{background:#fff;padding:8px 14px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.08);font-size:13px}
-  .stat b{color:#2c3e50;font-size:18px;display:block}
+  .stat{background:#fff;padding:10px 16px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.08);font-size:14px}
+  .stat b{color:#2c3e50;font-size:20px;display:block}
 
   .table-wrap{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.08);overflow:auto;max-height:75vh}
-  table{width:100%;border-collapse:separate;border-spacing:0;font-size:12px}
-  th,td{padding:6px 10px;border-bottom:1px solid #eee;text-align:left;white-space:nowrap}
-  thead th{background:#34495e;color:#fff;position:sticky;top:0;z-index:10}
+  table{width:100%;border-collapse:separate;border-spacing:0;font-size:14px}
+  th,td{padding:9px 12px;border-bottom:1px solid #eee;text-align:left;white-space:nowrap}
+  thead th{background:#34495e;color:#fff;position:sticky;top:0;z-index:10;font-size:13px}
   tbody tr:hover{background:#fafbfc}
-  td.score{text-align:right;font-family:monospace}
+  td.score{text-align:right;font-family:monospace;font-size:15px}
   td.total{font-weight:bold;color:#2c3e50}
-  .mini{font-size:11px;color:#777}
-  .badge-auto{background:#27ae60;color:#fff;padding:1px 6px;border-radius:8px;font-size:10px}
-  .badge-manual{background:#e67e22;color:#fff;padding:1px 6px;border-radius:8px;font-size:10px}
+  .mini{font-size:12px;color:#777}
+  .badge-auto{background:#27ae60;color:#fff;padding:2px 8px;border-radius:8px;font-size:11px}
+  .badge-manual{background:#e67e22;color:#fff;padding:2px 8px;border-radius:8px;font-size:11px}
   td a{color:#3498db;text-decoration:none}
   td a:hover{text-decoration:underline}
 
@@ -81,6 +81,11 @@
           <option value="">全部</option>
         </select>
       </label>
+      <label>会社:
+        <select id="filter-company" onchange="render()">
+          <option value="">全部</option>
+        </select>
+      </label>
       <label>クラス:
         <select id="filter-class" onchange="render()">
           <option value="">全部</option>
@@ -112,6 +117,7 @@
           <tr id="thead-row">
             <th>学生ID</th>
             <th>名前</th>
+            <th>会社</th>
             <th>クラス</th>
             <th>テスト</th>
             <th>受験日</th>
@@ -243,8 +249,10 @@ async function reload() {
   // フィルタドロップダウン
   const tests = [...new Set(_data.map(d => d.test_name))].sort();
   const classes = [...new Set(_data.map(d => d.class_group).filter(Boolean))].sort();
+  const companies = [...new Set(_data.map(d => d.company).filter(Boolean))].sort();
   fillSelect('filter-test', tests);
   fillSelect('filter-class', classes);
+  fillSelect('filter-company', companies);
 
   render();
 }
@@ -263,11 +271,13 @@ function fillSelect(id, items) {
 function getFiltered() {
   const fTest = document.getElementById('filter-test').value;
   const fClass = document.getElementById('filter-class').value;
+  const fCompany = document.getElementById('filter-company').value;
   const fSearch = (document.getElementById('filter-search').value || '').toLowerCase();
   const fNoConv = document.getElementById('filter-noconv').checked;
   return _data.filter(d => {
     if (fTest && d.test_name !== fTest) return false;
     if (fClass && d.class_group !== fClass) return false;
+    if (fCompany && d.company !== fCompany) return false;
     if (fSearch && !((d.student_id.toLowerCase().includes(fSearch)) || (d.name.toLowerCase().includes(fSearch)))) return false;
     if (fNoConv && d.score_conversation !== null && d.score_conversation !== undefined) return false;
     return true;
@@ -317,13 +327,14 @@ function render() {
     tr.innerHTML = `
       <td>${d.student_id}</td>
       <td>${d.name}</td>
+      <td>${d.company || '-'}</td>
       <td>${d.class_group}</td>
       <td>${d.test_name}<br><span class="mini">${tdef.display_name||''}</span></td>
       <td>${d.test_date}</td>
       <td class="score col-auto">${d.score_vocab ?? '-'}</td>
       <td class="score col-auto">${d.score_grammar ?? '-'}</td>
       <td class="score col-auto">${d.score_listening ?? '-'}</td>
-      <td class="score"><input type="number" min="0" max="100" class="conv-input" data-result-id="${d.result_id}" data-row="${i}" value="${convVal}" placeholder="-" style="width:56px;padding:3px 4px;text-align:right;border:1px solid #ddd;border-radius:3px;font-family:monospace"></td>
+      <td class="score"><input type="number" min="0" max="100" class="conv-input" data-result-id="${d.result_id}" data-row="${i}" value="${convVal}" placeholder="-" style="width:64px;padding:5px 6px;text-align:right;border:1px solid #ddd;border-radius:4px;font-family:monospace;font-size:14px"></td>
       <td class="score total">${total}/${max}</td>
       <td class="col-auto">${d.auto_scored ? '<span class="badge-auto">自動</span>' : '<span class="badge-manual">手動</span>'}</td>
       <td><a href="test-result-detail.html?id=${d.result_id}">→詳細</a></td>
