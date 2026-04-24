@@ -1268,65 +1268,71 @@ function renderDiagnosis(diagArea, results) {
     ? JSON.parse(withAnswers.answers_json)
     : withAnswers.answers_json;
 
-  // test1/test2 は セクション別正答率ベースの診断（文章形式）
+  // test1/test2 は セクション別正答率ベースの診断（全体まとめ文章）
   if (withAnswers.test_name === 'test1' || withAnswers.test_name === 'test2') {
     const secDiag = generateSectionDiagnosis(answers, withAnswers.test_name);
     if (secDiag) {
       const stypeJp = { goii:'語彙', bunpo:'文法', chokkai:'聴解' };
-      const weakByType = {goii:[], bunpo:[], chokkai:[]};
-      const strongByType = {goii:[], bunpo:[], chokkai:[]};
+      const byType = {goii:{correct:0,total:0,weak:[],strong:[]}, bunpo:{correct:0,total:0,weak:[],strong:[]}, chokkai:{correct:0,total:0,weak:[],strong:[]}};
       ['goii','bunpo','chokkai'].forEach(st => {
         (secDiag[st]||[]).forEach(x => {
-          if (x.rate < 0.6) weakByType[st].push({name:x.label, rate:Math.round(x.rate*100)});
-          else if (x.rate >= 0.8) strongByType[st].push({name:x.label, rate:Math.round(x.rate*100)});
+          byType[st].correct += x.correct;
+          byType[st].total += x.total;
+          if (x.rate < 0.6) byType[st].weak.push(x.label);
+          else if (x.rate >= 0.85) byType[st].strong.push(x.label);
         });
       });
+      // 教科別の総合評価
+      const getLevel = t => {
+        if (t.total === 0) return null;
+        const r = t.correct / t.total;
+        if (r >= 0.9) return { word:'よく理解できている', color:'#27ae60' };
+        if (r >= 0.75) return { word:'おおむね理解できている', color:'#16a085' };
+        if (r >= 0.6) return { word:'一部に弱点が見られる', color:'#e67e22' };
+        return { word:'基礎固めが必要', color:'#c0392b' };
+      };
+      const vLevel = getLevel(byType.goii);
+      const gLevel = getLevel(byType.bunpo);
+      const lLevel = getLevel(byType.chokkai);
 
-      const strongCount = Object.values(strongByType).reduce((s,a)=>s+a.length,0);
-      const weakCount = Object.values(weakByType).reduce((s,a)=>s+a.length,0);
+      // 全体平均
+      const totalCorrect = byType.goii.correct + byType.bunpo.correct + byType.chokkai.correct;
+      const totalAll = byType.goii.total + byType.bunpo.total + byType.chokkai.total;
+      const avgRate = totalAll > 0 ? totalCorrect/totalAll : 0;
 
-      // 理解できている点（文章）
-      let goodSentences = [];
-      ['goii','bunpo','chokkai'].forEach(st => {
-        if (strongByType[st].length > 0) {
-          const names = strongByType[st].slice(0,4).map(x => `「${x.name}」`).join('、');
-          goodSentences.push(`${stypeJp[st]}では、${names}${strongByType[st].length>4 ? 'など' : ''}の分野で高い正答率を示しており、しっかり理解できています`);
-        }
-      });
+      // 全体総評（1段落）
+      let overall = '';
+      if (avgRate >= 0.9) overall = '全体的に非常に高い理解度を示しており、基礎が確実に定着しています。';
+      else if (avgRate >= 0.75) overall = '全体的には安定した理解度を保っており、学習進度は良好です。';
+      else if (avgRate >= 0.6) overall = '基礎は概ね身についているものの、いくつかの分野に課題が残っています。';
+      else overall = '全体的に正答率が低く、広範囲にわたって基礎の定着が不十分な状況です。';
 
-      // 間違いが多い点（文章）
-      let badSentences = [];
-      ['goii','bunpo','chokkai'].forEach(st => {
-        if (weakByType[st].length > 0) {
-          const details = weakByType[st].map(x => `「${x.name}」(${x.rate}%)`).join('、');
-          badSentences.push(`${stypeJp[st]}では、${details}で正答率が低く、基礎の定着が不十分です`);
-        }
-      });
+      // 教科別の詳細を自然な文章で
+      const parts = [];
+      if (vLevel) parts.push(`語彙は${vLevel.word}`);
+      if (gLevel) parts.push(`文法は${gLevel.word}`);
+      if (lLevel) parts.push(`聴解は${lLevel.word}`);
 
-      // 総評
-      let summary = '';
-      if (weakCount === 0 && strongCount >= 5) {
-        summary = '全体を通して安定した理解度を示しており、基礎がしっかり身についています。このまま学習を継続すれば、更に力が伸びることが期待できます。';
-      } else if (weakCount <= 1) {
-        summary = '全体としてはおおむね良好な理解度ですが、一部に弱点が見られます。次回のテストまでに重点的な復習で克服できるレベルです。';
-      } else if (weakCount <= 3) {
-        summary = '複数の分野で課題が見られます。得意な分野の維持と並行して、弱点分野の基礎固めを優先的に進める必要があります。';
-      } else {
-        summary = '多くの分野で正答率が低く、広範囲にわたる復習が必要な状況です。まずは基本語彙と基礎文法を中心に、段階的に学習計画を立て直すことを推奨します。';
+      // 全教科の一番弱い分野（最大3つ）をピックアップ
+      const allWeak = [];
+      ['goii','bunpo','chokkai'].forEach(st => byType[st].weak.forEach(w => allWeak.push({stype:st, label:w})));
+      const allStrong = [];
+      ['goii','bunpo','chokkai'].forEach(st => byType[st].strong.forEach(s => allStrong.push({stype:st, label:s})));
+
+      // 最終まとめ文
+      let narrative = `${overall} 個別に見ると、${parts.join('、')}という状況です。`;
+      if (allStrong.length > 0) {
+        const topStrong = allStrong.slice(0,3).map(x => `${stypeJp[x.stype]}の${x.label}`).join('・');
+        narrative += ` 特に${topStrong}${allStrong.length>3 ? 'など' : ''}では高い正答率を示しており、しっかり理解できています。`;
+      }
+      if (allWeak.length > 0) {
+        const topWeak = allWeak.slice(0,3).map(x => `${stypeJp[x.stype]}の${x.label}`).join('・');
+        narrative += ` 一方で${topWeak}${allWeak.length>3 ? 'など' : ''}では理解不足が目立ち、今後重点的な復習と個別指導が必要です。`;
       }
 
-      let html = '<div style="line-height:1.8;margin-bottom:8px">';
-      html += `<p style="margin-bottom:10px">${summary}</p>`;
-      if (goodSentences.length > 0) {
-        html += `<p style="margin-bottom:8px"><span style="font-weight:bold;color:#27ae60">理解できている点：</span>${goodSentences.join('。')}。</p>`;
-      }
-      if (badSentences.length > 0) {
-        html += `<p style="margin-bottom:8px"><span style="font-weight:bold;color:#c0392b">間違いが多い点：</span>${badSentences.join('。')}。</p>`;
-      }
-      if (goodSentences.length === 0 && badSentences.length === 0) {
-        html += '<p style="color:#888">特筆すべき弱点も際立った強みも見られませんでした。</p>';
-      }
-      html += `<p style="font-size:11px;color:#999;margin-top:10px">（${withAnswers.test_name} / ${withAnswers.test_date} の解答を基に自動分析）</p>`;
+      let html = '<div style="line-height:1.9;font-size:14px;margin-bottom:6px">';
+      html += `<p>${narrative}</p>`;
+      html += `<p style="font-size:11px;color:#999;margin-top:10px">（${withAnswers.test_name} / ${withAnswers.test_date} の解答を基に自動分析・全体正答率 ${Math.round(avgRate*100)}%）</p>`;
       html += '</div>';
       diagArea.innerHTML = html;
       return;
