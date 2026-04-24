@@ -1300,34 +1300,34 @@ function renderDiagnosis(diagArea, results) {
       const totalAll = byType.goii.total + byType.bunpo.total + byType.chokkai.total;
       const avgRate = totalAll > 0 ? totalCorrect/totalAll : 0;
 
-      // 全体総評（1段落）
+      // 全体総評（1段落、常体）
       let overall = '';
-      if (avgRate >= 0.9) overall = '全体的に非常に高い理解度を示しており、基礎が確実に定着しています。';
-      else if (avgRate >= 0.75) overall = '全体的には安定した理解度を保っており、学習進度は良好です。';
-      else if (avgRate >= 0.6) overall = '基礎は概ね身についているものの、いくつかの分野に課題が残っています。';
-      else overall = '全体的に正答率が低く、広範囲にわたって基礎の定着が不十分な状況です。';
+      if (avgRate >= 0.9) overall = '全体的に非常に高い理解度を示しており、基礎が確実に定着している。';
+      else if (avgRate >= 0.75) overall = '全体的には安定した理解度を保ち、学習進度は良好。';
+      else if (avgRate >= 0.6) overall = '基礎は概ね身についているが、いくつかの分野に課題が残る。';
+      else overall = '全体的に正答率が低く、広範囲にわたって基礎の定着が不十分な状況。';
 
-      // 教科別の詳細を自然な文章で
+      // 教科別の詳細
       const parts = [];
       if (vLevel) parts.push(`語彙は${vLevel.word}`);
       if (gLevel) parts.push(`文法は${gLevel.word}`);
       if (lLevel) parts.push(`聴解は${lLevel.word}`);
 
-      // 全教科の一番弱い分野（最大3つ）をピックアップ
+      // 強み・弱みのピック
       const allWeak = [];
       ['goii','bunpo','chokkai'].forEach(st => byType[st].weak.forEach(w => allWeak.push({stype:st, label:w})));
       const allStrong = [];
       ['goii','bunpo','chokkai'].forEach(st => byType[st].strong.forEach(s => allStrong.push({stype:st, label:s})));
 
-      // 最終まとめ文
-      let narrative = `${overall} 個別に見ると、${parts.join('、')}という状況です。`;
+      // 最終まとめ文（常体）
+      let narrative = `${overall} 個別に見ると、${parts.join('、')}という状況。`;
       if (allStrong.length > 0) {
         const topStrong = allStrong.slice(0,3).map(x => `${stypeJp[x.stype]}の${x.label}`).join('・');
-        narrative += ` 特に${topStrong}${allStrong.length>3 ? 'など' : ''}では高い正答率を示しており、しっかり理解できています。`;
+        narrative += ` 特に${topStrong}${allStrong.length>3 ? 'など' : ''}では高い正答率を示しており、しっかり理解できている。`;
       }
       if (allWeak.length > 0) {
         const topWeak = allWeak.slice(0,3).map(x => `${stypeJp[x.stype]}の${x.label}`).join('・');
-        narrative += ` 一方で${topWeak}${allWeak.length>3 ? 'など' : ''}では理解不足が目立ち、今後重点的な復習と個別指導が必要です。`;
+        narrative += ` 一方で${topWeak}${allWeak.length>3 ? 'など' : ''}では理解不足が目立ち、今後重点的な復習と個別指導が必要。`;
       }
 
       let html = '<div style="line-height:1.9;font-size:14px;margin-bottom:6px">';
