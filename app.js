@@ -1366,7 +1366,7 @@ function renderDiagnosis(diagArea, results) {
 
       let html = '<div>';
       html += `<p style="margin:0 0 6px">${narrative}</p>`;
-      html += `<p style="font-size:10px;color:#94a3b8;margin:0">（${withAnswers.test_name} / ${withAnswers.test_date} の解答を基に自動分析・全体正答率 ${Math.round(avgRate*100)}%）</p>`;
+      html += `<p style="font-size:10px;color:#94a3b8;margin:0">（${withAnswers.test_name} / ${withAnswers.test_date} の解答を基に分析・全体正答率 ${Math.round(avgRate*100)}%）</p>`;
       html += '</div>';
       diagArea.innerHTML = html;
       return;
