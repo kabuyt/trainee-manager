@@ -1307,11 +1307,16 @@ function renderDiagnosis(diagArea, results) {
       else if (avgRate >= 0.6) overall = '基礎は概ね身についているが、いくつかの分野に課題が残る。';
       else overall = '全体的に正答率が低く、広範囲にわたって基礎の定着が不十分な状況。';
 
-      // 教科別の詳細
-      const parts = [];
-      if (vLevel) parts.push(`語彙は${vLevel.word}`);
-      if (gLevel) parts.push(`文法は${gLevel.word}`);
-      if (lLevel) parts.push(`聴解は${lLevel.word}`);
+      // 教科別の詳細（同じ評価レベルの教科はまとめる）
+      const levelToSubjects = {};
+      [['語彙', vLevel], ['文法', gLevel], ['聴解', lLevel]].forEach(([sub, lv]) => {
+        if (!lv) return;
+        if (!levelToSubjects[lv.word]) levelToSubjects[lv.word] = [];
+        levelToSubjects[lv.word].push(sub);
+      });
+      const parts = Object.entries(levelToSubjects).map(([word, subs]) => {
+        return `${subs.join('・')}は${word}`;
+      });
 
       // 最終まとめ文（常体）
       let narrative = `${overall} 個別に見ると、${parts.join('、')}という状況。`;
