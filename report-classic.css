@@ -1,0 +1,525 @@
+/* ===== 報告書スタイル ===== */
+@page { size: A4 portrait; margin: 8mm 10mm; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #edf1f7;
+  color: #1e293b;
+  font-size: 11px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== ツールバー ===== */
+.toolbar-top {
+  max-width: 210mm;
+  margin: 16px auto 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+}
+.toolbar-top a { color: #2563eb; text-decoration: none; font-size: 13px; font-weight: 500; }
+.toolbar-top a:hover { text-decoration: underline; }
+.btn-print {
+  background: #1e40af;
+  color: white;
+  border: none;
+  padding: 10px 28px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(30,64,175,0.25);
+  transition: background 0.15s;
+}
+.btn-print:hover { background: #1e3a8a; }
+.toolbar-actions { display: flex; align-items: center; gap: 10px; }
+.btn-save {
+  background: #16a34a;
+  color: white;
+  border: none;
+  padding: 10px 28px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(22,163,74,0.25);
+  transition: background 0.15s;
+}
+.btn-save:hover { background: #15803d; }
+.btn-save:disabled { background: #94a3b8; cursor: not-allowed; }
+#saveStatus {
+  font-size: 12px;
+  font-weight: 500;
+  transition: opacity 0.3s;
+}
+
+/* ===== レポートページ ===== */
+.report-page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 24px;
+  background: white;
+  padding: 8mm 12mm;
+  box-shadow: 0 1px 12px rgba(0,0,0,0.08);
+}
+
+/* ===== ロゴ ===== */
+.logo-bar {
+  padding: 2px 0 2px;
+}
+.report-logo {
+  height: 24px;
+  width: auto;
+}
+
+/* ===== ヘッダー ===== */
+.report-header { margin-bottom: 8px; }
+.header-body { display: flex; gap: 0; overflow: visible; border: 1px solid #cbd5e1; }
+.header-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.photo-area {
+  width: 80px;
+  min-width: 80px;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-left: 1px solid #cbd5e1;
+}
+.photo-area img { width: 100%; height: 100%; object-fit: cover; }
+.photo-area .photo-placeholder {
+  font-size: 10px;
+  color: #cbd5e1;
+  text-align: center;
+  line-height: 1.3;
+}
+.title-area {
+  background: #1e3a5f;
+  padding: 7px 16px;
+  text-align: center;
+  margin-bottom: 6px;
+}
+.title-area h1 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 3px;
+}
+
+.info-row {
+  display: flex;
+  font-size: 11px;
+  flex: 1;
+}
+.info-row + .info-row { border-top: 1px solid #cbd5e1; }
+.info-cell {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  border-right: 1px solid #cbd5e1;
+  padding: 5px 6px;
+  min-width: 0;
+}
+.info-cell--narrow { flex: 0 0 auto; }
+.info-cell--wide { flex: 2; }
+.info-cell--fixed { flex: 0 0 35%; }
+.info-cell:last-child { border-right: none; }
+.info-cell .label {
+  background: #e8edf5;
+  color: #334155;
+  padding: 2px 5px;
+  font-weight: 600;
+  font-size: 10px;
+  margin-right: 5px;
+  white-space: nowrap;
+}
+.info-cell .value { font-weight: 500; font-size: 11px; white-space: nowrap; }
+.info-cell .value small { color: #64748b; font-size: 10px; }
+
+/* ===== セクション ===== */
+.section-header {
+  background: #1e3a5f;
+  color: #fff;
+  padding: 4px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  margin: 8px 0 3px;
+  letter-spacing: 1px;
+}
+.section-sub {
+  background: #e8edf5;
+  padding: 3px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  margin: 4px 0 3px;
+  border-left: 3px solid #1e3a5f;
+  color: #334155;
+}
+
+/* ===== テスト成績テーブル ===== */
+.score-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 10px;
+  font-size: 11px;
+}
+.score-table th, .score-table td {
+  border: 1px solid #cbd5e1;
+  padding: 6px 8px;
+  text-align: center;
+  font-size: 11px;
+}
+.score-table th {
+  font-weight: 600;
+  color: #334155;
+  background: #e8edf5;
+}
+.col-label { width: 100px; background: #f1f5f9; }
+.col-vocab { background: #eef3fa; }
+.col-grammar { background: #ecf1f9; }
+.col-listen { background: #eaf0f8; }
+.col-conv { background: #e8eef7; }
+.col-total { background: #e2e8f4; }
+.row-label { background: #f1f5f9; font-weight: 600; text-align: left !important; font-size: 11px; color: #334155; }
+.total-cell { font-weight: 600; color: #1e3a5f; }
+.row-avg td { color: #64748b; }
+.row-dev .row-label { font-weight: 600; }
+.row-dev td { color: #1e40af; font-weight: 400; }
+.row-empty td { color: #cbd5e1; height: 22px; }
+
+/* ===== 評価 ===== */
+.eval-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.eval-box {
+  flex: 1;
+  border: 1px solid #cbd5e1;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f8fafc;
+}
+.eval-label {
+  background: #1e3a5f;
+  color: white;
+  padding: 3px 14px;
+  font-weight: 600;
+  font-size: 11px;
+}
+.eval-grade {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e3a5f;
+  min-width: 30px;
+}
+.eval-desc { font-size: 11px; color: #64748b; }
+
+/* ===== 成績推移 ===== */
+.trend-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10px;
+  margin-bottom: 4px;
+}
+.trend-table th, .trend-table td {
+  border: 1px solid #cbd5e1;
+  padding: 3px 8px;
+  text-align: center;
+  font-size: 10px;
+}
+.trend-table .row-empty td { color: #cbd5e1; }
+.trend-table th {
+  background: #e8edf5;
+  font-weight: 600;
+  color: #334155;
+  border-bottom: 2px solid #1e3a5f;
+}
+
+/* ===== グラフ ===== */
+.chart-container {
+  margin: 4px 0 6px;
+  padding: 8px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  height: 300px;
+}
+.chart-container canvas {
+  max-height: 100%;
+}
+
+/* ===== コメント欄 ===== */
+.comment-grid {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.comment-block {
+  flex: 1;
+  border: 1px solid #cbd5e1;
+  padding: 0;
+  overflow: hidden;
+}
+.comment-label {
+  padding: 3px 10px;
+  font-weight: 600;
+  font-size: 11px;
+  background: #e8edf5;
+  color: #334155;
+  border-bottom: 1px solid #cbd5e1;
+}
+.comment-block.good .comment-label { background: #dbeafe; color: #1e3a8a; }
+.comment-block.bad .comment-label { background: #fee2e2; color: #991b1b; }
+.comment-text {
+  padding: 6px 8px;
+  font-size: 11px;
+  line-height: 1.6;
+  min-height: 48px;
+  color: #1e293b;
+}
+.comment-text[contenteditable="true"] {
+  outline: none;
+  cursor: text;
+}
+.comment-text[contenteditable="true"]:hover {
+  background: #f8fafc;
+}
+.comment-text[contenteditable="true"]:focus {
+  background: #fffde7;
+  box-shadow: inset 0 0 0 1px #cbd5e1;
+}
+.comment-text[contenteditable="true"]:empty::before {
+  content: attr(data-placeholder);
+  color: #aaa;
+  pointer-events: none;
+}
+
+.diagnosis-box {
+  border: 1px solid #cbd5e1;
+  padding: 8px 10px;
+  font-size: 11px;
+  line-height: 1.6;
+  color: #1e293b;
+  margin-bottom: 6px;
+  background: #f1f5f9;
+  border-left: 3px solid #1e3a5f;
+}
+
+/* ===== 週別活動 ===== */
+.weekly-log {
+  margin-bottom: 4px;
+  border: 1.5px solid #cbd5e1;
+}
+.week-row {
+  display: flex;
+  border-bottom: 1.5px solid #cbd5e1;
+}
+.week-row:last-child { border-bottom: none; }
+.week-label {
+  width: 60px;
+  background: #e8edf5;
+  padding: 5px 8px;
+  font-weight: 600;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  border-right: 1.5px solid #cbd5e1;
+  color: #334155;
+}
+.week-row .comment-text {
+  flex: 1;
+  padding: 5px 8px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.week-row .comment-text[contenteditable="true"]:empty::before {
+  content: attr(data-placeholder);
+  color: #aaa;
+  pointer-events: none;
+}
+
+/* ===== 学習情報行 ===== */
+.learn-info { margin-bottom: 4px; border: 1px solid #cbd5e1; }
+.learn-info .info-cell { min-width: 0; }
+.learn-info .info-cell .label { font-size: 10px; margin-right: 4px; padding: 2px 4px; }
+.input-sm {
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  padding: 3px 5px;
+  font-size: 11px;
+  font-family: inherit;
+  max-width: 85px;
+}
+.input-sm:focus { border-color: #2563eb; outline: none; box-shadow: 0 0 0 2px rgba(37,99,235,0.12); }
+
+/* editable value spans */
+.learn-info .value[contenteditable="true"] {
+  outline: none;
+  cursor: text;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+.learn-info .value[contenteditable="true"]:hover { background: #f8fafc; }
+.learn-info .value[contenteditable="true"]:focus { background: #fffde7; box-shadow: inset 0 0 0 1px #cbd5e1; }
+
+/* ===== ドロップダウン ===== */
+select.no-print-select {
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-family: inherit;
+  background: white;
+}
+select.no-print-select:focus { border-color: #2563eb; outline: none; }
+
+/* ===== フッター ===== */
+.report-footer {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid #cbd5e1;
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  color: #64748b;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.print-footer {
+  display: none;
+}
+
+/* 印刷時に表示するテキスト（画面では非表示） */
+.month-print, .scope-print, .attitude-print, .env-print { display: none; }
+
+/* ===== テスト未受験時の表示 ===== */
+.score-table-wrap { position: relative; }
+.score-table-wrap.no-test .score-table { opacity: 0.55; filter: grayscale(0.9); pointer-events: none; }
+.score-table-wrap.no-test [contenteditable] { pointer-events: none; }
+.no-test-notice {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  border-left: 3px solid #1e3a5f;
+  padding: 10px 14px;
+  border-radius: 4px;
+  font-size: 12px;
+  text-align: center;
+  margin-bottom: 6px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* PDF/印刷時はグレースケールを控えめに */
+@media print {
+  .score-table-wrap.no-test .score-table { opacity: 0.6; filter: grayscale(0.7); }
+}
+
+/* 成績推移セクションが非表示なら 学習状況 の改ページを解除 */
+body.no-trend .section-header.page-break-before {
+  break-before: auto !important;
+  page-break-before: auto !important;
+}
+
+/* ===== 閲覧専用モード (readonly-view) ===== */
+.readonly-view .no-print { display: none !important; }
+.readonly-view select.no-print-select { display: none !important; }
+.readonly-view .month-print,
+.readonly-view .scope-print,
+.readonly-view .attitude-print,
+.readonly-view .env-print { display: inline; font-weight: bold; }
+.readonly-view [contenteditable] { outline: none !important; background: transparent !important; cursor: default !important; }
+.readonly-view [contenteditable]:empty::before { content: none !important; }
+.readonly-view .editable-score { cursor: default !important; }
+
+/* ===== 印刷用スタイル ===== */
+@media print {
+  body { background: white !important; margin: 0; padding: 0; }
+  html { background: white !important; }
+  .no-print { display: none !important; }
+  .report-page {
+    box-shadow: none;
+    border: none;
+    outline: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow: visible;
+  }
+
+  select.no-print-select { display: none; }
+  .month-print, .scope-print, .attitude-print, .env-print {
+    display: inline;
+    font-weight: bold;
+  }
+
+  [contenteditable] {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  [contenteditable]:empty::before {
+    content: none !important;
+  }
+
+  .comment-block { break-inside: avoid; }
+  .score-table, .trend-table, .chart-container { break-inside: avoid; }
+  .report-page { max-height: none; min-height: auto; }
+  .page-break-before { break-before: page; }
+
+  .report-footer { display: none; }
+  .print-footer {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    font-weight: 400;
+    color: #94a3b8;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-top: 1px solid #cbd5e1;
+    padding-top: 4px;
+  }
+
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+/* 会話スコア手動入力セル */
+.editable-score {
+  background: #fffde7;
+  cursor: text;
+  outline: none;
+  border: 1px dashed #f39c12 !important;
+  transition: background .2s;
+}
+.editable-score:hover {
+  background: #fff3cd;
+}
+.editable-score:focus {
+  background: #ffffff;
+  border: 2px solid #f39c12 !important;
+}
+.editable-score:empty::before {
+  content: attr(data-placeholder);
+  color: #aaa;
+  font-size: 0.85em;
+}
+@media print {
+  .editable-score {
+    background: transparent !important;
+    border: none !important;
+  }
+  .editable-score:empty::before { content: '-'; }
+}

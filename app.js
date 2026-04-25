@@ -768,6 +768,15 @@ function renderMonthScores(result) {
     const grade = getGrade(total);
     document.getElementById('evalJapanese').textContent = grade.label;
     document.getElementById('evalJapaneseDesc').textContent = grade.desc;
+    // モダンデザイン用: ヒーロー欄
+    const heroTotal = document.getElementById('heroTotal');
+    if (heroTotal) heroTotal.textContent = total;
+    const heroGrade = document.getElementById('heroGrade');
+    if (heroGrade) heroGrade.textContent = grade.label;
+    const heroGradeDesc = document.getElementById('heroGradeDesc');
+    if (heroGradeDesc) heroGradeDesc.textContent = grade.desc;
+    const scope2 = document.getElementById('scopeLabel2');
+    if (scope2) scope2.textContent = document.getElementById('scopeLabel').textContent;
     // テスト成績あり → 未受験通知を消す
     const wrap = document.getElementById('scoreTableWrap');
     const notice = document.getElementById('noTestNotice');
@@ -785,6 +794,15 @@ function renderMonthScores(result) {
     document.getElementById('rExamDate').textContent = '-';
     document.getElementById('evalJapanese').textContent = '-';
     document.getElementById('evalJapaneseDesc').textContent = '-';
+    // モダン: ヒーロー欄もリセット
+    const heroTotal = document.getElementById('heroTotal');
+    if (heroTotal) heroTotal.textContent = '—';
+    const heroGrade = document.getElementById('heroGrade');
+    if (heroGrade) heroGrade.textContent = '—';
+    const heroGradeDesc = document.getElementById('heroGradeDesc');
+    if (heroGradeDesc) heroGradeDesc.textContent = '—';
+    const scope2 = document.getElementById('scopeLabel2');
+    if (scope2) scope2.textContent = document.getElementById('scopeLabel').textContent;
     // 未受験通知を表示
     const wrap = document.getElementById('scoreTableWrap');
     const notice = document.getElementById('noTestNotice');

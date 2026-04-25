@@ -3,175 +3,242 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>教育報告書</title>
+<title>教育報告書 | GROP VIETNAM</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="report.css?v=25">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="report.css?v=27">
 </head>
 <body>
-<div class="print-footer">GROP VIETNAM CO., LTD</div>
+<div class="print-footer">GROP VIETNAM CO., LTD · 教育報告書</div>
 
 <div class="no-print toolbar-top">
-  <a href="index.html">&larr; 一覧に戻る</a>
+  <a href="index.html">← 一覧に戻る</a>
   <div class="toolbar-actions">
+    <a href="#" id="designToggle" class="design-toggle" style="font-size:11px;padding:6px 10px;border:1px solid #cbd5e1;border-radius:6px;color:#475569;text-decoration:none">🎨 クラシック表示</a>
     <span id="saveStatus"></span>
+    <button onclick="window.print()" class="btn-print admin-only" style="display:none">PDF / 印刷</button>
     <button onclick="saveReport()" class="btn-save">保存</button>
-    <button onclick="window.print()" class="btn-print admin-only" style="display:none">PDF保存 / 印刷</button>
   </div>
 </div>
 
 <div class="report-page" id="reportPage">
 
-  <!-- ===== ヘッダー ===== -->
-  <div class="report-header">
-    <div class="logo-bar">
-      <img src="logo.png" alt="GROP VIETNAM" class="report-logo">
-    </div>
-    <div class="title-area">
-      <h1>教育課程
-        <select id="monthSelect" class="no-print-select">
-          <option>1</option><option>2</option><option>3</option><option>4</option>
-          <option>5</option><option>6</option><option>7</option><option>8</option>
-        </select>
-        <span class="month-print" id="monthPrint">1</span>ヶ月目　個人成績書
-      </h1>
-    </div>
-    <div class="header-body">
-      <div class="header-main">
-        <div class="info-row">
-          <div class="info-cell info-cell--fixed"><span class="label">社名</span><span class="value" id="rCompany">-</span></div>
-          <div class="info-cell"><span class="label">氏名</span>
-            <span class="value">
-              <span id="rNameKata">-</span><br>
-              <small id="rNameRomaji">-</small>
-            </span>
-          </div>
+  <!-- ===== Masthead ===== -->
+  <header class="report-header">
+    <div class="masthead">
+      <div class="mast-logo">
+        <img src="logo.png" alt="GROP VIETNAM" class="report-logo">
+      </div>
+      <div class="mast-title">
+        <div class="kicker">Monthly Education Report</div>
+        <div class="ja">
+          教育課程
+          <span class="month-select-wrap">
+            <select id="monthSelect" class="no-print-select">
+              <option>1</option><option>2</option><option>3</option><option>4</option>
+              <option>5</option><option>6</option><option>7</option><option>8</option>
+            </select>
+            <span class="month-num month-print" id="monthPrint">1</span>
+          </span>
+          ヶ月目 個人成績書
         </div>
-        <div class="info-row">
-          <div class="info-cell info-cell--fixed"><span class="label">生年月日</span><span class="value" id="rBirthDate">-</span></div>
-          <div class="info-cell info-cell--narrow"><span class="label">年齢</span><span class="value" id="rAge">-</span></div>
-          <div class="info-cell"><span class="label">受験日</span><span class="value" id="rExamDate">-</span></div>
+      </div>
+      <div class="mast-meta">
+        <strong>GROP VIETNAM</strong>
+        Education Division
+      </div>
+    </div>
+
+    <!-- ===== Identity card ===== -->
+    <div class="identity">
+      <div class="identity-fields">
+        <div class="id-field">
+          <span class="id-label">氏名 / Name</span>
+          <span class="id-value name">
+            <span class="kata" id="rNameKata">-</span>
+            <span class="romaji" id="rNameRomaji">-</span>
+          </span>
+        </div>
+        <div class="id-field">
+          <span class="id-label">会社 / Company</span>
+          <span class="id-value" id="rCompany">-</span>
+        </div>
+        <div class="id-field">
+          <span class="id-label">受験日 / Exam Date</span>
+          <span class="id-value" id="rExamDate">-</span>
+        </div>
+        <div class="id-field">
+          <span class="id-label">生年月日 / Date of Birth</span>
+          <span class="id-value" id="rBirthDate">-</span>
+        </div>
+        <div class="id-field">
+          <span class="id-label">年齢 / Age</span>
+          <span class="id-value" id="rAge">-</span>
+        </div>
+        <div class="id-field">
+          <span class="id-label">所属 / Division</span>
+          <span class="id-value" style="color:var(--ink-soft);font-weight:500">Education</span>
         </div>
       </div>
       <div class="photo-area" id="photoArea">
-        <div class="photo-placeholder">写真</div>
+        <div class="photo-placeholder">PHOTO</div>
       </div>
     </div>
-  </div>
+  </header>
 
   <!-- ===== テスト成績 ===== -->
-  <div class="section-header">テスト成績</div>
-  <div class="score-table-wrap" id="scoreTableWrap">
-  <div class="no-test-notice" id="noTestNotice" style="display:none">📝 教育カリキュラム進捗により未受験</div>
-  <table class="score-table">
-    <thead>
-      <tr>
-        <th class="col-label">試験範囲</th>
-        <th class="col-score col-vocab">語彙</th>
-        <th class="col-score col-grammar">文法</th>
-        <th class="col-score col-listen">聴解</th>
-        <th class="col-score col-conv">会話</th>
-        <th class="col-score col-total">合計</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="row-label" id="scopeLabel">第4課迄</td>
-        <td id="sVocab">-</td>
-        <td id="sGrammar">-</td>
-        <td id="sListen">-</td>
-        <td id="sConv" contenteditable="true" data-placeholder="入力" class="editable-score" title="クリックして会話の点数を入力（0-100）">-</td>
-        <td id="sTotal" class="total-cell">-</td>
-      </tr>
-      <tr class="row-avg">
-        <td class="row-label">平均点</td>
-        <td id="avgVocab">-</td>
-        <td id="avgGrammar">-</td>
-        <td id="avgListen">-</td>
-        <td id="avgConv">-</td>
-        <td id="avgTotal" class="total-cell">-</td>
-      </tr>
-      <tr class="row-dev">
-        <td class="row-label">偏差値</td>
-        <td id="devVocab">-</td>
-        <td id="devGrammar">-</td>
-        <td id="devListen">-</td>
-        <td id="devConv">-</td>
-        <td id="devTotal" class="total-cell">-</td>
-      </tr>
-      <tr>
-        <td class="row-label">順位</td>
-        <td id="rankVocab">-</td>
-        <td id="rankGrammar">-</td>
-        <td id="rankListen">-</td>
-        <td id="rankConv">-</td>
-        <td id="rankTotal" class="total-cell">-</td>
-      </tr>
-      <tr>
-        <td class="row-label">受験者数</td>
-        <td id="examCount" colspan="5">-</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="section-header">テスト成績 <span class="en">Test Result</span></div>
+  <div class="score-area">
+    <div class="score-table-wrap" id="scoreTableWrap">
+      <div class="no-test-notice" id="noTestNotice" style="display:none">教育カリキュラム進捗により未受験</div>
+
+      <div class="score-hero">
+        <div class="scope">
+          <span class="scope-label">試験範囲 / Scope</span>
+          <span class="scope-val" id="scopeLabel">第4課迄</span>
+        </div>
+        <div class="total-display">
+          <span class="total-label">Total</span>
+          <span class="total-num" id="heroTotal">—</span>
+          <span class="total-max">/ 400</span>
+        </div>
+        <div class="grade-display">
+          <div>
+            <span class="g-label">評価 / Grade</span>
+            <span class="g-pill" id="heroGrade">—</span>
+          </div>
+          <div class="g-desc" id="heroGradeDesc">成績評価を表示します</div>
+        </div>
+      </div>
+
+      <table class="score-table">
+        <thead>
+          <tr>
+            <th class="col-label">試験範囲</th>
+            <th>語彙 / Vocab</th>
+            <th>文法 / Grammar</th>
+            <th>聴解 / Listen</th>
+            <th>会話 / Conv</th>
+            <th class="col-total">合計 / Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="row-label"><span id="scopeLabel2">—</span></td>
+            <td id="sVocab">-</td>
+            <td id="sGrammar">-</td>
+            <td id="sListen">-</td>
+            <td id="sConv" contenteditable="true" data-placeholder="入力" class="editable-score" title="クリックして会話の点数を入力（0-100）">-</td>
+            <td id="sTotal" class="total-cell">-</td>
+          </tr>
+          <tr class="row-avg">
+            <td class="row-label">Average</td>
+            <td id="avgVocab">-</td>
+            <td id="avgGrammar">-</td>
+            <td id="avgListen">-</td>
+            <td id="avgConv">-</td>
+            <td id="avgTotal" class="total-cell">-</td>
+          </tr>
+          <tr class="row-dev">
+            <td class="row-label">Deviation</td>
+            <td id="devVocab">-</td>
+            <td id="devGrammar">-</td>
+            <td id="devListen">-</td>
+            <td id="devConv">-</td>
+            <td id="devTotal" class="total-cell">-</td>
+          </tr>
+          <tr>
+            <td class="row-label">Rank</td>
+            <td id="rankVocab">-</td>
+            <td id="rankGrammar">-</td>
+            <td id="rankListen">-</td>
+            <td id="rankConv">-</td>
+            <td id="rankTotal" class="total-cell">-</td>
+          </tr>
+          <tr>
+            <td class="row-label">Examinees</td>
+            <td id="examCount" colspan="5">-</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <!-- ===== 評価 ===== -->
   <div class="eval-row">
     <div class="eval-box">
-      <span class="eval-label">日本語</span>
-      <span class="eval-grade" id="evalJapanese">-</span>
+      <div class="eval-label-wrap">
+        <span class="eval-label">日本語 / JP</span>
+        <span class="eval-grade" id="evalJapanese">-</span>
+      </div>
       <span class="eval-desc" id="evalJapaneseDesc">-</span>
     </div>
     <div class="eval-box">
-      <span class="eval-label">態度</span>
-      <select id="evalAttitude" class="no-print-select">
-        <option>秀</option><option>優</option><option>良</option><option>可</option><option>不可</option>
-      </select>
-      <span class="attitude-print" id="attitudePrint">秀</span>
+      <div class="eval-label-wrap">
+        <span class="eval-label">態度 / Attitude</span>
+        <span class="eval-grade">
+          <select id="evalAttitude" class="no-print-select" style="font-size:18px;font-weight:700;color:var(--navy);padding:0 4px;border:none;background:transparent">
+            <option>秀</option><option>優</option><option>良</option><option>可</option><option>不可</option>
+          </select>
+          <span class="attitude-print" id="attitudePrint">秀</span>
+        </span>
+      </div>
       <span class="eval-desc" id="evalAttitudeDesc">-</span>
     </div>
   </div>
 
   <!-- ===== 診断コメント ===== -->
-  <div class="section-header">診断コメント</div>
+  <div class="section-header">診断コメント <span class="en">Diagnosis</span></div>
   <div class="diagnosis-box" id="diagnosisArea">
-    <span style="color:#aaa">回答データがある場合、自動で診断コメントを表示します。</span>
+    <span style="color:var(--ink-mute)">回答データがある場合、自動で診断コメントを表示します。</span>
   </div>
 
   <!-- ===== 成績推移 ===== -->
   <div id="trendSection">
-    <div class="section-header">成績推移</div>
+    <div class="section-header">成績推移 <span class="en">Performance Trend</span></div>
     <div class="chart-container">
       <canvas id="trendChart"></canvas>
     </div>
     <table class="trend-table">
       <thead>
         <tr>
-          <th>試験範囲</th><th>語彙</th><th>文法</th><th>聴解</th><th>会話</th><th>合計</th>
+          <th style="text-align:left;padding-left:10px">試験範囲</th><th>語彙</th><th>文法</th><th>聴解</th><th>会話</th><th>合計</th>
         </tr>
       </thead>
       <tbody id="trendBody">
-        <tr><td colspan="6" style="color:#999;text-align:center">データなし</td></tr>
+        <tr><td colspan="6" style="color:var(--ink-mute);text-align:center">データなし</td></tr>
       </tbody>
     </table>
   </div>
 
   <!-- ===== 学習状況 ===== -->
-  <div class="section-header page-break-before">学習状況</div>
-  <div class="info-row learn-info">
-    <div class="info-cell"><span class="label">学習進捗</span><span class="value" contenteditable="true" id="learnProgress" data-placeholder="例：第18課">-</span></div>
-    <div class="info-cell"><span class="label">事前教育開始日</span><span class="value" id="learnStart">-</span></div>
-    <div class="info-cell"><span class="label">出国予定日</span><span class="value" id="learnDepart">-</span></div>
-    <div class="info-cell"><span class="label">生活環境</span>
-      <select id="learnEnv" class="input-sm no-print-select">
-        <option>寮生活</option><option>自宅通学</option>
-      </select>
-      <span class="env-print" id="envPrint">寮生活</span>
+  <div class="section-header page-break-before">学習状況 <span class="en">Learning Status</span></div>
+  <div class="learn-info">
+    <div class="id-field">
+      <span class="id-label">学習進捗 / Progress</span>
+      <span class="id-value value" contenteditable="true" id="learnProgress" data-placeholder="例：第18課" style="color:var(--green-2)">-</span>
+    </div>
+    <div class="id-field">
+      <span class="id-label">事前教育開始日 / Start</span>
+      <span class="id-value" id="learnStart">-</span>
+    </div>
+    <div class="id-field">
+      <span class="id-label">出国予定日 / Departure</span>
+      <span class="id-value" id="learnDepart">-</span>
+    </div>
+    <div class="id-field">
+      <span class="id-label">生活環境 / Environment</span>
+      <span class="id-value">
+        <select id="learnEnv" class="input-sm no-print-select">
+          <option>寮生活</option><option>自宅通学</option>
+        </select>
+        <span class="env-print" id="envPrint">寮生活</span>
+      </span>
     </div>
   </div>
 
-  <div class="section-sub">週別活動</div>
+  <div class="section-sub">週別活動 / Weekly Activities</div>
   <div class="weekly-log">
     <div class="week-row" id="week1">
       <div class="week-label">第1週</div>
@@ -191,60 +258,62 @@
     </div>
   </div>
 
-  <div class="section-sub">学習状況詳細</div>
+  <div class="section-sub">学習状況詳細 / Learning Notes</div>
   <div class="comment-grid">
     <div class="comment-block good">
-      <div class="comment-label">Good</div>
+      <div class="comment-label">Good · 良い点</div>
       <div class="comment-text" contenteditable="true" id="learnGood" data-placeholder="学習面の良い点..."></div>
     </div>
     <div class="comment-block bad">
-      <div class="comment-label">Bad</div>
+      <div class="comment-label">Bad · 課題</div>
       <div class="comment-text" contenteditable="true" id="learnBad" data-placeholder="学習面の課題..."></div>
     </div>
   </div>
   <div class="comment-grid">
     <div class="comment-block">
-      <div class="comment-label">問題点に対する対策</div>
+      <div class="comment-label">Measure · 問題点に対する対策</div>
       <div class="comment-text" contenteditable="true" id="learnMeasure" data-placeholder="対策を入力..."></div>
     </div>
     <div class="comment-block">
-      <div class="comment-label">改善した点</div>
+      <div class="comment-label">Improve · 改善した点</div>
       <div class="comment-text" contenteditable="true" id="learnImprove" data-placeholder="改善点を入力..."></div>
     </div>
   </div>
 
   <!-- ===== 生活態度詳細 ===== -->
-  <div class="section-header">生活状況・態度詳細</div>
+  <div class="section-header">生活状況・態度詳細 <span class="en">Daily Life &amp; Attitude</span></div>
   <div class="comment-grid">
     <div class="comment-block good">
-      <div class="comment-label">Good</div>
+      <div class="comment-label">Good · 良い点</div>
       <div class="comment-text" contenteditable="true" id="lifeGood" data-placeholder="良い点を入力..."></div>
     </div>
     <div class="comment-block bad">
-      <div class="comment-label">Bad</div>
+      <div class="comment-label">Bad · 改善が必要</div>
       <div class="comment-text" contenteditable="true" id="lifeBad" data-placeholder="改善が必要な点を入力..."></div>
     </div>
   </div>
   <div class="comment-grid">
     <div class="comment-block">
-      <div class="comment-label">問題点に対する対策</div>
+      <div class="comment-label">Measure · 問題点に対する対策</div>
       <div class="comment-text" contenteditable="true" id="lifeMeasure" data-placeholder="対策を入力..."></div>
     </div>
     <div class="comment-block">
-      <div class="comment-label">改善した点</div>
+      <div class="comment-label">Improve · 改善した点</div>
       <div class="comment-text" contenteditable="true" id="lifeImprove" data-placeholder="改善点を入力..."></div>
     </div>
   </div>
 
   <div class="comment-grid">
     <div class="comment-block">
-      <div class="comment-label">人物像、交友関係など</div>
+      <div class="comment-label">Personality · 人物像・交友関係など</div>
       <div class="comment-text" contenteditable="true" id="lifePersonality" data-placeholder="人物像や交友関係について入力..."></div>
     </div>
   </div>
 
   <div class="report-footer">
-    GROP VIETNAM CO., LTD
+    <span>GROP VIETNAM CO., LTD</span>
+    <span class="mark">● Monthly Education Report</span>
+    <span>Confidential</span>
   </div>
 
 </div><!-- /report-page -->
@@ -253,43 +322,22 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="auth.js?v=5"></script>
-<script src="app.js?v=26"></script>
+<script src="app.js?v=27"></script>
 <script>
-  (async function() {
-    const auth = await checkAuth();
-    if (!auth) return;
-    setupAuthUI();
-    await loadReport();
-  })();
-
-  document.getElementById('monthSelect').addEventListener('change', function() {
-    document.getElementById('monthPrint').textContent = this.value;
-    switchMonth(parseInt(this.value));
+// デザイン切替（クラシック ↔ モダン）
+(function() {
+  const btn = document.getElementById('designToggle');
+  if (!btn) return;
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    localStorage.setItem('reportDesign', 'classic');
+    location.href = 'report-classic.html' + location.search + location.hash;
   });
-  document.getElementById('evalAttitude').addEventListener('change', function() {
-    document.getElementById('attitudePrint').textContent = this.value;
-    document.getElementById('evalAttitudeDesc').textContent = getAttitudeDesc(this.value);
-  });
-  document.getElementById('learnEnv').addEventListener('change', function() {
-    document.getElementById('envPrint').textContent = this.value;
-  });
-
-  // 会話スコアの手動入力（blur or Enterで保存）
-  const convCell = document.getElementById('sConv');
-  convCell.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') { e.preventDefault(); convCell.blur(); }
-  });
-  convCell.addEventListener('blur', async function() {
-    const text = convCell.textContent.trim();
-    const val = text === '' || text === '-' ? null : parseInt(text, 10);
-    if (text !== '' && text !== '-' && (isNaN(val) || val < 0 || val > 100)) {
-      alert('0〜100の数値を入力してください');
-      return;
-    }
-    if (typeof saveConversationScore === 'function') {
-      await saveConversationScore(val);
-    }
-  });
+  // localStorage に classic 指定があり、URL に明示的な切替なしなら classic ページへ
+  if (localStorage.getItem('reportDesign') === 'classic' && !location.search.includes('design=modern')) {
+    location.href = 'report-classic.html' + location.search + location.hash;
+  }
+})();
 </script>
 </body>
 </html>
