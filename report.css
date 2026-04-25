@@ -867,47 +867,47 @@ body.no-trend .section-header.page-break-before {
     border-radius: 0;
   }
 
-  /* ====== 2ページ収納用の余白圧縮 ====== */
-  .report-header { margin-bottom: 8px; }
-  .masthead { padding: 2px 0 8px; gap: 12px; }
-  .identity { margin: 8px 0 6px; gap: 8px; }
-  .id-field { padding: 5px 9px 5px; }
-  .photo-area { aspect-ratio: 3/4.2; }
+  /* ====== 2ページ収納用調整：ページ1はゆとり、ページ2はやや圧縮 ====== */
 
-  .section-header { margin: 8px 0 4px; padding: 0 0 2px; font-size: 10.5px; }
-  .section-sub { margin: 5px 0 3px; padding: 2px 0 2px 9px; font-size: 10px; }
+  /* ページ1: ヘッダー〜成績推移 — ゆとりを持たせる */
+  .report-header { margin-bottom: 14px; }
+  .masthead { padding: 4px 0 12px; gap: 16px; }
+  .identity { margin: 14px 0 12px; gap: 12px; }
+  .id-field { padding: 8px 12px 9px; }
 
-  .score-hero { padding: 6px 14px; }
-  .score-hero .total-num { font-size: 18px; }
-  .score-hero .g-pill { width: 24px; height: 24px; font-size: 12px; }
-  .score-table th, .score-table td { padding: 4px 6px; }
-  .score-table thead th { padding: 5px 4px; }
-  .score-table tbody tr:first-child td:not(.row-label) { font-size: 13px; }
-  .score-table tbody tr:first-child td.total-cell { font-size: 14px; }
-  .score-table .row-avg td:not(.row-label),
-  .score-table .row-dev td:not(.row-label) { font-size: 10px; }
+  .section-header { margin: 14px 0 8px; padding: 0 0 4px; font-size: 11px; }
+  .section-sub { margin: 9px 0 6px; padding: 3px 0 3px 10px; font-size: 10.5px; }
 
-  .eval-row { gap: 6px; margin: 6px 0; }
-  .eval-box { padding: 6px 10px; }
-  .eval-grade { font-size: 18px; }
+  .score-hero { padding: 10px 16px; }
+  .score-hero .total-num { font-size: 22px; }
+  .score-hero .g-pill { width: 30px; height: 30px; font-size: 14px; }
+  .score-table th, .score-table td { padding: 6px 8px; }
+  .score-table thead th { padding: 7px 4px; }
+  .score-table tbody tr:first-child td:not(.row-label) { font-size: 15px; }
+  .score-table tbody tr:first-child td.total-cell { font-size: 16px; }
 
-  .diagnosis-box { padding: 7px 12px; line-height: 1.55; font-size: 10px; margin-bottom: 4px; }
+  .eval-row { gap: 8px; margin: 10px 0; }
+  .eval-box { padding: 10px 14px; }
+  .eval-grade { font-size: 22px; }
 
-  .chart-container { height: 150px; padding: 6px 8px 4px; margin: 4px 0 4px; }
-  .trend-table th, .trend-table td { padding: 3px 5px; font-size: 9px; }
-  .trend-table th { padding: 4px 5px; }
+  .diagnosis-box { padding: 11px 14px; line-height: 1.7; font-size: 10.5px; margin-bottom: 8px; }
 
-  .learn-info .id-field { padding: 5px 9px; }
-  .week-row { grid-template-columns: 56px 1fr; }
-  .week-label { padding: 4px 6px; font-size: 9.5px; }
-  .week-row .comment-text { padding: 4px 10px; font-size: 9.5px; min-height: 22px; line-height: 1.45; }
+  .chart-container { height: 175px; padding: 9px 11px 5px; margin: 6px 0 8px; }
 
-  .comment-grid { gap: 5px; margin-bottom: 4px; }
-  .comment-label { padding: 3px 10px; font-size: 8.5px; }
-  .comment-block .comment-text { padding: 5px 10px; font-size: 9.5px; min-height: 28px; line-height: 1.5; }
+  /* ページ2: 学習状況以降 — やや圧縮（収納用） */
+  .learn-info { margin-bottom: 5px; }
+  .learn-info .id-field { padding: 6px 10px; }
+  .week-row { grid-template-columns: 60px 1fr; }
+  .week-label { padding: 5px 7px; font-size: 10px; }
+  .week-row .comment-text { padding: 5px 10px; font-size: 10px; min-height: 26px; line-height: 1.5; }
+  .weekly-log { margin-bottom: 5px; }
+
+  .comment-grid { gap: 6px; margin-bottom: 5px; }
+  .comment-label { padding: 4px 11px; font-size: 9px; }
+  .comment-block .comment-text { padding: 6px 11px; font-size: 10px; min-height: 32px; line-height: 1.55; }
 
   .report-footer { display: none; }
-  /* ====== 余白圧縮 ここまで ====== */
+  /* ====== 余白調整 ここまで ====== */
 
   select.no-print-select { display: none; }
   .month-print, .scope-print, .attitude-print, .env-print {
