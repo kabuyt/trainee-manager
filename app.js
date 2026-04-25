@@ -933,7 +933,8 @@ async function saveReport() {
 
 function renderReport(t, results, classResults) {
   // 基本情報
-  document.getElementById('rCompany').textContent = t.company || '-';
+  const companyText = [t.company, t.class_group].filter(Boolean).join(' / ') || '-';
+  document.getElementById('rCompany').textContent = companyText;
   document.getElementById('rNameKata').textContent = t.name_katakana || '-';
   document.getElementById('rNameRomaji').textContent = t.name_romaji || '-';
   document.getElementById('rBirthDate').textContent = t.birth_date ? formatDate(t.birth_date) : '-';
