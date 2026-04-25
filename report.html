@@ -200,15 +200,9 @@
     <div class="chart-container">
       <canvas id="trendChart"></canvas>
     </div>
-    <table class="trend-table">
-      <thead>
-        <tr>
-          <th style="text-align:left;padding-left:10px">試験範囲</th><th>語彙</th><th>文法</th><th>聴解</th><th>会話</th><th>合計</th>
-        </tr>
-      </thead>
-      <tbody id="trendBody">
-        <tr><td colspan="6" style="color:var(--ink-mute);text-align:center">データなし</td></tr>
-      </tbody>
+    <!-- データテーブルは非表示 (グラフのみ表示)。trendBody はグラフ用データバインディング用に残置 -->
+    <table class="trend-table" style="display:none">
+      <tbody id="trendBody"></tbody>
     </table>
   </div>
 
