@@ -933,7 +933,7 @@ async function saveReport() {
 
 function renderReport(t, results, classResults) {
   // 基本情報
-  const companyText = [t.company, t.class_group].filter(Boolean).join(' / ') || '-';
+  const companyText = [t.company, t.class_group].filter(Boolean).join(' ').trim() || '-';
   document.getElementById('rCompany').textContent = companyText;
   document.getElementById('rNameKata').textContent = t.name_katakana || '-';
   document.getElementById('rNameRomaji').textContent = t.name_romaji || '-';
