@@ -603,7 +603,7 @@ async function saveConversationScore(value) {
   const row = _reportResults.find(r => matchTest(r, map));
   if (row) {
     const t = (row.score_vocab ?? 0) + (row.score_grammar ?? 0) + (row.score_listening ?? 0) + (row.score_conversation ?? 0);
-    document.getElementById('sTotal').textContent = t + '/400';
+    document.getElementById('sTotal').textContent = t;
   }
 }
 
@@ -735,7 +735,7 @@ function renderMonthScores(result) {
     document.getElementById('sGrammar').textContent = g;
     document.getElementById('sListen').textContent = l;
     document.getElementById('sConv').textContent = c;
-    document.getElementById('sTotal').textContent = total + '/400';
+    document.getElementById('sTotal').textContent = total;
 
     // 統計
     // 新旧両フォーマットの test_name を同一視（test2 <-> 第5-11課）
