@@ -322,21 +322,31 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="auth.js?v=5"></script>
-<script src="app.js?v=27"></script>
+<script src="app.js?v=28"></script>
 <script>
-// デザイン切替（クラシック ↔ モダン）
+// localStorage に classic 指定があれば classic ページへリダイレクト
 (function() {
-  const btn = document.getElementById('designToggle');
-  if (!btn) return;
-  btn.addEventListener('click', (e) => {
-    e.preventDefault();
-    localStorage.setItem('reportDesign', 'classic');
-    location.href = 'report-classic.html' + location.search + location.hash;
-  });
-  // localStorage に classic 指定があり、URL に明示的な切替なしなら classic ページへ
   if (localStorage.getItem('reportDesign') === 'classic' && !location.search.includes('design=modern')) {
     location.href = 'report-classic.html' + location.search + location.hash;
+    return;
   }
+  // デザイン切替ボタン
+  const btn = document.getElementById('designToggle');
+  if (btn) {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      localStorage.setItem('reportDesign', 'classic');
+      location.href = 'report-classic.html' + location.search + location.hash;
+    });
+  }
+})();
+
+// 認証してレポート読み込み
+(async function() {
+  const auth = await checkAuth();
+  if (!auth) return;
+  if (typeof setupAuthUI === 'function') setupAuthUI();
+  await loadReport();
 })();
 </script>
 </body>
