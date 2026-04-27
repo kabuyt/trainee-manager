@@ -163,6 +163,8 @@ function exportLoginCards() {
 
   const escape = s => String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
+  const qrUrl = (data) => `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(data)}&size=140x140&margin=4`;
+
   const cards = trainees.map(t => {
     const sid = t.student_id || '';
     const pw = (t.birth_date || '').replace(/-/g, '');
@@ -173,14 +175,20 @@ function exportLoginCards() {
     <span class="card-id">${escape(sid)}</span>
   </div>
   <div class="card-body">
-    <table>
-      <tr><th>名前 (Katakana)</th><td>${escape(t.name_katakana)}</td></tr>
-      <tr><th>名前 (Romaji)</th><td>${escape(t.name_romaji)}</td></tr>
-      <tr><th>クラス / 会社</th><td>${escape(t.class_group)} / ${escape(t.company)}</td></tr>
-      <tr class="login-row"><th>サイト URL</th><td class="big">${LOGIN_URL}</td></tr>
-      <tr class="login-row"><th>学生 ID</th><td class="big mono">${escape(sid)}</td></tr>
-      <tr class="login-row"><th>パスワード</th><td class="big mono">${escape(pw)}</td></tr>
-    </table>
+    <div class="card-content">
+      <table>
+        <tr><th>名前 (Katakana)</th><td>${escape(t.name_katakana)}</td></tr>
+        <tr><th>名前 (Romaji)</th><td>${escape(t.name_romaji)}</td></tr>
+        <tr><th>クラス / 会社</th><td>${escape(t.class_group)} / ${escape(t.company)}</td></tr>
+        <tr class="login-row"><th>サイト URL</th><td class="big">${LOGIN_URL}</td></tr>
+        <tr class="login-row"><th>学生 ID</th><td class="big mono">${escape(sid)}</td></tr>
+        <tr class="login-row"><th>パスワード</th><td class="big mono">${escape(pw)}</td></tr>
+      </table>
+      <div class="qr-box">
+        <img src="${qrUrl(LOGIN_URL)}" alt="QR" class="qr-img">
+        <div class="qr-label">📱 QRで開く</div>
+      </div>
+    </div>
     <div class="note">
       ※ パスワードは生年月日 (YYYYMMDD) です。<br>
       ※ Mật khẩu là ngày sinh (YYYYMMDD).
@@ -220,6 +228,8 @@ body { font-family: "Yu Gothic", "Meiryo", sans-serif; margin: 0; padding: 8px; 
 .card-title { font-size: 13px; font-weight: bold; color: #2c3e50; }
 .card-id { font-size: 16px; font-weight: bold; color: #c0392b; font-family: monospace; }
 .card-body { flex: 1; }
+.card-content { display: flex; gap: 10px; align-items: flex-start; }
+.card-content table { flex: 1; }
 .card table { width: 100%; border-collapse: collapse; font-size: 12px; }
 .card th { text-align: left; padding: 3px 6px; color: #555; font-weight: normal; width: 35%; vertical-align: top; }
 .card td { padding: 3px 6px; word-break: break-word; }
@@ -228,6 +238,9 @@ body { font-family: "Yu Gothic", "Meiryo", sans-serif; margin: 0; padding: 8px; 
 .big { font-size: 14px; font-weight: bold; }
 .mono { font-family: monospace; }
 .note { font-size: 10px; color: #777; margin-top: 8px; padding-top: 6px; border-top: 1px dashed #ccc; }
+.qr-box { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+.qr-img { width: 80px; height: 80px; border: 1px solid #ddd; padding: 2px; background: #fff; }
+.qr-label { font-size: 9px; color: #555; margin-top: 3px; letter-spacing: 0.05em; }
 @media print {
   body { background: #fff; padding: 0; }
   .toolbar { display: none; }
