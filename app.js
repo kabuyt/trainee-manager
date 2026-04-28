@@ -651,11 +651,13 @@ async function loadReport() {
     ]);
     if (tErr) throw tErr;
 
-    // 同グループ（class_group）のテスト結果 → 順位・受験者数 用
+    // 同グループ（同じ company + class_group）のテスト結果 → 順位・受験者数 用
     let classResults = [];
-    if (trainee.class_group) {
-      const { data: classTrainees } = await supabase
-        .from('trainees').select('id').eq('class_group', trainee.class_group);
+    if (trainee.company || trainee.class_group) {
+      let q = supabase.from('trainees').select('id');
+      if (trainee.company) q = q.eq('company', trainee.company);
+      if (trainee.class_group) q = q.eq('class_group', trainee.class_group);
+      const { data: classTrainees } = await q;
       if (classTrainees && classTrainees.length > 0) {
         const ids = classTrainees.map(t => t.id);
         const { data: allResults } = await supabase
@@ -759,14 +761,25 @@ function renderMonthScores(result) {
     // 統計
     // 新旧両フォーマットの test_name を同一視（test2 <-> 第5-11課）
     const map = MONTH_TEST_MAP.find(m => matchTest(result, m));
+    // 同一 trainee_id の重複（再受験など）は最新 test_date のみ採用
+    const dedupeByTrainee = (arr) => {
+      const m = new Map();
+      arr.forEach(r => {
+        const cur = m.get(r.trainee_id);
+        if (!cur || (r.test_date || '') > (cur.test_date || '')) m.set(r.trainee_id, r);
+      });
+      return Array.from(m.values());
+    };
     // 同グループ内（順位・受験者数 用）
-    const sameTest = map
+    const sameTestRaw = map
       ? _reportClassResults.filter(r => matchTest(r, map))
       : _reportClassResults.filter(r => r.test_name === result.test_name);
+    const sameTest = dedupeByTrainee(sameTestRaw);
     // 全実習生（平均・偏差値 用）
-    const sameTestGlobal = map
+    const sameTestGlobalRaw = map
       ? _reportAllTestResults.filter(r => matchTest(r, map))
       : _reportAllTestResults.filter(r => r.test_name === result.test_name);
+    const sameTestGlobal = dedupeByTrainee(sameTestGlobalRaw);
     const stats = calcStats(sameTest, result, sameTestGlobal);
     document.getElementById('avgVocab').textContent = stats.avg.vocab;
     document.getElementById('avgGrammar').textContent = stats.avg.grammar;
