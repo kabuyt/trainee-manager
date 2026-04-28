@@ -421,24 +421,18 @@ body {
 }
 .score-table thead .col-total { color: #fff; background: var(--navy-2); }
 
+/* 行ラベル（得点/平均/偏差値/順位/受験者数）: 全行統一 */
 .score-table td.row-label {
   background: var(--paper-2);
-  font-family: 'Inter', sans-serif;
-  font-size: 8.5px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: .16em;
-  color: var(--ink-soft);
+  letter-spacing: .04em;
+  color: var(--navy);
   text-align: left;
   padding-left: 12px;
-  text-transform: uppercase;
 }
-.score-table tbody tr:first-child td.row-label {
-  font-family: 'Noto Sans JP', sans-serif;
-  letter-spacing: .05em;
-  color: var(--navy);
-  font-size: 10px;
-  text-transform: none;
-}
+/* 得点行: 数字を大きく強調（既存仕様） */
 .score-table tbody tr:first-child td:not(.row-label) {
   font-family: 'Inter', sans-serif;
   font-size: 15px;
@@ -452,30 +446,14 @@ body {
   color: var(--green-2);
   background: #f4faf1;
 }
-.score-table .row-avg td:not(.row-label) {
+/* 平均・偏差値・順位・受験者数 行: フォントサイズ統一 */
+.score-table tbody tr:not(:first-child) td:not(.row-label) {
   font-family: 'Inter', sans-serif;
-  font-size: 11px;
-  color: var(--ink-soft);
-  font-weight: 400;
-}
-.score-table .row-dev td:not(.row-label) {
-  font-family: 'Inter', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--navy);
-}
-.score-table tr:nth-child(4) td:not(.row-label) {
-  font-family: 'Inter', sans-serif;
-  font-size: 10.5px;
-  color: var(--ink);
+  font-size: 12px;
   font-weight: 500;
+  color: var(--ink);
 }
-.score-table tr:last-child td:not(.row-label) {
-  font-family: 'Inter', sans-serif;
-  font-size: 10.5px;
-  color: var(--ink-soft);
-  font-weight: 400;
-}
+.score-table .row-dev td:not(.row-label) { font-weight: 600; color: var(--navy); }
 
 .editable-score {
   background: #fff8e1 !important;
