@@ -786,7 +786,7 @@ body {
   padding-top: 10px;
   border-top: 1px solid var(--rule);
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   font-family: 'Inter', sans-serif;
   font-size: 8.5px;
@@ -795,7 +795,6 @@ body {
   letter-spacing: .28em;
   text-transform: uppercase;
 }
-.report-footer .mark { color: var(--green-2); font-weight: 600; }
 .print-footer { display: none; }
 
 /* ===== Toggles ===== */
