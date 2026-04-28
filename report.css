@@ -283,7 +283,7 @@ body {
 
 .score-hero {
   display: grid;
-  grid-template-columns: 1.1fr 1fr 1.4fr;
+  grid-template-columns: 1fr auto;
   background: var(--paper-2);
   color: var(--ink);
   border: 1px solid var(--rule);
@@ -318,10 +318,10 @@ body {
 .score-hero .total-display {
   display: flex;
   align-items: baseline;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 5px;
   align-self: center;
-  padding: 0 10px;
+  padding: 0 4px;
 }
 .score-hero .total-label {
   font-family: 'Inter', sans-serif;
