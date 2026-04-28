@@ -189,14 +189,13 @@ body {
 .id-field:nth-child(3n) { border-right: none; }
 .id-field:nth-last-child(-n+3) { border-bottom: none; }
 .id-label {
-  font-family: 'Inter', sans-serif;
-  font-size: 8px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 9px;
   font-weight: 600;
-  letter-spacing: .22em;
+  letter-spacing: .06em;
   color: var(--ink-mute);
   display: block;
   margin-bottom: 3px;
-  text-transform: uppercase;
 }
 .id-value {
   font-size: 12px;
@@ -303,12 +302,11 @@ body {
 .score-hero .scope { display: flex; flex-direction: column; gap: 4px; align-self: center; }
 .score-hero .scope-pair { display: flex; align-items: baseline; gap: 8px; }
 .score-hero .scope-label {
-  font-family: 'Inter', sans-serif;
-  font-size: 8px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 9px;
   font-weight: 600;
-  letter-spacing: .22em;
+  letter-spacing: .06em;
   color: var(--ink-mute);
-  text-transform: uppercase;
 }
 .score-hero .scope-val {
   font-size: 11.5px;
@@ -325,12 +323,11 @@ body {
   padding: 0 4px;
 }
 .score-hero .total-label {
-  font-family: 'Inter', sans-serif;
-  font-size: 8px;
-  letter-spacing: .22em;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 9px;
+  letter-spacing: .06em;
   color: var(--ink-mute);
   align-self: center;
-  text-transform: uppercase;
   font-weight: 600;
 }
 .score-hero .total-num {
@@ -404,13 +401,12 @@ body {
 
 .score-table thead th {
   background: var(--navy);
-  font-family: 'Inter', sans-serif;
-  font-size: 8.5px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 10px;
   font-weight: 600;
-  letter-spacing: .16em;
-  color: rgba(255,255,255,.85);
+  letter-spacing: .08em;
+  color: rgba(255,255,255,.92);
   padding: 7px 4px;
-  text-transform: uppercase;
   border-color: rgba(255,255,255,.12);
 }
 .score-table .col-label { width: 82px; }
@@ -507,11 +503,11 @@ body {
   min-width: 66px;
 }
 .eval-label {
-  font-family: 'Inter', sans-serif;
-  font-size: 8px;
-  letter-spacing: .24em;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: .06em;
   color: var(--ink-mute);
-  text-transform: uppercase;
 }
 .eval-grade {
   font-size: 22px;

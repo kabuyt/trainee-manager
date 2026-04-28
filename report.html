@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="report.css?v=36">
+<link rel="stylesheet" href="report.css?v=39">
 </head>
 <body>
 <div class="print-footer">GROP VIETNAM CO., LTD · 教育報告書</div>
@@ -54,30 +54,30 @@
     <div class="identity">
       <div class="identity-fields">
         <div class="id-field">
-          <span class="id-label">氏名 / Name</span>
+          <span class="id-label">氏名</span>
           <span class="id-value name">
             <span class="kata" id="rNameKata">-</span>
             <span class="romaji" id="rNameRomaji">-</span>
           </span>
         </div>
         <div class="id-field">
-          <span class="id-label">会社 / Company</span>
+          <span class="id-label">会社</span>
           <span class="id-value" id="rCompany">-</span>
         </div>
         <div class="id-field">
-          <span class="id-label">監理団体 / Supervisor</span>
+          <span class="id-label">監理団体</span>
           <span class="id-value" id="rSupervisor">-</span>
         </div>
         <div class="id-field">
-          <span class="id-label">生年月日 / Date of Birth</span>
+          <span class="id-label">生年月日</span>
           <span class="id-value" id="rBirthDate">-</span>
         </div>
         <div class="id-field">
-          <span class="id-label">年齢 / Age</span>
+          <span class="id-label">年齢</span>
           <span class="id-value" id="rAge">-</span>
         </div>
         <div class="id-field">
-          <span class="id-label">送り出し機関 / Sender</span>
+          <span class="id-label">送り出し機関</span>
           <span class="id-value" id="rSender">-</span>
         </div>
       </div>
@@ -88,7 +88,7 @@
   </header>
 
   <!-- ===== テスト成績 ===== -->
-  <div class="section-header">テスト成績 <span class="en">Test Result</span></div>
+  <div class="section-header">テスト成績</div>
   <div class="score-area">
     <div class="score-table-wrap" id="scoreTableWrap">
       <div class="no-test-notice" id="noTestNotice" style="display:none">教育カリキュラム進捗により未受験</div>
@@ -96,16 +96,16 @@
       <div class="score-hero">
         <div class="scope">
           <div class="scope-pair">
-            <span class="scope-label">試験範囲 / Scope</span>
+            <span class="scope-label">試験範囲</span>
             <span class="scope-val" id="scopeLabel">第4課迄</span>
           </div>
           <div class="scope-pair">
-            <span class="scope-label">受験日 / Exam Date</span>
+            <span class="scope-label">受験日</span>
             <span class="scope-val" id="rExamDate">-</span>
           </div>
         </div>
         <div class="total-display">
-          <span class="total-label">Total</span>
+          <span class="total-label">合計</span>
           <span class="total-num" id="heroTotal">—</span>
           <span class="total-max">/ 400</span>
         </div>
@@ -115,11 +115,11 @@
         <thead>
           <tr>
             <th class="col-label">試験範囲</th>
-            <th>語彙 / Vocab</th>
-            <th>文法 / Grammar</th>
-            <th>聴解 / Listen</th>
-            <th>会話 / Conv</th>
-            <th class="col-total">合計 / Total</th>
+            <th>語彙</th>
+            <th>文法</th>
+            <th>聴解</th>
+            <th>会話</th>
+            <th class="col-total">合計</th>
           </tr>
         </thead>
         <tbody>
@@ -168,14 +168,14 @@
   <div class="eval-row">
     <div class="eval-box">
       <div class="eval-label-wrap">
-        <span class="eval-label">日本語 / JP</span>
+        <span class="eval-label">日本語</span>
         <span class="eval-grade" id="evalJapanese">-</span>
       </div>
       <span class="eval-desc" id="evalJapaneseDesc">-</span>
     </div>
     <div class="eval-box">
       <div class="eval-label-wrap">
-        <span class="eval-label">態度 / Attitude</span>
+        <span class="eval-label">態度</span>
         <span class="eval-grade">
           <select id="evalAttitude" class="no-print-select" style="font-size:18px;font-weight:700;color:var(--navy);padding:0 4px;border:none;background:transparent">
             <option>秀</option><option>優</option><option>良</option><option>可</option><option>不可</option>
@@ -188,14 +188,14 @@
   </div>
 
   <!-- ===== 診断コメント ===== -->
-  <div class="section-header">診断コメント <span class="en">Diagnosis</span></div>
+  <div class="section-header">診断コメント</div>
   <div class="diagnosis-box" id="diagnosisArea">
     <span style="color:var(--ink-mute)">回答データがある場合、自動で診断コメントを表示します。</span>
   </div>
 
   <!-- ===== 成績推移 ===== -->
   <div id="trendSection">
-    <div class="section-header">成績推移 <span class="en">Performance Trend</span></div>
+    <div class="section-header">成績推移</div>
     <div class="chart-container">
       <canvas id="trendChart"></canvas>
     </div>
@@ -206,22 +206,22 @@
   </div>
 
   <!-- ===== 学習状況 ===== -->
-  <div class="section-header page-break-before">学習状況 <span class="en">Learning Status</span></div>
+  <div class="section-header page-break-before">学習状況</div>
   <div class="learn-info">
     <div class="id-field">
-      <span class="id-label">学習進捗 / Progress</span>
+      <span class="id-label">学習進捗</span>
       <span class="id-value value" contenteditable="true" id="learnProgress" data-placeholder="例：第18課" style="color:var(--green-2)">-</span>
     </div>
     <div class="id-field">
-      <span class="id-label">事前教育開始日 / Start</span>
+      <span class="id-label">事前教育開始日</span>
       <span class="id-value" id="learnStart">-</span>
     </div>
     <div class="id-field">
-      <span class="id-label">出国予定日 / Departure</span>
+      <span class="id-label">出国予定日</span>
       <span class="id-value" id="learnDepart">-</span>
     </div>
     <div class="id-field">
-      <span class="id-label">生活環境 / Environment</span>
+      <span class="id-label">生活環境</span>
       <span class="id-value">
         <select id="learnEnv" class="input-sm no-print-select">
           <option>寮生活</option><option>自宅通学</option>
@@ -231,7 +231,7 @@
     </div>
   </div>
 
-  <div class="section-sub">週別活動 / Weekly Activities</div>
+  <div class="section-sub">週別活動</div>
   <div class="weekly-log">
     <div class="week-row" id="week1">
       <div class="week-label">第1週</div>
@@ -251,54 +251,54 @@
     </div>
   </div>
 
-  <div class="section-sub">学習状況詳細 / Learning Notes</div>
+  <div class="section-sub">学習状況詳細</div>
   <div class="comment-grid">
     <div class="comment-block good">
-      <div class="comment-label">Good · 良い点</div>
+      <div class="comment-label">良い点</div>
       <div class="comment-text" contenteditable="true" id="learnGood" data-placeholder="学習面の良い点..."></div>
     </div>
     <div class="comment-block bad">
-      <div class="comment-label">Bad · 課題</div>
+      <div class="comment-label">課題</div>
       <div class="comment-text" contenteditable="true" id="learnBad" data-placeholder="学習面の課題..."></div>
     </div>
   </div>
   <div class="comment-grid">
     <div class="comment-block">
-      <div class="comment-label">Measure · 問題点に対する対策</div>
+      <div class="comment-label">問題点に対する対策</div>
       <div class="comment-text" contenteditable="true" id="learnMeasure" data-placeholder="対策を入力..."></div>
     </div>
     <div class="comment-block">
-      <div class="comment-label">Improve · 改善した点</div>
+      <div class="comment-label">改善した点</div>
       <div class="comment-text" contenteditable="true" id="learnImprove" data-placeholder="改善点を入力..."></div>
     </div>
   </div>
 
   <!-- ===== 生活態度詳細 ===== -->
-  <div class="section-header">生活状況・態度詳細 <span class="en">Daily Life &amp; Attitude</span></div>
+  <div class="section-header">生活状況・態度詳細</div>
   <div class="comment-grid">
     <div class="comment-block good">
-      <div class="comment-label">Good · 良い点</div>
+      <div class="comment-label">良い点</div>
       <div class="comment-text" contenteditable="true" id="lifeGood" data-placeholder="良い点を入力..."></div>
     </div>
     <div class="comment-block bad">
-      <div class="comment-label">Bad · 改善が必要</div>
+      <div class="comment-label">改善が必要</div>
       <div class="comment-text" contenteditable="true" id="lifeBad" data-placeholder="改善が必要な点を入力..."></div>
     </div>
   </div>
   <div class="comment-grid">
     <div class="comment-block">
-      <div class="comment-label">Measure · 問題点に対する対策</div>
+      <div class="comment-label">問題点に対する対策</div>
       <div class="comment-text" contenteditable="true" id="lifeMeasure" data-placeholder="対策を入力..."></div>
     </div>
     <div class="comment-block">
-      <div class="comment-label">Improve · 改善した点</div>
+      <div class="comment-label">改善した点</div>
       <div class="comment-text" contenteditable="true" id="lifeImprove" data-placeholder="改善点を入力..."></div>
     </div>
   </div>
 
   <div class="comment-grid">
     <div class="comment-block">
-      <div class="comment-label">Personality · 人物像・交友関係など</div>
+      <div class="comment-label">人物像・交友関係など</div>
       <div class="comment-text" contenteditable="true" id="lifePersonality" data-placeholder="人物像や交友関係について入力..."></div>
     </div>
   </div>
