@@ -3,7 +3,7 @@
    Palette sourced from GROP VIETNAM logo:
      navy #102547 / green #3DAE2B
    ============================================================ */
-@page { size: A4 portrait; margin: 10mm 11mm 12mm; }
+@page { size: A4 portrait; margin: 12mm 10mm 14mm; }
 
 :root {
   --navy:        #102547;
@@ -861,7 +861,7 @@ body.no-trend .section-header.page-break-before {
     width: 100%;
     min-height: auto;
     margin: 0;
-    padding: 0;
+    padding: 0 6mm;
     box-shadow: none;
     border: none;
     border-radius: 0;

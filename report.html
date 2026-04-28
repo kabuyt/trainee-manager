@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="report.css?v=29">
+<link rel="stylesheet" href="report.css?v=32">
 </head>
 <body>
 <div class="print-footer">GROP VIETNAM CO., LTD · 教育報告書</div>
@@ -342,6 +342,40 @@
   if (typeof setupAuthUI === 'function') setupAuthUI();
   await loadReport();
 })();
+
+// 月切替
+document.getElementById('monthSelect').addEventListener('change', function() {
+  document.getElementById('monthPrint').textContent = this.value;
+  if (typeof switchMonth === 'function') switchMonth(parseInt(this.value));
+});
+// 態度評価
+document.getElementById('evalAttitude').addEventListener('change', function() {
+  document.getElementById('attitudePrint').textContent = this.value;
+  if (typeof getAttitudeDesc === 'function') {
+    document.getElementById('evalAttitudeDesc').textContent = getAttitudeDesc(this.value);
+  }
+});
+// 生活環境
+document.getElementById('learnEnv').addEventListener('change', function() {
+  document.getElementById('envPrint').textContent = this.value;
+});
+
+// 会話スコアの手動入力（blur or Enterで保存）
+const convCell = document.getElementById('sConv');
+convCell.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') { e.preventDefault(); convCell.blur(); }
+});
+convCell.addEventListener('blur', async function() {
+  const text = convCell.textContent.trim();
+  const val = text === '' || text === '-' ? null : parseInt(text, 10);
+  if (text !== '' && text !== '-' && (isNaN(val) || val < 0 || val > 100)) {
+    alert('0〜100の数値を入力してください');
+    return;
+  }
+  if (typeof saveConversationScore === 'function') {
+    await saveConversationScore(val);
+  }
+});
 </script>
 </body>
 </html>
