@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="report.css?v=35">
+<link rel="stylesheet" href="report.css?v=36">
 </head>
 <body>
 <div class="print-footer">GROP VIETNAM CO., LTD · 教育報告書</div>
@@ -65,8 +65,8 @@
           <span class="id-value" id="rCompany">-</span>
         </div>
         <div class="id-field">
-          <span class="id-label">受験日 / Exam Date</span>
-          <span class="id-value" id="rExamDate">-</span>
+          <span class="id-label">監理団体 / Supervisor</span>
+          <span class="id-value" id="rSupervisor">-</span>
         </div>
         <div class="id-field">
           <span class="id-label">生年月日 / Date of Birth</span>
@@ -77,8 +77,8 @@
           <span class="id-value" id="rAge">-</span>
         </div>
         <div class="id-field">
-          <span class="id-label">所属 / Division</span>
-          <span class="id-value" style="color:var(--ink-soft);font-weight:500">Education</span>
+          <span class="id-label">送り出し機関 / Sender</span>
+          <span class="id-value" id="rSender">-</span>
         </div>
       </div>
       <div class="photo-area" id="photoArea">
@@ -95,8 +95,14 @@
 
       <div class="score-hero">
         <div class="scope">
-          <span class="scope-label">試験範囲 / Scope</span>
-          <span class="scope-val" id="scopeLabel">第4課迄</span>
+          <div class="scope-pair">
+            <span class="scope-label">試験範囲 / Scope</span>
+            <span class="scope-val" id="scopeLabel">第4課迄</span>
+          </div>
+          <div class="scope-pair">
+            <span class="scope-label">受験日 / Exam Date</span>
+            <span class="scope-val" id="rExamDate">-</span>
+          </div>
         </div>
         <div class="total-display">
           <span class="total-label">Total</span>
@@ -309,7 +315,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="auth.js?v=5"></script>
-<script src="app.js?v=35"></script>
+<script src="app.js?v=36"></script>
 <script>
 // localStorage に classic 指定があれば classic ページへリダイレクト
 (function() {

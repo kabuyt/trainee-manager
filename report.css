@@ -300,7 +300,8 @@ body {
   width: 3px;
   background: var(--green);
 }
-.score-hero .scope { display: flex; align-items: baseline; gap: 8px; align-self: center; }
+.score-hero .scope { display: flex; flex-direction: column; gap: 4px; align-self: center; }
+.score-hero .scope-pair { display: flex; align-items: baseline; gap: 8px; }
 .score-hero .scope-label {
   font-family: 'Inter', sans-serif;
   font-size: 8px;

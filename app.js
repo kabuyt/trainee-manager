@@ -644,7 +644,7 @@ async function loadReport() {
   try {
     // 対象実習生 + テスト結果 + 月別報告書 + テストセクション情報を取得
     const [{ data: trainee, error: tErr }, { data: results, error: rErr }, { data: monthly }, { data: sections }] = await Promise.all([
-      supabase.from('trainees').select('*').eq('id', id).single(),
+      supabase.from('trainees').select('*, organizations(name)').eq('id', id).single(),
       supabase.from('test_results').select('*').eq('trainee_id', id).order('test_date', { ascending: true }),
       supabase.from('monthly_reports').select('*').eq('trainee_id', id),
       supabase.from('test_sections').select('test_id,section_type,answer_key,scoring_rules'),
@@ -976,6 +976,11 @@ function renderReport(t, results, classResults) {
   document.getElementById('rCompany').textContent = companyText;
   document.getElementById('rNameKata').textContent = t.name_katakana || '-';
   document.getElementById('rNameRomaji').textContent = t.name_romaji || '-';
+  // 監理団体・送り出し機関（modern版のみ。classic版には存在しないので getElementById ガード）
+  const supEl = document.getElementById('rSupervisor');
+  if (supEl) supEl.textContent = t.supervising_org || '-';
+  const sendEl = document.getElementById('rSender');
+  if (sendEl) sendEl.textContent = (t.organizations && t.organizations.name) || '-';
   document.getElementById('rBirthDate').textContent = t.birth_date ? formatDate(t.birth_date) : '-';
   const ageEl = document.getElementById('rAge');
   if (t.birth_date) {
