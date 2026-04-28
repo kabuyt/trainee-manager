@@ -625,6 +625,7 @@ let _reportTrainee = null;
 let _reportResults = [];
 let _reportSections = {};
 let _reportClassResults = [];
+let _reportAllTestResults = [];
 let _reportMonthly = {};  // { month: row }
 let _currentMonth = 1;
 
@@ -650,7 +651,7 @@ async function loadReport() {
     ]);
     if (tErr) throw tErr;
 
-    // 同クラスの全員のテスト結果を取得（偏差値・順位計算用）
+    // 同グループ（class_group）のテスト結果 → 順位・受験者数 用
     let classResults = [];
     if (trainee.class_group) {
       const { data: classTrainees } = await supabase
@@ -663,10 +664,15 @@ async function loadReport() {
       }
     }
 
+    // 全実習生のテスト結果 → 平均・偏差値 用
+    const { data: globalAll } = await supabase.from('test_results').select('*');
+    const allTestResults = globalAll || [];
+
     // グローバル状態に保存
     _reportTrainee = trainee;
     _reportResults = results || [];
     _reportClassResults = classResults;
+    _reportAllTestResults = allTestResults;
     _reportMonthly = {};
     (monthly || []).forEach(r => { _reportMonthly[r.month] = r; });
     _reportSections = {};
@@ -753,20 +759,26 @@ function renderMonthScores(result) {
     // 統計
     // 新旧両フォーマットの test_name を同一視（test2 <-> 第5-11課）
     const map = MONTH_TEST_MAP.find(m => matchTest(result, m));
+    // 同グループ内（順位・受験者数 用）
     const sameTest = map
       ? _reportClassResults.filter(r => matchTest(r, map))
       : _reportClassResults.filter(r => r.test_name === result.test_name);
-    const stats = calcStats(sameTest, result);
+    // 全実習生（平均・偏差値 用）
+    const sameTestGlobal = map
+      ? _reportAllTestResults.filter(r => matchTest(r, map))
+      : _reportAllTestResults.filter(r => r.test_name === result.test_name);
+    const stats = calcStats(sameTest, result, sameTestGlobal);
     document.getElementById('avgVocab').textContent = stats.avg.vocab;
     document.getElementById('avgGrammar').textContent = stats.avg.grammar;
     document.getElementById('avgListen').textContent = stats.avg.listen;
     document.getElementById('avgConv').textContent = stats.avg.conv;
     document.getElementById('avgTotal').textContent = stats.avg.total;
-    document.getElementById('devVocab').textContent = stats.dev.vocab;
-    document.getElementById('devGrammar').textContent = stats.dev.grammar;
-    document.getElementById('devListen').textContent = stats.dev.listen;
-    document.getElementById('devConv').textContent = stats.dev.conv;
-    document.getElementById('devTotal').textContent = stats.dev.total;
+    // 偏差値（classic版のみ存在 / modernでは削除済み）
+    const devMap = { devVocab: stats.dev.vocab, devGrammar: stats.dev.grammar, devListen: stats.dev.listen, devConv: stats.dev.conv, devTotal: stats.dev.total };
+    Object.entries(devMap).forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    });
     document.getElementById('rankVocab').textContent = stats.rank.vocab;
     document.getElementById('rankGrammar').textContent = stats.rank.grammar;
     document.getElementById('rankListen').textContent = stats.rank.listen;
@@ -801,7 +813,8 @@ function renderMonthScores(result) {
      'avgVocab','avgGrammar','avgListen','avgConv','avgTotal',
      'devVocab','devGrammar','devListen','devConv','devTotal',
      'rankVocab','rankGrammar','rankListen','rankConv','rankTotal'].forEach(id => {
-      document.getElementById(id).textContent = '-';
+      const el = document.getElementById(id);
+      if (el) el.textContent = '-';
     });
     document.getElementById('examCount').textContent = '-';
     document.getElementById('rExamDate').textContent = '-';
@@ -1059,9 +1072,11 @@ function renderTrendChart(results) {
   });
 }
 
-function calcStats(sameTest, latest) {
-  const n = sameTest.length;
-  const getScores = (key) => sameTest.map(r => r[key] ?? 0);
+// sameTestGroup: 同グループ内（順位用）/ sameTestGlobal: 全実習生（平均・偏差値用）
+function calcStats(sameTestGroup, latest, sameTestGlobal) {
+  const globalSet = sameTestGlobal || sameTestGroup;
+  const getScoresGroup = (key) => sameTestGroup.map(r => r[key] ?? 0);
+  const getScoresGlobal = (key) => globalSet.map(r => r[key] ?? 0);
   const avg = (arr) => arr.length ? (arr.reduce((a, b) => a + b, 0) / arr.length) : 0;
   const stddev = (arr) => {
     const m = avg(arr);
@@ -1085,21 +1100,25 @@ function calcStats(sameTest, latest) {
 
   const result = { avg: {}, dev: {}, rank: {} };
   keys.forEach(k => {
-    const scores = getScores(k.field);
+    const groupScores = getScoresGroup(k.field);
+    const globalScores = getScoresGlobal(k.field);
     const val = latest[k.field] ?? 0;
-    result.avg[k.name] = avg(scores).toFixed(1);
-    result.dev[k.name] = deviation(val, scores).toFixed(1);
-    result.rank[k.name] = rank(val, scores);
+    result.avg[k.name] = avg(globalScores).toFixed(1);
+    result.dev[k.name] = deviation(val, globalScores).toFixed(1);
+    result.rank[k.name] = rank(val, groupScores);
   });
 
-  const totals = sameTest.map(r =>
+  const groupTotals = sameTestGroup.map(r =>
+    (r.score_vocab ?? 0) + (r.score_grammar ?? 0) + (r.score_listening ?? 0) + (r.score_conversation ?? 0)
+  );
+  const globalTotals = globalSet.map(r =>
     (r.score_vocab ?? 0) + (r.score_grammar ?? 0) + (r.score_listening ?? 0) + (r.score_conversation ?? 0)
   );
   const myTotal = (latest.score_vocab ?? 0) + (latest.score_grammar ?? 0) +
                   (latest.score_listening ?? 0) + (latest.score_conversation ?? 0);
-  result.avg.total = avg(totals).toFixed(1);
-  result.dev.total = deviation(myTotal, totals).toFixed(1);
-  result.rank.total = rank(myTotal, totals);
+  result.avg.total = avg(globalTotals).toFixed(1);
+  result.dev.total = deviation(myTotal, globalTotals).toFixed(1);
+  result.rank.total = rank(myTotal, groupTotals);
 
   return result;
 }
