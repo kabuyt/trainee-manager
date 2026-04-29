@@ -1056,10 +1056,6 @@ function renderTrendChart(results) {
   const ctx = document.getElementById('trendChart');
   if (!ctx) return;
 
-  // container のサイズ確定を待つため強制リフロー
-  const container = ctx.parentElement;
-  if (container) void container.offsetHeight;
-
   // 全8回分のラベルを固定（MONTH_TEST_MAP の順序）
   const labels = MONTH_TEST_MAP.map(m => m.testLabel);
   const resolved = MONTH_TEST_MAP.map(m => results.find(r => matchTest(r, m)) || null);
