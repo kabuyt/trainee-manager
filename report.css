@@ -396,8 +396,7 @@ body {
   width: 100%;
   border-collapse: collapse;
   font-size: 10.5px;
-  border: 1px solid var(--rule);
-  border-top: none;
+  border: 1px solid var(--rule-2);
   background: #fff;
   border-radius: 0 0 8px 8px;
   overflow: hidden;
@@ -410,6 +409,8 @@ body {
 }
 .score-table th:last-child, .score-table td:last-child { border-right: none; }
 .score-table tbody tr:last-child td { border-bottom: none; }
+.score-table thead th:first-child { border-top-left-radius: 0; }
+.score-table thead th:last-child { border-top-right-radius: 0; }
 
 .score-table thead th {
   background: var(--navy);
