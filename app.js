@@ -1079,7 +1079,7 @@ function renderTrendChart(results) {
       responsive: true,
       maintainAspectRatio: false,
       animation: false,
-      layout: { padding: { top: 6, right: 10, bottom: 2, left: 2 } },
+      layout: { padding: { top: 12, right: 10, bottom: 2, left: 2 } },
       plugins: {
         legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 8, boxWidth: 14 } },
         title: { display: false },
@@ -1088,11 +1088,11 @@ function renderTrendChart(results) {
         y: {
           beginAtZero: true,
           min: 0,
-          max: 100,
+          max: 105,
           ticks: {
             font: { size: 10 },
             stepSize: 10,
-            callback: v => v
+            callback: v => v > 100 ? '' : v
           },
           grid: { color: 'rgba(0,0,0,.06)' }
         },
