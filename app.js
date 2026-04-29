@@ -980,7 +980,9 @@ function renderReport(t, results, classResults) {
   const cleanCompany = (t.company || '').replace(/株式会社/g, '').replace(/\s+/g, ' ').trim();
   const companyText = [cleanCompany, t.class_group].filter(Boolean).join(' ').trim() || '-';
   document.getElementById('rCompany').textContent = companyText;
-  document.getElementById('rNameKata').textContent = t.name_katakana || '-';
+  // カタカナ名の区切り（半角・全角スペース）を中黒「・」に統一
+  const kataDisplay = (t.name_katakana || '').replace(/[\s\u3000]+/g, '・').trim() || '-';
+  document.getElementById('rNameKata').textContent = kataDisplay;
   document.getElementById('rNameRomaji').textContent = t.name_romaji || '-';
   // 監理団体・送り出し機関（modern版のみ。classic版には存在しないので getElementById ガード）
   const supEl = document.getElementById('rSupervisor');
