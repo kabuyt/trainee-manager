@@ -1088,13 +1088,15 @@ function renderTrendChart(results) {
         y: {
           beginAtZero: true,
           min: 0,
-          max: 105,
+          max: 110,
           ticks: {
             font: { size: 10 },
             stepSize: 10,
             callback: v => v > 100 ? '' : v
           },
-          grid: { color: 'rgba(0,0,0,.06)' }
+          grid: {
+            color: ctx => ctx.tick && ctx.tick.value > 100 ? 'rgba(0,0,0,0)' : 'rgba(0,0,0,.06)'
+          }
         },
         x: { ticks: { font: { size: 10 } } },
       },
