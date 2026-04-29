@@ -407,10 +407,6 @@ body {
   padding: 6px 8px;
   text-align: center;
 }
-.score-table th:last-child, .score-table td:last-child { border-right: none; }
-.score-table tbody tr:last-child td { border-bottom: none; }
-.score-table thead th:first-child { border-top-left-radius: 0; }
-.score-table thead th:last-child { border-top-right-radius: 0; }
 
 .score-table thead th {
   background: var(--navy);
