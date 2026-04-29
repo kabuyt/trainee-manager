@@ -404,21 +404,33 @@ async function registerTrainee() {
       traineeId = trainee.id;
     }
 
-    // 写真アップロード
+    // 写真アップロード（ファイル名にタイムスタンプを含めて確実に新しい URL にする）
     const photoFile = document.getElementById('photo').files[0];
     if (photoFile) {
-      const ext = photoFile.name.split('.').pop();
-      const path = `${traineeId}.${ext}`;
+      const ext = (photoFile.name.split('.').pop() || 'jpg').toLowerCase();
+      const ts = Date.now();
+      const path = `${traineeId}_${ts}.${ext}`;
       const { error: uploadError } = await supabase.storage
         .from('trainee-photos')
-        .upload(path, photoFile, { contentType: photoFile.type, upsert: true });
+        .upload(path, photoFile, { contentType: photoFile.type, upsert: false });
 
-      if (!uploadError) {
-        const { data: urlData } = supabase.storage.from('trainee-photos').getPublicUrl(path);
-        // URL にタイムスタンプを付与してブラウザキャッシュを回避（同パス upsert で URL が変わらない問題）
-        const bustedUrl = urlData.publicUrl + (urlData.publicUrl.includes('?') ? '&' : '?') + 't=' + Date.now();
-        await supabase.from('trainees').update({ photo_url: bustedUrl }).eq('id', traineeId);
+      if (uploadError) {
+        console.error('写真アップロード失敗:', uploadError);
+        showMsg(msgEl, '写真のアップロードに失敗しました: ' + uploadError.message, 'error');
+        btn.disabled = false;
+        return;
       }
+      const { data: urlData } = supabase.storage.from('trainee-photos').getPublicUrl(path);
+      const newUrl = urlData.publicUrl + '?t=' + ts;
+      const { error: updateErr } = await supabase.from('trainees')
+        .update({ photo_url: newUrl }).eq('id', traineeId);
+      if (updateErr) {
+        console.error('photo_url 更新失敗:', updateErr);
+        showMsg(msgEl, '写真URL保存に失敗: ' + updateErr.message, 'error');
+        btn.disabled = false;
+        return;
+      }
+      console.log('✓ 新しい写真URL:', newUrl);
     }
 
     showMsg(msgEl, _editTraineeId ? '更新しました！' : '登録しました！', 'success');
