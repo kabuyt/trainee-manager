@@ -1056,6 +1056,10 @@ function renderTrendChart(results) {
   const ctx = document.getElementById('trendChart');
   if (!ctx) return;
 
+  // container のサイズ確定を待つため強制リフロー
+  const container = ctx.parentElement;
+  if (container) void container.offsetHeight;
+
   // 全8回分のラベルを固定（MONTH_TEST_MAP の順序）
   const labels = MONTH_TEST_MAP.map(m => m.testLabel);
   const resolved = MONTH_TEST_MAP.map(m => results.find(r => matchTest(r, m)) || null);
@@ -1064,7 +1068,7 @@ function renderTrendChart(results) {
   const grammarData = resolved.map(r => r ? (r.score_grammar ?? 0) : null);
   const listenData = resolved.map(r => r ? (r.score_listening ?? 0) : null);
   const convData = resolved.map(r => r ? (r.score_conversation ?? 0) : null);
-  new Chart(ctx, {
+  const chart = new Chart(ctx, {
     type: 'line',
     data: {
       labels,
@@ -1079,6 +1083,7 @@ function renderTrendChart(results) {
       responsive: true,
       maintainAspectRatio: false,
       animation: false,
+      devicePixelRatio: Math.max(window.devicePixelRatio || 1, 2),
       layout: { padding: { top: 12, right: 10, bottom: 2, left: 2 } },
       plugins: {
         legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 8, boxWidth: 14 } },
@@ -1102,6 +1107,8 @@ function renderTrendChart(results) {
       },
     },
   });
+  // レイアウト確定後の再リサイズ（テキストがにじむ問題の保険）
+  requestAnimationFrame(() => { try { chart.resize(); } catch (e) {} });
 }
 
 // sameTestGroup: 同グループ内（順位用）/ sameTestGlobal: 全実習生（平均・偏差値用）
