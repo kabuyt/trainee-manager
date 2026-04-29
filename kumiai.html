@@ -284,7 +284,7 @@ function render() {
           <span class="sid">${t.student_id}</span>
           <span class="name-jp">${t.name_katakana||''}</span>
           <span class="name-en">${t.name_romaji||''}</span>
-          ${em ? `<a href="report.html?id=${t.id}#m=${em}&ro=1" target="_blank" class="btn-open">📄 開く</a>` : ''}
+          ${em ? `<a href="report.html?id=${t.id}&design=modern#m=${em}&ro=1" target="_blank" class="btn-open">📄 開く</a>` : ''}
           <button class="${btnClass}" ${btnOnclick}>📥 ダウンロード</button>
         </div>`;
     });
@@ -296,7 +296,7 @@ function render() {
 // 個別PDFをiframeで描画→PDF化して返す
 async function renderPdfBlob(traineeId, month) {
   const frame = document.getElementById('renderFrame');
-  frame.src = `report.html?id=${traineeId}#m=${month}&bulk=1&ro=1`;
+  frame.src = `report.html?id=${traineeId}&design=modern#m=${month}&bulk=1&ro=1`;
   await new Promise((resolve, reject) => {
     const onLoad = () => {
       frame.removeEventListener('load', onLoad);

@@ -281,8 +281,8 @@ async function generateZip() {
     setStatus(t.id, '処理中...', 's-wait');
     logLine(`[${i+1}/${matched.length}] ${t.student_id} ${t.name_romaji||t.name_katakana||''}`);
     try {
-      // iframeに report.html を読み込んで月を切替
-      frame.src = `report.html?id=${t.id}#m=${month}&bulk=1`;
+      // iframeに report.html を読み込んで月を切替（design=modern でクラシックリダイレクト回避）
+      frame.src = `report.html?id=${t.id}&design=modern#m=${month}&bulk=1`;
       await new Promise((resolve, reject) => {
         const onLoad = () => {
           frame.removeEventListener('load', onLoad);

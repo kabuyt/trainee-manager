@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="report.css?v=44">
+<link rel="stylesheet" href="report.css?v=45">
 </head>
 <body>
 <div class="print-footer">GROP VIETNAM CO., LTD · 教育報告書</div>
@@ -316,8 +316,11 @@
 <script src="app.js?v=37"></script>
 <script>
 // localStorage に classic 指定があれば classic ページへリダイレクト
+// ただし bulk=1（一括PDF出力中）は強制的にモダンを使う
 (function() {
-  if (localStorage.getItem('reportDesign') === 'classic' && !location.search.includes('design=modern')) {
+  const isBulk = (location.hash || '').includes('bulk=1');
+  const forceModern = location.search.includes('design=modern') || isBulk;
+  if (localStorage.getItem('reportDesign') === 'classic' && !forceModern) {
     location.href = 'report-classic.html' + location.search + location.hash;
     return;
   }
