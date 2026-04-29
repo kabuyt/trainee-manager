@@ -282,7 +282,8 @@ async function generateZip() {
     logLine(`[${i+1}/${matched.length}] ${t.student_id} ${t.name_romaji||t.name_katakana||''}`);
     try {
       // iframeに report.html を読み込んで月を切替（design=modern でクラシックリダイレクト回避）
-      frame.src = `report.html?id=${t.id}&design=modern#m=${month}&bulk=1`;
+      const cacheBust = Date.now();
+      frame.src = `report.html?id=${t.id}&design=modern&_=${cacheBust}#m=${month}&bulk=1`;
       await new Promise((resolve, reject) => {
         const onLoad = () => {
           frame.removeEventListener('load', onLoad);
@@ -298,6 +299,17 @@ async function generateZip() {
       const reportPage = doc.getElementById('reportPage');
       if (!reportPage) throw new Error('reportPage not found');
 
+      // 画像が全部ロード完了するまで待機（html2canvas が中途半端な画像で natural size を使う問題を防止）
+      const imgs = Array.from(doc.querySelectorAll('img'));
+      await Promise.all(imgs.map(img => {
+        if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+        return new Promise(res => {
+          img.addEventListener('load', res, { once: true });
+          img.addEventListener('error', res, { once: true });
+          setTimeout(res, 4000); // 安全タイムアウト
+        });
+      }));
+
       // PDF 生成（A4, mm）
       const safeName = (t.name_romaji||'unknown').replace(/[^A-Za-z0-9_]/g,'_');
       const fname = `${t.student_id}_${safeName}.pdf`;
@@ -307,16 +319,17 @@ async function generateZip() {
       const opt = {
         margin: 0,
         filename: fname,
-        image: { type: 'jpeg', quality: 0.95 },
+        image: { type: 'jpeg', quality: 0.92 },
         html2canvas: {
           scale: 2,
           useCORS: true,
+          allowTaint: true,
           backgroundColor: '#ffffff',
-          windowWidth: 794,  // A4 width @ 96dpi
-          letterRendering: true
+          letterRendering: true,
+          logging: false
         },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
-        pagebreak: { mode: ['css', 'legacy'], before: '.page-break-before' }
+        pagebreak: { mode: ['css'], before: '.page-break-before' }
       };
       const pdfBlob = await html2pdf().set(opt).from(reportPage).outputPdf('blob');
       zip.file(zipPath, pdfBlob);

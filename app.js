@@ -998,10 +998,13 @@ function renderReport(t, results, classResults) {
     ageEl.textContent = '-';
   }
 
-  // 顔写真
+  // 顔写真（html2canvas がCSS%を解決できない場合があるため明示px）
   const photoArea = document.getElementById('photoArea');
   if (photoArea && t.photo_url) {
-    photoArea.innerHTML = `<img src="${t.photo_url}" alt="写真" style="width:100%;height:100%;object-fit:cover;">`;
+    const isBulkMode = document.body.classList.contains('print-mode');
+    const w = isBulkMode ? 84 : 96;
+    const h = isBulkMode ? 112 : 128;
+    photoArea.innerHTML = `<img src="${t.photo_url}" alt="写真" width="${w}" height="${h}" style="width:${w}px;height:${h}px;max-width:${w}px;max-height:${h}px;object-fit:cover;display:block;" crossorigin="anonymous">`;
   }
 
   // 成績推移テーブル + グラフ（全8回分表示）
