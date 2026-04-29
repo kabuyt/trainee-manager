@@ -453,6 +453,8 @@ body {
   font-weight: 700;
   color: var(--green-2);
   background: #f4faf1;
+  background-clip: padding-box;
+  box-shadow: inset 1px 0 0 var(--rule);
 }
 /* 平均・偏差値・順位・受験者数 行: フォントサイズ統一 */
 .score-table tbody tr:not(:first-child) td:not(.row-label) {
