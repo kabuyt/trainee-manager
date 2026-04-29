@@ -976,8 +976,9 @@ async function saveReport() {
 }
 
 function renderReport(t, results, classResults) {
-  // 基本情報
-  const companyText = [t.company, t.class_group].filter(Boolean).join(' ').trim() || '-';
+  // 基本情報（会社名から「株式会社」を除去）
+  const cleanCompany = (t.company || '').replace(/株式会社/g, '').replace(/\s+/g, ' ').trim();
+  const companyText = [cleanCompany, t.class_group].filter(Boolean).join(' ').trim() || '-';
   document.getElementById('rCompany').textContent = companyText;
   document.getElementById('rNameKata').textContent = t.name_katakana || '-';
   document.getElementById('rNameRomaji').textContent = t.name_romaji || '-';
