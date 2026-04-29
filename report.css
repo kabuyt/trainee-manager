@@ -470,15 +470,20 @@ body {
 }
 .score-table .row-dev td:not(.row-label) { font-weight: 600; color: var(--navy); }
 
+/* 編集セル: 装飾は outline で表現し、表の border (border-right/border-bottom)
+   は衝突しないよう保持。これで印刷時に罫線が消える問題が起きない */
 .editable-score {
   background: #fff8e1 !important;
   cursor: text;
-  outline: none;
-  border: 1px dashed var(--accent-warm) !important;
-  border-radius: 3px;
+  outline: 1px dashed var(--accent-warm);
+  outline-offset: -3px;
 }
 .editable-score:hover { background: #ffeeb3 !important; }
-.editable-score:focus { background: #fff !important; border: 1.5px solid var(--accent-warm) !important; }
+.editable-score:focus {
+  background: #fff !important;
+  outline: 1.5px solid var(--accent-warm);
+  outline-offset: -2px;
+}
 .editable-score:empty::before {
   content: attr(data-placeholder);
   color: var(--ink-mute);
@@ -843,7 +848,7 @@ body {
   border-bottom-color: transparent !important;
 }
 .readonly-view [contenteditable]:empty::before { content: none !important; }
-.readonly-view .editable-score { background: transparent !important; border: none !important; }
+.readonly-view .editable-score { background: transparent !important; outline: none !important; }
 
 body.no-trend .section-header.page-break-before {
   break-before: auto !important;
@@ -965,7 +970,11 @@ body.no-trend .section-header.page-break-before {
   .score-hero { background: var(--paper-2) !important; color: var(--ink) !important; }
   .score-table thead th { background: var(--navy) !important; color: #fff !important; }
   .score-table thead .col-total { background: var(--navy-2) !important; }
-  .editable-score { background: transparent !important; border: none !important; }
+  /* 印刷時: 編集装飾は消すが、表罫線（border-right/border-bottom）は保持 */
+  .editable-score {
+    background: transparent !important;
+    outline: none !important;
+  }
   .editable-score:empty::before { content: '-'; color: var(--ink); }
 
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -1072,7 +1081,13 @@ body.print-mode .identity,
 body.print-mode .score-hero { break-inside: avoid; page-break-inside: avoid; }
 
 body.print-mode [contenteditable]:empty::before { content: none !important; }
-body.print-mode [contenteditable] {
+/* 編集装飾を消す。ただし td.editable-score は表の罫線を保持する必要があるため
+   border は触らず、outline のみ消す */
+body.print-mode [contenteditable]:not(.editable-score) {
   background: transparent !important;
   border: none !important;
+}
+body.print-mode .editable-score {
+  background: transparent !important;
+  outline: none !important;
 }
