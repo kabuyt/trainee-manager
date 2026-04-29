@@ -394,12 +394,12 @@ body {
 
 .score-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   font-size: 10.5px;
   border: 1px solid var(--rule-2);
   background: #fff;
   border-radius: 0 0 8px 8px;
-  overflow: hidden;
 }
 .score-table th, .score-table td {
   border-bottom: 1px solid var(--rule);
@@ -407,6 +407,8 @@ body {
   padding: 6px 8px;
   text-align: center;
 }
+.score-table th:last-child, .score-table td:last-child { border-right: none; }
+.score-table tbody tr:last-child td { border-bottom: none; }
 
 .score-table thead th {
   background: var(--navy);
