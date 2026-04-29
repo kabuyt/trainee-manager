@@ -454,8 +454,13 @@ body {
   color: var(--green-2);
   background: #f4faf1;
   background-clip: padding-box;
-  box-shadow: inset 1px 0 0 var(--rule);
 }
+/* 合計列（会話との境界）の罫線を確実に表示。box-shadow だと印刷で消えるため
+   border-left を採用し、対応する会話列の border-right は除去して二重線を防止 */
+.score-table .col-total,
+.score-table .total-cell { border-left: 1px solid var(--rule); }
+.score-table th:nth-last-child(2),
+.score-table td:nth-last-child(2) { border-right: none; }
 /* 平均・偏差値・順位・受験者数 行: フォントサイズ統一 */
 .score-table tbody tr:not(:first-child) td:not(.row-label) {
   font-family: 'Inter', sans-serif;
