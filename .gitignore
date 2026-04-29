@@ -28,3 +28,5 @@ export_pdfs.py
 import_brastech_reports.py
 import_excel_report.py
 ai_diagnosis_backup_*.json
+bulk_pdf.py
+.env.local
