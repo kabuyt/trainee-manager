@@ -563,8 +563,14 @@ body {
   border: 1px solid var(--rule);
   height: 210px;
   border-radius: 8px;
+  position: relative;
 }
-.chart-container canvas { max-height: 100%; }
+.chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 100%;
+  display: block;
+}
 
 .trend-table {
   width: 100%;
