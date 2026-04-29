@@ -281,30 +281,52 @@ async function generateZip() {
     setStatus(t.id, '処理中...', 's-wait');
     logLine(`[${i+1}/${matched.length}] ${t.student_id} ${t.name_romaji||t.name_katakana||''}`);
     try {
+      // 重要: iframe 使い回しで前回の _reportReady が残ってしまう問題を防止
+      try {
+        if (frame.contentWindow) frame.contentWindow._reportReady = false;
+      } catch (e) {}
+
       // iframeに report.html を読み込んで月を切替（design=modern でクラシックリダイレクト回避）
       const cacheBust = Date.now();
       frame.src = `report.html?id=${t.id}&design=modern&_=${cacheBust}#m=${month}&bulk=1`;
-      // iframe 内の window._reportReady フラグを待つ（最大25秒）
+
+      // _reportReady フラグを待つ + URL に今回の cacheBust が含まれていることを確認
+      // （前回の ready 状態を拾わない保険）+ document.fonts.ready で日本語フォント読込待機
       await new Promise((resolve, reject) => {
         const startedAt = Date.now();
-        const check = () => {
+        const check = async () => {
           try {
-            if (frame.contentWindow && frame.contentWindow._reportReady) {
+            const w = frame.contentWindow;
+            const d = frame.contentDocument;
+            if (
+              w && w._reportReady &&
+              w.location && w.location.href.includes(`_=${cacheBust}`)
+            ) {
+              // フォント読込完了待機（Inter + Noto Sans JP）
+              if (d && d.fonts && d.fonts.ready) {
+                try { await d.fonts.ready; } catch (e) {}
+              }
+              // ペイント反映を 2 フレーム保証
+              await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
               return resolve();
             }
           } catch (e) {}
-          if (Date.now() - startedAt > 25000) return reject(new Error('timeout: _reportReady'));
+          if (Date.now() - startedAt > 30000) return reject(new Error('timeout: report ready'));
           setTimeout(check, 200);
         };
         check();
       });
-      // レイアウト/ペイント反映を保証するため追加で 800ms 待機
-      await new Promise(r => setTimeout(r, 800));
 
       const doc = frame.contentDocument;
       if (!doc) throw new Error('iframe content inaccessible');
       const reportPage = doc.getElementById('reportPage');
       if (!reportPage) throw new Error('reportPage not found');
+
+      // reportPage の幅・高さが reasonable なサイズになっていることを確認（崩れ検出）
+      const rect = reportPage.getBoundingClientRect();
+      if (rect.width < 600 || rect.height < 400) {
+        console.warn(`[${t.student_id}] reportPage size suspicious: ${rect.width}x${rect.height}`);
+      }
 
       // PDF 生成（A4, mm）
       const safeName = (t.name_romaji||'unknown').replace(/[^A-Za-z0-9_]/g,'_');

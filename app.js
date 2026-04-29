@@ -741,7 +741,7 @@ async function loadReport() {
       const eprint = document.getElementById('envPrint');
       if (esel && eprint) eprint.textContent = esel.value;
     }
-    // 全画像 + チャートのレンダリング完了を待ってからシグナル
+    // 全画像 + フォント + チャートのレンダリング完了を待ってからシグナル
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
     const allImages = Array.from(document.images || []);
     await Promise.all(allImages.map(img => {
@@ -752,6 +752,12 @@ async function loadReport() {
         setTimeout(res, 3000);
       });
     }));
+    // 日本語フォント（Noto Sans JP / Inter）の読込完了を待機
+    if (document.fonts && document.fonts.ready) {
+      try { await document.fonts.ready; } catch (e) {}
+    }
+    // さらに 1 フレーム待ってレイアウト確定
+    await new Promise(r => requestAnimationFrame(r));
     window._reportReady = true;
   } catch (err) {
     document.getElementById('reportPage').innerHTML =
