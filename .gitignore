@@ -19,3 +19,12 @@ ranks.txt
 diagnosis.json
 rank_report_tmp.docx
 test_data/login_cards.html
+
+# secret 含む Python スクリプト（service_role 直書きあり）
+generate_kumiai_reports.py
+generate_reports.py
+diagnose.py
+export_pdfs.py
+import_brastech_reports.py
+import_excel_report.py
+ai_diagnosis_backup_*.json
