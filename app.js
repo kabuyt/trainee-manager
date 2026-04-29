@@ -636,9 +636,14 @@ async function loadReport() {
   // URL hash から ro=1 (readonly) / bulk=1 を取得
   const hash = (location.hash || '').replace(/^#/, '');
   const hashParams = new URLSearchParams(hash.replace(/&/g, '&'));
-  const isReadonly = hashParams.get('ro') === '1' || hashParams.get('bulk') === '1';
+  const isBulk = hashParams.get('bulk') === '1';
+  const isReadonly = hashParams.get('ro') === '1' || isBulk;
   if (isReadonly) {
     window._REPORT_READONLY = true;
+  }
+  // bulk PDF 生成時は @media print が効かないので print-mode クラスで圧縮レイアウトを画面適用
+  if (isBulk) {
+    document.body.classList.add('print-mode');
   }
 
   try {

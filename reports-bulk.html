@@ -305,12 +305,18 @@ async function generateZip() {
       const folder = (t.company || '(未設定)').replace(/[\\/:*?"<>|]/g, '_');
       const zipPath = `${folder}/${fname}`;
       const opt = {
-        margin: [8, 8, 8, 8],
+        margin: 0,
         filename: fname,
         image: { type: 'jpeg', quality: 0.95 },
-        html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css'] }
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#ffffff',
+          windowWidth: 794,  // A4 width @ 96dpi
+          letterRendering: true
+        },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
+        pagebreak: { mode: ['css', 'legacy'], before: '.page-break-before' }
       };
       const pdfBlob = await html2pdf().set(opt).from(reportPage).outputPdf('blob');
       zip.file(zipPath, pdfBlob);
