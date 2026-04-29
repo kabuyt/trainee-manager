@@ -1516,6 +1516,7 @@ function renderDiagnosis(diagArea, results) {
       }
 
       // 弱み（教科ごとに独立、すべて列挙）
+      // 全体の出来に応じて表現の強さを段階化（高得点者には辛口にしない）
       const weakFragments = [];
       ['goii','bunpo','chokkai'].forEach(st => {
         if (byType[st].weak.length > 0) {
@@ -1526,7 +1527,18 @@ function renderDiagnosis(diagArea, results) {
         }
       });
       if (weakFragments.length > 0) {
-        narrative += ` 一方で${weakFragments.join('、')}では理解不足が目立つ。`;
+        let weakPhrase;
+        if (avgRate >= 0.85) {
+          // 高得点者: 軽く・前向きに
+          weakPhrase = `で得点が伸び悩んだ部分があり、ここを補強すればさらに伸びる`;
+        } else if (avgRate >= 0.6) {
+          // 中位: やや課題ありと指摘
+          weakPhrase = `ではやや課題が残る`;
+        } else {
+          // 低位: 明確に弱点指摘
+          weakPhrase = `では理解不足が目立つ`;
+        }
+        narrative += ` 一方で${weakFragments.join('、')}${weakPhrase}。`;
       }
 
       // 教科別の具体的アドバイス（弱点がある教科に対して）
