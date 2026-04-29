@@ -415,7 +415,9 @@ async function registerTrainee() {
 
       if (!uploadError) {
         const { data: urlData } = supabase.storage.from('trainee-photos').getPublicUrl(path);
-        await supabase.from('trainees').update({ photo_url: urlData.publicUrl }).eq('id', traineeId);
+        // URL にタイムスタンプを付与してブラウザキャッシュを回避（同パス upsert で URL が変わらない問題）
+        const bustedUrl = urlData.publicUrl + (urlData.publicUrl.includes('?') ? '&' : '?') + 't=' + Date.now();
+        await supabase.from('trainees').update({ photo_url: bustedUrl }).eq('id', traineeId);
       }
     }
 
