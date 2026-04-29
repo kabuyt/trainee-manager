@@ -741,9 +741,22 @@ async function loadReport() {
       const eprint = document.getElementById('envPrint');
       if (esel && eprint) eprint.textContent = esel.value;
     }
+    // 全画像 + チャートのレンダリング完了を待ってからシグナル
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    const allImages = Array.from(document.images || []);
+    await Promise.all(allImages.map(img => {
+      if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+      return new Promise(res => {
+        img.addEventListener('load', res, { once: true });
+        img.addEventListener('error', res, { once: true });
+        setTimeout(res, 3000);
+      });
+    }));
+    window._reportReady = true;
   } catch (err) {
     document.getElementById('reportPage').innerHTML =
       '<p style="color:red;padding:20px">読み込みに失敗しました: ' + err.message + '</p>';
+    window._reportReady = true; // エラー時もシグナル（タイムアウト回避）
   }
 }
 

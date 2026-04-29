@@ -284,31 +284,27 @@ async function generateZip() {
       // iframeに report.html を読み込んで月を切替（design=modern でクラシックリダイレクト回避）
       const cacheBust = Date.now();
       frame.src = `report.html?id=${t.id}&design=modern&_=${cacheBust}#m=${month}&bulk=1`;
+      // iframe 内の window._reportReady フラグを待つ（最大25秒）
       await new Promise((resolve, reject) => {
-        const onLoad = () => {
-          frame.removeEventListener('load', onLoad);
-          // データ読込 + 月切替完了を待つ（5秒）
-          setTimeout(resolve, 5000);
+        const startedAt = Date.now();
+        const check = () => {
+          try {
+            if (frame.contentWindow && frame.contentWindow._reportReady) {
+              return resolve();
+            }
+          } catch (e) {}
+          if (Date.now() - startedAt > 25000) return reject(new Error('timeout: _reportReady'));
+          setTimeout(check, 200);
         };
-        frame.addEventListener('load', onLoad);
-        setTimeout(() => reject(new Error('timeout')), 30000);
+        check();
       });
+      // レイアウト/ペイント反映を保証するため追加で 800ms 待機
+      await new Promise(r => setTimeout(r, 800));
 
       const doc = frame.contentDocument;
       if (!doc) throw new Error('iframe content inaccessible');
       const reportPage = doc.getElementById('reportPage');
       if (!reportPage) throw new Error('reportPage not found');
-
-      // 画像が全部ロード完了するまで待機（html2canvas が中途半端な画像で natural size を使う問題を防止）
-      const imgs = Array.from(doc.querySelectorAll('img'));
-      await Promise.all(imgs.map(img => {
-        if (img.complete && img.naturalWidth > 0) return Promise.resolve();
-        return new Promise(res => {
-          img.addEventListener('load', res, { once: true });
-          img.addEventListener('error', res, { once: true });
-          setTimeout(res, 4000); // 安全タイムアウト
-        });
-      }));
 
       // PDF 生成（A4, mm）
       const safeName = (t.name_romaji||'unknown').replace(/[^A-Za-z0-9_]/g,'_');
