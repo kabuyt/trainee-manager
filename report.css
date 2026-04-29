@@ -544,6 +544,15 @@ body {
   color: var(--ink-soft);
   line-height: 1.5;
 }
+.eval-note {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 9.5px;
+  color: var(--ink-mute);
+  letter-spacing: .04em;
+  text-align: right;
+  margin: 4px 2px 0 0;
+  line-height: 1.4;
+}
 
 /* ===== Diagnosis ===== */
 .diagnosis-box {
@@ -906,6 +915,7 @@ body.no-trend .section-header.page-break-before {
   .eval-label { font-size: 9.5px; }
   .eval-grade { font-size: 19px; }
   .eval-desc { font-size: 9.5px; }
+  .eval-note { font-size: 9px; margin: 3px 2px 0 0; }
 
   .diagnosis-box { padding: 9px 13px; line-height: 1.65; font-size: 10px; margin-bottom: 6px; }
 
@@ -1035,6 +1045,7 @@ body.print-mode .eval-box { padding: 8px 13px; }
 body.print-mode .eval-label { font-size: 9.5px; }
 body.print-mode .eval-grade { font-size: 19px; }
 body.print-mode .eval-desc { font-size: 9.5px; }
+body.print-mode .eval-note { font-size: 9px; margin: 3px 2px 0 0; }
 
 body.print-mode .diagnosis-box { padding: 9px 13px; line-height: 1.65; font-size: 10px; margin-bottom: 6px; }
 
