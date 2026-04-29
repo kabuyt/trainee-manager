@@ -3,7 +3,7 @@
    Palette sourced from GROP VIETNAM logo:
      navy #102547 / green #3DAE2B
    ============================================================ */
-@page { size: A4 portrait; margin: 9mm 9mm 10mm; }
+@page { size: A4 portrait; margin: 10mm 10mm 11mm; }
 
 :root {
   --navy:        #102547;
@@ -847,65 +847,65 @@ body.no-trend .section-header.page-break-before {
     width: 100%;
     min-height: auto;
     margin: 0;
-    padding: 0 3mm;
+    padding: 0 4mm;
     box-shadow: none;
     border: none;
     border-radius: 0;
-    font-size: 9.5px;
+    font-size: 10px;
   }
 
-  /* ====== 2ページ厳密収納調整 ====== */
+  /* ====== 2ページ収納（バランス重視） ====== */
 
   /* ページ1: ヘッダー〜成績推移 */
-  .report-header { margin-bottom: 6px; }
-  .masthead { padding: 2px 0 7px; gap: 12px; }
-  .mast-title .ja { font-size: 14px; }
-  .mast-title .ja .month-num { font-size: 18px; }
-  .report-logo { height: 24px; }
+  .report-header { margin-bottom: 9px; }
+  .masthead { padding: 3px 0 9px; gap: 14px; }
+  .mast-title .ja { font-size: 15px; }
+  .mast-title .ja .month-num { font-size: 20px; }
+  .report-logo { height: 26px; }
 
-  .identity { margin: 7px 0 6px; gap: 8px; grid-template-columns: 1fr 78px; }
-  .id-field { padding: 4px 9px 5px; }
-  .id-label { font-size: 8px; margin-bottom: 1px; }
-  .id-value { font-size: 10.5px; }
-  .id-value.name .kata { font-size: 11px; }
-  .id-value.name .romaji { font-size: 8.5px; }
-  .photo-area { width: 78px; height: 104px; max-width: 78px; max-height: 104px; }
+  .identity { margin: 9px 0 8px; gap: 10px; grid-template-columns: 1fr 84px; }
+  .id-field { padding: 6px 11px 7px; }
+  .id-label { font-size: 8.5px; margin-bottom: 2px; }
+  .id-value { font-size: 11px; }
+  .id-value.name .kata { font-size: 11.5px; }
+  .id-value.name .romaji { font-size: 9px; }
+  .photo-area { width: 84px; height: 112px; max-width: 84px; max-height: 112px; }
 
-  .section-header { margin: 7px 0 4px; padding: 0 0 3px; font-size: 10px; }
-  .section-sub { margin: 5px 0 3px; padding: 2px 0 2px 8px; font-size: 9.5px; }
+  .section-header { margin: 10px 0 6px; padding: 0 0 4px; font-size: 10.5px; }
+  .section-sub { margin: 7px 0 5px; padding: 3px 0 3px 9px; font-size: 10px; }
 
-  .score-hero { padding: 5px 10px; }
-  .score-hero .total-num { font-size: 18px; }
-  .score-hero .total-label, .score-hero .total-max { font-size: 9px; }
-  .score-hero .scope-label { font-size: 8.5px; }
-  .score-hero .scope-val { font-size: 11px; }
-  .score-table th, .score-table td { padding: 3px 5px; font-size: 9.5px; }
-  .score-table thead th { padding: 4px 3px; font-size: 9px; }
-  .score-table tbody tr:first-child td:not(.row-label) { font-size: 12px; }
-  .score-table tbody tr:first-child td.total-cell { font-size: 13px; }
+  .score-hero { padding: 8px 13px; }
+  .score-hero .total-num { font-size: 21px; }
+  .score-hero .total-label, .score-hero .total-max { font-size: 9.5px; }
+  .score-hero .scope-label { font-size: 9px; }
+  .score-hero .scope-val { font-size: 11.5px; }
+  .score-table th, .score-table td { padding: 5px 7px; font-size: 10px; }
+  .score-table thead th { padding: 6px 4px; font-size: 9.5px; }
+  .score-table tbody tr:first-child td:not(.row-label) { font-size: 13.5px; }
+  .score-table tbody tr:first-child td.total-cell { font-size: 14.5px; }
 
-  .eval-row { gap: 6px; margin: 5px 0; }
-  .eval-box { padding: 5px 10px; }
-  .eval-label { font-size: 9px; }
-  .eval-grade { font-size: 16px; }
-  .eval-desc { font-size: 9px; }
+  .eval-row { gap: 8px; margin: 8px 0; }
+  .eval-box { padding: 8px 13px; }
+  .eval-label { font-size: 9.5px; }
+  .eval-grade { font-size: 19px; }
+  .eval-desc { font-size: 9.5px; }
 
-  .diagnosis-box { padding: 6px 10px; line-height: 1.5; font-size: 9px; margin-bottom: 4px; }
+  .diagnosis-box { padding: 9px 13px; line-height: 1.65; font-size: 10px; margin-bottom: 6px; }
 
-  .chart-container { height: 110px; padding: 4px 6px 2px; margin: 3px 0 4px; }
+  .chart-container { height: 165px; padding: 8px 10px 4px; margin: 5px 0 7px; }
 
-  /* ページ2: 学習状況以降 — 圧縮 */
-  .learn-info { margin-bottom: 3px; gap: 6px; }
-  .learn-info .id-field { padding: 3px 8px 4px; }
-  .weekly-log { margin-bottom: 3px; gap: 2px; }
-  .week-row { grid-template-columns: 50px 1fr; }
-  .week-label { padding: 3px 6px; font-size: 9px; }
-  .week-row .comment-text { padding: 3px 8px; font-size: 9px; min-height: 16px; line-height: 1.4; }
+  /* ページ2: 学習状況以降 */
+  .learn-info { margin-bottom: 5px; gap: 8px; }
+  .learn-info .id-field { padding: 5px 10px 6px; }
+  .weekly-log { margin-bottom: 5px; gap: 3px; }
+  .week-row { grid-template-columns: 56px 1fr; }
+  .week-label { padding: 5px 8px; font-size: 9.5px; }
+  .week-row .comment-text { padding: 5px 10px; font-size: 9.5px; min-height: 22px; line-height: 1.55; }
 
-  .comment-grid { gap: 5px; margin-bottom: 3px; }
-  .comment-label { padding: 2px 9px; font-size: 8.5px; letter-spacing: .04em; }
+  .comment-grid { gap: 6px; margin-bottom: 5px; }
+  .comment-label { padding: 4px 11px; font-size: 9px; letter-spacing: .05em; }
   .comment-label::before { width: 4px; height: 4px; }
-  .comment-block .comment-text { padding: 4px 9px; font-size: 9px; min-height: 22px; line-height: 1.45; }
+  .comment-block .comment-text { padding: 6px 11px; font-size: 9.5px; min-height: 30px; line-height: 1.6; }
 
   .report-footer { display: none; }
   /* ====== 余白調整 ここまで ====== */
