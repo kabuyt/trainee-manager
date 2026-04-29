@@ -892,7 +892,7 @@ body.no-trend .section-header.page-break-before {
 
   .diagnosis-box { padding: 9px 13px; line-height: 1.65; font-size: 10px; margin-bottom: 6px; }
 
-  .chart-container { height: 215px; padding: 10px 12px 6px; margin: 7px 0 9px; }
+  .chart-container { height: 290px; padding: 12px 14px 8px; margin: 9px 0 10px; }
 
   /* ページ2: 学習状況以降 */
   .learn-info { margin-bottom: 5px; gap: 8px; }
@@ -1016,7 +1016,7 @@ body.print-mode .eval-desc { font-size: 9.5px; }
 
 body.print-mode .diagnosis-box { padding: 9px 13px; line-height: 1.65; font-size: 10px; margin-bottom: 6px; }
 
-body.print-mode .chart-container { height: 215px; padding: 10px 12px 6px; margin: 7px 0 9px; }
+body.print-mode .chart-container { height: 290px; padding: 12px 14px 8px; margin: 9px 0 10px; }
 
 /* ページ2 */
 body.print-mode .learn-info { margin-bottom: 5px; gap: 8px; }
