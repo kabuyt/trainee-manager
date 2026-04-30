@@ -797,16 +797,16 @@ body {
 
 /* ===== No-test notice ===== */
 .no-test-notice {
-  background: linear-gradient(135deg, #fff7e6 0%, #fff2d6 100%);
-  color: #92400e;
-  border: 1.5px solid #fbbf24;
-  border-left: 5px solid #f59e0b;
-  padding: 22px 24px;
-  border-radius: 10px;
-  font-size: 16px;
+  background: linear-gradient(135deg, var(--paper-3) 0%, var(--paper-2) 100%);
+  color: var(--navy);
+  border: 1px solid var(--rule-2);
+  border-left: 4px solid var(--navy);
+  padding: 18px 22px;
+  border-radius: 8px;
+  font-size: 14px;
   text-align: center;
   margin-bottom: 12px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: .06em;
 }
 .score-table-wrap.no-test .score-hero,
@@ -922,8 +922,8 @@ body {
   .diagnosis-box { padding: 9px 13px; line-height: 1.65; font-size: 10px; margin-bottom: 6px; }
 
   .no-test-notice {
-    padding: 20px 22px;
-    font-size: 14px;
+    padding: 16px 20px;
+    font-size: 13px;
     margin-bottom: 10px;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
@@ -1060,8 +1060,8 @@ body.print-mode .eval-note { font-size: 9px; margin: 3px 2px 0 0; }
 body.print-mode .diagnosis-box { padding: 9px 13px; line-height: 1.65; font-size: 10px; margin-bottom: 6px; }
 
 body.print-mode .no-test-notice {
-  padding: 20px 22px;
-  font-size: 14px;
+  padding: 16px 20px;
+  font-size: 13px;
   margin-bottom: 10px;
 }
 
