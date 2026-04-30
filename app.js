@@ -55,7 +55,25 @@ function setupKumiaiFilter() {
     filterEl.appendChild(opt);
   });
   filterEl.dataset.populated = '1';
-  filterEl.addEventListener('change', applyFilters);
+
+  // 既定値: 直前の選択を localStorage から復元 → なければグローバルウェイを優先選択
+  const saved = localStorage.getItem('indexKumiaiFilter');
+  let defaultKumiai = '';
+  if (saved && kumiais.includes(saved)) {
+    defaultKumiai = saved;
+  } else {
+    const gw = kumiais.find(k => k.includes('グローバルウェイ'));
+    if (gw) defaultKumiai = gw;
+  }
+  if (defaultKumiai) {
+    filterEl.value = defaultKumiai;
+    applyFilters();
+  }
+
+  filterEl.addEventListener('change', () => {
+    localStorage.setItem('indexKumiaiFilter', filterEl.value);
+    applyFilters();
+  });
 }
 
 function setupOrgFilter() {
