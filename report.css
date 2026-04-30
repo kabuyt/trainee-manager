@@ -796,17 +796,21 @@ body {
 }
 
 /* ===== No-test notice ===== */
+/* navy + green を主軸とする全体パレットに合わせる暖色アクセント。
+   ターコッタ系のラスト (burnt sienna #b45309) は寒色のnavyと暖色対比で
+   響き合い、ブランドの --accent-warm (#f59e0b) とも自然に繋がる */
 .no-test-notice {
-  background: linear-gradient(135deg, var(--paper-3) 0%, var(--paper-2) 100%);
-  color: var(--navy);
-  border: 1px solid var(--rule-2);
-  border-left: 4px solid var(--navy);
+  background: linear-gradient(135deg, #fff8ee 0%, #fef3e6 100%);
+  color: #b45309;
+  border: 1px solid #f5e1c8;
+  border-left: 4px solid var(--accent-warm);
   padding: 18px 22px;
   border-radius: 8px;
   font-size: 14px;
   text-align: center;
   margin-bottom: 12px;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: .04em;
   letter-spacing: .06em;
 }
 .score-table-wrap.no-test .score-hero,
