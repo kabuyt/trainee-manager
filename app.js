@@ -27,8 +27,10 @@ async function loadTrainees() {
     data.sort((a, b) => sortKey(a.student_id).localeCompare(sortKey(b.student_id)));
 
     allTrainees = data;
-    setupKumiaiFilter();
-    renderTrainees(data);
+    // setupKumiaiFilter 内で applyFilters が呼ばれた場合は、
+    // 既にフィルタ適用された状態で render 済みなので重複呼び出ししない
+    const filterApplied = setupKumiaiFilter();
+    if (!filterApplied) renderTrainees(data);
   } catch (err) {
     document.getElementById('loadingMsg').classList.add('hidden');
     const errEl = document.getElementById('errorMsg');
@@ -38,15 +40,16 @@ async function loadTrainees() {
 }
 
 // 組合フィルタを populate（実習生データから一意の supervising_org を抽出）
+// 戻り値: フィルタを適用して render したかどうか (true なら呼び出し側は render 不要)
 function setupKumiaiFilter() {
   const filterEl = document.getElementById('kumiaiFilter');
-  if (!filterEl || filterEl.dataset.populated === '1') return;
+  if (!filterEl || filterEl.dataset.populated === '1') return false;
 
   const kumiais = [...new Set(allTrainees.map(t => t.supervising_org).filter(Boolean))].sort();
   // 1組合しか無い場合はフィルタ非表示
   if (kumiais.length <= 1) {
     filterEl.classList.add('hidden');
-    return;
+    return false;
   }
   kumiais.forEach(k => {
     const opt = document.createElement('option');
@@ -56,11 +59,17 @@ function setupKumiaiFilter() {
   });
   filterEl.dataset.populated = '1';
 
+  filterEl.addEventListener('change', () => {
+    localStorage.setItem('indexKumiaiFilter', filterEl.value);
+    applyFilters();
+  });
+
   // 既定値: 直前の選択を localStorage から復元 → なければグローバルウェイを優先選択
   const saved = localStorage.getItem('indexKumiaiFilter');
   let defaultKumiai = '';
-  if (saved && kumiais.includes(saved)) {
-    defaultKumiai = saved;
+  if (saved !== null) {
+    // 空文字（全組合）も保存対象なのでそのまま使う
+    if (saved === '' || kumiais.includes(saved)) defaultKumiai = saved;
   } else {
     const gw = kumiais.find(k => k.includes('グローバルウェイ'));
     if (gw) defaultKumiai = gw;
@@ -68,12 +77,9 @@ function setupKumiaiFilter() {
   if (defaultKumiai) {
     filterEl.value = defaultKumiai;
     applyFilters();
+    return true;
   }
-
-  filterEl.addEventListener('change', () => {
-    localStorage.setItem('indexKumiaiFilter', filterEl.value);
-    applyFilters();
-  });
+  return false;
 }
 
 function setupOrgFilter() {
