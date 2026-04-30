@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>教育報告書 - グローバルウェイ協同組合</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/jszip@3/dist/jszip.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans JP',sans-serif;background:#edf1f7;color:#102547;padding:24px;max-width:920px;margin:0 auto;font-size:14px}
+h1{color:#102547;font-size:22px;margin-bottom:8px;font-weight:700;border-left:4px solid #3DAE2B;padding-left:12px}
+h2{font-size:15px;margin:24px 0 8px;color:#102547;font-weight:600}
+.meta{color:#64748b;font-size:13px;margin-bottom:18px}
+.actions{margin-bottom:20px}
+.btn-dl{display:inline-block;background:#102547;color:#fff;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;cursor:pointer;border:none;font-family:inherit;box-shadow:0 2px 8px rgba(16,37,71,.25)}
+.btn-dl:hover{background:#1b3460}
+.btn-dl:disabled{opacity:.6;cursor:wait}
+.list{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.06);margin-bottom:14px}
+.item{display:flex;align-items:center;padding:14px 20px;border-bottom:1px solid #eef1f6;text-decoration:none;color:inherit;transition:background .15s}
+.item:last-child{border-bottom:none}
+.item:hover{background:#f7f8fb}
+.num{color:#8993a8;font-size:12px;width:32px;font-family:Inter,sans-serif}
+.name{flex:1;font-weight:600;color:#102547}
+.btn{background:#3DAE2B;color:#fff;padding:5px 14px;border-radius:6px;font-size:12px;font-weight:600}
+.footer{text-align:center;color:#8993a8;font-size:11px;margin-top:32px;padding:14px;letter-spacing:.1em}
+</style>
+</head>
+<body>
+<h1>教育報告書 グローバルウェイ協同組合</h1><p class="meta">2026年4月度 / 1ヶ月目 / 全13名</p><div class="actions"><button class="btn-dl" id="bulkZipBtn">📥 一括ダウンロード (ZIP)</button></div><h2>🏢 ロイヤルデリカ（5名）</h2><div class="list"><a href="ロイヤルデリカ/%E6%95%99%E8%82%B2%E5%A0%B1%E5%91%8A%E6%9B%B8%201%E3%83%B6%E6%9C%88%E7%9B%AE%20%E3%82%B0%E3%82%A8%E3%83%B3%E3%83%BB%E3%83%AC%E3%83%BC%E3%83%BB%E3%82%AD%E3%82%A7%E3%82%A6%E3%83%BB%E3%83%B4%E3%82%A3.pdf" class="item" target="_blank"><span class="num">1</span><span class="name">グエン・レー・キェウ・ヴィ</span><span class="btn">📄 PDF</span></a><a href="ロイヤルデリカ/%E6%95%99%E8%82%B2%E5%A0%B1%E5%91%8A%E6%9B%B8%201%E3%83%B6%E6%9C%88%E7%9B%AE%20%E3%83%81%E3%83%A3%E3%83%B3%E3%83%BB%E3%83%86%E3%82%A3%E3%83%BB%E3%82%AC%E3%83%B3%E3%83%BB%E3%83%AA%E3%83%B3.pdf" class="item" target="_blank"><span class="num">2</span><span class="name">チャン・ティ・ガン・リン</span><span class="btn">📄 PDF</span></a><a href="ロイヤルデリカ/%E6%95%99%E8%82%B2%E5%A0%B1%E5%91%8A%E6%9B%B8%201%E3%83%B6%E6%9C%88%E7%9B%AE%20%E3%83%80%E3%83%B3%E3%83%BB%E3%83%86%E3%82%A3%E3%83%BB%E3%82%BF%E3%82%A4%E3%83%B3%E3%83%BB%E3%83%88%E3%82%A5%E3%82%A4.pdf" class="item" target="_blank"><span class="num">3</span><span class="name">ダン・ティ・タイン・トゥイ</span><span class="btn">📄 PDF</span></a><a href="ロイヤルデリカ/%E6%95%99%E8%82%B2%E5%A0%B1%E5%91%8A%E6%9B%B8%201%E3%83%B6%E6%9C%88%E7%9B%AE%20%E3%83%81%E3%83%A3%E3%83%B3%E3%83%BB%E3%83%86%E3%82%A3%E3%83%BB%E3%83%88%E3%82%A5%E3%82%A4%E3%83%BB%E3%83%8F%E3%83%B3.pdf" class="item" target="_blank"><span class="num">4</span><span class="name">チャン・ティ・トゥイ・ハン</span><span class="btn">📄 PDF</span></a><a href="ロイヤルデリカ/%E6%95%99%E8%82%B2%E5%A0%B1%E5%91%8A%E6%9B%B8%201%E3%83%B6%E6%9C%88%E7%9B%AE%20%E3%82%B0%E3%82%A8%E3%83%B3%E3%83%BB%E3%82%AD%E3%83%A0%E3%83%BB%E3%82%AF%E3%82%A8%E3%83%B3.pdf" class="item" target="_blank"><span class="num">5</span><span class="name">グエン・キム・クエン</span><span class="btn">📄 PDF</span></a></div><h2>🏢 グロップジョイ YKK（2名）</h2><div class="list"><a href="グロップジョイ YKK/%E6%95%99%E8%82%B2%E5%A0%B1%E5%91%8A%E6%9B%B8%201%E3%83%B6%E6%9C%88%E7%9B%AE%20%E3%83%96%E3%82%A4%E3%83%BB%E3%83%86%E3%82%A3%E3%83%BB%E3%82%AD%E3%83%A0%E3%83%BB%E3%82%AC%E3%83%B3.pdf" class="item" target="_blank"><span class="num">1</span><span class="name">ブイ・ティ・キム・ガン</span><span class="btn">📄 PDF</span></a><a href="グロップジョイ YKK/%E6%95%99%E8%82%B2%E5%A0%B1%E5%91%8A%E6%9B%B8%201%E3%83%B6%E6%9C%88%E7%9B%AE%20%E3%82%B0%E3%82%A8%E3%83%B3%E3%83%BB%E3%83%86%E3%82%A3%E3%83%BB%E3%82%BF%E3%82%A4%E3%83%B3%E3%83%BB%E3%83%88%E3%82%A5%E3%82%AA%E3%83%B3.pdf" class="item" target="_blank"><span class="num">2</span><span class="name">グエン・ティ・タイン・トゥオン</span><span class="btn">📄 PDF</span></a></div><h2>🏢 株式会社  キンレイ亀山（6名）</h2><div class="list"><a href="株式会社  キンレイ亀山/%E6%95%99%E8%82%B2%E5%A0%B1%E5%91%8A%E6%9B%B8%201%E3%83%B6%E6%9C%88%E7%9B%AE%20%E3%83%89%E3%83%BC%E3%83%BB%E3%82%B0%E3%82%A8%E3%83%B3%E3%83%BB%E3%83%88%E3%82%A5%E3%82%A2%E3%83%B3%E3%83%BB%E3%82%BA%E3%82%A4.pdf" class="item" target="_blank"><span class="num">1</span><span class="name">ドー・グエン・トゥアン・ズイ</span><span class="btn">📄 PDF</span></a><a href="株式会社  キンレイ亀山/%E6%95%99%E8%82%B2%E5%A0%B1%E5%91%8A%E6%9B%B8%201%E3%83%B6%E6%9C%88%E7%9B%AE%20%E3%83%80%E3%83%B3%E3%83%BB%E3%82%BA%E3%82%A4%E3%83%BB%E3%82%AB%E3%83%B3.pdf" class="item" target="_blank"><span class="num">2</span><span class="name">ダン・ズイ・カン</span><span class="btn">📄 PDF</span></a><a href="株式会社  キンレイ亀山/%E6%95%99%E8%82%B2%E5%A0%B1%E5%91%8A%E6%9B%B8%201%E3%83%B6%E6%9C%88%E7%9B%AE%20%E3%83%81%E3%83%A3%E3%83%B3%E3%83%BB%E3%83%95%E3%83%83%E3%82%AF%E3%83%BB%E3%83%93%E3%83%B3.pdf" class="item" target="_blank"><span class="num">3</span><span class="name">チャン・フック・ビン</span><span class="btn">📄 PDF</span></a><a href="株式会社  キンレイ亀山/%E6%95%99%E8%82%B2%E5%A0%B1%E5%91%8A%E6%9B%B8%201%E3%83%B6%E6%9C%88%E7%9B%AE%20%E3%83%AC%E3%83%BB%E3%82%BF%E3%82%A4%E3%83%B3%E3%83%BB%E3%83%95%E3%82%A4.pdf" class="item" target="_blank"><span class="num">4</span><span class="name">レ・タイン・フイ</span><span class="btn">📄 PDF</span></a><a href="株式会社  キンレイ亀山/%E6%95%99%E8%82%B2%E5%A0%B1%E5%91%8A%E6%9B%B8%201%E3%83%B6%E6%9C%88%E7%9B%AE%20%E3%83%AC%E3%83%BB%E3%83%9F%E3%83%B3%E3%83%BB%E3%82%AB%E3%83%B3.pdf" class="item" target="_blank"><span class="num">5</span><span class="name">レ・ミン・カン</span><span class="btn">📄 PDF</span></a><a href="株式会社  キンレイ亀山/%E6%95%99%E8%82%B2%E5%A0%B1%E5%91%8A%E6%9B%B8%201%E3%83%B6%E6%9C%88%E7%9B%AE%20%E3%83%B4%E3%82%A1%E3%83%B3%E3%83%BB%E3%82%B3%E3%83%B3%E3%83%BB%E3%83%95%E3%83%BC.pdf" class="item" target="_blank"><span class="num">6</span><span class="name">ヴァン・コン・フー</span><span class="btn">📄 PDF</span></a></div>
+<div class="footer">GROP VIETNAM CO., LTD · 教育報告書</div>
+<script>
+document.getElementById('bulkZipBtn').addEventListener('click', async function() {
+  const btn=this; const orig=btn.textContent; btn.disabled=true; btn.textContent='⏳ ZIP生成中...';
+  try {
+    const files = ["ロイヤルデリカ/教育報告書 1ヶ月目 グエン・レー・キェウ・ヴィ.pdf", "ロイヤルデリカ/教育報告書 1ヶ月目 チャン・ティ・ガン・リン.pdf", "ロイヤルデリカ/教育報告書 1ヶ月目 ダン・ティ・タイン・トゥイ.pdf", "ロイヤルデリカ/教育報告書 1ヶ月目 チャン・ティ・トゥイ・ハン.pdf", "ロイヤルデリカ/教育報告書 1ヶ月目 グエン・キム・クエン.pdf", "グロップジョイ YKK/教育報告書 1ヶ月目 ブイ・ティ・キム・ガン.pdf", "グロップジョイ YKK/教育報告書 1ヶ月目 グエン・ティ・タイン・トゥオン.pdf", "株式会社  キンレイ亀山/教育報告書 1ヶ月目 ドー・グエン・トゥアン・ズイ.pdf", "株式会社  キンレイ亀山/教育報告書 1ヶ月目 ダン・ズイ・カン.pdf", "株式会社  キンレイ亀山/教育報告書 1ヶ月目 チャン・フック・ビン.pdf", "株式会社  キンレイ亀山/教育報告書 1ヶ月目 レ・タイン・フイ.pdf", "株式会社  キンレイ亀山/教育報告書 1ヶ月目 レ・ミン・カン.pdf", "株式会社  キンレイ亀山/教育報告書 1ヶ月目 ヴァン・コン・フー.pdf"];
+    const zip = new JSZip();
+    for (const f of files) {
+      const resp = await fetch(f);
+      if (resp.ok) { const blob = await resp.blob(); zip.file(f, blob); }
+    }
+    const content = await zip.generateAsync({type:'blob'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(content); a.download = "教育報告書_globalway_202604_1ヶ月目.zip"; a.click();
+    URL.revokeObjectURL(a.href);
+  } catch(e) { alert('ダウンロード失敗: '+e.message); }
+  btn.disabled=false; btn.textContent=orig;
+});
+</script>
+
+<script>
+(function() {
+  const KEY = 'kumiai_pw_globalway_202604';
+  if (sessionStorage.getItem(KEY) === 'globalway2026') return;
+  document.addEventListener('DOMContentLoaded', () => {
+    const overlay = document.createElement('div');
+    overlay.style.cssText='position:fixed;inset:0;background:#102547;display:flex;align-items:center;justify-content:center;z-index:9999;font-family:Noto Sans JP,sans-serif;color:#fff';
+    overlay.innerHTML = '<div style="background:#fff;color:#102547;padding:40px;border-radius:12px;max-width:380px;width:90%;text-align:center"><h2 style="margin-bottom:16px">パスワード入力</h2><input id="pwInput" type="password" placeholder="パスワード" style="width:100%;padding:10px;border:1px solid #ccc;border-radius:6px;font-size:15px;margin-bottom:12px"><button id="pwBtn" style="width:100%;padding:10px;background:#102547;color:#fff;border:none;border-radius:6px;font-size:15px;cursor:pointer">入る</button><p id="pwErr" style="color:#c0392b;font-size:13px;margin-top:8px;display:none">パスワードが違います</p></div>';
+    document.body.appendChild(overlay);
+    const inp=document.getElementById('pwInput');
+    const btn=document.getElementById('pwBtn');
+    const err=document.getElementById('pwErr');
+    const tryLogin=()=>{ if(inp.value === 'globalway2026'){ sessionStorage.setItem(KEY,'globalway2026'); overlay.remove(); } else { err.style.display='block'; inp.value=''; inp.focus(); } };
+    btn.addEventListener('click',tryLogin);
+    inp.addEventListener('keydown',e=>{ if(e.key==='Enter') tryLogin(); });
+    inp.focus();
+  });
+})();
+</script>
+
+</body></html>
