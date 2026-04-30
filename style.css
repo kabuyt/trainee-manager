@@ -145,6 +145,9 @@ td a:hover { text-decoration: underline; }
 .btn-danger { background: white; color: #dc2626; border: 1px solid #fca5a5; }
 .btn-danger:hover { background: #fef2f2; }
 
+.btn-report { background: #eef5ff; color: #1e40af; border: 1px solid #bfdbfe; text-decoration: none; }
+.btn-report:hover { background: #dbeafe; }
+
 .btn-sm { padding: 5px 12px; font-size: 13px; }
 
 .btn:disabled { opacity: 0.6; cursor: not-allowed; }

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>実習生管理システム</title>
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
   <header>
@@ -24,6 +24,9 @@
       <div class="toolbar">
         <div class="toolbar-left">
           <input type="text" id="searchInput" placeholder="名前・会社名で検索..." class="search-box">
+          <select id="kumiaiFilter" class="org-filter">
+            <option value="">全組合</option>
+          </select>
           <select id="orgFilter" class="org-filter hidden">
             <option value="">全送り出し機関</option>
           </select>
@@ -46,6 +49,7 @@
             <th>名前（カタカナ）</th>
             <th>会社名</th>
             <th>期</th>
+            <th>組合</th>
             <th id="thOrg" class="hidden">送り出し機関</th>
             <th>操作</th>
           </tr>
@@ -63,7 +67,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
   <script src="auth.js?v=5"></script>
-  <script src="app.js?v=46"></script>
+  <script src="app.js?v=47"></script>
   <script>
     (async function() {
       const auth = await checkAuth();

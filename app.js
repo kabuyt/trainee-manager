@@ -27,6 +27,7 @@ async function loadTrainees() {
     data.sort((a, b) => sortKey(a.student_id).localeCompare(sortKey(b.student_id)));
 
     allTrainees = data;
+    setupKumiaiFilter();
     renderTrainees(data);
   } catch (err) {
     document.getElementById('loadingMsg').classList.add('hidden');
@@ -34,6 +35,27 @@ async function loadTrainees() {
     errEl.textContent = 'データの読み込みに失敗しました: ' + err.message;
     errEl.classList.remove('hidden');
   }
+}
+
+// 組合フィルタを populate（実習生データから一意の supervising_org を抽出）
+function setupKumiaiFilter() {
+  const filterEl = document.getElementById('kumiaiFilter');
+  if (!filterEl || filterEl.dataset.populated === '1') return;
+
+  const kumiais = [...new Set(allTrainees.map(t => t.supervising_org).filter(Boolean))].sort();
+  // 1組合しか無い場合はフィルタ非表示
+  if (kumiais.length <= 1) {
+    filterEl.classList.add('hidden');
+    return;
+  }
+  kumiais.forEach(k => {
+    const opt = document.createElement('option');
+    opt.value = k;
+    opt.textContent = k;
+    filterEl.appendChild(opt);
+  });
+  filterEl.dataset.populated = '1';
+  filterEl.addEventListener('change', applyFilters);
 }
 
 function setupOrgFilter() {
@@ -60,8 +82,10 @@ function setupOrgFilter() {
 function applyFilters() {
   const searchEl = document.getElementById('searchInput');
   const orgEl = document.getElementById('orgFilter');
+  const kumiaiEl = document.getElementById('kumiaiFilter');
   const q = (searchEl ? searchEl.value : '').toLowerCase();
   const orgId = orgEl ? orgEl.value : '';
+  const kumiai = kumiaiEl ? kumiaiEl.value : '';
 
   let filtered = allTrainees;
   if (q) {
@@ -73,6 +97,9 @@ function applyFilters() {
   }
   if (orgId) {
     filtered = filtered.filter(t => t.organization_id === orgId);
+  }
+  if (kumiai) {
+    filtered = filtered.filter(t => t.supervising_org === kumiai);
   }
   renderTrainees(filtered);
 }
@@ -99,9 +126,11 @@ function renderTrainees(data) {
       <td>${t.name_katakana || '-'}</td>
       <td>${t.company || '-'}</td>
       <td>${t.class_group || '-'}</td>
+      <td>${t.supervising_org || '-'}</td>
       ${showOrg ? `<td>${t.organizations?.name || '-'}</td>` : ''}
       <td>
         <a href="trainee.html?id=${t.id}" class="btn btn-sm btn-secondary">詳細</a>
+        <a href="report.html?id=${t.id}" target="_blank" class="btn btn-sm btn-report" title="教育報告書を開く">📄 報告書</a>
         <button onclick="deleteTrainee('${t.id}')" class="btn btn-sm btn-danger">削除</button>
       </td>
     </tr>
@@ -118,8 +147,10 @@ function filterTrainees(query) {
 function getFilteredTrainees() {
   const searchEl = document.getElementById('searchInput');
   const orgEl = document.getElementById('orgFilter');
+  const kumiaiEl = document.getElementById('kumiaiFilter');
   const q = (searchEl ? searchEl.value : '').toLowerCase();
   const orgId = orgEl ? orgEl.value : '';
+  const kumiai = kumiaiEl ? kumiaiEl.value : '';
 
   let filtered = allTrainees;
   if (q) {
@@ -131,6 +162,9 @@ function getFilteredTrainees() {
   }
   if (orgId) {
     filtered = filtered.filter(t => t.organization_id === orgId);
+  }
+  if (kumiai) {
+    filtered = filtered.filter(t => t.supervising_org === kumiai);
   }
   return filtered;
 }
