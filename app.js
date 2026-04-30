@@ -814,6 +814,12 @@ function switchMonth(month) {
 
   // 該当月のコメントを表示
   renderMonthComments(_reportMonthly[month]);
+
+  // PDF/印刷ファイル名用 document.title を月変更に追従
+  const kata = (document.getElementById('rNameKata') || {}).textContent || '';
+  if (kata && kata !== '-') {
+    document.title = `教育報告書 ${month}ヶ月目 ${kata}`;
+  }
 }
 
 function renderMonthScores(result) {
@@ -1051,6 +1057,11 @@ function renderReport(t, results, classResults) {
   const kataDisplay = (t.name_katakana || '').replace(/[\s\u3000]+/g, '・').trim() || '-';
   document.getElementById('rNameKata').textContent = kataDisplay;
   document.getElementById('rNameRomaji').textContent = t.name_romaji || '-';
+  // PDF/印刷時のデフォルトファイル名は document.title から取られる
+  // 「教育報告書 〇ヶ月目 名前カタカナ」形式に
+  if (kataDisplay && kataDisplay !== '-') {
+    document.title = `教育報告書 ${_currentMonth}ヶ月目 ${kataDisplay}`;
+  }
   // 監理団体・送り出し機関（modern版のみ。classic版には存在しないので getElementById ガード）
   const supEl = document.getElementById('rSupervisor');
   if (supEl) supEl.textContent = t.supervising_org || '-';
