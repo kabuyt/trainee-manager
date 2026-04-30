@@ -863,12 +863,16 @@ body {
 .readonly-view [contenteditable]:empty::before { content: none !important; }
 .readonly-view .editable-score { background: transparent !important; outline: none !important; }
 
-/* グラフ非表示時もページブレイクを維持して、生活状況・態度詳細が
-   2ページ目に来るようにする（レイアウトの一貫性を優先） */
-/* body.no-trend .section-header.page-break-before {
+/* グラフ非表示時はページ分割を変更:
+   学習状況 は1ページ目に残し、生活状況・態度詳細 から2ページ目に */
+body.no-trend .section-header.page-break-before {
   break-before: auto !important;
   page-break-before: auto !important;
-} */
+}
+body.no-trend #lifeSectionHeader {
+  break-before: page !important;
+  page-break-before: always !important;
+}
 
 /* ===== Print ===== */
 @media print {
