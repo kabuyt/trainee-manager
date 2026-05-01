@@ -252,7 +252,7 @@ body { font-family: 'Noto Sans JP', sans-serif; background: #edf1f7; color: #1e2
 </div><!-- /main-content -->
 
 <script>
-const PASS_HASH = '45a0d88e1a6f25d07741d4ce2995c733eec586bced00051905ce3c88cf146ddb';
+const PASS_HASH = '17e0ee807f334cb9fd4e82d524f4ef2d7250d27e9cb811bf0804e64eaa592b44';
 async function sha256(text) {
   const encoded = new TextEncoder().encode(text);
   const buffer = await crypto.subtle.digest('SHA-256', encoded);
@@ -265,7 +265,7 @@ document.getElementById('authForm').addEventListener('submit', async (e) => {
   const err = document.getElementById('authError');
   const hash = await sha256(inp.value);
   if (hash === PASS_HASH) {
-    sessionStorage.setItem('auth_hiroshimaworld', '1');
+    sessionStorage.setItem('auth_worldbusiness', '1');
     document.getElementById('authOverlay').style.display = 'none';
     document.getElementById('mainContent').style.display = 'block';
   } else {
@@ -274,7 +274,7 @@ document.getElementById('authForm').addEventListener('submit', async (e) => {
     inp.value = ''; inp.focus();
   }
 });
-if (sessionStorage.getItem('auth_hiroshimaworld') === '1') {
+if (sessionStorage.getItem('auth_worldbusiness') === '1') {
   document.getElementById('authOverlay').style.display = 'none';
   document.getElementById('mainContent').style.display = 'block';
 } else {
@@ -302,7 +302,7 @@ async function downloadZip(files, zipName, btn) {
 }
 
 document.getElementById('bulkZipBtn').addEventListener('click', () => {
-  downloadZip(ALL_FILES, '教育報告書_hiroshimaworld_202605.zip', document.getElementById('bulkZipBtn'));
+  downloadZip(ALL_FILES, '教育報告書_worldbusiness_202605.zip', document.getElementById('bulkZipBtn'));
 });
 document.querySelectorAll('.btn-company-dl').forEach(btn => {
   btn.addEventListener('click', () => {
