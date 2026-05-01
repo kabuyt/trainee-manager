@@ -158,16 +158,18 @@ git add reports/ && git commit -m "reports: 月次更新" && git push</pre>
 
     function isReportEmpty(r) {
       if (!r) return true;
-      // 判定対象: 週別活動 + 学習状況詳細 + 生活状況詳細
+      // 判定対象: 週別活動 + 学習状況詳細 + 生活状況詳細（計12フィールド）
       // life_personality は前月引き継ぎなので除外、learn_progress は week4 から自動抽出なので除外
       const fields = [
         'week1','week2','week3','week4',                                // 週別活動
         'learn_good','learn_bad','learn_measure','learn_improve',       // 学習状況詳細
         'life_good','life_bad','life_measure','life_improve',           // 生活状況・態度詳細
       ];
-      return fields.every(f => {
+      // 12個のうち1つでも空欄があれば未入力扱い
+      return fields.some(f => {
         const v = (r[f] || '').replace(/<[^>]+>/g,'').trim();
-        return v === '' || v === '※特記事項なし' || v === '-';
+        return v === '' || v === '-';
+        // 「※特記事項なし」は明示的に記入されたものとして入力済み扱い
       });
     }
 
