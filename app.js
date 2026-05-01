@@ -633,7 +633,8 @@ function renderTraineeDetail(t, results) {
 }
 
 // ===== 教育報告書 =====
-const MONTH_TEST_MAP = [
+// みん日カリキュラム: 全50課を8回テストでカバー
+const MONTH_TEST_MAP_MINNA = [
   { month: 1, test: 'test1', testLabel: '第1-4課',   scope: '第4課迄' },
   { month: 2, test: 'test2', testLabel: '第5-11課',  scope: '第11課迄' },
   { month: 3, test: 'test3', testLabel: '第12-18課', scope: '第18課迄' },
@@ -644,6 +645,26 @@ const MONTH_TEST_MAP = [
   { month: 8, test: 'test8', testLabel: '第46-50課', scope: '第50課迄' },
 ];
 
+// まるごとカリキュラム: 全18課を4回テストでカバー（5-8ヶ月目はテストなし）
+const MONTH_TEST_MAP_MARUGOTO = [
+  { month: 1, test: 'marugoto_1', testLabel: 'L1-L5',   scope: 'L5迄' },
+  { month: 2, test: 'marugoto_2', testLabel: 'L6-L10',  scope: 'L10迄' },
+  { month: 3, test: 'marugoto_3', testLabel: 'L11-L14', scope: 'L14迄' },
+  { month: 4, test: 'marugoto_4', testLabel: 'L15-L18', scope: 'L18迄' },
+];
+
+function getMonthTestMap(curriculum) {
+  return curriculum === 'marugoto' ? MONTH_TEST_MAP_MARUGOTO : MONTH_TEST_MAP_MINNA;
+}
+
+// _reportTrainee.curriculum を見て現在の表示用マップを返す
+function currentMonthMap() {
+  return getMonthTestMap(_reportTrainee?.curriculum);
+}
+
+// レガシー名（後方互換、curriculum 切替前提のないコードからの直接参照用）
+const MONTH_TEST_MAP = MONTH_TEST_MAP_MINNA;
+
 // test_name を検索する（新旧両フォーマット対応）
 function matchTest(row, map) {
   return row.test_name === map.test || row.test_name === map.testLabel;
@@ -651,7 +672,7 @@ function matchTest(row, map) {
 
 // 会話スコアを DB に保存（報告書画面から呼ばれる）
 async function saveConversationScore(value) {
-  const map = MONTH_TEST_MAP.find(m => m.month === _currentMonth);
+  const map = currentMonthMap().find(m => m.month === _currentMonth);
   if (!map || !_reportTrainee) return;
   const existing = _reportResults.find(r => matchTest(r, map));
   const convCell = document.getElementById('sConv');
@@ -760,12 +781,19 @@ async function loadReport() {
       _reportSections[s.test_id][s.section_type] = { answer_key: s.answer_key, scoring_rules: s.scoring_rules };
     });
 
+    // curriculum に応じて月セレクタの選択肢を構築（marugoto は1-4、minna は1-8）
+    const monthSelEl = document.getElementById('monthSelect');
+    if (monthSelEl) {
+      const months = currentMonthMap().map(m => m.month);
+      monthSelEl.innerHTML = months.map(n => `<option value="${n}">${n}</option>`).join('');
+    }
+
     // 最新月の自動選択（テスト結果 + レポート記入のどちらか高い方）
     let initMonth = 1;
 
-    // 1. テスト結果から最大月（新旧フォーマット対応）
+    // 1. テスト結果から最大月（新旧フォーマット対応、curriculum 別）
     if (_reportResults.length > 0) {
-      for (const map of MONTH_TEST_MAP) {
+      for (const map of currentMonthMap()) {
         if (_reportResults.some(r => matchTest(r, map))) {
           initMonth = Math.max(initMonth, map.month);
         }
@@ -843,7 +871,7 @@ async function loadReport() {
 
 function switchMonth(month) {
   _currentMonth = month;
-  const map = MONTH_TEST_MAP.find(m => m.month === month);
+  const map = currentMonthMap().find(m => m.month === month);
   if (!map) return;
 
   // 試験範囲ラベル更新
@@ -878,8 +906,8 @@ function renderMonthScores(result) {
     document.getElementById('sTotal').textContent = total;
 
     // 統計
-    // 新旧両フォーマットの test_name を同一視（test2 <-> 第5-11課）
-    const map = MONTH_TEST_MAP.find(m => matchTest(result, m));
+    // 新旧両フォーマットの test_name を同一視（test2 <-> 第5-11課、marugoto も同様）
+    const map = currentMonthMap().find(m => matchTest(result, m));
     // 同一 trainee_id の重複（再受験など）は最新 test_date のみ採用
     const dedupeByTrainee = (arr) => {
       const m = new Map();
@@ -1152,16 +1180,17 @@ function renderReport(t, results, classResults) {
     photoArea.innerHTML = `<img src="${t.photo_url}" alt="写真" width="${w}" height="${h}" style="width:${w}px;height:${h}px;max-width:${w}px;max-height:${h}px;object-fit:cover;display:block;" crossorigin="anonymous">`;
   }
 
-  // 成績推移テーブル + グラフ（全8回分表示）
-  // 第1回（test1/第1-4課）未受験の場合はセクション全体を非表示
-  const hasTest1 = (results || []).some(r => r.test_name === 'test1' || r.test_name === '第1-4課');
+  // 成績推移テーブル + グラフ（curriculum 別の全回分表示）
+  // 第1回未受験の場合はセクション全体を非表示
+  const _firstMap = currentMonthMap()[0];
+  const hasTest1 = (results || []).some(r => matchTest(r, _firstMap));
   const trendSection = document.getElementById('trendSection');
   if (trendSection) trendSection.style.display = hasTest1 ? '' : 'none';
   // 改ページ制御用のbodyクラス
   document.body.classList.toggle('no-trend', !hasTest1);
   if (hasTest1) {
     const tbody = document.getElementById('trendBody');
-    tbody.innerHTML = MONTH_TEST_MAP.map(m => {
+    tbody.innerHTML = currentMonthMap().map(m => {
       const label = m.testLabel;
       const r = results.find(row => matchTest(row, m));
       if (r) {
@@ -1198,9 +1227,10 @@ function renderTrendChart(results) {
   const ctx = document.getElementById('trendChart');
   if (!ctx) return;
 
-  // 全8回分のラベルを固定（MONTH_TEST_MAP の順序）
-  const labels = MONTH_TEST_MAP.map(m => m.testLabel);
-  const resolved = MONTH_TEST_MAP.map(m => results.find(r => matchTest(r, m)) || null);
+  // 各カリキュラムの全回分のラベルを固定（curriculum 別）
+  const _map = currentMonthMap();
+  const labels = _map.map(m => m.testLabel);
+  const resolved = _map.map(m => results.find(r => matchTest(r, m)) || null);
 
   const vocabData = resolved.map(r => r ? (r.score_vocab ?? 0) : null);
   const grammarData = resolved.map(r => r ? (r.score_grammar ?? 0) : null);
