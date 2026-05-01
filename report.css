@@ -861,12 +861,13 @@ body {
 .readonly-view .editable-score { background: transparent !important; outline: none !important; }
 
 /* グラフ非表示時はページ分割を変更:
-   学習状況 は1ページ目に残し、生活状況・態度詳細 から2ページ目に */
+   学習状況・週別活動 は1ページ目に残し、学習状況詳細 から2ページ目に
+   （学習状況詳細 + 生活状況・態度詳細 を2枚目にまとめる） */
 body.no-trend .section-header.page-break-before {
   break-before: auto !important;
   page-break-before: auto !important;
 }
-body.no-trend #lifeSectionHeader {
+body.no-trend #learnDetailSub {
   break-before: page !important;
   page-break-before: always !important;
 }
