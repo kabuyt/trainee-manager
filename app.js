@@ -760,13 +760,30 @@ async function loadReport() {
       _reportSections[s.test_id][s.section_type] = { answer_key: s.answer_key, scoring_rules: s.scoring_rules };
     });
 
-    // 最新テスト結果の月を自動選択
+    // 最新月の自動選択（テスト結果 + レポート記入のどちらか高い方）
     let initMonth = 1;
+
+    // 1. テスト結果から最大月（新旧フォーマット対応）
     if (_reportResults.length > 0) {
-      const latestTest = _reportResults[_reportResults.length - 1].test_name;
-      const found = MONTH_TEST_MAP.find(m => m.test === latestTest);
-      if (found) initMonth = found.month;
+      for (const map of MONTH_TEST_MAP) {
+        if (_reportResults.some(r => matchTest(r, map))) {
+          initMonth = Math.max(initMonth, map.month);
+        }
+      }
     }
+
+    // 2. 月次レポートから最大月（記入されたフィールドがある月）
+    const reportFields = ['week1','week2','week3','week4',
+      'learn_good','learn_bad','learn_measure','learn_improve',
+      'life_good','life_bad','life_measure','life_improve'];
+    Object.values(_reportMonthly || {}).forEach(r => {
+      if (!r || !r.month) return;
+      const hasContent = reportFields.some(f => {
+        const v = (r[f] || '').replace(/<[^>]+>/g, '').trim();
+        return v && v !== '※特記事項なし' && v !== '-';
+      });
+      if (hasContent) initMonth = Math.max(initMonth, r.month);
+    });
 
     renderReport(trainee, _reportResults, classResults);
     // 月を設定して切替
