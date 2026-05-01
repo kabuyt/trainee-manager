@@ -17,8 +17,8 @@
         <a href="index.html" class="active">🏠 ダッシュボード</a>
         <a href="register.html">+ 新規登録</a>
         <a href="test-results.html">📊 成績</a>
-        <a href="https://kabuyt.github.io/nihongo-test-1-4ka/test-admin.html" target="_blank">🔓 テスト解放</a>
-        <a href="https://kabuyt.github.io/nihongo-test-1-4ka/test-preview.html" target="_blank">👁 プレビュー</a>
+        <a href="https://kabuyt.github.io/nihongo-test-1-4ka/test-admin.html" target="_blank" class="admin-only">🔓 テスト解放</a>
+        <a href="https://kabuyt.github.io/nihongo-test-1-4ka/test-preview.html" target="_blank" class="admin-only">👁 プレビュー</a>
       </nav>
     </div>
   </header>
@@ -43,9 +43,9 @@
           <div class="stat-value" id="statReports">--</div>
           <div class="stat-sub" id="statReportsSub">--</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card admin-only">
           <div class="stat-label">配布サイト</div>
-          <div class="stat-value" id="statDistrib" style="font-size:18px">3組合</div>
+          <div class="stat-value" style="font-size:18px">3組合</div>
           <div class="stat-sub">globalway / cic / worldbusiness</div>
         </div>
       </div>
@@ -57,10 +57,10 @@
           <a href="register.html" class="qa-btn primary">+ 新規実習生登録</a>
           <a href="test-results.html" class="qa-btn">📊 成績一覧（会話入力）</a>
           <button class="qa-btn" onclick="exportLoginCards()">📇 ログインカード出力</button>
-          <a href="https://kabuyt.github.io/trainee-manager/reports/globalway/" target="_blank" class="qa-btn">📁 globalway DLサイト</a>
-          <a href="https://kabuyt.github.io/trainee-manager/reports/cic/" target="_blank" class="qa-btn">📁 cic DLサイト</a>
-          <a href="https://kabuyt.github.io/trainee-manager/reports/worldbusiness/" target="_blank" class="qa-btn">📁 worldbusiness DLサイト</a>
-          <button class="qa-btn" onclick="showRegenInstructions()">🔄 配布サイト再生成手順</button>
+          <a href="https://kabuyt.github.io/trainee-manager/reports/globalway/" target="_blank" class="qa-btn admin-only">📁 globalway DLサイト</a>
+          <a href="https://kabuyt.github.io/trainee-manager/reports/cic/" target="_blank" class="qa-btn admin-only">📁 cic DLサイト</a>
+          <a href="https://kabuyt.github.io/trainee-manager/reports/worldbusiness/" target="_blank" class="qa-btn admin-only">📁 worldbusiness DLサイト</a>
+          <button class="qa-btn admin-only" onclick="showRegenInstructions()">🔄 配布サイト再生成手順</button>
         </div>
       </div>
 
