@@ -3,24 +3,69 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>実習生管理システム</title>
-  <link rel="stylesheet" href="style.css?v=7">
+  <title>GROP VIETNAM 教育管理</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
   <header>
     <div class="header-inner">
-      <h1>GROP VIETNAM 実習生管理システム</h1>
+      <h1>VIETNAM 教育管理</h1>
       <nav>
-        <a href="index.html" class="active">一覧</a>
-        <a href="register.html">新規登録</a>
+        <a href="index.html" class="active">🏠 ダッシュボード</a>
+        <a href="register.html">+ 新規登録</a>
         <a href="test-results.html">📊 成績</a>
-        <a href="reports-bulk.html">📁 報告書一括出力</a>
+        <a href="kumiai.html">📁 組合ポータル</a>
+        <a href="https://kabuyt.github.io/nihongo-test-1-4ka/test-admin.html" target="_blank">🔓 テスト解放</a>
+        <a href="https://kabuyt.github.io/nihongo-test-1-4ka/test-preview.html" target="_blank">👁 プレビュー</a>
       </nav>
     </div>
   </header>
 
   <main>
     <div class="container">
+
+      <!-- ===== ダッシュボード ===== -->
+      <div class="dashboard-grid" id="dashboardGrid">
+        <div class="stat-card">
+          <div class="stat-label">実習生</div>
+          <div class="stat-value" id="statTrainees">--</div>
+          <div class="stat-sub" id="statTraineesSub">読み込み中...</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">受験率（最新月）</div>
+          <div class="stat-value" id="statTestRate">--</div>
+          <div class="stat-sub" id="statTestRateSub">--</div>
+        </div>
+        <div class="stat-card" id="statReportsCard">
+          <div class="stat-label">未入力レポート</div>
+          <div class="stat-value" id="statReports">--</div>
+          <div class="stat-sub" id="statReportsSub">--</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">配布サイト</div>
+          <div class="stat-value" id="statDistrib" style="font-size:18px">3組合</div>
+          <div class="stat-sub">globalway / cic / worldbusiness</div>
+        </div>
+      </div>
+
+      <!-- ===== クイックアクション ===== -->
+      <div class="quick-actions">
+        <h3>⚡ クイックアクション</h3>
+        <div class="quick-action-grid">
+          <a href="register.html" class="qa-btn primary">+ 新規実習生登録</a>
+          <a href="test-results.html" class="qa-btn">📊 成績一覧（会話入力）</a>
+          <button class="qa-btn" onclick="exportLoginCards()">📇 ログインカード出力</button>
+          <a href="https://kabuyt.github.io/trainee-manager/reports/globalway/" target="_blank" class="qa-btn">📁 globalway DLサイト</a>
+          <a href="https://kabuyt.github.io/trainee-manager/reports/cic/" target="_blank" class="qa-btn">📁 cic DLサイト</a>
+          <a href="https://kabuyt.github.io/trainee-manager/reports/worldbusiness/" target="_blank" class="qa-btn">📁 worldbusiness DLサイト</a>
+          <button class="qa-btn" onclick="showRegenInstructions()">🔄 配布サイト再生成手順</button>
+        </div>
+      </div>
+
+      <!-- ===== 実習生一覧 ===== -->
       <div class="toolbar">
         <div class="toolbar-left">
           <input type="text" id="searchInput" placeholder="名前・会社名で検索..." class="search-box">
@@ -30,11 +75,6 @@
           <select id="orgFilter" class="org-filter hidden">
             <option value="">全送り出し機関</option>
           </select>
-        </div>
-        <div class="toolbar-right" style="display:flex;gap:8px">
-          <a href="reports-bulk.html" class="btn btn-secondary admin-only" style="display:none">📁 報告書一括出力</a>
-          <button id="exportLoginCardsBtn" class="btn btn-secondary" onclick="exportLoginCards()">📇 ログインカード出力</button>
-          <a href="register.html" class="btn btn-primary">+ 新規登録</a>
         </div>
       </div>
 
@@ -64,16 +104,96 @@
     </div>
   </main>
 
+  <!-- 再生成手順モーダル -->
+  <div id="regenModal" style="display:none;position:fixed;inset:0;background:rgba(16,37,71,.5);z-index:1000;align-items:center;justify-content:center" onclick="if(event.target===this)this.style.display='none'">
+    <div style="background:#fff;max-width:560px;width:90%;border-radius:12px;padding:28px;box-shadow:0 4px 20px rgba(0,0,0,.2)">
+      <h3 style="color:#102547;margin-bottom:14px">🔄 配布サイト再生成手順</h3>
+      <p style="color:#4a5878;margin-bottom:14px;font-size:13.5px">PowerShell を開いて以下を実行してください:</p>
+      <pre id="regenCmd" style="background:#0f1a2e;color:#3DAE2B;padding:16px;border-radius:8px;font-size:12px;overflow-x:auto;line-height:1.7">cd C:\Users\kabuyamat\Desktop\trainee-manager
+python bulk_pdf.py --kumiai globalway --auto-month --all --site --password globalway2026
+python bulk_pdf.py --kumiai cic --auto-month --all --site --password cic2026
+python bulk_pdf.py --kumiai worldbusiness --auto-month --all --site --password worldbusiness2026
+rm -rf reports/globalway reports/cic reports/worldbusiness
+cp -r reports_pdf/globalway reports_pdf/cic reports_pdf/worldbusiness reports/
+git add reports/ && git commit -m "reports: 月次更新" && git push</pre>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
+        <button onclick="navigator.clipboard.writeText(document.getElementById('regenCmd').textContent);this.textContent='✓ コピー済';" class="btn btn-secondary">📋 コピー</button>
+        <button onclick="document.getElementById('regenModal').style.display='none'" class="btn btn-primary">閉じる</button>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
   <script src="auth.js?v=5"></script>
   <script src="app.js?v=49"></script>
   <script>
+    function showRegenInstructions() {
+      document.getElementById('regenModal').style.display = 'flex';
+    }
+
+    // ===== ダッシュボード統計 =====
+    async function loadDashboardStats() {
+      try {
+        // 実習生総数
+        const { count: traineeCount } = await supabase
+          .from('trainees')
+          .select('*', { count: 'exact', head: true });
+        document.getElementById('statTrainees').textContent = traineeCount || 0;
+        document.getElementById('statTraineesSub').textContent = '名（全組合計）';
+
+        // 最新月の test_name を判定（test_results から最新の月）
+        const { data: latestTest } = await supabase
+          .from('test_results')
+          .select('test_name')
+          .order('test_date', { ascending: false })
+          .limit(1)
+          .single();
+        if (latestTest) {
+          const testName = latestTest.test_name;
+          const monthMatch = /^test(\d+)$/.exec(testName) || /^第(\d+)-/.exec(testName);
+          const monthNum = monthMatch ? parseInt(monthMatch[1]) : null;
+
+          // 該当 test_name の受験者数
+          const { count: examCount } = await supabase
+            .from('test_results')
+            .select('*', { count: 'exact', head: true })
+            .eq('test_name', testName);
+
+          if (traineeCount && examCount) {
+            const rate = Math.round((examCount / traineeCount) * 100);
+            document.getElementById('statTestRate').textContent = rate + '%';
+            document.getElementById('statTestRateSub').textContent =
+              `${examCount} / ${traineeCount}名${monthNum ? '・' + monthNum + 'ヶ月目' : ''}`;
+          }
+        }
+
+        // 未入力レポート（learn_good 等が空のもの）
+        const { data: reports } = await supabase
+          .from('monthly_reports')
+          .select('learn_good, learn_bad, life_good, life_bad');
+        const blank = (reports || []).filter(r =>
+          !(r.learn_good || r.learn_bad || r.life_good || r.life_bad)
+        ).length;
+        const total = (reports || []).length;
+        const reportsEl = document.getElementById('statReports');
+        const reportsCardEl = document.getElementById('statReportsCard');
+        reportsEl.textContent = blank + '/' + total;
+        document.getElementById('statReportsSub').textContent =
+          blank === 0 ? '全件入力済み' : '件 未入力（一部）';
+        if (blank > total / 2) reportsCardEl.classList.add('warn');
+
+      } catch (err) {
+        console.error('ダッシュボード統計取得失敗:', err);
+      }
+    }
+
     (async function() {
       const auth = await checkAuth();
       if (!auth) return;
       setupAuthUI();
       await loadTrainees();
+      loadDashboardStats(); // 並行で
 
       document.getElementById('searchInput').addEventListener('input', function() {
         filterTrainees(this.value);
