@@ -64,6 +64,15 @@
         </div>
       </div>
 
+      <!-- ===== 未入力レポート ===== -->
+      <div class="pending-reports" id="pendingReports" style="display:none">
+        <div class="pending-header">
+          <h3>📝 未入力レポート <span class="pending-count" id="pendingCount">0</span></h3>
+          <button class="pending-toggle" id="pendingToggle" onclick="togglePendingList()">折りたたみ</button>
+        </div>
+        <div class="pending-list" id="pendingList"></div>
+      </div>
+
       <!-- ===== 実習生一覧 ===== -->
       <div class="toolbar">
         <div class="toolbar-left">
@@ -131,6 +140,103 @@ git add reports/ && git commit -m "reports: 月次更新" && git push</pre>
       document.getElementById('regenModal').style.display = 'flex';
     }
 
+    function togglePendingList() {
+      const list = document.getElementById('pendingList');
+      const btn = document.getElementById('pendingToggle');
+      list.classList.toggle('collapsed');
+      btn.textContent = list.classList.contains('collapsed') ? '展開' : '折りたたみ';
+    }
+
+    // ===== 未入力レポート一覧 =====
+    // テスト名 → 月番号
+    const TEST_TO_MONTH = {
+      'test1':1, 'test2':2, 'test3':3, 'test4':4,
+      'test5':5, 'test6':6, 'test7':7, 'test8':8,
+      '第1-4課':1, '第5-11課':2, '第12-18課':3, '第19-25課':4,
+      '第26-33課':5, '第34-40課':6, '第41-45課':7, '第46-50課':8,
+    };
+
+    function isReportEmpty(r) {
+      if (!r) return true;
+      const fields = ['learn_good','learn_bad','learn_measure','learn_improve',
+        'life_good','life_bad','life_measure','life_improve','life_personality',
+        'week1','week2','week3','week4'];
+      return fields.every(f => {
+        const v = (r[f] || '').replace(/<[^>]+>/g,'').trim();
+        return v === '' || v === '※特記事項なし' || v === '-';
+      });
+    }
+
+    async function loadPendingReports() {
+      try {
+        // 1. 全実習生（RLS で自動フィルタ）
+        const { data: trainees } = await supabase
+          .from('trainees')
+          .select('id, student_id, name_katakana, name_romaji, supervising_org, company, class_group')
+          .order('student_id');
+        if (!trainees || !trainees.length) return;
+
+        // 2. テスト結果から各人の現在月を判定
+        const { data: results } = await supabase
+          .from('test_results')
+          .select('trainee_id, test_name');
+        const traineeMonth = {};
+        trainees.forEach(t => {
+          const tests = (results || []).filter(r => r.trainee_id === t.id);
+          const months = tests.map(r => TEST_TO_MONTH[r.test_name]).filter(m => m);
+          traineeMonth[t.id] = months.length ? Math.max(...months) : 1;
+        });
+
+        // 3. 月次レポート取得
+        const { data: reports } = await supabase
+          .from('monthly_reports')
+          .select('*');
+
+        // 4. 未入力判定
+        const pending = [];
+        trainees.forEach(t => {
+          const targetMonth = traineeMonth[t.id];
+          const report = (reports || []).find(r =>
+            r.trainee_id === t.id && r.month === targetMonth);
+          if (isReportEmpty(report)) {
+            pending.push({ trainee: t, month: targetMonth });
+          }
+        });
+
+        // 5. 描画
+        const panel = document.getElementById('pendingReports');
+        const countEl = document.getElementById('pendingCount');
+        const listEl = document.getElementById('pendingList');
+        panel.style.display = '';
+        countEl.textContent = pending.length;
+        if (pending.length === 0) {
+          countEl.classList.add('zero');
+          listEl.innerHTML = '<div class="pending-empty">✅ 全レポート入力済みです</div>';
+          return;
+        }
+        // 組合 → 学生IDでソート
+        pending.sort((a, b) => {
+          const oa = a.trainee.supervising_org || '';
+          const ob = b.trainee.supervising_org || '';
+          if (oa !== ob) return oa.localeCompare(ob);
+          return (a.trainee.student_id || '').localeCompare(b.trainee.student_id || '');
+        });
+        listEl.innerHTML = pending.map(({ trainee, month }) => {
+          const kataDisplay = (trainee.name_katakana || '').replace(/[\s　]+/g, '・');
+          const orgLabel = (trainee.company || '').replace('株式会社','').trim() +
+            (trainee.class_group ? ' ' + trainee.class_group : '');
+          return `<a href="report.html?id=${trainee.id}#m=${month}" class="pending-item" target="_blank">
+            <span class="sid">${trainee.student_id || '?'}</span>
+            <span class="name">${kataDisplay || '?'} <span class="org">${orgLabel}</span></span>
+            <span class="month-badge">${month}ヶ月目</span>
+            <span style="color:var(--green-2);font-size:11px;font-weight:600">編集 →</span>
+          </a>`;
+        }).join('');
+      } catch (err) {
+        console.error('未入力レポート取得失敗:', err);
+      }
+    }
+
     // ===== ダッシュボード統計 =====
     async function loadDashboardStats() {
       try {
@@ -193,6 +299,7 @@ git add reports/ && git commit -m "reports: 月次更新" && git push</pre>
       setupAuthUI();
       await loadTrainees();
       loadDashboardStats(); // 並行で
+      loadPendingReports(); // 並行で
 
       document.getElementById('searchInput').addEventListener('input', function() {
         filterTrainees(this.value);

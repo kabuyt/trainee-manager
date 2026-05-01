@@ -228,6 +228,113 @@ main { padding: 28px 24px; }
 }
 
 /* ============================================================
+   Pending reports panel
+   ============================================================ */
+.pending-reports {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--warn);
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin-bottom: 24px;
+}
+.pending-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.pending-reports h3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: .04em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pending-count {
+  background: var(--warn);
+  color: #fff;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+}
+.pending-count.zero {
+  background: var(--green);
+}
+.pending-toggle {
+  background: transparent;
+  border: 1px solid var(--rule-2);
+  color: var(--ink-soft);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.pending-toggle:hover { background: var(--paper-2); }
+.pending-list {
+  display: grid;
+  gap: 6px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+.pending-list.collapsed { display: none; }
+.pending-item {
+  display: grid;
+  grid-template-columns: 70px 1fr 90px auto;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--ink);
+  font-size: 13px;
+  transition: all .15s;
+}
+.pending-item:hover {
+  background: #fff8e1;
+  border-color: var(--warn);
+}
+.pending-item .sid {
+  font-family: 'Inter', monospace;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--green-2);
+}
+.pending-item .name {
+  font-weight: 600;
+  color: var(--navy);
+}
+.pending-item .org {
+  font-size: 11px;
+  color: var(--ink-mute);
+}
+.pending-item .month-badge {
+  background: var(--warn);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+}
+.pending-empty {
+  padding: 14px;
+  text-align: center;
+  color: var(--green-2);
+  font-size: 13px;
+  background: var(--green-soft);
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+/* ============================================================
    Toolbar (search/filters)
    ============================================================ */
 .toolbar {
