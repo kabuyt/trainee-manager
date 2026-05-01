@@ -1,46 +1,75 @@
 -- ============================================================
--- カリキュラム種別サポート migration
+-- まるごとカリキュラムサポート migration
 -- 2026-05-02
 -- ============================================================
 --
 -- 実行手順:
---   Supabase Dashboard > SQL Editor で以下を実行
+--   Supabase Dashboard > SQL Editor で各ブロック順に実行
 --
 -- 変更点:
--- 1. trainees テーブルに curriculum カラム追加（みん日 / まるごと の選択）
--- 2. 既存実習生は全員 'minna_nihongo' で初期化（default）
--- 3. VJC の対象5名を 'marugoto' に更新（指定が必要、下記参照）
+-- 1. trainees に curriculum カラム追加（minna_nihongo / marugoto）
+-- 2. test_definitions に marugoto_1〜4 を追加
+-- 3. ★まるごと組5名★への curriculum 設定 + test_access 付与（手動指定）
 --
 -- 背景:
--- - みん日: 既存全員。50課を8回（test1-test8）でカバー
--- - まるごと: VJCの一部（日本語力が著しく低い実習生）。18課を4回でカバー
--- - 第1回〜第8回の回数は両方共通。範囲ラベルが異なる:
+-- - みん日: 全実習生が default、50課を8回テスト
+-- - まるごと: VJCの一部（日本語力が著しく低い）、18課を4回テスト
+-- - 第1回〜第8回の回数は両カリキュラム共通。範囲ラベルだけ違う:
 --     みん日 第1回 = 第1-4課 / まるごと 第1回 = L1-L5
+-- - まるごと組は4ヶ月でテスト終了（5ヶ月目以降空欄）
 -- ============================================================
 
--- 1. curriculum カラム追加
+-- ============================================================
+-- 1. trainees.curriculum カラム
+-- ============================================================
 ALTER TABLE trainees
   ADD COLUMN IF NOT EXISTS curriculum TEXT DEFAULT 'minna_nihongo'
   CHECK (curriculum IN ('minna_nihongo', 'marugoto'));
 
--- 2. 既存実習生のNULL対策（既にDEFAULTで埋まっているはずだが念のため）
 UPDATE trainees SET curriculum = 'minna_nihongo' WHERE curriculum IS NULL;
 
--- 3. NOT NULL 制約を追加
 ALTER TABLE trainees
   ALTER COLUMN curriculum SET NOT NULL;
 
--- 4. 確認用: 現在のカリキュラム分布
--- SELECT curriculum, COUNT(*) FROM trainees GROUP BY curriculum;
+-- 確認
+SELECT curriculum, COUNT(*) FROM trainees GROUP BY curriculum;
 
--- 5. ★まるごと組の指定★
--- VJCの該当5名の student_id を以下に列挙して実行:
+-- ============================================================
+-- 2. test_definitions に marugoto_1〜4 を追加
+-- ============================================================
+INSERT INTO test_definitions (id, display_name, lesson_range, sections, max_scores, sort_order, is_active)
+VALUES
+  ('marugoto_1', '第1回 (まるごと L1-L5)',   'L1-L5',   '["goii","bunpo","chokkai"]'::jsonb, '{"goii":100,"bunpo":100,"chokkai":100}'::jsonb, 101, true),
+  ('marugoto_2', '第2回 (まるごと L6-L10)',  'L6-L10',  '["goii","bunpo","chokkai"]'::jsonb, '{"goii":100,"bunpo":100,"chokkai":100}'::jsonb, 102, true),
+  ('marugoto_3', '第3回 (まるごと L11-L14)', 'L11-L14', '["goii","bunpo","chokkai"]'::jsonb, '{"goii":100,"bunpo":100,"chokkai":100}'::jsonb, 103, true),
+  ('marugoto_4', '第4回 (まるごと L15-L18)', 'L15-L18', '["goii","bunpo","chokkai"]'::jsonb, '{"goii":100,"bunpo":100,"chokkai":100}'::jsonb, 104, true)
+ON CONFLICT (id) DO NOTHING;
+
+-- 確認
+SELECT id, display_name FROM test_definitions WHERE id LIKE 'marugoto%' ORDER BY id;
+
+-- ============================================================
+-- 3. ★まるごと組5名★の指定（学生IDが決まったら下記をアンコメントして実行）
+-- ============================================================
+-- 例: VJC012, VJC013, VJC015, VJC016, VJC017 をまるごと組にする場合
+--
+-- -- 3a. curriculum を marugoto に
 -- UPDATE trainees SET curriculum = 'marugoto'
 --   WHERE student_id IN ('VJC0XX', 'VJC0XX', 'VJC0XX', 'VJC0XX', 'VJC0XX');
-
--- 6. 確認用: VJCの全員と現在のカリキュラム
--- SELECT student_id, name_katakana, curriculum
+--
+-- -- 3b. marugoto_1 の受験許可を付与（test_access）
+-- INSERT INTO test_access (trainee_id, test_id, granted_at)
+-- SELECT id, 'marugoto_1', now()
 --   FROM trainees
---   JOIN organizations ON trainees.organization_id = organizations.id
---   WHERE organizations.slug = 'vjc'
---   ORDER BY student_id;
+--   WHERE student_id IN ('VJC0XX', 'VJC0XX', 'VJC0XX', 'VJC0XX', 'VJC0XX')
+-- ON CONFLICT DO NOTHING;
+--
+-- -- 3c. 確認
+-- SELECT t.student_id, t.name_katakana, t.curriculum, ta.test_id
+--   FROM trainees t
+--   LEFT JOIN test_access ta ON ta.trainee_id = t.id AND ta.test_id LIKE 'marugoto%'
+--   WHERE t.curriculum = 'marugoto'
+--   ORDER BY t.student_id;
+--
+-- 注: 第2-4回は別途進捗に応じて test_access を追加する
+--   INSERT INTO test_access (...) ...test_id = 'marugoto_2' ... など
