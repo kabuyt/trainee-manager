@@ -763,6 +763,15 @@ body {
   background: var(--ink-mute);
   flex-shrink: 0;
 }
+.comment-label-hint {
+  margin-left: auto;
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--ink-mute);
+  letter-spacing: .04em;
+  font-family: 'Noto Sans JP', sans-serif;
+  text-transform: none;
+}
 .comment-block.good .comment-label {
   background: var(--green-soft);
   color: var(--green-2);

@@ -963,6 +963,29 @@ function renderMonthComments(report) {
     if (el) el.innerHTML = (report && report[dbFields[i]]) || '';
   });
 
+  // 人物像・交友関係は前月の内容を引き継ぐ（追記前提のフィールド）
+  // 当月が空の場合、直近の過去月の内容で初期化
+  const personalityEl = document.getElementById('lifePersonality');
+  if (personalityEl) {
+    const currentValue = (report && report.life_personality) || '';
+    const stripped = currentValue.replace(/<[^>]+>/g, '').trim();
+    if (!stripped && _currentMonth > 1) {
+      for (let m = _currentMonth - 1; m >= 1; m--) {
+        const prev = _reportMonthly[m];
+        const prevValue = (prev && prev.life_personality) || '';
+        const prevStripped = prevValue.replace(/<[^>]+>/g, '').trim();
+        if (prevStripped) {
+          personalityEl.innerHTML = prevValue;
+          // 引き継ぎマーカー（保存時には消える、表示時の目印）
+          personalityEl.dataset.inheritedFrom = m;
+          break;
+        }
+      }
+    } else {
+      delete personalityEl.dataset.inheritedFrom;
+    }
+  }
+
   // 週別活動
   for (let w = 1; w <= 4; w++) {
     const weekEl = document.getElementById('week' + w);
