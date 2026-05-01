@@ -360,18 +360,27 @@ async function bulkCompany(companyName) {
   bar.style.width = '0%';
 
   const zip = new JSZip();
-  for (let i = 0; i < targets.length; i++) {
-    const t = targets[i];
-    status.textContent = `[${i+1}/${targets.length}] ${t.student_id} ${t.name_romaji||''} (${t._eduMonth}ヶ月目)`;
-    try {
-      const blob = await renderPdfBlob(t.id, t._eduMonth);
-      zip.file(fileNameOf(t), blob);
-    } catch (err) {
-      status.textContent = `✗ ${t.student_id}: ${err.message}`;
-      console.error(t.student_id, err);
+  // 3並列でPDF生成（Render Free でも I/O 重なりで体感速度UP）
+  const CONCURRENCY = 3;
+  let queueIdx = 0, completed = 0, errors = 0;
+  async function worker() {
+    while (true) {
+      const idx = queueIdx++;
+      if (idx >= targets.length) return;
+      const t = targets[idx];
+      try {
+        const blob = await renderPdfBlob(t.id, t._eduMonth);
+        zip.file(fileNameOf(t), blob);
+      } catch (err) {
+        errors++;
+        console.error(t.student_id, err);
+      }
+      completed++;
+      status.textContent = `[${completed}/${targets.length}] 生成中... (並列${CONCURRENCY})${errors ? ` 失敗:${errors}` : ''}`;
+      bar.style.width = `${Math.round(completed/targets.length*100)}%`;
     }
-    bar.style.width = `${Math.round((i+1)/targets.length*100)}%`;
   }
+  await Promise.all(Array.from({length: Math.min(CONCURRENCY, targets.length)}, () => worker()));
   status.textContent = 'ZIP生成中...';
   const content = await zip.generateAsync({ type: 'blob' });
   const dateStr = `${ry}${String(rm).padStart(2,'0')}`;
