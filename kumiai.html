@@ -50,7 +50,6 @@
   .login-box{max-width:400px;margin:80px auto;padding:30px;background:#fff;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.1);text-align:center}
   .login-box input{width:100%;padding:8px;margin:5px 0;border:1px solid #ddd;border-radius:5px;font-size:14px}
   .login-box button{width:100%;padding:10px;margin-top:10px;background:#1e3a5f;color:#fff;border:none;border-radius:5px;cursor:pointer}
-  .hidden-frame{position:fixed;left:-9999px;top:0;width:900px;height:1400px;border:none}
 </style>
 </head>
 <body>
@@ -85,13 +84,18 @@
   <div class="footer">GROP VIETNAM CO., LTD · 日本語教育報告書</div>
 </div>
 
-<iframe id="renderFrame" class="hidden-frame" sandbox="allow-same-origin allow-scripts"></iframe>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3/dist/jszip.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10/dist/html2pdf.bundle.min.js"></script>
 <script src="config.js"></script>
 <script>
+// PDF生成サーバ URL（trainee-pdf-server / Render.com）
+// 優先度: ?pdf_server=URL → localStorage.pdf_server → デフォルト（本番）
+// ローカル開発時: http://localhost:5500/kumiai.html?pdf_server=http://127.0.0.1:8787
+const PDF_SERVER =
+  new URLSearchParams(location.search).get('pdf_server')
+  || localStorage.getItem('pdf_server')
+  || 'https://trainee-pdf-server.onrender.com';
+
 // 組合スラッグ→表示名マッピング
 const KUMIAI_MAP = {
   globalway: 'グローバルウェイ協同組合',
@@ -293,27 +297,19 @@ function render() {
   document.getElementById('list').innerHTML = html;
 }
 
-// 個別PDFをiframeで描画→PDF化して返す
+// PDF生成サーバ (trainee-pdf-server) に最新データでPDF生成を依頼してblobで受け取る
 async function renderPdfBlob(traineeId, month) {
-  const frame = document.getElementById('renderFrame');
-  frame.src = `report.html?id=${traineeId}&design=modern#m=${month}&bulk=1&ro=1`;
-  await new Promise((resolve, reject) => {
-    const onLoad = () => {
-      frame.removeEventListener('load', onLoad);
-      setTimeout(resolve, 4500);
-    };
-    frame.addEventListener('load', onLoad);
-    setTimeout(() => reject(new Error('timeout')), 30000);
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) throw new Error('未ログイン');
+  const url = `${PDF_SERVER}/api/pdf?id=${encodeURIComponent(traineeId)}&month=${month}`;
+  const res = await fetch(url, {
+    headers: { 'Authorization': `Bearer ${session.access_token}` },
   });
-  const doc = frame.contentDocument;
-  const reportPage = doc.getElementById('reportPage');
-  if (!reportPage) throw new Error('reportPage not found');
-  return await html2pdf().set({
-    margin: [8, 8, 8, 8],
-    image: { type: 'jpeg', quality: 0.95 },
-    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-  }).from(reportPage).outputPdf('blob');
+  if (!res.ok) {
+    const txt = await res.text().catch(() => '');
+    throw new Error(`PDF生成失敗 (${res.status}): ${txt.slice(0, 200)}`);
+  }
+  return await res.blob();
 }
 
 function fileNameOf(t) {
@@ -343,7 +339,6 @@ async function downloadSingle(btnEl) {
   }
   btnEl.disabled = false;
   btnEl.textContent = origText;
-  document.getElementById('renderFrame').src = 'about:blank';
 }
 
 // 企業別一括
@@ -387,7 +382,6 @@ async function bulkCompany(companyName) {
   URL.revokeObjectURL(a.href);
   status.textContent = '✓ ダウンロード完了';
   if (btn) { btn.disabled = false; btn.textContent = origText; }
-  document.getElementById('renderFrame').src = 'about:blank';
 }
 
 init();
