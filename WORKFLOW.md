@@ -11,7 +11,7 @@ brastech-reports と同方式の **静的サイト生成** を採用。
 |---|---|---|
 | グローバルウェイ協同組合 | https://kabuyt.github.io/trainee-manager/reports/globalway/ | `globalway2026` |
 | CIC協同組合 | https://kabuyt.github.io/trainee-manager/reports/cic/ | `cic2026` |
-| 広島ワールド協同組合 | https://kabuyt.github.io/trainee-manager/reports/hiroshimaworld/ | `hiroshima2026` |
+| ワールドビジネス協同組合 | https://kabuyt.github.io/trainee-manager/reports/hiroshimaworld/ | `hiroshima2026` |
 
 ## 月次運用の3ステップ
 
