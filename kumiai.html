@@ -360,14 +360,25 @@ async function bulkCompany(companyName) {
   bar.style.width = '0%';
 
   const zip = new JSZip();
-  // 3並列でPDF生成（Render Free でも I/O 重なりで体感速度UP）
-  const CONCURRENCY = 3;
-  let queueIdx = 0, completed = 0, errors = 0;
+  // 2並列でPDF生成（Render Free 0.1 CPU + 512MB メモリの制約に合わせる）
+  const CONCURRENCY = 2;
+  status.textContent = `[0/${targets.length}] 開始中...初回はサーバ起動で最大50秒かかります`;
+  let queueIdx = 0, started = 0, completed = 0, errors = 0;
+  function refreshStatus() {
+    const inFlight = started - completed;
+    status.textContent =
+      `完了 ${completed}/${targets.length}` +
+      (inFlight > 0 ? ` (${inFlight}件生成中)` : '') +
+      (errors > 0 ? ` 失敗:${errors}` : '');
+    bar.style.width = `${Math.round(completed/targets.length*100)}%`;
+  }
   async function worker() {
     while (true) {
       const idx = queueIdx++;
       if (idx >= targets.length) return;
       const t = targets[idx];
+      started++;
+      refreshStatus();
       try {
         const blob = await renderPdfBlob(t.id, t._eduMonth);
         zip.file(fileNameOf(t), blob);
@@ -376,8 +387,7 @@ async function bulkCompany(companyName) {
         console.error(t.student_id, err);
       }
       completed++;
-      status.textContent = `[${completed}/${targets.length}] 生成中... (並列${CONCURRENCY})${errors ? ` 失敗:${errors}` : ''}`;
-      bar.style.width = `${Math.round(completed/targets.length*100)}%`;
+      refreshStatus();
     }
   }
   await Promise.all(Array.from({length: Math.min(CONCURRENCY, targets.length)}, () => worker()));
