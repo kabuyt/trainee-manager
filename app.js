@@ -381,6 +381,8 @@ async function loadEditData() {
   document.getElementById('nameKatakana').value = t.name_katakana || '';
   document.getElementById('company').value = t.company || '';
   document.getElementById('supervisingOrg').value = t.supervising_org || '';
+  const curEl = document.getElementById('curriculum');
+  if (curEl) curEl.value = t.curriculum || 'minna_nihongo';
   document.getElementById('classGroup').value = t.class_group || '';
   document.getElementById('birthDate').value = t.birth_date || '';
   document.getElementById('gender').value = t.gender || '';
@@ -417,6 +419,7 @@ async function registerTrainee() {
     birth_date: document.getElementById('birthDate').value || null,
     gender: document.getElementById('gender').value || null,
     supervising_org: document.getElementById('supervisingOrg').value || null,
+    curriculum: document.getElementById('curriculum')?.value || 'minna_nihongo',
     training_start_date: document.getElementById('trainingStartDate').value || null,
     arrival_date: document.getElementById('arrivalDate').value || null,
     stay_period: document.getElementById('stayPeriod')?.value?.trim() || null,
