@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="report.css?v=66">
+<link rel="stylesheet" href="report.css?v=67">
 </head>
 <body>
 <div class="print-footer">GROP VIETNAM CO., LTD · 教育報告書</div>
@@ -17,6 +17,7 @@
   <div class="toolbar-actions">
     <a href="#" id="designToggle" class="design-toggle" style="font-size:11px;padding:6px 10px;border:1px solid #cbd5e1;border-radius:6px;color:#475569;text-decoration:none">🎨 クラシック表示</a>
     <span id="saveStatus"></span>
+    <button onclick="runStyleCheck()" class="btn-style-check" title="表記ゆれ・全角数字・ですます等のチェック">📐 文体チェック</button>
     <button onclick="window.print()" class="btn-print admin-only" style="display:none">PDF / 印刷</button>
     <button onclick="saveReport()" class="btn-save">保存</button>
   </div>
@@ -310,11 +311,27 @@
 
 </div><!-- /report-page -->
 
+<!-- ===== 文体チェック モーダル ===== -->
+<div id="styleCheckModal" class="no-print" style="display:none;position:fixed;inset:0;background:rgba(16,37,71,.5);z-index:9999;align-items:center;justify-content:center" onclick="if(event.target===this)closeStyleCheck()">
+  <div style="background:#fff;max-width:640px;width:92%;max-height:80vh;overflow:auto;border-radius:12px;padding:24px;box-shadow:0 8px 32px rgba(0,0,0,.2)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;border-bottom:1px solid #e4e7ef;padding-bottom:10px">
+      <h3 style="color:#102547;font-size:16px;margin:0">📐 文体チェック</h3>
+      <button onclick="closeStyleCheck()" style="border:none;background:transparent;font-size:20px;cursor:pointer;color:#8993a8">×</button>
+    </div>
+    <div id="styleCheckSummary" style="margin-bottom:14px;font-size:13px;color:#4a5878"></div>
+    <div id="styleCheckList" style="display:flex;flex-direction:column;gap:8px;font-size:12.5px"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:18px;border-top:1px solid #e4e7ef;padding-top:12px">
+      <button onclick="closeStyleCheck()" style="background:#fff;border:1px solid #d5d9e3;color:#102547;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;font-family:inherit">閉じる</button>
+      <button id="styleCheckAutoFix" onclick="autoFixAllStyle()" style="background:#3DAE2B;border:1px solid #3DAE2B;color:#fff;padding:8px 18px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;font-family:inherit">⚡ 自動修正</button>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="auth.js?v=5"></script>
-<script src="app.js?v=51"></script>
+<script src="app.js?v=52"></script>
 <script>
 // localStorage に classic 指定があれば classic ページへリダイレクト
 // ただし bulk=1（一括PDF出力中）は強制的にモダンを使う

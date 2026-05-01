@@ -1717,3 +1717,220 @@ function showMsg(el, text, type) {
   el.className = type === 'success' ? 'msg-success' : 'msg-error';
   el.classList.remove('hidden');
 }
+
+// ===========================================================
+// 文体チェック (style validator)
+// ===========================================================
+
+const STYLE_FIELDS = [
+  { id: 'lifeGood',         label: '生活: Good' },
+  { id: 'lifeBad',          label: '生活: Bad' },
+  { id: 'lifeMeasure',      label: '生活: 対策' },
+  { id: 'lifeImprove',      label: '生活: 改善' },
+  { id: 'lifePersonality',  label: '人物像・交友関係' },
+  { id: 'learnGood',        label: '学習: Good' },
+  { id: 'learnBad',         label: '学習: Bad' },
+  { id: 'learnMeasure',     label: '学習: 対策' },
+  { id: 'learnImprove',     label: '学習: 改善' },
+];
+
+function getWeekIds() {
+  return [1,2,3,4].map(n => ({ id: 'week' + n, label: '第' + n + '週', isWeek: true }));
+}
+
+const FW_DIGITS = '０１２３４５６７８９';
+const HW_DIGITS = '0123456789';
+const DIGIT_TRANS = (s) => s.split('').map(c => {
+  const i = FW_DIGITS.indexOf(c);
+  return i >= 0 ? HW_DIGITS[i] : c;
+}).join('');
+
+const STYLE_RULES = [
+  {
+    name: '全角数字',
+    detect: text => /[０-９]/.test(text),
+    fix: text => DIGIT_TRANS(text),
+    desc: '数字は半角に統一',
+  },
+  {
+    name: '課間ハイフン',
+    detect: text => /\d+\s*[-－]\s*\d+(?=課)/.test(text),
+    fix: text => text.replace(/(\d+)\s*[-－]\s*(\d+)(?=課)/g, '$1～$2'),
+    desc: '課番号間は波線「～」に',
+  },
+  {
+    name: 'ですます',
+    detect: text => /(です|ます|でした|ました|ません)[。、，,]/.test(text)
+                 || /(です|ます)$/.test(text.replace(/<[^>]+>/g, '')),
+    fix: null, // 文体は機械修正困難（手動推奨）
+    desc: '常体（〜だ／〜である）に',
+  },
+  {
+    name: '・前改行なし',
+    detect: text => / ・/.test(text) || /[^>\n]・/.test(text.replace(/<br\s*\/?>/g, '\n').replace(/^.*?・/, '')),
+    fix: text => {
+      const parts = text.split('・');
+      if (parts.length <= 1) return text;
+      const cleaned = parts.map(p => p.replace(/(<br>)+\s*$/, '').replace(/\s+$/, ''));
+      const rest = cleaned.slice(1).join('<br>・');
+      return (cleaned[0] ? cleaned[0] + '・' : '・') + rest;
+    },
+    desc: '「・」の前で改行を入れる',
+  },
+];
+
+function checkFieldStyle(elId) {
+  const el = document.getElementById(elId);
+  if (!el) return null;
+  // contenteditable の中の HTML
+  let html = '';
+  if (el.classList.contains('week-row') || el.classList.contains('comment-block')) {
+    const t = el.querySelector('.comment-text');
+    html = t ? t.innerHTML : '';
+  } else {
+    html = el.innerHTML;
+  }
+  // テキストだけのチェック対象
+  const text = html;
+  const issues = [];
+  STYLE_RULES.forEach(rule => {
+    if (rule.detect(text)) {
+      issues.push({ rule: rule.name, desc: rule.desc, autoFixable: !!rule.fix });
+    }
+  });
+  return { el, html, issues };
+}
+
+function getAllStyleTargets() {
+  // 通常コメント + 週活動
+  const targets = STYLE_FIELDS.map(f => ({ ...f, isWeek: false }));
+  for (let n = 1; n <= 4; n++) {
+    targets.push({ id: 'week' + n, label: '第' + n + '週', isWeek: true });
+  }
+  return targets;
+}
+
+function getFieldHTML(target) {
+  if (target.isWeek) {
+    const row = document.getElementById(target.id);
+    const t = row ? row.querySelector('.comment-text') : null;
+    return t ? t.innerHTML : '';
+  }
+  const el = document.getElementById(target.id);
+  return el ? el.innerHTML : '';
+}
+
+function setFieldHTML(target, html) {
+  if (target.isWeek) {
+    const row = document.getElementById(target.id);
+    const t = row ? row.querySelector('.comment-text') : null;
+    if (t) t.innerHTML = html;
+  } else {
+    const el = document.getElementById(target.id);
+    if (el) el.innerHTML = html;
+  }
+}
+
+function runStyleCheck() {
+  const targets = getAllStyleTargets();
+  const results = [];
+  targets.forEach(target => {
+    const html = getFieldHTML(target);
+    if (!html) return;
+    STYLE_RULES.forEach(rule => {
+      if (rule.detect(html)) {
+        results.push({
+          target,
+          rule: rule.name,
+          desc: rule.desc,
+          autoFixable: !!rule.fix,
+        });
+      }
+    });
+  });
+
+  const summary = document.getElementById('styleCheckSummary');
+  const list = document.getElementById('styleCheckList');
+  const autoBtn = document.getElementById('styleCheckAutoFix');
+
+  if (results.length === 0) {
+    summary.innerHTML = '<span style="color:#3DAE2B;font-weight:600">✅ 規則違反なし</span>';
+    list.innerHTML = '';
+    autoBtn.style.display = 'none';
+  } else {
+    const fixable = results.filter(r => r.autoFixable).length;
+    summary.innerHTML = `<strong>${results.length}件</strong>の違反が見つかりました。
+      ${fixable > 0 ? `<span style="color:#3DAE2B">${fixable}件は自動修正可能</span>。` : ''}`;
+    // ルール別グループ化
+    const byRule = {};
+    results.forEach(r => {
+      if (!byRule[r.rule]) byRule[r.rule] = { desc: r.desc, autoFixable: r.autoFixable, fields: [] };
+      byRule[r.rule].fields.push(r.target.label);
+    });
+    list.innerHTML = Object.entries(byRule).map(([rule, info]) => `
+      <div style="background:#fff8e1;border:1px solid #fbbf24;border-radius:6px;padding:10px 12px">
+        <div style="font-weight:700;color:#92400e;margin-bottom:4px">⚠️ ${rule} <span style="font-weight:400;color:#6b5223;font-size:11px">— ${info.desc}</span></div>
+        <div style="color:#6b5223;font-size:12px">該当: ${info.fields.join(' / ')}</div>
+        ${info.autoFixable ? '<div style="color:#3DAE2B;font-size:11px;margin-top:4px">⚡ 自動修正可</div>' : '<div style="color:#92400e;font-size:11px;margin-top:4px">手動修正が必要</div>'}
+      </div>
+    `).join('');
+    autoBtn.style.display = fixable > 0 ? '' : 'none';
+  }
+
+  // ボタンの色を更新（違反ありなら強調）
+  const btn = document.querySelector('.btn-style-check');
+  if (btn) {
+    btn.classList.toggle('has-issues', results.length > 0);
+    btn.textContent = results.length > 0 ? `📐 文体チェック (${results.length})` : '📐 文体チェック';
+  }
+
+  document.getElementById('styleCheckModal').style.display = 'flex';
+}
+
+function closeStyleCheck() {
+  document.getElementById('styleCheckModal').style.display = 'none';
+}
+
+function autoFixAllStyle() {
+  const targets = getAllStyleTargets();
+  let fixCount = 0;
+  targets.forEach(target => {
+    let html = getFieldHTML(target);
+    if (!html) return;
+    let changed = false;
+    STYLE_RULES.forEach(rule => {
+      if (rule.fix && rule.detect(html)) {
+        const newHtml = rule.fix(html);
+        if (newHtml !== html) {
+          html = newHtml;
+          changed = true;
+          fixCount++;
+        }
+      }
+    });
+    if (changed) setFieldHTML(target, html);
+  });
+  alert(`${fixCount}箇所を自動修正しました。\n保存ボタンで確定してください。`);
+  closeStyleCheck();
+  // 残りの違反を再チェック
+  setTimeout(() => runStyleCheck(), 100);
+}
+
+// ページ読込時に1回チェック（バッジ表示のため）
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const targets = getAllStyleTargets();
+    let count = 0;
+    targets.forEach(target => {
+      const html = getFieldHTML(target);
+      STYLE_RULES.forEach(rule => {
+        if (html && rule.detect(html)) count++;
+      });
+    });
+    const btn = document.querySelector('.btn-style-check');
+    if (btn) {
+      btn.classList.toggle('has-issues', count > 0);
+      btn.textContent = count > 0 ? `📐 文体チェック (${count})` : '📐 文体チェック';
+    }
+  }, 1500);
+});
