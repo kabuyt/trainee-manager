@@ -158,9 +158,13 @@ git add reports/ && git commit -m "reports: 月次更新" && git push</pre>
 
     function isReportEmpty(r) {
       if (!r) return true;
-      const fields = ['learn_good','learn_bad','learn_measure','learn_improve',
-        'life_good','life_bad','life_measure','life_improve','life_personality',
-        'week1','week2','week3','week4'];
+      // 判定対象: 週別活動 + 学習状況詳細 + 生活状況詳細
+      // life_personality は前月引き継ぎなので除外、learn_progress は week4 から自動抽出なので除外
+      const fields = [
+        'week1','week2','week3','week4',                                // 週別活動
+        'learn_good','learn_bad','learn_measure','learn_improve',       // 学習状況詳細
+        'life_good','life_bad','life_measure','life_improve',           // 生活状況・態度詳細
+      ];
       return fields.every(f => {
         const v = (r[f] || '').replace(/<[^>]+>/g,'').trim();
         return v === '' || v === '※特記事項なし' || v === '-';
