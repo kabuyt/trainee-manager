@@ -666,27 +666,49 @@ function getMonthTestMap(curriculum) {
   return curriculum === 'marugoto' ? MONTH_TEST_MAP_MARUGOTO : MONTH_TEST_MAP_MINNA;
 }
 
-// まるごとへの切替月を判定:
-// test_results に最初に出現する marugoto_N の月番号
-// 切り替えた月以降はすべて marugoto 扱い、それ以前は minna_nihongo
-function getMarugotoSwitchMonth() {
-  if (!Array.isArray(_reportResults)) return null;
-  const months = MONTH_TEST_MAP_MARUGOTO
-    .filter(m => _reportResults.some(r => matchTest(r, m)))
-    .map(m => m.month);
-  return months.length ? Math.min(...months) : null;
+// まるごと受講者かどうか:
+// - test_results に marugoto_N の結果がある、または
+// - trainee.curriculum === 'marugoto'
+function isMarugotoTrainee() {
+  if (_reportTrainee && _reportTrainee.curriculum === 'marugoto') return true;
+  if (Array.isArray(_reportResults)) {
+    return MONTH_TEST_MAP_MARUGOTO.some(m =>
+      _reportResults.some(r => matchTest(r, m))
+    );
+  }
+  return false;
+}
+
+// まるごとオフセット:
+// - 純粋まるごと（minna 結果なし）: 0
+// - 既に minna でN月分受験済 → まるごとに切替: N（marugoto_1 = 月N+1）
+function getMarugotoOffset() {
+  if (!isMarugotoTrainee()) return 0;
+  if (!Array.isArray(_reportResults)) return 0;
+  let maxMinnaMonth = 0;
+  for (const m of MONTH_TEST_MAP_MINNA) {
+    if (_reportResults.some(r => matchTest(r, m))) {
+      maxMinnaMonth = Math.max(maxMinnaMonth, m.month);
+    }
+  }
+  return maxMinnaMonth;
 }
 
 // 各月のカリキュラム情報を返す
-// - 切替月より前: みんなの日本語 (test1〜test8 / 第N-M課)
-// - 切替月以降の1-4: まるごと (marugoto_1〜4 / L1-L18)
-// - 切替月以降の5-8: テストなし（卒業相当）
+// - まるごと生 + 月 ≤ offset: minna（既送付の月1レポートを保護）
+// - まるごと生 + offset < 月 ≤ offset+4: marugoto_(月-offset)
+// - まるごと生 + offset+4 < 月: 卒業（テストなし）
+// - みんな生: 月N の minna
 function getMonthInfo(monthNum) {
-  const switchMonth = getMarugotoSwitchMonth();
-  if (switchMonth !== null && monthNum >= switchMonth) {
-    const m = MONTH_TEST_MAP_MARUGOTO.find(x => x.month === monthNum);
-    if (m) return m;
-    // 5-8ヶ月目はまるごとにはテストなし
+  if (isMarugotoTrainee()) {
+    const offset = getMarugotoOffset();
+    if (monthNum <= offset) {
+      // 切替前のminna月（過去ログ用）
+      return MONTH_TEST_MAP_MINNA.find(m => m.month === monthNum);
+    }
+    const marugotoIdx = monthNum - offset;
+    const m = MONTH_TEST_MAP_MARUGOTO.find(x => x.month === marugotoIdx);
+    if (m) return { ...m, month: monthNum };
     return { month: monthNum, test: null, testLabel: '-', scope: '（卒業）' };
   }
   return MONTH_TEST_MAP_MINNA.find(m => m.month === monthNum);
@@ -695,6 +717,20 @@ function getMonthInfo(monthNum) {
 // 現在の表示用マップを返す（1-8ヶ月分、各月でカリキュラム自動判定）
 function currentMonthMap() {
   return MONTH_TEST_MAP_MINNA.map(m => getMonthInfo(m.month));
+}
+
+// 成績推移テーブル・グラフ用マップ:
+// - まるごと生: marugoto_1〜4 の4回分のみ（minna月や卒業月は除外）
+// - みんな生: minna 8回分
+function getTrendMap() {
+  if (isMarugotoTrainee()) {
+    const offset = getMarugotoOffset();
+    return MONTH_TEST_MAP_MARUGOTO.map(m => ({
+      ...m,
+      month: m.month + offset, // 絶対月番号に変換
+    }));
+  }
+  return MONTH_TEST_MAP_MINNA.slice();
 }
 
 // レガシー名（後方互換、curriculum 切替前提のないコードからの直接参照用）
@@ -1217,7 +1253,9 @@ function renderReport(t, results, classResults) {
 
   // 成績推移テーブル + グラフ（curriculum 別の全回分表示）
   // 第1回未受験の場合はセクション全体を非表示
-  const _firstMap = currentMonthMap()[0];
+  // まるごと生は marugoto_1〜4 のみ（minna月・卒業月を含めない）
+  const _trendMap = getTrendMap();
+  const _firstMap = _trendMap[0];
   const hasTest1 = (results || []).some(r => matchTest(r, _firstMap));
   const trendSection = document.getElementById('trendSection');
   if (trendSection) trendSection.style.display = hasTest1 ? '' : 'none';
@@ -1225,7 +1263,7 @@ function renderReport(t, results, classResults) {
   document.body.classList.toggle('no-trend', !hasTest1);
   if (hasTest1) {
     const tbody = document.getElementById('trendBody');
-    tbody.innerHTML = currentMonthMap().map(m => {
+    tbody.innerHTML = _trendMap.map(m => {
       const label = m.testLabel;
       const r = results.find(row => matchTest(row, m));
       if (r) {
@@ -1262,8 +1300,8 @@ function renderTrendChart(results) {
   const ctx = document.getElementById('trendChart');
   if (!ctx) return;
 
-  // 各カリキュラムの全回分のラベルを固定（curriculum 別）
-  const _map = currentMonthMap();
+  // 各カリキュラムの全回分のラベルを固定（まるごと生は4回分のみ）
+  const _map = getTrendMap();
   const labels = _map.map(m => m.testLabel);
   const resolved = _map.map(m => results.find(r => matchTest(r, m)) || null);
 
