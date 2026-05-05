@@ -143,6 +143,11 @@ function renderTrainees(data) {
   emptyEl.classList.add('hidden');
   const showOrg = isAdmin();
   const tbody = document.getElementById('traineeList');
+  const fmtDate = s => {
+    if (!s) return '-';
+    const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s);
+    return m ? `${m[1]}/${m[2]}/${m[3]}` : s;
+  };
   tbody.innerHTML = data.map(t => `
     <tr>
       <td><span class="student-id-badge">${t.student_id || '-'}</span></td>
@@ -152,6 +157,7 @@ function renderTrainees(data) {
       <td>${t.class_group || '-'}</td>
       <td>${t.supervising_org || '-'}</td>
       ${showOrg ? `<td>${t.organizations?.name || '-'}</td>` : ''}
+      <td style="font-family:'Inter',monospace;font-size:12px;color:var(--ink-soft)">${fmtDate(t.training_start_date)}</td>
       <td>
         <a href="trainee.html?id=${t.id}" class="btn btn-sm btn-secondary">詳細</a>
         <a href="report.html?id=${t.id}" target="_blank" class="btn btn-sm btn-report" title="教育報告書を開く">📄 報告書</a>
