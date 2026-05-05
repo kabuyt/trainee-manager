@@ -666,9 +666,35 @@ function getMonthTestMap(curriculum) {
   return curriculum === 'marugoto' ? MONTH_TEST_MAP_MARUGOTO : MONTH_TEST_MAP_MINNA;
 }
 
-// _reportTrainee.curriculum を見て現在の表示用マップを返す
+// まるごとへの切替月を判定:
+// test_results に最初に出現する marugoto_N の月番号
+// 切り替えた月以降はすべて marugoto 扱い、それ以前は minna_nihongo
+function getMarugotoSwitchMonth() {
+  if (!Array.isArray(_reportResults)) return null;
+  const months = MONTH_TEST_MAP_MARUGOTO
+    .filter(m => _reportResults.some(r => matchTest(r, m)))
+    .map(m => m.month);
+  return months.length ? Math.min(...months) : null;
+}
+
+// 各月のカリキュラム情報を返す
+// - 切替月より前: みんなの日本語 (test1〜test8 / 第N-M課)
+// - 切替月以降の1-4: まるごと (marugoto_1〜4 / L1-L18)
+// - 切替月以降の5-8: テストなし（卒業相当）
+function getMonthInfo(monthNum) {
+  const switchMonth = getMarugotoSwitchMonth();
+  if (switchMonth !== null && monthNum >= switchMonth) {
+    const m = MONTH_TEST_MAP_MARUGOTO.find(x => x.month === monthNum);
+    if (m) return m;
+    // 5-8ヶ月目はまるごとにはテストなし
+    return { month: monthNum, test: null, testLabel: '-', scope: '（卒業）' };
+  }
+  return MONTH_TEST_MAP_MINNA.find(m => m.month === monthNum);
+}
+
+// 現在の表示用マップを返す（1-8ヶ月分、各月でカリキュラム自動判定）
 function currentMonthMap() {
-  return getMonthTestMap(_reportTrainee?.curriculum);
+  return MONTH_TEST_MAP_MINNA.map(m => getMonthInfo(m.month));
 }
 
 // レガシー名（後方互換、curriculum 切替前提のないコードからの直接参照用）
