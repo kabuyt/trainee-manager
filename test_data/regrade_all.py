@@ -187,8 +187,9 @@ def g_substring_match(rule, ak, answers):
 
 def g_multi_field_group(rule, ak, answers):
     ppf = rule.get('points_per_field', rule.get('points_each', 1))
+    group_points = rule.get('group_points')
     score = 0
-    for group in rule.get('groups', []):
+    for gi, group in enumerate(rule.get('groups', [])):
         all_ok = True
         for fid in group:
             expected = ak.get(fid) if isinstance(ak, dict) else None
@@ -202,7 +203,10 @@ def g_multi_field_group(rule, ak, answers):
                 if normalize(user) != normalize(expected):
                     all_ok = False; break
         if all_ok:
-            score += ppf * len(group)
+            if group_points and gi < len(group_points):
+                score += group_points[gi] or 0
+            else:
+                score += ppf * len(group)
     return score
 
 
