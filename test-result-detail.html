@@ -91,6 +91,9 @@ const RESULT_ID = params.get('id');
     .eq('id', RESULT_ID)
     .single();
 
+  // 結果取得後にグローバルにも保持（除外操作用）
+  window._currentResult = result;
+
   if (error || !result) {
     document.getElementById('content').innerHTML = `<div class="card"><p style="color:red">取得失敗: ${error?.message || '不明'}</p></div>`;
     return;
@@ -116,6 +119,24 @@ function renderDetail(result, sections, testDef) {
   const max = (testDef.sections || ['goii','bunpo','chokkai']).length * 100;
 
   let html = '';
+
+  // 除外バナー（excluded=true なら最上部に表示）
+  if (result.excluded) {
+    html += `<div class="card" style="background:#fdedeb;border-left:6px solid #c0392b;padding:14px 18px">
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <div style="flex:1">
+          <div style="font-size:16px;font-weight:bold;color:#c0392b">⚠ このテスト結果は除外されています</div>
+          <div style="font-size:13px;color:#555;margin-top:4px">理由: ${escapeHtml(result.excluded_reason || '(未記入)')}</div>
+          <div style="font-size:12px;color:#888;margin-top:4px">レポート・グラフ・curriculum 判定からは除外されますが、データは保持されています。</div>
+        </div>
+        <button class="btn" style="background:#3498db" onclick="restoreResult()">↶ 復元する</button>
+      </div>
+    </div>`;
+  } else {
+    html += `<div style="text-align:right;margin-bottom:8px">
+      <button class="btn" style="background:#e74c3c" onclick="excludeResult()">🚫 誤受験として除外</button>
+    </div>`;
+  }
 
   // 基本情報
   html += `<div class="card">
@@ -319,6 +340,32 @@ function escapeHtml(s) {
 
 function normalize(s) {
   return String(s ?? '').trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+// ====== 誤受験除外 ======
+async function excludeResult() {
+  const r = window._currentResult;
+  if (!r) return;
+  const t = r.trainees || {};
+  const name = t.name_katakana || t.student_id || '?';
+  const reason = prompt(`「${name}」の「${r.test_name}」を誤受験として除外します。\n\n理由を入力してください（任意）:`, '誤受験');
+  if (reason === null) return;
+  const { error } = await supabase.from('test_results')
+    .update({ excluded: true, excluded_reason: reason || '誤受験' })
+    .eq('id', RESULT_ID);
+  if (error) { alert('失敗: ' + error.message); return; }
+  alert('✓ 除外しました');
+  location.reload();
+}
+
+async function restoreResult() {
+  if (!confirm('このテスト結果を復元しますか？\n（レポート・グラフに再度反映されます）')) return;
+  const { error } = await supabase.from('test_results')
+    .update({ excluded: false, excluded_reason: null })
+    .eq('id', RESULT_ID);
+  if (error) { alert('失敗: ' + error.message); return; }
+  alert('✓ 復元しました');
+  location.reload();
 }
 </script>
 </body>

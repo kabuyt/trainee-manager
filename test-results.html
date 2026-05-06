@@ -42,6 +42,15 @@
   .badge-manual{background:#e67e22;color:#fff;padding:2px 8px;border-radius:8px;font-size:11px}
   td a{color:#3DAE2B;text-decoration:none}
   td a:hover{text-decoration:underline}
+  /* 除外行のスタイル */
+  tr.excluded{background:#f5f5f5;color:#999}
+  tr.excluded td{text-decoration:line-through}
+  tr.excluded td a{color:#999}
+  tr.excluded td .badge-excluded{background:#95a5a6;color:#fff;padding:2px 8px;border-radius:8px;font-size:11px;text-decoration:none;display:inline-block}
+  .btn-exclude{background:#e74c3c;color:#fff;padding:3px 8px;border:none;border-radius:4px;font-size:11px;cursor:pointer}
+  .btn-exclude:hover{background:#c0392b}
+  .btn-restore{background:#3498db;color:#fff;padding:3px 8px;border:none;border-radius:4px;font-size:11px;cursor:pointer}
+  .btn-restore:hover{background:#2980b9}
 
   .login-box{max-width:400px;margin:80px auto;padding:30px;background:#fff;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.1);text-align:center}
   .login-box input{width:100%;padding:8px;margin:5px 0;border:1px solid #ddd;border-radius:5px;font-size:14px}
@@ -99,6 +108,7 @@
         <input type="text" id="filter-search" oninput="render()" placeholder="ID/名前" style="width:140px">
       </label>
       <label style="font-size:12px"><input type="checkbox" id="filter-noconv" onchange="render()"> 会話未入力のみ</label>
+      <label style="font-size:12px"><input type="checkbox" id="filter-include-excluded" onchange="render()"> 除外済みも表示</label>
       <label style="font-size:12px">満点:
         <select id="filter-maxmode" onchange="render()">
           <option value="400">/400（会話含）</option>
@@ -133,6 +143,7 @@
             <th class="score-total">合計</th>
             <th class="col-auto">採点</th>
             <th>詳細</th>
+            <th>除外</th>
           </tr>
         </thead>
         <tbody id="rows"></tbody>
@@ -223,7 +234,7 @@ async function reload() {
   const [trRes, tdRes, resRes] = await Promise.all([
     supabase.from('trainees').select('id,student_id,name_katakana,name_romaji,class_group,company'),
     supabase.from('test_definitions').select('id,display_name,sections,sort_order').order('sort_order'),
-    supabase.from('test_results').select('id,trainee_id,test_name,test_date,score_vocab,score_grammar,score_listening,score_conversation,auto_scored,created_at').order('created_at', { ascending: false })
+    supabase.from('test_results').select('id,trainee_id,test_name,test_date,score_vocab,score_grammar,score_listening,score_conversation,auto_scored,created_at,excluded,excluded_reason').order('created_at', { ascending: false })
   ]);
   if (trRes.error) { alert(trRes.error.message); return; }
 
@@ -250,6 +261,8 @@ async function reload() {
       score_listening: r.score_listening,
       score_conversation: r.score_conversation,
       auto_scored: r.auto_scored,
+      excluded: r.excluded === true,
+      excluded_reason: r.excluded_reason || '',
     };
   });
 
@@ -281,7 +294,9 @@ function getFiltered() {
   const fCompany = document.getElementById('filter-company').value;
   const fSearch = (document.getElementById('filter-search').value || '').toLowerCase();
   const fNoConv = document.getElementById('filter-noconv').checked;
+  const fIncludeExcluded = document.getElementById('filter-include-excluded').checked;
   return _data.filter(d => {
+    if (!fIncludeExcluded && d.excluded) return false;
     if (fTest && d.test_name !== fTest) return false;
     if (fClass && d.class_group !== fClass) return false;
     if (fCompany && d.company !== fCompany) return false;
@@ -331,6 +346,11 @@ function render() {
     const convVal = (d.score_conversation === null || d.score_conversation === undefined) ? '' : d.score_conversation;
     const autoTotal = (d.score_vocab||0)+(d.score_grammar||0)+(d.score_listening||0);
     const total = maxMode === '400' ? autoTotal + (d.score_conversation || 0) : autoTotal;
+    if (d.excluded) tr.classList.add('excluded');
+    const exclusionCell = d.excluded
+      ? `<span class="badge-excluded" title="${d.excluded_reason || '理由未記入'}">除外済</span>
+         <button class="btn-restore" onclick="restoreResult('${d.result_id}')" style="margin-left:4px">↶ 復元</button>`
+      : `<button class="btn-exclude" onclick="excludeResult('${d.result_id}', '${(d.name||d.student_id).replace(/'/g,"\\'")}', '${d.test_name}')">🚫 誤受験</button>`;
     tr.innerHTML = `
       <td><a href="trainee.html?id=${d.trainee_id}">${d.student_id}</a></td>
       <td><a href="trainee.html?id=${d.trainee_id}">${d.name || d.name_romaji || '?'}</a></td>
@@ -341,10 +361,11 @@ function render() {
       <td class="score col-auto">${d.score_vocab ?? '-'}</td>
       <td class="score col-auto">${d.score_grammar ?? '-'}</td>
       <td class="score col-auto">${d.score_listening ?? '-'}</td>
-      <td class="score"><input type="number" min="0" max="100" class="conv-input" data-result-id="${d.result_id}" data-row="${i}" value="${convVal}" placeholder="-" style="width:64px;padding:5px 6px;text-align:center;border:1px solid #ddd;border-radius:4px;font-family:monospace;font-size:14px"></td>
+      <td class="score"><input type="number" min="0" max="100" class="conv-input" data-result-id="${d.result_id}" data-row="${i}" value="${convVal}" placeholder="-" style="width:64px;padding:5px 6px;text-align:center;border:1px solid #ddd;border-radius:4px;font-family:monospace;font-size:14px" ${d.excluded ? 'disabled' : ''}></td>
       <td class="score total">${total}/${max}</td>
       <td class="col-auto">${d.auto_scored ? '<span class="badge-auto">自動</span>' : '<span class="badge-manual">手動</span>'}</td>
       <td><a href="test-result-detail.html?id=${d.result_id}">→詳細</a></td>
+      <td>${exclusionCell}</td>
     `;
     tbody.appendChild(tr);
   });
@@ -420,6 +441,30 @@ function onConvKey(e) {
     e.target.blur();
     if (next) { next.focus(); next.select(); }
   }
+}
+
+// ====== 誤受験除外 ======
+async function excludeResult(rid, name, testName) {
+  const reason = prompt(`「${name}」の「${testName}」を誤受験として除外します。\n\n理由を入力してください（任意）:`, '誤受験');
+  if (reason === null) return; // cancelled
+  const { error } = await supabase.from('test_results')
+    .update({ excluded: true, excluded_reason: reason || '誤受験' })
+    .eq('id', rid);
+  if (error) { alert('失敗: ' + error.message); return; }
+  const d = _data.find(x => x.result_id === rid);
+  if (d) { d.excluded = true; d.excluded_reason = reason || '誤受験'; }
+  render();
+}
+
+async function restoreResult(rid) {
+  if (!confirm('このテスト結果を復元しますか？\n（レポート・グラフに再度反映されます）')) return;
+  const { error } = await supabase.from('test_results')
+    .update({ excluded: false, excluded_reason: null })
+    .eq('id', rid);
+  if (error) { alert('失敗: ' + error.message); return; }
+  const d = _data.find(x => x.result_id === rid);
+  if (d) { d.excluded = false; d.excluded_reason = ''; }
+  render();
 }
 
 function rowsToTSV(filtered) {

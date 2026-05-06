@@ -840,10 +840,11 @@ async function loadReport() {
     const allTestResults = globalAll || [];
 
     // グローバル状態に保存
+    // excluded=true（誤受験等）は全レポート計算から除外
     _reportTrainee = trainee;
-    _reportResults = results || [];
-    _reportClassResults = classResults;
-    _reportAllTestResults = allTestResults;
+    _reportResults = (results || []).filter(r => !r.excluded);
+    _reportClassResults = (classResults || []).filter(r => !r.excluded);
+    _reportAllTestResults = (allTestResults || []).filter(r => !r.excluded);
     _reportMonthly = {};
     (monthly || []).forEach(r => { _reportMonthly[r.month] = r; });
     _reportSections = {};
