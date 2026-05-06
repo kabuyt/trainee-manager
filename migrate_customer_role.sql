@@ -66,4 +66,4 @@ CREATE POLICY "monthly_reports_select" ON monthly_reports FOR SELECT USING (
 --
 -- 他の組合も同様に作成:
 -- globalway@trainee.local → supervising_org='グローバルウェイ協同組合'
--- hiroshima@trainee.local → supervising_org='広島ワールド協同組合'
+-- worldbusiness@trainee.local → supervising_org='ワールドビジネス協同組合'
