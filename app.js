@@ -1594,6 +1594,67 @@ function _diagGetExpected(ak, fid, idx) {
   return undefined;
 }
 
+// まるごとテスト用のセクションラベル（block prefix → 表示名）
+const MARUGOTO_LABELS = {
+  marugoto_1: {
+    v1: 'ひらがな単語の意味', v2: 'カタカナ単語の意味',
+    v3a: '漢字の読み方', v3b: '漢字の意味',
+    v4: 'ベトナム語→日本語訳', v5: '絵と言葉のマッチ',
+    g1: '助詞の使い方', g2: 'です/ます活用',
+    g3: '文の並び替え', g4: '文型・対話の理解',
+    l1: 'あいさつ・場面', l2: '教室の会話',
+    l3: '自己紹介・国・仕事', l4: '家族', l5: '好きなもの・食事',
+  },
+  // marugoto_2/3/4 は今後追加
+};
+
+// まるごとテストのセクション別正答率診断
+// answers_json は {qid: {selected, correct, points}} 形式（クライアント側で採点済み）
+function generateMarugotoSectionDiagnosis(answers, testName) {
+  if (!answers) return null;
+  const labels = MARUGOTO_LABELS[testName];
+  if (!labels) return null;
+
+  // qid prefix（v1, v3a, g1, l2 等）でグループ化
+  const groups = {};
+  for (const qid in answers) {
+    const a = answers[qid];
+    if (!a || typeof a !== 'object') continue;
+    const m = /^([vgl]\d+[a-z]?)/i.exec(qid);
+    if (!m) continue;
+    const prefix = m[1];
+    if (!groups[prefix]) groups[prefix] = { correct: 0, total: 0 };
+    groups[prefix].total++;
+    if (a.correct === true) groups[prefix].correct++;
+  }
+
+  // セクションタイプ別（v→goii, g→bunpo, l→chokkai）にまとめ
+  const bySecType = { goii: [], bunpo: [], chokkai: [] };
+  // 並び順を固定（labels の順番）
+  const orderedKeys = Object.keys(labels);
+  for (const prefix of orderedKeys) {
+    if (!groups[prefix]) continue;
+    const stype = prefix.startsWith('v') ? 'goii'
+                : prefix.startsWith('g') ? 'bunpo'
+                : prefix.startsWith('l') ? 'chokkai'
+                : null;
+    if (!stype) continue;
+    const { correct, total } = groups[prefix];
+    if (total === 0) continue;
+    bySecType[stype].push({
+      sid: prefix,
+      label: labels[prefix] || prefix,
+      correct, total,
+      rate: correct / total,
+    });
+  }
+  // 空のセクションは削除
+  for (const k in bySecType) {
+    if (bySecType[k].length === 0) delete bySecType[k];
+  }
+  return Object.keys(bySecType).length ? bySecType : null;
+}
+
 // セクション別の正答率ベース診断（test1/test2用）
 function generateSectionDiagnosis(answers, testName) {
   const sections = _reportSections[testName];
@@ -1662,9 +1723,12 @@ function renderDiagnosis(diagArea, results) {
     ? JSON.parse(withAnswers.answers_json)
     : withAnswers.answers_json;
 
-  // test1/test2 は セクション別正答率ベースの診断（全体まとめ文章）
-  if (withAnswers.test_name === 'test1' || withAnswers.test_name === 'test2') {
-    const secDiag = generateSectionDiagnosis(answers, withAnswers.test_name);
+  // test1/test2 + marugoto_N は セクション別正答率ベースの診断（全体まとめ文章）
+  const isMarugoto = /^marugoto_\d+$/.test(withAnswers.test_name);
+  if (withAnswers.test_name === 'test1' || withAnswers.test_name === 'test2' || isMarugoto) {
+    const secDiag = isMarugoto
+      ? generateMarugotoSectionDiagnosis(answers, withAnswers.test_name)
+      : generateSectionDiagnosis(answers, withAnswers.test_name);
     if (secDiag) {
       const stypeJp = { goii:'語彙', bunpo:'文法', chokkai:'聴解' };
       const byType = {goii:{correct:0,total:0,weak:[],strong:[]}, bunpo:{correct:0,total:0,weak:[],strong:[]}, chokkai:{correct:0,total:0,weak:[],strong:[]}};
