@@ -311,6 +311,22 @@ body {
   pointer-events: none;
 }
 
+/* 貼り付け時の Outlook/Teams/Word 装飾を強制リセット */
+.comment-text *,
+.comment-text *::before,
+.comment-text *::after {
+  font-size: inherit !important;
+  font-family: inherit !important;
+  color: inherit !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  letter-spacing: normal !important;
+  line-height: inherit !important;
+  font-weight: inherit !important;
+  font-style: inherit !important;
+  text-decoration: none !important;
+}
+
 .diagnosis-box {
   border: 1px solid #cbd5e1;
   padding: 8px 10px;

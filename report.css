@@ -830,6 +830,23 @@ body {
   pointer-events: none;
 }
 
+/* 貼り付け時に紛れ込んだ Outlook/Teams/Word 等の装飾を強制リセット
+   （DB は触らず、表示・PDF出力で常に親の comment-text サイズに統一） */
+.comment-text *,
+.comment-text *::before,
+.comment-text *::after {
+  font-size: inherit !important;
+  font-family: inherit !important;
+  color: inherit !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  letter-spacing: normal !important;
+  line-height: inherit !important;
+  font-weight: inherit !important;
+  font-style: inherit !important;
+  text-decoration: none !important;
+}
+
 /* ===== No-test notice ===== */
 /* 温かみのあるアイボリー背景 + アンバー系アクセント */
 .no-test-notice {

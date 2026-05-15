@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="report-classic.css?v=1">
+<link rel="stylesheet" href="report-classic.css?v=2">
 </head>
 <body>
 <div class="print-footer">GROP VIETNAM CO., LTD</div>
@@ -256,6 +256,26 @@
     setupAuthUI();
     await loadReport();
   })();
+
+  // 貼り付けは常にプレーンテキスト化（Outlook/Teams/Word の装飾を除去）
+  document.addEventListener('paste', function(e) {
+    const target = e.target;
+    if (!target || target.getAttribute('contenteditable') !== 'true') return;
+    e.preventDefault();
+    const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+    if (document.queryCommandSupported && document.queryCommandSupported('insertText')) {
+      document.execCommand('insertText', false, text);
+    } else {
+      const sel = window.getSelection();
+      if (sel && sel.rangeCount > 0) {
+        const range = sel.getRangeAt(0);
+        range.deleteContents();
+        range.insertNode(document.createTextNode(text));
+        range.collapse(false);
+      }
+    }
+    target.dispatchEvent(new Event('input', { bubbles: true }));
+  });
 
   document.getElementById('monthSelect').addEventListener('change', function() {
     document.getElementById('monthPrint').textContent = this.value;
