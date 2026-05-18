@@ -64,14 +64,15 @@
     "instruction": "<ruby>反対<rt>はんたい</rt></ruby>の<ruby>意味<rt>いみ</rt></ruby>の<ruby>言葉<rt>ことば</rt></ruby>をひらがなで<ruby>書<rt>か</rt></ruby>いてください。",
     "points_each": 1,
     "total_points": 7,
+    "example_html": "せまい　⇔　ひろい",
     "items": [
-      { "field_id": "g4_1", "label": "せまい　⇔", "input_type": "text" },
-      { "field_id": "g4_2", "label": "<ruby>涼<rt>すず</rt></ruby>しい　⇔", "input_type": "text" },
-      { "field_id": "g4_3", "label": "<ruby>重<rt>おも</rt></ruby>い　⇔", "input_type": "text" },
-      { "field_id": "g4_4", "label": "<ruby>多<rt>おお</rt></ruby>い　⇔", "input_type": "text" },
-      { "field_id": "g4_5", "label": "<ruby>遠<rt>とお</rt></ruby>い　⇔", "input_type": "text" },
-      { "field_id": "g4_6", "label": "<ruby>長<rt>なが</rt></ruby>い　⇔", "input_type": "text" },
-      { "field_id": "g4_7", "label": "<ruby>暗<rt>くら</rt></ruby>い　⇔", "input_type": "text" }
+      { "field_id": "g4_1", "label": "１）　<ruby>涼<rt>すず</rt></ruby>しい　⇔", "input_type": "text" },
+      { "field_id": "g4_2", "label": "２）　<ruby>重<rt>おも</rt></ruby>い　⇔", "input_type": "text" },
+      { "field_id": "g4_3", "label": "３）　<ruby>多<rt>おお</rt></ruby>い　⇔", "input_type": "text" },
+      { "field_id": "g4_4", "label": "４）　<ruby>遠<rt>とお</rt></ruby>い　⇔", "input_type": "text" },
+      { "field_id": "g4_5", "label": "５）　<ruby>長<rt>なが</rt></ruby>い　⇔", "input_type": "text" },
+      { "field_id": "g4_6", "label": "６）　<ruby>暗<rt>くら</rt></ruby>い　⇔", "input_type": "text" },
+      { "field_id": "g4_7", "label": "７）　<ruby>遅<rt>おそ</rt></ruby>い　⇔", "input_type": "text" }
     ]
   },
   {
