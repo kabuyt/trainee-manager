@@ -45,6 +45,16 @@
   .toggle{font-size:12px;color:#3498db;cursor:pointer;margin-top:8px;display:inline-block}
   .btn{padding:6px 14px;border:none;border-radius:5px;font-size:13px;cursor:pointer;background:#3498db;color:#fff}
   .btn:hover{background:#2980b9}
+  .manual-panel{border-left:5px solid #3498db}
+  .manual-summary{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+  .manual-summary .pill{background:#e3f2fd;color:#1a5276;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:bold}
+  .manual-row{display:grid;grid-template-columns:90px 1fr 110px;gap:10px;align-items:start;background:#f8fbff;border:1px solid #d7e8f7;border-radius:6px;padding:10px;margin:8px 0}
+  .manual-row .fid{font-weight:bold;color:#1a5276;font-size:12px}
+  .manual-row .answer{background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 8px;min-height:32px;white-space:pre-wrap}
+  .manual-row input{width:70px;padding:5px;border:1px solid #aaa;border-radius:4px;text-align:right}
+  .manual-save{display:flex;align-items:center;gap:10px;justify-content:flex-end;margin-top:12px}
+  .manual-note{font-size:12px;color:#666;line-height:1.6}
+  @media(max-width:640px){.manual-row{grid-template-columns:1fr}.manual-save{justify-content:flex-start;flex-wrap:wrap}}
 </style>
 </head>
 <body>
@@ -161,6 +171,10 @@ function renderDetail(result, sections, testDef) {
   // セクション別
   const secNames = { goii: '語彙テスト', bunpo: '文法テスト', chokkai: '聴解テスト' };
   sections.sort((a,b)=> ['goii','bunpo','chokkai'].indexOf(a.section_type) - ['goii','bunpo','chokkai'].indexOf(b.section_type));
+  const manualItems = collectManualScoringItems(sections, answers);
+  if (manualItems.length) {
+    html += renderManualScoringPanel(result, manualItems);
+  }
   sections.forEach(sec => {
     html += `<div class="card"><h2>${secNames[sec.section_type] || sec.section_type}</h2>`;
     html += renderQuestions(sec.questions || [], sec.answer_key || {}, sec.scoring_rules || {}, answers);
@@ -175,6 +189,7 @@ function renderDetail(result, sections, testDef) {
   </div>`;
 
   document.getElementById('content').innerHTML = html;
+  updateManualTotals();
 }
 
 function renderQuestions(questions, answerKey, scoringRules, userAnswers) {
@@ -215,7 +230,7 @@ function renderQuestions(questions, answerKey, scoringRules, userAnswers) {
       const isAnswered = userVal !== undefined && userVal !== '' && userVal !== null;
       let status = 'unanswered';
       let badge = '';
-      if (method === 'manual') {
+      if (method === 'manual' || (q.grading === 'manual' && (!method || method === 'manual'))) {
         status = 'manual';
         badge = '<span class="badge-mn">先生採点</span>';
       } else if (isBlockLevel && expected === undefined) {
@@ -244,6 +259,94 @@ function renderQuestions(questions, answerKey, scoringRules, userAnswers) {
 }
 
 // grading.js と同じロジックで個別fieldをマッチ判定
+function collectManualScoringItems(sections, userAnswers) {
+  const secLabel = { goii: '語彙', bunpo: '文法', chokkai: '聴解' };
+  const items = [];
+  (sections || []).forEach(sec => {
+    const rules = sec.scoring_rules || {};
+    (sec.questions || []).forEach(q => {
+      const rule = rules[q.id] || {};
+      const isManual = rule.method === 'manual' || (q.grading === 'manual' && (!rule.method || rule.method === 'manual'));
+      if (!isManual) return;
+      const pointsEach = Number(rule.points_each || rule.points_per_field || q.points_each || 0);
+      collectFieldIds(q).forEach(fid => {
+        items.push({
+          sectionType: sec.section_type,
+          sectionLabel: secLabel[sec.section_type] || sec.section_type,
+          blockId: q.id,
+          fieldId: fid,
+          max: pointsEach,
+          title: stripRuby(q.title_html || q.id),
+          answer: userAnswers[fid] ?? '',
+        });
+      });
+    });
+  });
+  return items;
+}
+
+function manualScoresFromResult(result) {
+  const raw = result.manual_scores_json || {};
+  if (typeof raw === 'string') {
+    try { return JSON.parse(raw) || {}; } catch(e) { return {}; }
+  }
+  return raw || {};
+}
+
+function manualTotals(scores) {
+  const totals = { goii: 0, bunpo: 0, chokkai: 0 };
+  Object.values(scores || {}).forEach(row => {
+    if (!row || !row.section_type) return;
+    totals[row.section_type] = (totals[row.section_type] || 0) + (Number(row.points) || 0);
+  });
+  return totals;
+}
+
+function renderManualScoringPanel(result, items) {
+  const saved = manualScoresFromResult(result);
+  const previousTotals = manualTotals(saved);
+  const grammarBase = Math.max(0, Number(result.score_grammar || 0) - Number(result.manual_score_grammar ?? previousTotals.bunpo ?? 0));
+  const listeningBase = Math.max(0, Number(result.score_listening || 0) - Number(result.manual_score_listening ?? previousTotals.chokkai ?? 0));
+  const grammarMax = items.filter(i => i.sectionType === 'bunpo').reduce((s, i) => s + i.max, 0);
+  const listeningMax = items.filter(i => i.sectionType === 'chokkai').reduce((s, i) => s + i.max, 0);
+
+  return `<div class="card manual-panel">
+    <h2>手動採点</h2>
+    <div class="manual-note">
+      記述式・先生採点の問題だけを表示しています。保存すると自動点に加算して、文法・聴解の点数を更新します。
+    </div>
+    <div class="manual-summary">
+      <span class="pill">文法 自動点: ${grammarBase}</span>
+      <span class="pill">文法 手動: <b id="manual-bunpo-total">0</b> / ${grammarMax}</span>
+      <span class="pill">聴解 自動点: ${listeningBase}</span>
+      <span class="pill">聴解 手動: <b id="manual-chokkai-total">0</b> / ${listeningMax}</span>
+    </div>
+    <div id="manual-score-list">
+      ${items.map(item => {
+        const savedScore = saved[item.fieldId]?.points ?? '';
+        const answer = item.answer === '' || item.answer === null || item.answer === undefined ? '(未回答)' : item.answer;
+        return `<div class="manual-row" data-section="${escapeHtml(item.sectionType)}" data-field="${escapeHtml(item.fieldId)}" data-max="${item.max}">
+          <div>
+            <div class="fid">${escapeHtml(item.fieldId)}</div>
+            <div style="font-size:11px;color:#777">${escapeHtml(item.sectionLabel)} / ${escapeHtml(item.blockId)}</div>
+          </div>
+          <div>
+            <div style="font-size:12px;color:#555;margin-bottom:4px">${escapeHtml(item.title)}</div>
+            <div class="answer">${escapeHtml(String(answer))}</div>
+          </div>
+          <label style="font-size:12px;color:#555">点数 / ${item.max}<br>
+            <input class="manual-score-input" type="number" min="0" max="${item.max}" step="0.5" value="${escapeHtml(String(savedScore))}" oninput="updateManualTotals()">
+          </label>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="manual-save">
+      <span id="manual-save-status" class="manual-note"></span>
+      <button class="btn" onclick="saveManualScores()">手動採点を保存</button>
+    </div>
+  </div>`;
+}
+
 function matchAnswer(userVal, expected, method, rule) {
   const opts = {
     strip_accents: method === 'flex_match' || method === 'vietnamese_fuzzy',
@@ -343,6 +446,79 @@ function normalize(s) {
 }
 
 // ====== 誤受験除外 ======
+function readManualScoreRows() {
+  const rows = Array.from(document.querySelectorAll('.manual-row'));
+  const scores = {};
+  const totals = { goii: 0, bunpo: 0, chokkai: 0 };
+  rows.forEach(row => {
+    const sectionType = row.dataset.section;
+    const fieldId = row.dataset.field;
+    const max = Number(row.dataset.max || 0);
+    const input = row.querySelector('.manual-score-input');
+    const raw = input ? input.value : '';
+    const points = raw === '' ? 0 : Number(raw);
+    if (!Number.isFinite(points) || points < 0 || points > max) {
+      throw new Error(`${fieldId} は 0〜${max} 点で入力してください`);
+    }
+    scores[fieldId] = { section_type: sectionType, points, max };
+    totals[sectionType] = (totals[sectionType] || 0) + points;
+  });
+  return { scores, totals };
+}
+
+function updateManualTotals() {
+  const list = document.getElementById('manual-score-list');
+  if (!list) return;
+  try {
+    const { totals } = readManualScoreRows();
+    const b = document.getElementById('manual-bunpo-total');
+    const c = document.getElementById('manual-chokkai-total');
+    if (b) b.textContent = totals.bunpo || 0;
+    if (c) c.textContent = totals.chokkai || 0;
+    const status = document.getElementById('manual-save-status');
+    if (status) status.textContent = '';
+  } catch (e) {
+    const status = document.getElementById('manual-save-status');
+    if (status) status.textContent = e.message;
+  }
+}
+
+async function saveManualScores() {
+  const r = window._currentResult;
+  if (!r) return;
+  const status = document.getElementById('manual-save-status');
+  try {
+    const { scores, totals } = readManualScoreRows();
+    const previous = manualTotals(manualScoresFromResult(r));
+    const savedGrammar = Number(r.manual_score_grammar ?? previous.bunpo ?? 0);
+    const savedListening = Number(r.manual_score_listening ?? previous.chokkai ?? 0);
+    const baseGrammar = Math.max(0, Number(r.score_grammar || 0) - savedGrammar);
+    const baseListening = Math.max(0, Number(r.score_listening || 0) - savedListening);
+    const nextGrammar = baseGrammar + (totals.bunpo || 0);
+    const nextListening = baseListening + (totals.chokkai || 0);
+
+    if (status) status.textContent = '保存中...';
+    const { error } = await supabase.from('test_results')
+      .update({
+        score_grammar: nextGrammar,
+        score_listening: nextListening,
+        manual_score_grammar: totals.bunpo || 0,
+        manual_score_listening: totals.chokkai || 0,
+        manual_scores_json: scores,
+        manually_scored_at: new Date().toISOString(),
+      })
+      .eq('id', RESULT_ID);
+
+    if (error) throw error;
+    if (status) status.textContent = '保存しました';
+    alert('手動採点を保存しました');
+    location.reload();
+  } catch (e) {
+    if (status) status.textContent = '保存失敗: ' + e.message;
+    alert('保存に失敗しました: ' + e.message + '\n\nDB列が未追加の場合は migrations/2026_05_18_manual_scoring.sql を先に実行してください。');
+  }
+}
+
 async function excludeResult() {
   const r = window._currentResult;
   if (!r) return;
