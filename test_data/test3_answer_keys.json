@@ -126,100 +126,70 @@
       },
       "g7": {
         "g7_1": [
-          "đường",
-          "đường cát"
+          "đường"
         ],
         "g7_2": [
-          "sản phẩm",
-          "mặt hàng",
-          "hàng hóa"
+          "sản phẩm"
         ],
         "g7_3": [
-          "mật khẩu",
-          "mã PIN",
-          "số PIN",
-          "mã số bí mật",
-          "mã số cá nhân"
+          "mật khẩu"
         ],
         "g7_4": [
-          "giám đốc",
-          "tổng giám đốc",
-          "chủ tịch công ty"
+          "giám đốc"
         ],
         "g7_5": [
           "tiền mặt"
         ],
         "g7_6": [
           "cách sử dụng",
-          "cách dùng",
-          "cách xài"
+          "cách dùng"
         ],
         "g7_7": [
-          "cho xem",
-          "cho coi",
-          "đưa cho xem"
+          "cho xem"
         ],
         "g7_8": [
-          "câu trả lời",
-          "đáp án",
-          "lời giải",
-          "câu đáp"
+          "câu trả lời"
         ],
         "g7_9": [
-          "sốt",
-          "cơn sốt"
+          "sốt"
         ],
         "g7_10": [
-          "thẻ bảo hiểm",
-          "thẻ bảo hiểm y tế",
-          "giấy bảo hiểm"
+          "thẻ bảo hiểm"
         ],
         "g7_11": [
           "nhớ",
-          "ghi nhớ",
-          "học thuộc"
+          "ghi nhớ"
         ],
         "g7_12": [
-          "áo khoác",
-          "áo ngoài"
+          "áo khoác"
         ],
         "g7_13": [
-          "độc thân",
-          "chưa kết hôn",
-          "chưa lập gia đình"
+          "độc thân"
         ],
         "g7_14": [
           "đặt",
-          "để",
-          "đặt xuống"
+          "để"
         ],
         "g7_15": [
-          "bản đồ",
-          "địa đồ"
+          "bản đồ"
         ],
         "g7_16": [
-          "tiền thừa",
-          "tiền trả lại",
-          "tiền dư"
+          "tiền thừa"
         ],
         "g7_17": [
           "vứt",
           "bỏ",
-          "vứt bỏ",
           "bỏ đi"
         ],
         "g7_18": [
           "xuống",
           "xuống xe",
-          "xuống tàu",
-          "xuống khỏi xe",
-          "xuống khỏi tàu"
+          "xuống tàu"
         ],
         "g7_19": [
           "khẩn trương",
-          "vội vàng",
-          "vội vã",
-          "nhanh lên"
+          "gấp rút",
+          "vội vàng"
         ]
       }
     },
@@ -365,8 +335,7 @@
           "何が歌えますか"
         ],
         "b4_5": [
-          "行きませんか",
-          "行きましょう"
+          "行きませんか"
         ]
       },
       "b5_ox": [
@@ -383,8 +352,10 @@
           "はい、行ってもいいです。土曜日は13時から18時までです"
         ],
         "b5_7": [
+          "国と町がお金を払っていますから",
           "会社は国と町からお金をもらっていますから",
           "国と町からお金をもらっていますから",
+          "国と町にお金をもらっていますから",
           "そのお金で先生は働きますから"
         ],
         "b5_8": ""
