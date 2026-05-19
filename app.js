@@ -148,6 +148,9 @@ function renderTrainees(data) {
     const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s);
     return m ? `${m[1]}/${m[2]}/${m[3]}` : s;
   };
+  const escAttr = s => String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   tbody.innerHTML = data.map(t => `
     <tr>
       <td><span class="student-id-badge">${t.student_id || '-'}</span></td>
@@ -158,6 +161,16 @@ function renderTrainees(data) {
       <td>${t.supervising_org || '-'}</td>
       ${showOrg ? `<td>${t.organizations?.name || '-'}</td>` : ''}
       <td style="font-family:'Inter',monospace;font-size:12px;color:var(--ink-soft)">${fmtDate(t.training_start_date)}</td>
+      <td>
+        <textarea
+          data-id="${t.id}"
+          class="notes-input"
+          rows="2"
+          onblur="saveInlineNotes(this)"
+          placeholder="メモ"
+          style="width:200px;min-width:140px;max-width:280px;min-height:38px;font-size:12px;padding:5px 7px;border:1px solid #d0d6dd;border-radius:5px;resize:vertical;font-family:inherit;line-height:1.5;background:#fff;box-sizing:border-box"
+        >${escAttr(t.notes || '')}</textarea>
+      </td>
       <td>
         <a href="trainee.html?id=${t.id}" class="btn btn-sm btn-secondary">詳細</a>
         <a href="report.html?id=${t.id}" target="_blank" class="btn btn-sm btn-report" title="教育報告書を開く">📄 報告書</a>
@@ -661,6 +674,40 @@ function renderTraineeDetail(t, results) {
       lastSaved = notesEl.value;
     });
   }
+}
+
+// 一覧画面のインライン備考保存
+const _inlineNotesLastSaved = new WeakMap();
+async function saveInlineNotes(textarea) {
+  const traineeId = textarea.dataset.id;
+  if (!traineeId) return;
+  const value = textarea.value;
+  const last = _inlineNotesLastSaved.get(textarea);
+  // 初回（last 未設定）は元の値と比較
+  const baseline = (last !== undefined) ? last : textarea.defaultValue;
+  if (value === baseline) return; // 変更なし
+  // 保存中: 黄色枠
+  const origBorder = textarea.style.borderColor;
+  textarea.style.borderColor = '#f1c40f';
+  const { error } = await supabase
+    .from('trainees')
+    .update({ notes: value || null })
+    .eq('id', traineeId);
+  if (error) {
+    textarea.style.borderColor = '#c0392b';
+    textarea.title = '保存失敗: ' + error.message;
+    return;
+  }
+  // 成功: 緑枠 → 一定時間後に元に戻す
+  textarea.style.borderColor = '#27ae60';
+  textarea.title = '✓ 保存しました（' + new Date().toLocaleTimeString('ja-JP') + '）';
+  _inlineNotesLastSaved.set(textarea, value);
+  // allTrainees にも反映（再描画時に消えないように）
+  const t = (typeof allTrainees !== 'undefined') ? allTrainees.find(x => x.id === traineeId) : null;
+  if (t) t.notes = value || null;
+  setTimeout(() => {
+    textarea.style.borderColor = origBorder || '#d0d6dd';
+  }, 1500);
 }
 
 async function saveTraineeNotes(traineeId, textarea, prevValue) {
