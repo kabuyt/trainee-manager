@@ -214,49 +214,65 @@ function renderQuestions(questions, answerKey, scoringRules, userAnswers) {
       return;
     }
 
-    const fieldIds = collectFieldIds(q);
-    fieldIds.forEach((fid, idx) => {
-      const userVal = userAnswers[fid];
-      // 配列ak対応（test1 旧形式）
-      let expected;
-      if (typeof ak === 'object' && !Array.isArray(ak) && ak !== null) {
-        expected = ak[fid];
-      } else if (Array.isArray(ak)) {
-        // index ベース（g1,g2等）
-        const m = fid.match(/(\d+)$/);
-        if (m) {
-          const i = parseInt(m[1], 10) - 1;
-          if (i >= 0 && i < ak.length) expected = ak[i];
-        }
-      }
-
-      const isAnswered = userVal !== undefined && userVal !== '' && userVal !== null;
-      let status = 'unanswered';
-      let badge = '';
-      if (method === 'manual' || (q.grading === 'manual' && (!method || method === 'manual'))) {
-        status = 'manual';
-        badge = '<span class="badge-mn">先生採点</span>';
-      } else if (isBlockLevel && expected === undefined) {
-        status = 'manual';
-        badge = '<span class="badge-mn">ブロック採点</span>';
-      } else if (!isAnswered) {
-        status = 'unanswered';
-        badge = '<span class="badge-na">未回答</span>';
-      } else if (expected !== undefined) {
-        const ok = matchAnswer(userVal, expected, method, rule);
-        status = ok ? 'correct' : 'wrong';
-        badge = ok ? '<span class="badge-ok">○</span>' : '<span class="badge-ng">×</span>';
-      } else {
-        status = 'manual';
-        badge = '<span class="badge-mn">要確認</span>';
-      }
-      html += `<div class="q-item ${status}">
-        <div class="qlabel">${fid} ${badge}</div>
-        <div class="userAns">${escapeHtml(String(userVal ?? '(未回答)'))}</div>
-        ${expected !== undefined ? `<div class="correctAns ${status==='wrong'?'wrong':''}">正解: ${escapeHtml(String(Array.isArray(expected)?expected.join(' / '):expected))}</div>` : ''}
-      </div>`;
-    });
+    if (Array.isArray(q.sub_sections) && q.sub_sections.length) {
+      q.sub_sections.forEach(sub => {
+        const subRule = scoringRules[sub.sub_id] || {};
+        const subAk = answerKey[sub.sub_id];
+        const subMethod = subRule.method;
+        const subIsBlockLevel = blockLevelMethods.includes(subMethod);
+        html += `<div style="font-size:12px;font-weight:bold;color:#555;margin:8px 0 4px">${stripRuby(sub.sub_title || sub.sub_id)}</div>`;
+        html += renderQuestionFieldRows(collectFieldIds(sub), subAk, subRule, subMethod, subIsBlockLevel, sub, userAnswers);
+      });
+    } else {
+      html += renderQuestionFieldRows(collectFieldIds(q), ak, rule, method, isBlockLevel, q, userAnswers);
+    }
     html += `</div>`;
+  });
+  return html;
+}
+
+function renderQuestionFieldRows(fieldIds, ak, rule, method, isBlockLevel, questionBlock, userAnswers) {
+  let html = '';
+  fieldIds.forEach((fid, idx) => {
+    const userVal = userAnswers[fid];
+    // 配列ak対応（test1 旧形式）
+    let expected;
+    if (typeof ak === 'object' && !Array.isArray(ak) && ak !== null) {
+      expected = ak[fid];
+    } else if (Array.isArray(ak)) {
+      // index ベース（g1,g2等）
+      const m = fid.match(/(\d+)$/);
+      if (m) {
+        const i = parseInt(m[1], 10) - 1;
+        if (i >= 0 && i < ak.length) expected = ak[i];
+      }
+    }
+
+    const isAnswered = userVal !== undefined && userVal !== '' && userVal !== null;
+    let status = 'unanswered';
+    let badge = '';
+    if (method === 'manual' || (questionBlock.grading === 'manual' && (!method || method === 'manual'))) {
+      status = 'manual';
+      badge = '<span class="badge-mn">先生採点</span>';
+    } else if (isBlockLevel && expected === undefined) {
+      status = 'manual';
+      badge = '<span class="badge-mn">ブロック採点</span>';
+    } else if (!isAnswered) {
+      status = 'unanswered';
+      badge = '<span class="badge-na">未回答</span>';
+    } else if (expected !== undefined) {
+      const ok = matchAnswer(userVal, expected, method, rule);
+      status = ok ? 'correct' : 'wrong';
+      badge = ok ? '<span class="badge-ok">○</span>' : '<span class="badge-ng">×</span>';
+    } else {
+      status = 'manual';
+      badge = '<span class="badge-mn">要確認</span>';
+    }
+    html += `<div class="q-item ${status}">
+      <div class="qlabel">${fid} ${badge}</div>
+      <div class="userAns">${escapeHtml(String(userVal ?? '(未回答)'))}</div>
+      ${expected !== undefined ? `<div class="correctAns ${status==='wrong'?'wrong':''}">正解: ${escapeHtml(String(Array.isArray(expected)?expected.join(' / '):expected))}</div>` : ''}
+    </div>`;
   });
   return html;
 }
