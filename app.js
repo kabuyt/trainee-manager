@@ -596,6 +596,16 @@ function renderTraineeDetail(t, results) {
       </div>
     </div>
 
+    <div class="section-title" style="margin-top:24px;display:flex;align-items:center;gap:8px">
+      📝 備考・メモ
+      <span id="notesStatus" style="font-size:12px;font-weight:400;color:#888"></span>
+    </div>
+    <div style="margin-bottom:20px">
+      <textarea id="traineeNotes"
+        placeholder="この実習生に関するメモ・備考を入力できます（フォーカスを外すと自動保存）"
+        style="width:100%;min-height:120px;padding:10px 12px;border:1px solid #d0d6dd;border-radius:8px;font-family:inherit;font-size:14px;line-height:1.7;resize:vertical;background:#fff;box-sizing:border-box"></textarea>
+    </div>
+
     <div class="section-title">テスト結果</div>
     ${results.length === 0
       ? '<p class="no-data">テスト結果がありません</p>'
@@ -639,6 +649,40 @@ function renderTraineeDetail(t, results) {
         </table>`
     }
   `;
+
+  // 備考欄のセットアップ（XSS回避のため innerHTML ではなく value で値投入）
+  const notesEl = document.getElementById('traineeNotes');
+  if (notesEl) {
+    notesEl.value = t.notes || '';
+    let lastSaved = notesEl.value;
+    notesEl.addEventListener('blur', async () => {
+      if (notesEl.value === lastSaved) return; // 変更なしならスキップ
+      await saveTraineeNotes(t.id, notesEl, lastSaved);
+      lastSaved = notesEl.value;
+    });
+  }
+}
+
+async function saveTraineeNotes(traineeId, textarea, prevValue) {
+  const status = document.getElementById('notesStatus');
+  const value = textarea.value;
+  if (status) {
+    status.textContent = '保存中...';
+    status.style.color = '#888';
+  }
+  const { error } = await supabase
+    .from('trainees')
+    .update({ notes: value || null })
+    .eq('id', traineeId);
+  if (!status) return;
+  if (error) {
+    status.textContent = '✗ 保存失敗: ' + error.message;
+    status.style.color = '#c0392b';
+    // 失敗したら前の値に戻すか問い合わせる選択肢もあるが、まずは表示のみ
+  } else {
+    status.textContent = '✓ 保存しました（' + new Date().toLocaleTimeString('ja-JP') + '）';
+    status.style.color = '#27ae60';
+  }
 }
 
 // ===== 教育報告書 =====
