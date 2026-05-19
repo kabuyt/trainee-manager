@@ -136,7 +136,7 @@ git add reports/ && git commit -m "reports: 月次更新" && git push</pre>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
   <script src="auth.js?v=5"></script>
-  <script src="app.js?v=54"></script>
+  <script src="app.js?v=55"></script>
   <script>
     function showRegenInstructions() {
       document.getElementById('regenModal').style.display = 'flex';
@@ -305,13 +305,21 @@ git add reports/ && git commit -m "reports: 月次更新" && git push</pre>
       const auth = await checkAuth();
       if (!auth) return;
       setupAuthUI();
+
+      // 検索ボックスは loadTrainees の前に復元（applyFilters に値が反映されるように）
+      const searchEl = document.getElementById('searchInput');
+      if (searchEl) {
+        const savedSearch = localStorage.getItem('indexSearchInput') || '';
+        searchEl.value = savedSearch;
+        searchEl.addEventListener('input', function() {
+          localStorage.setItem('indexSearchInput', this.value);
+          filterTrainees(this.value);
+        });
+      }
+
       await loadTrainees();
       loadDashboardStats(); // 並行で
       loadPendingReports(); // 並行で
-
-      document.getElementById('searchInput').addEventListener('input', function() {
-        filterTrainees(this.value);
-      });
     })();
   </script>
 </body>

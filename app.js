@@ -27,10 +27,10 @@ async function loadTrainees() {
     data.sort((a, b) => sortKey(a.student_id).localeCompare(sortKey(b.student_id)));
 
     allTrainees = data;
-    // setupKumiaiFilter 内で applyFilters が呼ばれた場合は、
-    // 既にフィルタ適用された状態で render 済みなので重複呼び出ししない
-    const filterApplied = setupKumiaiFilter();
-    if (!filterApplied) renderTrainees(data);
+    setupKumiaiFilter();
+    // 最後に必ず applyFilters() を呼ぶ。
+    // org/kumiai/search の localStorage 復元結果をすべて反映させた最終状態をレンダ。
+    applyFilters();
   } catch (err) {
     document.getElementById('loadingMsg').classList.add('hidden');
     const errEl = document.getElementById('errorMsg');
@@ -76,9 +76,8 @@ function setupKumiaiFilter() {
   }
   if (defaultKumiai) {
     filterEl.value = defaultKumiai;
-    applyFilters();
-    return true;
   }
+  // applyFilters は呼び出し側 (loadTrainees) で最後にまとめて呼ばれる
   return false;
 }
 
@@ -99,8 +98,15 @@ function setupOrgFilter() {
   });
 
   filterEl.addEventListener('change', function() {
+    localStorage.setItem('indexOrgFilter', filterEl.value);
     applyFilters();
   });
+
+  // 直前の選択を localStorage から復元（applyFilters は loadTrainees 側で最後にまとめて呼ぶ）
+  const saved = localStorage.getItem('indexOrgFilter');
+  if (saved !== null && (saved === '' || allOrgs.some(o => o.id === saved))) {
+    filterEl.value = saved;
+  }
 }
 
 function applyFilters() {
