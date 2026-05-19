@@ -50,7 +50,10 @@
   .manual-summary .pill{background:#e3f2fd;color:#1a5276;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:bold}
   .manual-row{display:grid;grid-template-columns:90px 1fr 110px;gap:10px;align-items:start;background:#f8fbff;border:1px solid #d7e8f7;border-radius:6px;padding:10px;margin:8px 0}
   .manual-row .fid{font-weight:bold;color:#1a5276;font-size:12px}
+  .manual-row .question{background:#eef6ff;border:1px solid #cfe3f6;border-radius:4px;padding:7px 8px;margin-bottom:6px;line-height:1.7}
+  .manual-row .passage{background:#fff;border:1px solid #e5edf6;border-radius:4px;padding:8px;margin-bottom:6px;max-height:180px;overflow:auto;line-height:1.7}
   .manual-row .answer{background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 8px;min-height:32px;white-space:pre-wrap}
+  .manual-blank{display:inline-block;background:#fff;border:1px solid #7fb3d5;border-radius:3px;padding:0 8px;color:#1a5276;font-weight:bold}
   .manual-row input{width:70px;padding:5px;border:1px solid #aaa;border-radius:4px;text-align:right}
   .manual-save{display:flex;align-items:center;gap:10px;justify-content:flex-end;margin-top:12px}
   .manual-note{font-size:12px;color:#666;line-height:1.6}
@@ -267,22 +270,83 @@ function collectManualScoringItems(sections, userAnswers) {
     (sec.questions || []).forEach(q => {
       const rule = rules[q.id] || {};
       const isManual = rule.method === 'manual' || (q.grading === 'manual' && (!rule.method || rule.method === 'manual'));
-      if (!isManual) return;
-      const pointsEach = Number(rule.points_each || rule.points_per_field || q.points_each || 0);
-      collectFieldIds(q).forEach(fid => {
-        items.push({
-          sectionType: sec.section_type,
-          sectionLabel: secLabel[sec.section_type] || sec.section_type,
-          blockId: q.id,
-          fieldId: fid,
-          max: pointsEach,
-          title: stripRuby(q.title_html || q.id),
-          answer: userAnswers[fid] ?? '',
+      if (isManual) {
+        const pointsEach = Number(rule.points_each || rule.points_per_field || q.points_each || 0);
+        collectFieldIds(q).forEach(fid => {
+          const context = buildManualQuestionContext(q, q, fid);
+          items.push({
+            sectionType: sec.section_type,
+            sectionLabel: secLabel[sec.section_type] || sec.section_type,
+            blockId: q.id,
+            fieldId: fid,
+            max: pointsEach,
+            title: stripRuby(q.title_html || q.id),
+            questionHtml: context.questionHtml,
+            passageHtml: context.passageHtml,
+            answer: userAnswers[fid] ?? '',
+          });
+        });
+      }
+      (q.sub_sections || []).forEach(sub => {
+        const subRule = rules[sub.sub_id] || {};
+        const subManual = subRule.method === 'manual' || (sub.grading === 'manual' && (!subRule.method || subRule.method === 'manual'));
+        if (!subManual) return;
+        const subPointsEach = Number(subRule.points_each || subRule.points_per_field || sub.points_each || q.points_each || 0);
+        collectFieldIds(sub).forEach(fid => {
+          const context = buildManualQuestionContext(q, sub, fid);
+          items.push({
+            sectionType: sec.section_type,
+            sectionLabel: secLabel[sec.section_type] || sec.section_type,
+            blockId: sub.sub_id,
+            fieldId: fid,
+            max: subPointsEach,
+            title: stripRuby(q.title_html || sub.sub_title || sub.sub_id),
+            questionHtml: context.questionHtml,
+            passageHtml: context.passageHtml,
+            answer: userAnswers[fid] ?? '',
+          });
         });
       });
     });
   });
   return items;
+}
+
+function buildManualQuestionContext(parent, block, fieldId) {
+  const related = findFieldContext(block, fieldId) || {};
+  let questionHtml = related.question || related.prompt || related.dialogue_html || block.sub_title || parent.instruction || '';
+  if (related.dialogue_html) {
+    const escapedId = fieldId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    questionHtml = related.dialogue_html
+      .replace(new RegExp('\\{' + escapedId + '\\}', 'g'), '<span class="manual-blank">回答欄</span>')
+      .replace(/\{[^}]+\}/g, '<span class="manual-blank">　</span>');
+  }
+  if (!questionHtml && Array.isArray(related.words)) questionHtml = related.words.join(' / ');
+  return {
+    questionHtml: questionHtml || fieldId,
+    passageHtml: parent.passage_html || block.passage_html || '',
+  };
+}
+
+function findFieldContext(value, fieldId) {
+  if (!value) return null;
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const found = findFieldContext(item, fieldId);
+      if (found) return found;
+    }
+    return null;
+  }
+  if (typeof value !== 'object') return null;
+  if (value.field_id === fieldId) return value;
+  if (Array.isArray(value.fields) && value.fields.some(f => f && f.field_id === fieldId)) return value;
+  for (const key in value) {
+    if (typeof value[key] === 'object') {
+      const found = findFieldContext(value[key], fieldId);
+      if (found) return found;
+    }
+  }
+  return null;
 }
 
 function manualScoresFromResult(result) {
@@ -332,6 +396,8 @@ function renderManualScoringPanel(result, items) {
           </div>
           <div>
             <div style="font-size:12px;color:#555;margin-bottom:4px">${escapeHtml(item.title)}</div>
+            ${item.passageHtml ? `<div class="passage">${item.passageHtml}</div>` : ''}
+            <div class="question">${item.questionHtml || escapeHtml(item.fieldId)}</div>
             <div class="answer">${escapeHtml(String(answer))}</div>
           </div>
           <label style="font-size:12px;color:#555">点数 / ${item.max}<br>
