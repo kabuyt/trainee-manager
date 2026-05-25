@@ -28,6 +28,20 @@ async function loadTrainees() {
 
     allTrainees = data;
     setupKumiaiFilter();
+    // ログインアカウント未作成チェック（admin のみ）
+    if (typeof isAdmin === 'function' && isAdmin()) {
+      const noAuth = allTrainees.filter(t => !t.auth_user_id && t.student_id && t.birth_date);
+      const banner = document.getElementById('noAuthBanner');
+      if (banner) {
+        if (noAuth.length > 0) {
+          document.getElementById('noAuthCount').textContent = noAuth.length;
+          document.getElementById('noAuthIds').textContent = noAuth.map(t => t.student_id).join(', ');
+          banner.classList.remove('hidden');
+        } else {
+          banner.classList.add('hidden');
+        }
+      }
+    }
     // 最後に必ず applyFilters() を呼ぶ。
     // org/kumiai/search の localStorage 復元結果をすべて反映させた最終状態をレンダ。
     applyFilters();
