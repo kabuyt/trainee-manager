@@ -758,6 +758,7 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 8px;
   margin-bottom: 8px;
+  align-items: start;
 }
 .comment-grid:has(.comment-block:only-child) { grid-template-columns: 1fr; }
 
@@ -1135,6 +1136,7 @@ body.print-mode .week-label { padding: 5px 8px; font-size: 9.5px; }
 body.print-mode .week-row .comment-text { padding: 5px 10px; font-size: 9.5px; min-height: 22px; line-height: 1.55; }
 
 body.print-mode .comment-grid { gap: 6px; margin-bottom: 5px; }
+body.print-mode .comment-grid { align-items: start; }
 body.print-mode .comment-label { padding: 4px 11px; font-size: 9px; letter-spacing: .05em; }
 body.print-mode .comment-label::before { width: 4px; height: 4px; }
 body.print-mode .comment-block .comment-text { padding: 6px 11px; font-size: 9.5px; min-height: 30px; line-height: 1.6; }
