@@ -170,7 +170,13 @@
     <div class="eval-box">
       <div class="eval-label-wrap">
         <span class="eval-label">日本語</span>
-        <span class="eval-grade" id="evalJapanese">-</span>
+        <span class="eval-grade">
+          <select id="evalJapanese" class="no-print-select" style="font-size:18px;font-weight:700;color:var(--navy);padding:0 4px;border:none;background:transparent">
+            <option value="">-</option>
+            <option>秀</option><option>優</option><option>良</option><option>可</option><option>不可</option>
+          </select>
+          <span class="japanese-print" id="japanesePrint">-</span>
+        </span>
       </div>
       <span class="eval-desc" id="evalJapaneseDesc">-</span>
     </div>
@@ -394,6 +400,12 @@ document.getElementById('evalAttitude').addEventListener('change', function() {
   document.getElementById('attitudePrint').textContent = this.value;
   if (typeof getAttitudeDesc === 'function') {
     document.getElementById('evalAttitudeDesc').textContent = getAttitudeDesc(this.value);
+  }
+});
+// 日本語評価
+document.getElementById('evalJapanese').addEventListener('change', function() {
+  if (typeof setJapaneseEval === 'function') {
+    setJapaneseEval(this.value);
   }
 });
 // 生活環境

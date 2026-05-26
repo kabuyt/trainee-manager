@@ -889,13 +889,14 @@ body {
 .print-footer { display: none; }
 
 /* ===== Toggles ===== */
-.month-print, .scope-print, .attitude-print, .env-print { display: none; }
+.month-print, .scope-print, .japanese-print, .attitude-print, .env-print { display: none; }
 
 /* ===== Readonly ===== */
 .readonly-view .no-print { display: none !important; }
 .readonly-view select.no-print-select { display: none !important; }
 .readonly-view .month-print,
 .readonly-view .scope-print,
+.readonly-view .japanese-print,
 .readonly-view .attitude-print,
 .readonly-view .env-print { display: inline; font-weight: 700; }
 .readonly-view .mast-title .month-print {
@@ -1008,7 +1009,7 @@ body.no-trend #learnDetailSub {
   /* ====== 余白調整 ここまで ====== */
 
   select.no-print-select { display: none; }
-  .month-print, .scope-print, .attitude-print, .env-print {
+  .month-print, .scope-print, .japanese-print, .attitude-print, .env-print {
     display: inline;
     font-weight: 700;
   }
@@ -1144,6 +1145,7 @@ body.print-mode .comment-block .comment-text { padding: 6px 11px; font-size: 9.5
 body.print-mode select.no-print-select { display: none; }
 body.print-mode .month-print,
 body.print-mode .scope-print,
+body.print-mode .japanese-print,
 body.print-mode .attitude-print,
 body.print-mode .env-print { display: inline; font-weight: 700; }
 body.print-mode .mast-title .month-print {

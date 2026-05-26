@@ -1020,6 +1020,9 @@ async function loadReport() {
       const msel = document.getElementById('monthSelect');
       const mprint = document.getElementById('monthPrint');
       if (msel && mprint) mprint.textContent = msel.value;
+      const jsel = document.getElementById('evalJapanese');
+      const jprint = document.getElementById('japanesePrint');
+      if (jsel && jprint) jprint.textContent = jsel.value || '-';
       const asel = document.getElementById('evalAttitude');
       const aprint = document.getElementById('attitudePrint');
       if (asel && aprint) aprint.textContent = asel.value;
@@ -1134,8 +1137,8 @@ function renderMonthScores(result) {
 
     // 評価
     const grade = getGrade(total);
-    document.getElementById('evalJapanese').textContent = grade.label;
-    document.getElementById('evalJapaneseDesc').textContent = grade.desc;
+    window._autoJapaneseGrade = grade;
+    setJapaneseEval(grade.label);
     // モダンデザイン用: ヒーロー欄
     const heroTotal = document.getElementById('heroTotal');
     if (heroTotal) heroTotal.textContent = total;
@@ -1161,8 +1164,8 @@ function renderMonthScores(result) {
     });
     document.getElementById('examCount').textContent = '-';
     document.getElementById('rExamDate').textContent = '-';
-    document.getElementById('evalJapanese').textContent = '-';
-    document.getElementById('evalJapaneseDesc').textContent = '-';
+    window._autoJapaneseGrade = null;
+    setJapaneseEval('');
     // モダン: ヒーロー欄もリセット
     const heroTotal = document.getElementById('heroTotal');
     if (heroTotal) heroTotal.textContent = '—';
@@ -1239,6 +1242,10 @@ function renderMonthComments(report) {
     progEl.textContent = progText || '-';
   }
 
+  // 日本語評価（未保存なら得点からの自動判定を使う）
+  const autoJapanese = (window._autoJapaneseGrade && window._autoJapaneseGrade.label) || '';
+  setJapaneseEval((report && report.japanese_eval) || autoJapanese);
+
   // 態度評価
   const attEl = document.getElementById('evalAttitude');
   if (report && report.attitude_eval) {
@@ -1283,6 +1290,7 @@ async function saveReport() {
   const data = {
     trainee_id: _reportTrainee.id,
     month: _currentMonth,
+    japanese_eval: getJapaneseOverrideValue(),
     attitude_eval: document.getElementById('evalAttitude').value,
     living_env: document.getElementById('learnEnv').value,
     learn_progress: document.getElementById('learnProgress').textContent.trim(),
@@ -1303,16 +1311,33 @@ async function saveReport() {
   };
 
   try {
+    let japaneseEvalSkipped = false;
     const { error } = await supabase.from('monthly_reports').upsert(data, {
       onConflict: 'trainee_id,month',
     });
-    if (error) throw error;
+    if (error) {
+      // DB migration 未適用でも他の保存を止めない。
+      // monthly_reports.japanese_eval 追加後は通常の保存で自動的に保持される。
+      if (error.code === 'PGRST204' || String(error.message || '').includes('japanese_eval')) {
+        const fallbackData = { ...data };
+        delete fallbackData.japanese_eval;
+        const { error: fallbackError } = await supabase.from('monthly_reports').upsert(fallbackData, {
+          onConflict: 'trainee_id,month',
+        });
+        if (fallbackError) throw fallbackError;
+        japaneseEvalSkipped = data.japanese_eval !== null;
+      } else {
+        throw error;
+      }
+    }
 
     // ローカルキャッシュ更新
     _reportMonthly[_currentMonth] = { ..._reportMonthly[_currentMonth], ...data };
 
-    status.textContent = '✓ 保存しました';
-    status.style.color = '#16a34a';
+    status.textContent = japaneseEvalSkipped
+      ? '✓ 保存しました（日本語評価の上書きはDB列追加後に保存できます）'
+      : '✓ 保存しました';
+    status.style.color = japaneseEvalSkipped ? '#d97706' : '#16a34a';
     setTimeout(() => { status.textContent = ''; }, 3000);
   } catch (err) {
     status.textContent = '✗ 保存失敗: ' + err.message;
@@ -1521,6 +1546,37 @@ function getGrade(total) {
   if (total >= 300) return { label: '良', desc: '良好な成績です' };
   if (total >= 280) return { label: '可', desc: '合格水準の成績です' };
   return { label: '不可', desc: '更なる努力が必要です' };
+}
+
+function getJapaneseDesc(grade) {
+  const map = {
+    '秀': '最高ランクの成績です',
+    '優': '優秀な成績です',
+    '良': '良好な成績です',
+    '可': '合格水準の成績です',
+    '不可': '更なる努力が必要です',
+  };
+  return map[grade] || '-';
+}
+
+function setJapaneseEval(value) {
+  const val = value || '';
+  const sel = document.getElementById('evalJapanese');
+  const print = document.getElementById('japanesePrint');
+  const desc = document.getElementById('evalJapaneseDesc');
+  if (sel) {
+    if ('value' in sel) sel.value = val;
+    else sel.textContent = val || '-';
+  }
+  if (print) print.textContent = val || '-';
+  if (desc) desc.textContent = val ? getJapaneseDesc(val) : '-';
+}
+
+function getJapaneseOverrideValue() {
+  const sel = document.getElementById('evalJapanese');
+  const selected = sel ? (('value' in sel) ? sel.value : sel.textContent) : '';
+  const auto = (window._autoJapaneseGrade && window._autoJapaneseGrade.label) || '';
+  return selected && selected !== auto ? selected : null;
 }
 
 function getAttitudeDesc(grade) {
