@@ -841,11 +841,22 @@ body {
   color: inherit !important;
   background: transparent !important;
   background-color: transparent !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
   letter-spacing: normal !important;
   line-height: inherit !important;
   font-weight: inherit !important;
   font-style: inherit !important;
   text-decoration: none !important;
+}
+.comment-text p:empty,
+.comment-text div:empty,
+.comment-text p:has(> br:only-child),
+.comment-text div:has(> br:only-child) {
+  display: none !important;
 }
 
 /* ===== No-test notice ===== */
