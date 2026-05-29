@@ -755,22 +755,22 @@ async function saveTraineeNotes(traineeId, textarea, prevValue) {
 // ===== 教育報告書 =====
 // みん日カリキュラム: 全50課を8回テストでカバー
 const MONTH_TEST_MAP_MINNA = [
-  { month: 1, test: 'test1', testLabel: '第1-4課',   scope: '第4課迄' },
-  { month: 2, test: 'test2', testLabel: '第5-11課',  scope: '第11課迄' },
-  { month: 3, test: 'test3', testLabel: '第12-18課', scope: '第18課迄' },
-  { month: 4, test: 'test4', testLabel: '第19-25課', scope: '第25課迄' },
-  { month: 5, test: 'test5', testLabel: '第26-33課', scope: '第33課迄' },
-  { month: 6, test: 'test6', testLabel: '第34-40課', scope: '第40課迄' },
-  { month: 7, test: 'test7', testLabel: '第41-45課', scope: '第45課迄' },
-  { month: 8, test: 'test8', testLabel: '第46-50課', scope: '第50課迄' },
+  { month: 1, test: 'test1', testLabel: '第1-4課',   scope: 'みんなの日本語4課まで' },
+  { month: 2, test: 'test2', testLabel: '第5-11課',  scope: 'みんなの日本語11課まで' },
+  { month: 3, test: 'test3', testLabel: '第12-18課', scope: 'みんなの日本語18課まで' },
+  { month: 4, test: 'test4', testLabel: '第19-25課', scope: 'みんなの日本語25課まで' },
+  { month: 5, test: 'test5', testLabel: '第26-33課', scope: 'みんなの日本語33課まで' },
+  { month: 6, test: 'test6', testLabel: '第34-40課', scope: 'みんなの日本語40課まで' },
+  { month: 7, test: 'test7', testLabel: '第41-45課', scope: 'みんなの日本語45課まで' },
+  { month: 8, test: 'test8', testLabel: '第46-50課', scope: 'みんなの日本語50課まで' },
 ];
 
 // まるごとカリキュラム: 全18課を4回テストでカバー（5-8ヶ月目はテストなし）
 const MONTH_TEST_MAP_MARUGOTO = [
-  { month: 1, test: 'marugoto_1', testLabel: 'L1-L5',   scope: 'L5迄' },
-  { month: 2, test: 'marugoto_2', testLabel: 'L6-L10',  scope: 'L10迄' },
-  { month: 3, test: 'marugoto_3', testLabel: 'L11-L14', scope: 'L14迄' },
-  { month: 4, test: 'marugoto_4', testLabel: 'L15-L18', scope: 'L18迄' },
+  { month: 1, test: 'marugoto_1', testLabel: 'L1-L5',   scope: 'まるごと5課まで' },
+  { month: 2, test: 'marugoto_2', testLabel: 'L6-L10',  scope: 'まるごと10課まで' },
+  { month: 3, test: 'marugoto_3', testLabel: 'L11-L14', scope: 'まるごと14課まで' },
+  { month: 4, test: 'marugoto_4', testLabel: 'L15-L18', scope: 'まるごと18課まで' },
 ];
 
 function getMonthTestMap(curriculum) {
