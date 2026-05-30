@@ -1183,6 +1183,38 @@ function renderMonthScores(result) {
   }
 }
 
+function escapeCommentText(text) {
+  return String(text || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function normalizeCommentHtml(html) {
+  if (!html) return '';
+  const raw = String(html);
+  if (!/(<table|<colgroup|class=["']?xl\d|mso-|&nbsp;)/i.test(raw)) {
+    return raw.trim();
+  }
+
+  const tmp = document.createElement('div');
+  tmp.innerHTML = raw;
+  tmp.querySelectorAll('style,script,colgroup').forEach(el => el.remove());
+  tmp.querySelectorAll('br').forEach(br => br.replaceWith('\n'));
+  tmp.querySelectorAll('p,div,tr,td,li').forEach(el => el.appendChild(document.createTextNode('\n')));
+
+  const lines = tmp.textContent
+    .replace(/\u00a0/g, ' ')
+    .replace(/[ \t]+/g, ' ')
+    .split(/\n+/)
+    .map(line => line.trim())
+    .filter(Boolean);
+
+  return lines.map(escapeCommentText).join('<br>');
+}
+
 function renderMonthComments(report) {
   const fields = ['lifeGood','lifeBad','lifeMeasure','lifeImprove','lifePersonality',
                   'learnGood','learnBad','learnMeasure','learnImprove'];
@@ -1191,7 +1223,7 @@ function renderMonthComments(report) {
 
   fields.forEach((id, i) => {
     const el = document.getElementById(id);
-    if (el) el.innerHTML = (report && report[dbFields[i]]) || '';
+    if (el) el.innerHTML = normalizeCommentHtml((report && report[dbFields[i]]) || '');
   });
 
   // 人物像・交友関係は前月の内容を引き継ぐ（追記前提のフィールド）
@@ -1206,7 +1238,7 @@ function renderMonthComments(report) {
         const prevValue = (prev && prev.life_personality) || '';
         const prevStripped = prevValue.replace(/<[^>]+>/g, '').trim();
         if (prevStripped) {
-          personalityEl.innerHTML = prevValue;
+          personalityEl.innerHTML = normalizeCommentHtml(prevValue);
           // 引き継ぎマーカー（保存時には消える、表示時の目印）
           personalityEl.dataset.inheritedFrom = m;
           break;
@@ -1278,7 +1310,7 @@ async function saveReport() {
     const el = document.getElementById(id);
     if (!el) return '※特記事項なし';
     const text = el.textContent.trim();
-    return text ? el.innerHTML.trim() : '※特記事項なし';
+    return text ? normalizeCommentHtml(el.innerHTML).trim() : '※特記事項なし';
   };
   const getWeek = (n) => {
     const row = document.getElementById('week' + n);
