@@ -773,6 +773,33 @@ const MONTH_TEST_MAP_MARUGOTO = [
   { month: 4, test: 'marugoto_4', testLabel: 'L15-L18', scope: 'まるごと18課まで' },
 ];
 
+const TRAINEE_TEST_MONTH_OVERRIDES = {
+  BRN014: { test1: 2 },
+  BRN015: { test1: 2 },
+};
+
+function getTestMonthOverrides() {
+  const sid = _reportTrainee?.student_id;
+  return sid ? (TRAINEE_TEST_MONTH_OVERRIDES[sid] || null) : null;
+}
+
+function applyTestMonthOverrides(map) {
+  const overrides = getTestMonthOverrides();
+  if (!overrides || !map) return map;
+
+  const overrideTest = Object.keys(overrides).find(test => overrides[test] === map.month);
+  if (overrideTest) {
+    const source = MONTH_TEST_MAP_MINNA.find(m => m.test === overrideTest);
+    return source ? { ...source, month: map.month, shiftedFromMonth: source.month } : map;
+  }
+
+  if (map.test && overrides[map.test] && overrides[map.test] !== map.month) {
+    return { month: map.month, test: null, testLabel: '-', scope: '未受験' };
+  }
+
+  return map;
+}
+
 function getMonthTestMap(curriculum) {
   return curriculum === 'marugoto' ? MONTH_TEST_MAP_MARUGOTO : MONTH_TEST_MAP_MINNA;
 }
@@ -815,14 +842,14 @@ function getMonthInfo(monthNum) {
     const offset = getMarugotoOffset();
     if (monthNum <= offset) {
       // 切替前のminna月（過去ログ用）
-      return MONTH_TEST_MAP_MINNA.find(m => m.month === monthNum);
+      return applyTestMonthOverrides(MONTH_TEST_MAP_MINNA.find(m => m.month === monthNum));
     }
     const marugotoIdx = monthNum - offset;
     const m = MONTH_TEST_MAP_MARUGOTO.find(x => x.month === marugotoIdx);
     if (m) return { ...m, month: monthNum };
     return { month: monthNum, test: null, testLabel: '-', scope: '（卒業）' };
   }
-  return MONTH_TEST_MAP_MINNA.find(m => m.month === monthNum);
+  return applyTestMonthOverrides(MONTH_TEST_MAP_MINNA.find(m => m.month === monthNum));
 }
 
 // 現在の表示用マップを返す（1-8ヶ月分、各月でカリキュラム自動判定）
@@ -841,6 +868,8 @@ function getTrendMap() {
       month: m.month + offset, // 絶対月番号に変換
     }));
   }
+  const overrides = getTestMonthOverrides();
+  if (overrides) return currentMonthMap().filter(m => m && m.test);
   return MONTH_TEST_MAP_MINNA.slice();
 }
 
@@ -849,6 +878,7 @@ const MONTH_TEST_MAP = MONTH_TEST_MAP_MINNA;
 
 // test_name を検索する（新旧両フォーマット対応）
 function matchTest(row, map) {
+  if (!row || !map || !map.test) return false;
   return row.test_name === map.test || row.test_name === map.testLabel;
 }
 
@@ -1066,6 +1096,7 @@ function switchMonth(month) {
   // 該当月のテスト結果を表示
   const result = _reportResults.find(r => matchTest(r, map));
   renderMonthScores(result);
+  renderDiagnosis(document.getElementById('diagnosisArea'), _reportResults);
 
   // 該当月のコメントを表示
   renderMonthComments(_reportMonthly[month]);
@@ -1948,8 +1979,11 @@ function generateSectionDiagnosis(answers, testName) {
 function renderDiagnosis(diagArea, results) {
   if (!diagArea) return;
 
-  // answers_jsonがあるテスト結果を探す（最新から）
-  const withAnswers = [...results].reverse().find(r => r.answers_json);
+  // 表示中の月に対応する answers_json があるテスト結果を探す
+  const currentMap = currentMonthMap().find(m => m.month === _currentMonth);
+  const withAnswers = [...results].reverse().find(r =>
+    r.answers_json && (!currentMap || matchTest(r, currentMap))
+  );
   if (!withAnswers) {
     diagArea.innerHTML = '<span style="color:#aaa">回答データがまだありません。テスト受験後に診断が表示されます。</span>';
     return;
