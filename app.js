@@ -2233,7 +2233,56 @@ const STYLE_RULES = [
     },
     desc: '「・」の前で改行を入れる',
   },
+  {
+    name: '学習コメント文末句点',
+    detect: (text, target) => isLearningCommentTarget(target) && hasMissingTerminalPeriod(text),
+    fix: (text, target) => isLearningCommentTarget(target) ? addTerminalPeriodsToHtml(text) : text,
+    desc: '学習状況詳細の文末に句点「。」を付ける',
+  },
 ];
+
+function isLearningCommentTarget(target) {
+  return !!target && ['learnGood', 'learnBad', 'learnMeasure', 'learnImprove'].includes(target.id);
+}
+
+function htmlToStyleLines(html) {
+  return String(html || '')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/(div|p|li)>/gi, '\n')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/g, ' ')
+    .split(/\n+/)
+    .flatMap(line => line.split(/(?=・)/g))
+    .map(line => line.trim())
+    .filter(Boolean);
+}
+
+function needsTerminalPeriod(line) {
+  const s = String(line || '').trim();
+  if (!s || s === '※特記事項なし') return false;
+  if (/^[・\s]*$/.test(s)) return false;
+  return !/[。！？!?）)]$/.test(s);
+}
+
+function hasMissingTerminalPeriod(html) {
+  return htmlToStyleLines(html).some(needsTerminalPeriod);
+}
+
+function escapeHtmlText(s) {
+  return String(s || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function addTerminalPeriodsToHtml(html) {
+  const lines = htmlToStyleLines(html);
+  if (!lines.length) return html;
+  return lines.map(line => {
+    const fixed = needsTerminalPeriod(line) ? line + '。' : line;
+    return escapeHtmlText(fixed);
+  }).join('<br>');
+}
 
 function checkFieldStyle(elId) {
   const el = document.getElementById(elId);
@@ -2250,7 +2299,7 @@ function checkFieldStyle(elId) {
   const text = html;
   const issues = [];
   STYLE_RULES.forEach(rule => {
-    if (rule.detect(text)) {
+    if (rule.detect(text, { id: elId })) {
       issues.push({ rule: rule.name, desc: rule.desc, autoFixable: !!rule.fix });
     }
   });
@@ -2294,7 +2343,7 @@ function runStyleCheck() {
     const html = getFieldHTML(target);
     if (!html) return;
     STYLE_RULES.forEach(rule => {
-      if (rule.detect(html)) {
+      if (rule.detect(html, target)) {
         results.push({
           target,
           rule: rule.name,
@@ -2355,8 +2404,8 @@ function autoFixAllStyle() {
     if (!html) return;
     let changed = false;
     STYLE_RULES.forEach(rule => {
-      if (rule.fix && rule.detect(html)) {
-        const newHtml = rule.fix(html);
+      if (rule.fix && rule.detect(html, target)) {
+        const newHtml = rule.fix(html, target);
         if (newHtml !== html) {
           html = newHtml;
           changed = true;
@@ -2380,7 +2429,7 @@ window.addEventListener('load', () => {
     targets.forEach(target => {
       const html = getFieldHTML(target);
       STYLE_RULES.forEach(rule => {
-        if (html && rule.detect(html)) count++;
+        if (html && rule.detect(html, target)) count++;
       });
     });
     const btn = document.querySelector('.btn-style-check');
