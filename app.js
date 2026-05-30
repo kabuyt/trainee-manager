@@ -1389,6 +1389,10 @@ function renderReport(t, results, classResults) {
     reportLogo.alt = isWorldBusiness ? 'WORLD BUSINESS COOPERATIVE' : 'GROP VIETNAM';
     reportLogo.classList.toggle('report-logo-worldbusiness', isWorldBusiness);
   }
+  const reportMastMeta = document.getElementById('reportMastMeta');
+  if (reportMastMeta) {
+    reportMastMeta.hidden = (t.supervising_org || '').includes('ワールドビジネス');
+  }
 
   const cleanCompany = (t.company || '').replace(/株式会社/g, '').replace(/\s+/g, ' ').trim();
   const companyText = [cleanCompany, t.class_group].filter(Boolean).join(' ').trim() || '-';
