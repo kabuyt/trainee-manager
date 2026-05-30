@@ -141,7 +141,7 @@ body {
 }
 .mast-logo { display: flex; align-items: center; }
 .report-logo { height: 30px; width: auto; display: block; }
-.report-logo-worldbusiness { height: 34px; }
+.report-logo-worldbusiness { height: 42px; }
 
 .mast-title { text-align: center; display: flex; flex-direction: column; gap: 3px; }
 .mast-title .kicker {
@@ -962,7 +962,7 @@ body.no-trend #learnDetailSub {
   .mast-title .ja { font-size: 15px; }
   .mast-title .ja .month-num { font-size: 20px; }
   .report-logo { height: 26px; }
-  .report-logo-worldbusiness { height: 30px; }
+  .report-logo-worldbusiness { height: 36px; }
 
   .identity { margin: 9px 0 8px; gap: 10px; grid-template-columns: 1fr 84px; }
   .id-field { padding: 6px 11px 7px; }
@@ -1099,7 +1099,7 @@ body.print-mode .masthead { padding: 3px 0 9px; gap: 14px; }
 body.print-mode .mast-title .ja { font-size: 15px; }
 body.print-mode .mast-title .ja .month-num { font-size: 20px; }
 body.print-mode .report-logo { height: 26px; }
-body.print-mode .report-logo-worldbusiness { height: 30px; }
+body.print-mode .report-logo-worldbusiness { height: 36px; }
 
 body.print-mode .identity { margin: 9px 0 8px; gap: 10px; grid-template-columns: 1fr 84px; }
 body.print-mode .id-field { padding: 6px 11px 7px; }
