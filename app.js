@@ -1994,13 +1994,47 @@ function renderDiagnosis(diagArea, results) {
       const totalCorrect = byType.goii.correct + byType.bunpo.correct + byType.chokkai.correct;
       const totalAll = byType.goii.total + byType.bunpo.total + byType.chokkai.total;
       const avgRate = totalAll > 0 ? totalCorrect/totalAll : 0;
+      const subjectRates = [
+        { key:'goii', name:'語彙', rate: byType.goii.total ? byType.goii.correct / byType.goii.total : null },
+        { key:'bunpo', name:'文法', rate: byType.bunpo.total ? byType.bunpo.correct / byType.bunpo.total : null },
+        { key:'chokkai', name:'聴解', rate: byType.chokkai.total ? byType.chokkai.correct / byType.chokkai.total : null },
+      ].filter(x => x.rate !== null);
+      const sortedSubjects = [...subjectRates].sort((a, b) => a.rate - b.rate);
+      const weakestSubject = sortedSubjects[0];
+      const strongestSubject = sortedSubjects[sortedSubjects.length - 1];
+      const weakSubjects = subjectRates.filter(x => x.rate < 0.6);
 
       // 全体総評（1段落、常体）
       let overall = '';
-      if (avgRate >= 0.9) overall = '全体的に非常に高い理解度を示しており、基礎が確実に定着している。';
-      else if (avgRate >= 0.75) overall = '全体的には安定した理解度を保ち、学習進度は良好。';
-      else if (avgRate >= 0.6) overall = '基礎は概ね身についているが、いくつかの分野に課題が残る。';
-      else overall = '全体的に正答率が低く、広範囲にわたって基礎の定着が不十分な状況。';
+      if (avgRate >= 0.9) {
+        overall = '全体的に非常に高い理解度を示しており、基礎が確実に定着している。';
+      } else if (avgRate >= 0.75) {
+        overall = strongestSubject && weakestSubject
+          ? `${strongestSubject.name}を中心に安定した理解が見られ、${weakestSubject.name}を補強すればさらに得点の安定が期待できる。`
+          : '全体的には安定した理解度を保ち、学習進度は良好。';
+      } else if (avgRate >= 0.7) {
+        if (weakSubjects.length === 1 && strongestSubject) {
+          overall = `${strongestSubject.name}面は比較的安定している一方、${weakSubjects[0].name}の定着にはまだ課題が残る。`;
+        } else if (weakSubjects.length >= 2) {
+          overall = `${strongestSubject?.name || '得意分野'}では理解が見られるものの、${weakSubjects.map(x => x.name).join('・')}で取りこぼしが目立つ。`;
+        } else {
+          overall = `全体として合格水準に達しており、${weakestSubject?.name || '苦手分野'}を中心に復習するとさらに安定する。`;
+        }
+      } else if (avgRate >= 0.6) {
+        if (weakSubjects.length === 1 && strongestSubject) {
+          overall = avgRate < 0.65
+            ? `${weakSubjects[0].name}の取りこぼしが目立ち、${strongestSubject.name}で見られる理解を他分野にも広げる必要がある。`
+            : `${strongestSubject.name}には一定の理解が見られる一方、${weakSubjects[0].name}は重点的な復習が必要。`;
+        } else if (weakSubjects.length >= 2) {
+          overall = `${strongestSubject?.name || '一部分野'}には理解できている項目もあるが、${weakSubjects.map(x => x.name).join('・')}は基礎確認が必要な状況。`;
+        } else {
+          overall = `全体では大きく崩れていないが、${weakestSubject?.name || '一部分野'}を中心に理解のむらが見られる。`;
+        }
+      } else {
+        overall = weakSubjects.length >= 2
+          ? `${weakSubjects.map(x => x.name).join('・')}で正答率が低く、基礎の再確認が必要。`
+          : '全体的に正答率が低く、広範囲にわたって基礎の定着が不十分な状況。';
+      }
 
       // 教科別の詳細（同じ評価レベルの教科はまとめる）
       const levelToSubjects = {};
