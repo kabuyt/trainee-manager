@@ -927,7 +927,7 @@ async function loadReport() {
       supabase.from('trainees').select('*, organizations(name)').eq('id', id).single(),
       supabase.from('test_results').select('*').eq('trainee_id', id).order('test_date', { ascending: true }),
       supabase.from('monthly_reports').select('*').eq('trainee_id', id),
-      supabase.from('test_sections').select('test_id,section_type,answer_key,scoring_rules'),
+      supabase.from('test_sections').select('test_id,section_type,questions,answer_key,scoring_rules'),
     ]);
     if (tErr) throw tErr;
 
@@ -961,7 +961,7 @@ async function loadReport() {
     _reportSections = {};
     (sections || []).forEach(s => {
       if (!_reportSections[s.test_id]) _reportSections[s.test_id] = {};
-      _reportSections[s.test_id][s.section_type] = { answer_key: s.answer_key, scoring_rules: s.scoring_rules };
+      _reportSections[s.test_id][s.section_type] = { questions: s.questions, answer_key: s.answer_key, scoring_rules: s.scoring_rules };
     });
 
     // curriculum に応じて月セレクタの選択肢を構築（marugoto は1-4、minna は1-8）
@@ -1748,8 +1748,33 @@ const SECTION_LABELS = {
     b1:'助詞の使い方', b2:'語彙選択', b3:'文並び替え', b4:'会話文完成', b5:'位置表現', b6:'正誤判定', b7:'同意文の判定', b8:'正しい答えの選択',
     c1:'行動の聞き取り', c2:'A or B 判定', c3:'理由（どうして）', c4:'行動予定', c5:'買い物', c6:'形容詞', c7:'交通手段',
     c8:'女性の居場所', c9:'スケジュール', c10:'絵と音声のマッチ', c11:'○×判定', c12:'選択式応答'
+  },
+  test3: {
+    g1:'絵と言葉のマッチ', g2:'絵に合う語彙', g3:'絵の言葉を書く', g4:'反対語', g5:'語彙選択', g6:'カテゴリー分類', g7:'和訳（日→ベトナム語）',
+    b1:'空欄補充', b2:'正しい語句の選択', b3:'文並び替え', b4:'空欄補充（文作成）', b5_ox:'読解の正誤判定', b5_written:'読解の記述回答', b6:'過去形', b7:'質問への回答',
+    c1:'買い物場面の聞き取り', c2:'目的の聞き取り', c3:'行動の聞き取り', c4:'パーティ場面の聞き取り', c5:'必要事項の聞き取り', c6:'選択式聞き取り',
+    c7:'可能表現の聞き取り', c8:'現在の動作の聞き取り', c9:'応答選択', c10:'○×判定', c11:'質問応答'
   }
 };
+
+function _diagStripHtml(s) {
+  return String(s || '')
+    .replace(/<ruby>(.*?)<rt>.*?<\/rt><\/ruby>/g, '$1')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function _diagSectionLabel(testName, sid, sectionData) {
+  const fixed = SECTION_LABELS[testName]?.[sid];
+  if (fixed) return fixed;
+  const baseSid = sid.replace(/_(ox|written)$/, '');
+  const q = (sectionData?.questions || []).find(x => x?.id === sid || x?.id === baseSid);
+  const title = _diagStripHtml(q?.title_html || q?.title);
+  if (!title) return sid;
+  return title.replace(/^問題\s*\d+[．.、]?\s*/, '').replace(/＜.*$/, '').trim() || sid;
+}
 
 // 正規化（ベトナム語声調を除去）
 function _diagNorm(s){ return String(s||'').trim().toLowerCase().replace(/\s+/g,'').replace(/\u3000/g,''); }
@@ -1866,14 +1891,14 @@ function generateMarugotoSectionDiagnosis(answers, testName) {
   return Object.keys(bySecType).length ? bySecType : null;
 }
 
-// セクション別の正答率ベース診断（test1/test2用）
+// セクション別の正答率ベース診断
 function generateSectionDiagnosis(answers, testName) {
   const sections = _reportSections[testName];
   if (!sections) return null;
-  const labels = SECTION_LABELS[testName] || {};
   const bySecType = {};
   for (const stype in sections) {
-    const { answer_key, scoring_rules } = sections[stype];
+    const sectionData = sections[stype];
+    const { answer_key, scoring_rules } = sectionData;
     if (!scoring_rules) continue;
     const secResults = [];
     for (const sid in scoring_rules) {
@@ -1896,7 +1921,7 @@ function generateSectionDiagnosis(answers, testName) {
         });
       } else {
         // field_ids を列挙
-        let fids = rule.field_ids || [];
+        let fids = (rule.field_ids || []).slice();
         if (method==='multi_field_group') fids = (rule.groups||[]).flat();
         if (method==='pair_match') {
           (rule.items||[]).forEach(p => { if(p.a_field) fids.push(p.a_field); if(p.b_field) fids.push(p.b_field); });
@@ -1912,7 +1937,7 @@ function generateSectionDiagnosis(answers, testName) {
         });
       }
       if (total > 0) {
-        secResults.push({ sid, label: labels[sid]||sid, correct, total, rate: correct/total });
+        secResults.push({ sid, label: _diagSectionLabel(testName, sid, sectionData), correct, total, rate: correct/total });
       }
     }
     if (secResults.length) bySecType[stype] = secResults;
@@ -1934,9 +1959,10 @@ function renderDiagnosis(diagArea, results) {
     ? JSON.parse(withAnswers.answers_json)
     : withAnswers.answers_json;
 
-  // test1/test2 + marugoto_N は セクション別正答率ベースの診断（全体まとめ文章）
+  // test_sections に採点ルールがあるテスト + marugoto_N は セクション別正答率ベースの診断（全体まとめ文章）
   const isMarugoto = /^marugoto_\d+$/.test(withAnswers.test_name);
-  if (withAnswers.test_name === 'test1' || withAnswers.test_name === 'test2' || isMarugoto) {
+  const hasSectionRules = !!_reportSections[withAnswers.test_name];
+  if (hasSectionRules || isMarugoto) {
     const secDiag = isMarugoto
       ? generateMarugotoSectionDiagnosis(answers, withAnswers.test_name)
       : generateSectionDiagnosis(answers, withAnswers.test_name);
