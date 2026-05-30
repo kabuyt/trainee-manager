@@ -1382,6 +1382,14 @@ async function saveReport() {
 
 function renderReport(t, results, classResults) {
   // 基本情報（会社名から「株式会社」を除去）
+  const reportLogo = document.getElementById('reportLogo');
+  if (reportLogo) {
+    const isWorldBusiness = (t.supervising_org || '').includes('ワールドビジネス');
+    reportLogo.src = isWorldBusiness ? 'world_business_logo.png' : 'logo.png';
+    reportLogo.alt = isWorldBusiness ? 'WORLD BUSINESS COOPERATIVE' : 'GROP VIETNAM';
+    reportLogo.classList.toggle('report-logo-worldbusiness', isWorldBusiness);
+  }
+
   const cleanCompany = (t.company || '').replace(/株式会社/g, '').replace(/\s+/g, ' ').trim();
   const companyText = [cleanCompany, t.class_group].filter(Boolean).join(' ').trim() || '-';
   document.getElementById('rCompany').textContent = companyText;
