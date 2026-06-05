@@ -171,8 +171,15 @@ function renderTrainees(data) {
   const escAttr = s => String(s == null ? '' : s)
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
     .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  const photoCell = t => {
+    const label = t.student_id ? String(t.student_id).slice(-3) : 'No';
+    return t.photo_url
+      ? `<a href="trainee.html?id=${t.id}" class="list-photo-link"><img src="${escAttr(t.photo_url)}" alt="${escAttr(t.name_romaji || '写真')}" class="list-photo" loading="lazy" onerror="this.closest('.list-photo-link').outerHTML='<div class=&quot;list-photo list-photo-placeholder&quot;>${escAttr(label)}</div>'"></a>`
+      : `<div class="list-photo list-photo-placeholder">${escAttr(label)}</div>`;
+  };
   tbody.innerHTML = data.map(t => `
     <tr>
+      <td class="td-photo">${photoCell(t)}</td>
       <td><span class="student-id-badge">${t.student_id || '-'}</span></td>
       <td><a href="trainee.html?id=${t.id}">${t.name_romaji}</a></td>
       <td>${t.name_katakana || '-'}</td>

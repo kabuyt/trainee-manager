@@ -410,6 +410,35 @@ tr:hover td { background: var(--paper-2); }
 td a { color: var(--navy); text-decoration: none; font-weight: 500; }
 td a:hover { color: var(--green-2); text-decoration: underline; }
 
+.th-photo,
+.td-photo {
+  width: 58px;
+  min-width: 58px;
+  padding-right: 6px;
+}
+.list-photo-link {
+  display: inline-flex;
+  text-decoration: none;
+}
+.list-photo {
+  width: 42px;
+  height: 56px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid var(--rule-2);
+  background: var(--paper-2);
+  box-shadow: 0 1px 2px rgba(16,37,71,.08);
+}
+.list-photo-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-mute);
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+}
+
 /* ============================================================
    Buttons
    ============================================================ */

@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=8">
+  <link rel="stylesheet" href="style.css?v=9">
 </head>
 <body>
   <header>
@@ -111,6 +111,7 @@ python create_student_accounts.py --apply</pre>
       <table id="traineeTable" class="hidden">
         <thead>
           <tr>
+            <th class="th-photo">写真</th>
             <th>学生ID</th>
             <th>名前（ローマ字）</th>
             <th>名前（カタカナ）</th>
@@ -155,7 +156,7 @@ git add reports/ && git commit -m "reports: 月次更新" && git push</pre>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
   <script src="auth.js?v=5"></script>
-  <script src="app.js?v=56"></script>
+  <script src="app.js?v=57"></script>
   <script>
     function showRegenInstructions() {
       document.getElementById('regenModal').style.display = 'flex';
