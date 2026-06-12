@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=10">
+  <link rel="stylesheet" href="style.css?v=11">
 </head>
 <body>
   <header>
@@ -94,6 +94,22 @@
       <div id="loadingMsg" class="loading">読み込み中...</div>
       <div id="errorMsg" class="error hidden"></div>
 
+      <div id="bulkArchiveBar" class="bulk-archive-bar hidden admin-only">
+        <div class="bulk-archive-left">
+          <strong><span id="bulkSelectedCount">0</span>名を選択中</strong>
+          <select id="bulkStatusSelect" class="bulk-status-select" aria-label="一括変更する在籍ステータス">
+            <option value="graduated">卒業にする</option>
+            <option value="withdrawn">辞退・退学にする</option>
+            <option value="inactive">停止にする</option>
+            <option value="active">稼働中に戻す</option>
+          </select>
+          <input id="bulkStatusDate" type="date" class="bulk-status-date" aria-label="ステータス日付">
+          <input id="bulkArchiveNote" type="text" class="bulk-archive-note" placeholder="メモ 例: 2026年6月修了">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="applyBulkStatus()">一括変更</button>
+        </div>
+        <button type="button" class="bulk-clear-btn" onclick="clearBulkSelection()">選択解除</button>
+      </div>
+
       <!-- ログインアカウント未作成リマインダー（admin only、対象がいる時のみ表示） -->
       <div id="noAuthBanner" class="hidden admin-only" style="background:#fef5e7;border:1px solid #f0c14b;border-left:5px solid #d68910;border-radius:8px;padding:12px 16px;margin:0 0 16px;color:#5b3a00">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
@@ -116,6 +132,9 @@ python create_student_accounts.py --apply</pre>
       <table id="traineeTable" class="hidden">
         <thead>
           <tr>
+            <th class="th-select admin-only">
+              <input type="checkbox" id="selectAllTrainees" aria-label="表示中の実習生をすべて選択" onchange="toggleAllVisibleTrainees(this.checked)">
+            </th>
             <th class="th-photo">写真</th>
             <th>学生ID</th>
             <th>名前（ローマ字）</th>
@@ -161,7 +180,7 @@ git add reports/ && git commit -m "reports: 月次更新" && git push</pre>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
   <script src="auth.js?v=5"></script>
-  <script src="app.js?v=58"></script>
+  <script src="app.js?v=59"></script>
   <script>
     function showRegenInstructions() {
       document.getElementById('regenModal').style.display = 'flex';

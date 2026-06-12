@@ -1,6 +1,8 @@
 // ===== 実習生一覧 =====
 let allTrainees = [];
 let allOrgs = [];
+let currentRenderedTrainees = [];
+let selectedTraineeIds = new Set();
 
 const TRAINEE_STATUS = {
   active: { label: '稼働中', badge: 'active' },
@@ -43,6 +45,7 @@ function updateStatusTabs() {
 
 function setStatusFilter(value) {
   localStorage.setItem('indexStatusFilter', value || 'active');
+  clearBulkSelection();
   updateStatusTabs();
   applyFilters();
 }
@@ -197,6 +200,7 @@ function applyFilters() {
   if (kumiai) {
     filtered = filtered.filter(t => t.supervising_org === kumiai);
   }
+  clearBulkSelection(false);
   renderTrainees(filtered);
 }
 
@@ -205,10 +209,12 @@ function renderTrainees(data) {
 
   const emptyEl = document.getElementById('emptyMsg');
   const tableEl = document.getElementById('traineeTable');
+  currentRenderedTrainees = data;
 
   if (data.length === 0) {
     tableEl.classList.add('hidden');
     emptyEl.classList.remove('hidden');
+    updateBulkArchiveBar();
     return;
   }
 
@@ -238,6 +244,7 @@ function renderTrainees(data) {
   };
   tbody.innerHTML = data.map(t => `
     <tr>
+      ${showOrg ? `<td class="td-select"><input type="checkbox" class="trainee-select" value="${escAttr(t.id)}" aria-label="${escAttr(t.name_romaji || t.student_id || '実習生')}を選択" ${selectedTraineeIds.has(t.id) ? 'checked' : ''} onchange="toggleTraineeSelection('${escAttr(t.id)}', this.checked)"></td>` : ''}
       <td class="td-photo">${photoCell(t)}</td>
       <td><span class="student-id-badge">${t.student_id || '-'}</span></td>
       <td><a href="trainee.html?id=${t.id}">${t.name_romaji}</a>${statusCell(t)}</td>
@@ -266,6 +273,105 @@ function renderTrainees(data) {
   `).join('');
 
   tableEl.classList.remove('hidden');
+  updateBulkArchiveBar();
+}
+
+function toggleTraineeSelection(id, checked) {
+  if (!id) return;
+  if (checked) {
+    selectedTraineeIds.add(id);
+  } else {
+    selectedTraineeIds.delete(id);
+  }
+  updateBulkArchiveBar();
+}
+
+function toggleAllVisibleTrainees(checked) {
+  currentRenderedTrainees.forEach(t => {
+    if (checked) {
+      selectedTraineeIds.add(t.id);
+    } else {
+      selectedTraineeIds.delete(t.id);
+    }
+  });
+  document.querySelectorAll('.trainee-select').forEach(cb => {
+    cb.checked = checked;
+  });
+  updateBulkArchiveBar();
+}
+
+function clearBulkSelection(update = true) {
+  selectedTraineeIds.clear();
+  if (!update) return;
+  document.querySelectorAll('.trainee-select').forEach(cb => {
+    cb.checked = false;
+  });
+  const selectAll = document.getElementById('selectAllTrainees');
+  if (selectAll) {
+    selectAll.checked = false;
+    selectAll.indeterminate = false;
+  }
+  updateBulkArchiveBar();
+}
+
+function updateBulkArchiveBar() {
+  const bar = document.getElementById('bulkArchiveBar');
+  const countEl = document.getElementById('bulkSelectedCount');
+  const selectAll = document.getElementById('selectAllTrainees');
+  if (!bar || !countEl) return;
+
+  const visibleIds = currentRenderedTrainees.map(t => t.id);
+  const visibleSelected = visibleIds.filter(id => selectedTraineeIds.has(id)).length;
+  const count = selectedTraineeIds.size;
+  countEl.textContent = count;
+  bar.classList.toggle('hidden', count === 0);
+
+  if (selectAll) {
+    selectAll.checked = visibleIds.length > 0 && visibleSelected === visibleIds.length;
+    selectAll.indeterminate = visibleSelected > 0 && visibleSelected < visibleIds.length;
+  }
+}
+
+async function applyBulkStatus() {
+  const ids = [...selectedTraineeIds];
+  if (!ids.length) return;
+
+  const statusEl = document.getElementById('bulkStatusSelect');
+  const dateEl = document.getElementById('bulkStatusDate');
+  const noteEl = document.getElementById('bulkArchiveNote');
+  const status = statusEl?.value || 'graduated';
+  const label = statusLabel(status);
+  const note = noteEl?.value?.trim() || null;
+  const targetNames = ids
+    .map(id => allTrainees.find(t => t.id === id))
+    .filter(Boolean)
+    .map(t => `${t.student_id || ''} ${t.name_romaji || ''}`.trim())
+    .slice(0, 5)
+    .join('\n');
+  const more = ids.length > 5 ? `\nほか ${ids.length - 5} 名` : '';
+
+  if (!confirm(`${ids.length}名を「${label}」に変更します。\n\n${targetNames}${more}`)) return;
+
+  const payload = {
+    status,
+    graduated_at: status === 'active' ? null : (dateEl?.value || new Date().toISOString().slice(0, 10)),
+    archive_note: status === 'active' ? null : note,
+  };
+
+  const { error } = await supabase
+    .from('trainees')
+    .update(payload)
+    .in('id', ids);
+
+  if (error) {
+    alert('一括変更に失敗しました: ' + error.message);
+    return;
+  }
+
+  allTrainees = allTrainees.map(t => ids.includes(t.id) ? { ...t, ...payload } : t);
+  clearBulkSelection(false);
+  applyFilters();
+  alert(`${ids.length}名を「${label}」に変更しました。`);
 }
 
 function filterTrainees(query) {
