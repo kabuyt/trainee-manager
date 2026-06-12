@@ -2,6 +2,51 @@
 let allTrainees = [];
 let allOrgs = [];
 
+const TRAINEE_STATUS = {
+  active: { label: '稼働中', badge: 'active' },
+  graduated: { label: '卒業', badge: 'graduated' },
+  withdrawn: { label: '辞退・退学', badge: 'withdrawn' },
+  inactive: { label: '停止', badge: 'inactive' },
+};
+
+function getTraineeStatus(t) {
+  return t?.status || 'active';
+}
+
+function getStatusFilter() {
+  return localStorage.getItem('indexStatusFilter') || 'active';
+}
+
+function isArchivedStatus(status) {
+  return status && status !== 'active';
+}
+
+function statusLabel(status) {
+  return TRAINEE_STATUS[status]?.label || status || '稼働中';
+}
+
+function escapeHtml(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function updateStatusTabs() {
+  const current = getStatusFilter();
+  document.querySelectorAll('[data-status-filter]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.statusFilter === current);
+  });
+}
+
+function setStatusFilter(value) {
+  localStorage.setItem('indexStatusFilter', value || 'active');
+  updateStatusTabs();
+  applyFilters();
+}
+
 async function loadTrainees() {
   try {
     // 管理者なら組織一覧も取得してフィルタを構築
@@ -27,10 +72,11 @@ async function loadTrainees() {
     data.sort((a, b) => sortKey(a.student_id).localeCompare(sortKey(b.student_id)));
 
     allTrainees = data;
+    updateStatusTabs();
     setupKumiaiFilter();
     // ログインアカウント未作成チェック（admin のみ）
     if (typeof isAdmin === 'function' && isAdmin()) {
-      const noAuth = allTrainees.filter(t => !t.auth_user_id && t.student_id && t.birth_date);
+      const noAuth = allTrainees.filter(t => getTraineeStatus(t) === 'active' && !t.auth_user_id && t.student_id && t.birth_date);
       const banner = document.getElementById('noAuthBanner');
       if (banner) {
         if (noAuth.length > 0) {
@@ -132,6 +178,12 @@ function applyFilters() {
   const kumiai = kumiaiEl ? kumiaiEl.value : '';
 
   let filtered = allTrainees;
+  const statusFilter = getStatusFilter();
+  if (statusFilter === 'active') {
+    filtered = filtered.filter(t => getTraineeStatus(t) === 'active');
+  } else if (statusFilter === 'archive') {
+    filtered = filtered.filter(t => isArchivedStatus(getTraineeStatus(t)));
+  }
   if (q) {
     filtered = filtered.filter(t =>
       (t.name_romaji || '').toLowerCase().includes(q) ||
@@ -177,11 +229,18 @@ function renderTrainees(data) {
       ? `<a href="trainee.html?id=${t.id}" class="list-photo-link"><img src="${escAttr(t.photo_url)}" alt="${escAttr(t.name_romaji || '写真')}" class="list-photo" loading="lazy" onerror="this.closest('.list-photo-link').outerHTML='<div class=&quot;list-photo list-photo-placeholder&quot;>${escAttr(label)}</div>'"></a>`
       : `<div class="list-photo list-photo-placeholder">${escAttr(label)}</div>`;
   };
+  const statusCell = t => {
+    const status = getTraineeStatus(t);
+    if (status === 'active') return '';
+    const meta = TRAINEE_STATUS[status] || { label: status, badge: 'inactive' };
+    const note = t.archive_note ? ` title="${escAttr(t.archive_note)}"` : '';
+    return `<span class="status-badge status-${meta.badge}"${note}>${escAttr(meta.label)}</span>`;
+  };
   tbody.innerHTML = data.map(t => `
     <tr>
       <td class="td-photo">${photoCell(t)}</td>
       <td><span class="student-id-badge">${t.student_id || '-'}</span></td>
-      <td><a href="trainee.html?id=${t.id}">${t.name_romaji}</a></td>
+      <td><a href="trainee.html?id=${t.id}">${t.name_romaji}</a>${statusCell(t)}</td>
       <td>${t.name_katakana || '-'}</td>
       <td>${t.company || '-'}</td>
       <td>${t.class_group || '-'}</td>
@@ -223,6 +282,12 @@ function getFilteredTrainees() {
   const kumiai = kumiaiEl ? kumiaiEl.value : '';
 
   let filtered = allTrainees;
+  const statusFilter = getStatusFilter();
+  if (statusFilter === 'active') {
+    filtered = filtered.filter(t => getTraineeStatus(t) === 'active');
+  } else if (statusFilter === 'archive') {
+    filtered = filtered.filter(t => isArchivedStatus(getTraineeStatus(t)));
+  }
   if (q) {
     filtered = filtered.filter(t =>
       (t.name_romaji || '').toLowerCase().includes(q) ||
@@ -240,7 +305,7 @@ function getFilteredTrainees() {
 }
 
 function exportLoginCards() {
-  const trainees = getFilteredTrainees().filter(t => t.auth_user_id);
+  const trainees = getFilteredTrainees().filter(t => t.auth_user_id && getTraineeStatus(t) === 'active');
   if (trainees.length === 0) {
     alert('ログインアカウントのある実習生がいません。');
     return;
@@ -595,7 +660,7 @@ function renderTraineeDetail(t, results) {
           : `<div class="detail-photo detail-photo-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>`}
         <div>
           ${t.student_id ? `<span class="student-id-large">${t.student_id}</span>` : ''}
-          <h2>${t.name_romaji}</h2>
+          <h2>${t.name_romaji}${getTraineeStatus(t) !== 'active' ? ` <span class="status-badge status-${TRAINEE_STATUS[getTraineeStatus(t)]?.badge || 'inactive'}">${statusLabel(getTraineeStatus(t))}</span>` : ''}</h2>
           <p class="katakana">${t.name_katakana || ''}</p>
         </div>
       </div>
@@ -635,6 +700,29 @@ function renderTraineeDetail(t, results) {
         <span class="info-value">${t.arrival_date ? formatDate(t.arrival_date) : '-'}</span>
       </div>
     </div>
+
+    ${isAdmin() ? `
+      <div class="status-panel">
+        <div class="status-panel-main">
+          <div>
+            <div class="section-title status-title">在籍ステータス</div>
+            <div class="status-controls">
+              <select id="traineeStatus" class="status-select">
+                <option value="active" ${getTraineeStatus(t) === 'active' ? 'selected' : ''}>稼働中</option>
+                <option value="graduated" ${getTraineeStatus(t) === 'graduated' ? 'selected' : ''}>卒業</option>
+                <option value="withdrawn" ${getTraineeStatus(t) === 'withdrawn' ? 'selected' : ''}>辞退・退学</option>
+                <option value="inactive" ${getTraineeStatus(t) === 'inactive' ? 'selected' : ''}>停止</option>
+              </select>
+              <input id="statusDate" type="date" class="status-date" value="${escapeHtml(t.graduated_at || '')}">
+              <input id="archiveNote" type="text" class="status-note" placeholder="メモ 例: 2026年6月修了" value="${escapeHtml(t.archive_note || '')}">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="saveTraineeStatus('${t.id}')">保存</button>
+            </div>
+            <div class="status-help">通常の一覧・ログインカード出力は「稼働中」のみを対象にします。卒業・辞退・停止はアーカイブで確認できます。</div>
+          </div>
+          <span id="statusSaveMsg" class="status-save-msg"></span>
+        </div>
+      </div>
+    ` : ''}
 
     <div class="section-title" style="margin-top:24px;display:flex;align-items:center;gap:8px">
       📝 備考・メモ
@@ -701,6 +789,46 @@ function renderTraineeDetail(t, results) {
       lastSaved = notesEl.value;
     });
   }
+}
+
+async function saveTraineeStatus(traineeId) {
+  const statusEl = document.getElementById('traineeStatus');
+  const dateEl = document.getElementById('statusDate');
+  const noteEl = document.getElementById('archiveNote');
+  const msgEl = document.getElementById('statusSaveMsg');
+  if (!statusEl) return;
+
+  const status = statusEl.value || 'active';
+  const payload = {
+    status,
+    graduated_at: status === 'active' ? null : (dateEl?.value || new Date().toISOString().slice(0, 10)),
+    archive_note: status === 'active' ? null : (noteEl?.value?.trim() || null),
+  };
+
+  if (msgEl) {
+    msgEl.textContent = '保存中...';
+    msgEl.style.color = '#888';
+  }
+
+  const { error } = await supabase
+    .from('trainees')
+    .update(payload)
+    .eq('id', traineeId);
+
+  if (error) {
+    if (msgEl) {
+      msgEl.textContent = '保存失敗: DB列の追加が必要です';
+      msgEl.style.color = '#c0392b';
+    }
+    console.error('status update failed:', error);
+    return;
+  }
+
+  if (msgEl) {
+    msgEl.textContent = '保存しました';
+    msgEl.style.color = '#27ae60';
+  }
+  setTimeout(() => location.reload(), 600);
 }
 
 // 一覧画面のインライン備考保存

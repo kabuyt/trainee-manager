@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=9">
+  <link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
   <header>
@@ -77,6 +77,11 @@
       <div class="toolbar">
         <div class="toolbar-left">
           <input type="text" id="searchInput" placeholder="名前・会社名で検索..." class="search-box">
+          <div class="status-tabs" role="tablist" aria-label="在籍ステータス">
+            <button type="button" class="status-tab active" data-status-filter="active" onclick="setStatusFilter('active')">稼働中</button>
+            <button type="button" class="status-tab" data-status-filter="archive" onclick="setStatusFilter('archive')">アーカイブ</button>
+            <button type="button" class="status-tab" data-status-filter="all" onclick="setStatusFilter('all')">全員</button>
+          </div>
           <select id="kumiaiFilter" class="org-filter">
             <option value="">全組合</option>
           </select>
@@ -156,7 +161,7 @@ git add reports/ && git commit -m "reports: 月次更新" && git push</pre>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
   <script src="auth.js?v=5"></script>
-  <script src="app.js?v=57"></script>
+  <script src="app.js?v=58"></script>
   <script>
     function showRegenInstructions() {
       document.getElementById('regenModal').style.display = 'flex';
@@ -200,16 +205,17 @@ git add reports/ && git commit -m "reports: 月次更新" && git push</pre>
         // 1. 全実習生（RLS で自動フィルタ）
         const { data: trainees } = await supabase
           .from('trainees')
-          .select('id, student_id, name_katakana, name_romaji, supervising_org, company, class_group')
+          .select('*')
           .order('student_id');
-        if (!trainees || !trainees.length) return;
+        const activeTrainees = (trainees || []).filter(t => (t.status || 'active') === 'active');
+        if (!activeTrainees.length) return;
 
         // 2. テスト結果から各人の現在月を判定
         const { data: results } = await supabase
           .from('test_results')
           .select('trainee_id, test_name');
         const traineeMonth = {};
-        trainees.forEach(t => {
+        activeTrainees.forEach(t => {
           const tests = (results || []).filter(r => r.trainee_id === t.id);
           const months = tests.map(r => TEST_TO_MONTH[r.test_name]).filter(m => m);
           traineeMonth[t.id] = months.length ? Math.max(...months) : 1;
@@ -222,7 +228,7 @@ git add reports/ && git commit -m "reports: 月次更新" && git push</pre>
 
         // 4. 未入力判定
         const pending = [];
-        trainees.forEach(t => {
+        activeTrainees.forEach(t => {
           const targetMonth = traineeMonth[t.id];
           const report = (reports || []).find(r =>
             r.trainee_id === t.id && r.month === targetMonth);
@@ -269,11 +275,13 @@ git add reports/ && git commit -m "reports: 月次更新" && git push</pre>
     async function loadDashboardStats() {
       try {
         // 実習生総数
-        const { count: traineeCount } = await supabase
+        const { data: traineesForCount } = await supabase
           .from('trainees')
-          .select('*', { count: 'exact', head: true });
+          .select('*');
+        const traineeCount = (traineesForCount || []).filter(t => (t.status || 'active') === 'active').length;
+        const archivedCount = (traineesForCount || []).filter(t => (t.status || 'active') !== 'active').length;
         document.getElementById('statTrainees').textContent = traineeCount || 0;
-        document.getElementById('statTraineesSub').textContent = '名（全組合計）';
+        document.getElementById('statTraineesSub').textContent = archivedCount ? `名（稼働中・アーカイブ${archivedCount}名）` : '名（稼働中）';
 
         // 最新月の test_name を判定（test_results から最新の月）
         const { data: latestTest } = await supabase
