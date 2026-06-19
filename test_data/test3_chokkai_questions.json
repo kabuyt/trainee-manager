@@ -133,7 +133,7 @@
       {
         "field_id": "c3_1",
         "label": "① 問1",
-        "audio_src": "audio/問題3-1カリナさんはタクシーで空港まで.mp3",
+        "audio_src": "audio/問題3-2カリナさんはタクシーで空港まで-1.mp3",
         "choices": [
           {
             "value": "a",
@@ -155,7 +155,7 @@
       {
         "field_id": "c3_2",
         "label": "② 問2",
-        "audio_src": "audio/問題3-2カリナさんはタクシーで空港まで-1.mp3",
+        "audio_src": "audio/問題3-3カリナさんはタクシーで空港まで-2.mp3",
         "choices": [
           {
             "value": "a",
@@ -278,6 +278,7 @@
     "instruction": "Nghe và chọn đáp án đúng.",
     "points_each": 1,
     "total_points": 10,
+    "image_src": "images/chokkai/image11.png",
     "audio_src": "audio/問題６.mp3",
     "items": [
       {
@@ -393,7 +394,7 @@
     "items": [
       {
         "field_id": "c7_1",
-        "label": "１）Eメールと電話ができます。",
+        "label": "１）Eメールと<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>送<rt>おく</rt></ruby>ります。",
         "input_type": "select",
         "options": [
           "○",
@@ -402,7 +403,7 @@
       },
       {
         "field_id": "c7_2",
-        "label": "２）お寺の写真を撮ります。",
+        "label": "２）<ruby>今日<rt>きょう</rt></ruby>お<ruby>寺<rt>てら</rt></ruby>の<ruby>中<rt>なか</rt></ruby>を<ruby>見<rt>み</rt></ruby>ます。",
         "input_type": "select",
         "options": [
           "○",
@@ -420,6 +421,7 @@
     "total_points": 6,
     "image_src": "images/chokkai/image12.jpeg",
     "audio_src": "audio/問題８.mp3",
+    "preserve_option_order": true,
     "items": [
       {
         "field_id": "c8_1",
@@ -602,8 +604,7 @@
           "×"
         ]
       }
-    ],
-    "image_src": "images/chokkai/image11.png"
+    ]
   },
   {
     "id": "c11",
