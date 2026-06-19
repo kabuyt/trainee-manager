@@ -160,17 +160,17 @@
           {
             "value": "a",
             "label": "ａ",
-            "image_src": "images/chokkai/image3.png"
+            "image_src": "images/chokkai/image6.png"
           },
           {
             "value": "b",
             "label": "ｂ",
-            "image_src": "images/chokkai/image4.png"
+            "image_src": "images/chokkai/image7.png"
           },
           {
             "value": "c",
             "label": "ｃ",
-            "image_src": "images/chokkai/image5.png"
+            "image_src": "images/chokkai/image8.png"
           }
         ]
       }
