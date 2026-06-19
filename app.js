@@ -249,6 +249,7 @@ function renderTrainees(data) {
       <td><span class="student-id-badge">${t.student_id || '-'}</span></td>
       <td><a href="trainee.html?id=${t.id}">${t.name_romaji}</a>${statusCell(t)}</td>
       <td>${t.name_katakana || '-'}</td>
+      <td style="font-family:'Inter',monospace;font-size:12px;color:var(--ink-soft)">${fmtDate(t.birth_date)}</td>
       <td>${t.company || '-'}</td>
       <td>${t.class_group || '-'}</td>
       <td>${t.supervising_org || '-'}</td>
