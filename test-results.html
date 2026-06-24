@@ -558,7 +558,7 @@ function showRanking() {
         <thead>
           <tr>
             <th>順位</th><th>写真</th><th>名前</th><th>会社</th><th>クラス</th><th>受験日</th>
-            <th>語彙</th><th>文法</th><th>聴解</th><th>会話</th><th>合計</th><th>詳細</th>
+            <th>語彙</th><th>文法</th><th>聴解</th><th>会話</th><th>合計</th><th>評価</th><th>詳細</th>
           </tr>
         </thead>
         <tbody>
@@ -575,6 +575,7 @@ function showRanking() {
               <td class="score">${r.score_listening ?? '-'}</td>
               <td class="score">${r.score_conversation ?? '-'}</td>
               <td class="score total">${r.total}/${r.max}</td>
+              <td style="text-align:center;font-size:20px">${r.total >= 300 ? '😊' : '😢'}</td>
               <td><a href="test-result-detail.html?id=${r.result_id}" target="_blank">詳細</a></td>
             </tr>
           `).join('')}
@@ -631,12 +632,12 @@ function buildPrintableRankingHtml(rows) {
   <div class="meta">${escHtml(title || '選択した受験者')} ・ ${rows.length}名 ・ ${dates.length === 1 ? escHtml(dates[0]) : '受験日: 複数/未指定'}</div>
   <div class="podium">${podium}</div>
   <table>
-    <thead><tr><th>順位</th><th>写真</th><th>名前</th><th>会社</th><th>クラス</th><th>受験日</th><th>語彙</th><th>文法</th><th>聴解</th><th>会話</th><th>合計</th></tr></thead>
+    <thead><tr><th>順位</th><th>写真</th><th>名前</th><th>会社</th><th>クラス</th><th>受験日</th><th>語彙</th><th>文法</th><th>聴解</th><th>会話</th><th>合計</th><th>評価</th></tr></thead>
     <tbody>${rows.map(r => `
       <tr>
         <td class="num">${r.rank}</td><td>${photoHtml(r, 'rank-photo')}</td><td>${escHtml(r.name || r.name_romaji || r.student_id)}</td>
         <td>${escHtml(r.company || '-')}</td><td>${escHtml(r.class_group || '-')}</td><td>${escHtml(r.test_date || '-')}</td>
-        <td class="score">${r.score_vocab ?? '-'}</td><td class="score">${r.score_grammar ?? '-'}</td><td class="score">${r.score_listening ?? '-'}</td><td class="score">${r.score_conversation ?? '-'}</td><td class="score total">${r.total}/${r.max}</td>
+        <td class="score">${r.score_vocab ?? '-'}</td><td class="score">${r.score_grammar ?? '-'}</td><td class="score">${r.score_listening ?? '-'}</td><td class="score">${r.score_conversation ?? '-'}</td><td class="score total">${r.total}/${r.max}</td><td style="text-align:center;font-size:16px">${r.total >= 300 ? '😊' : '😢'}</td>
       </tr>`).join('')}</tbody>
   </table>
 </body>
@@ -663,11 +664,11 @@ function printRanking() {
 async function copyRankingTSV() {
   const rows = _lastRankingRows.length ? _lastRankingRows : buildRankingRows();
   if (!rows.length) return;
-  const lines = [['順位','学生ID','名前','会社','クラス','テスト','受験日','語彙','文法','聴解','会話','合計','満点']];
+  const lines = [['順位','学生ID','名前','会社','クラス','テスト','受験日','語彙','文法','聴解','会話','合計','満点','評価']];
   rows.forEach(r => lines.push([
     r.rank, r.student_id, r.name || r.name_romaji || '', r.company || '', r.class_group || '',
     r.test_name, r.test_date || '', r.score_vocab ?? '', r.score_grammar ?? '',
-    r.score_listening ?? '', r.score_conversation ?? '', r.total, r.max
+    r.score_listening ?? '', r.score_conversation ?? '', r.total, r.max, r.total >= 300 ? '😊' : '😢'
   ]));
   const text = lines.map(row => row.map(v => String(v).replace(/\t/g, ' ').replace(/\n/g, ' ')).join('\t')).join('\n');
   try {
