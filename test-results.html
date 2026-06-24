@@ -72,6 +72,8 @@
   .podium-card.rank-1{background:#fff7d6;border-color:#f2c94c}
   .podium-card.rank-2{background:#f3f4f6;border-color:#c8ced8}
   .podium-card.rank-3{background:#fff1e6;border-color:#d99a5f}
+  .podium-photo{width:86px;height:86px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 2px 8px rgba(16,37,71,.18);background:#eef1f6;display:block;margin-bottom:6px}
+  .podium-photo-placeholder{display:flex;align-items:center;justify-content:center;color:#8993a8;font-size:12px;font-weight:bold}
   .podium-rank{font-size:22px;font-weight:bold;color:#102547}
   .podium-name{font-size:15px;font-weight:bold;margin-top:4px}
   .podium-score{font-size:22px;font-weight:bold;color:#3DAE2B;margin-top:6px}
@@ -79,6 +81,8 @@
   .ranking-table th,.ranking-table td{padding:8px 10px}
   .ranking-table .rank-cell{font-size:17px;font-weight:bold;text-align:center;color:#102547}
   .ranking-table .rank-top{background:#fffdf2}
+  .rank-photo{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#eef1f6;vertical-align:middle}
+  .rank-photo-placeholder{display:inline-flex;align-items:center;justify-content:center;color:#8993a8;font-size:11px;font-weight:bold}
   .row-select-cell{text-align:center;width:44px;min-width:44px}
   .row-select-cell input{width:16px;height:16px}
   @media(max-width:700px){
@@ -186,6 +190,7 @@
     <div id="ranking-content"></div>
     <div class="actions">
       <button class="btn" onclick="copyRankingTSV()">📋 ランキングTSVコピー</button>
+      <button class="btn btn-green" onclick="printRanking()">🖨 PDF/印刷</button>
       <button class="btn btn-warn" onclick="document.getElementById('ranking-modal').classList.remove('show')">閉じる</button>
     </div>
     <p id="ranking-copy-status" style="font-size:12px;color:#27ae60;margin-top:8px"></p>
@@ -274,7 +279,7 @@ async function doLogout() {
 
 async function reload() {
   const [trRes, tdRes, resRes] = await Promise.all([
-    supabase.from('trainees').select('id,student_id,name_katakana,name_romaji,class_group,company'),
+    supabase.from('trainees').select('id,student_id,name_katakana,name_romaji,class_group,company,photo_url'),
     supabase.from('test_definitions').select('id,display_name,sections,sort_order').order('sort_order'),
     supabase.from('test_results').select('id,trainee_id,test_name,test_date,score_vocab,score_grammar,score_listening,score_conversation,auto_scored,created_at,excluded,excluded_reason').order('created_at', { ascending: false })
   ]);
@@ -293,6 +298,7 @@ async function reload() {
       student_id: t.student_id || '?',
       name: t.name_katakana || '',
       name_romaji: t.name_romaji || '',
+      photo_url: t.photo_url || '',
       class_group: t.class_group || '',
       company: t.company || '',
       test_name: r.test_name,
@@ -334,6 +340,15 @@ function escHtml(v) {
   return String(v ?? '').replace(/[&<>"']/g, ch => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[ch]));
+}
+
+function photoHtml(row, className) {
+  const label = escHtml((row.name || row.name_romaji || row.student_id || '?').slice(0, 1));
+  const alt = escHtml((row.name || row.name_romaji || row.student_id || '受験者') + 'の顔写真');
+  if (row.photo_url) {
+    return `<img src="${escHtml(row.photo_url)}" alt="${alt}" class="${className}" crossorigin="anonymous" onerror="this.outerHTML='<span class=&quot;${className} ${className}-placeholder&quot;>${label}</span>'">`;
+  }
+  return `<span class="${className} ${className}-placeholder">${label}</span>`;
 }
 
 function getFiltered() {
@@ -520,6 +535,7 @@ function showRanking() {
     : '';
   const podium = rows.filter(r => r.rank <= 3).map(r => `
     <div class="podium-card rank-${r.rank}">
+      ${photoHtml(r, 'podium-photo')}
       <div class="podium-rank">${r.rank}位</div>
       <div class="podium-name">${escHtml(r.name || r.name_romaji || r.student_id)}</div>
       <div class="mini">${escHtml(r.company || '-')} / ${escHtml(r.class_group || '-')}</div>
@@ -541,7 +557,7 @@ function showRanking() {
       <table class="ranking-table">
         <thead>
           <tr>
-            <th>順位</th><th>名前</th><th>会社</th><th>クラス</th><th>受験日</th>
+            <th>順位</th><th>写真</th><th>名前</th><th>会社</th><th>クラス</th><th>受験日</th>
             <th>語彙</th><th>文法</th><th>聴解</th><th>会話</th><th>合計</th><th>詳細</th>
           </tr>
         </thead>
@@ -549,6 +565,7 @@ function showRanking() {
           ${rows.map(r => `
             <tr class="${r.rank <= 3 ? 'rank-top' : ''}">
               <td class="rank-cell">${r.rank}</td>
+              <td>${photoHtml(r, 'rank-photo')}</td>
               <td>${escHtml(r.name || r.name_romaji || r.student_id)}</td>
               <td>${escHtml(r.company || '-')}</td>
               <td>${escHtml(r.class_group || '-')}</td>
@@ -566,6 +583,81 @@ function showRanking() {
     </div>
   `;
   document.getElementById('ranking-modal').classList.add('show');
+}
+
+function buildPrintableRankingHtml(rows) {
+  const tests = [...new Set(rows.map(r => r.test_name))];
+  const companies = [...new Set(rows.map(r => r.company).filter(Boolean))];
+  const classes = [...new Set(rows.map(r => r.class_group).filter(Boolean))];
+  const dates = [...new Set(rows.map(r => r.test_date).filter(Boolean))];
+  const title = [
+    tests.length === 1 ? tests[0] : '複数テスト',
+    companies.length === 1 ? companies[0] : '',
+    classes.length === 1 ? classes[0] : ''
+  ].filter(Boolean).join(' / ');
+  const podium = rows.filter(r => r.rank <= 3).map(r => `
+    <div class="podium-card rank-${r.rank}">
+      ${photoHtml(r, 'podium-photo')}
+      <div class="podium-rank">${r.rank}位</div>
+      <div class="podium-name">${escHtml(r.name || r.name_romaji || r.student_id)}</div>
+      <div class="mini">${escHtml(r.company || '-')} / ${escHtml(r.class_group || '-')}</div>
+      <div class="podium-score">${r.total}<span>/${r.max}</span></div>
+    </div>
+  `).join('');
+  return `<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ランキング</title>
+<style>
+  *{box-sizing:border-box}
+  body{font-family:'Hiragino Sans','Meiryo',sans-serif;color:#102547;margin:24px;background:#fff}
+  h1{font-size:24px;margin:0 0 6px;text-align:center}
+  .meta{text-align:center;color:#555;font-size:13px;margin-bottom:18px}
+  .podium{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+  .podium-card{border:1px solid #d8dee9;border-radius:10px;padding:14px;text-align:center;background:#fff}
+  .rank-1{background:#fff7d6;border-color:#f2c94c}.rank-2{background:#f3f4f6;border-color:#c8ced8}.rank-3{background:#fff1e6;border-color:#d99a5f}
+  .podium-photo{width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 2px 8px rgba(16,37,71,.18);margin:0 auto 8px;display:block;background:#eef1f6}
+  .podium-photo-placeholder{display:flex;align-items:center;justify-content:center;color:#8993a8;font-size:14px;font-weight:bold}
+  .podium-rank{font-size:24px;font-weight:bold}.podium-name{font-size:16px;font-weight:bold;margin-top:4px}.podium-score{font-size:24px;font-weight:bold;color:#3DAE2B;margin-top:6px}.podium-score span{font-size:13px;color:#555}
+  table{width:100%;border-collapse:collapse;font-size:12px}th,td{border:1px solid #d8dee9;padding:7px 8px;text-align:left}th{background:#102547;color:#fff}.num{text-align:center;font-weight:bold}.score{text-align:center;font-family:monospace}.total{font-weight:bold;color:#102547}
+  .rank-photo{width:40px;height:40px;border-radius:50%;object-fit:cover;background:#eef1f6}.rank-photo-placeholder{display:inline-flex;align-items:center;justify-content:center;color:#8993a8;font-size:11px;font-weight:bold}
+  @media print{body{margin:12mm}.no-print{display:none}}
+</style>
+</head>
+<body>
+  <button class="no-print" onclick="window.print()" style="position:fixed;right:16px;top:16px;padding:8px 14px;background:#3DAE2B;color:#fff;border:none;border-radius:6px;cursor:pointer">PDF/印刷</button>
+  <h1>ランキング</h1>
+  <div class="meta">${escHtml(title || '選択した受験者')} ・ ${rows.length}名 ・ ${dates.length === 1 ? escHtml(dates[0]) : '受験日: 複数/未指定'}</div>
+  <div class="podium">${podium}</div>
+  <table>
+    <thead><tr><th>順位</th><th>写真</th><th>名前</th><th>会社</th><th>クラス</th><th>受験日</th><th>語彙</th><th>文法</th><th>聴解</th><th>会話</th><th>合計</th></tr></thead>
+    <tbody>${rows.map(r => `
+      <tr>
+        <td class="num">${r.rank}</td><td>${photoHtml(r, 'rank-photo')}</td><td>${escHtml(r.name || r.name_romaji || r.student_id)}</td>
+        <td>${escHtml(r.company || '-')}</td><td>${escHtml(r.class_group || '-')}</td><td>${escHtml(r.test_date || '-')}</td>
+        <td class="score">${r.score_vocab ?? '-'}</td><td class="score">${r.score_grammar ?? '-'}</td><td class="score">${r.score_listening ?? '-'}</td><td class="score">${r.score_conversation ?? '-'}</td><td class="score total">${r.total}/${r.max}</td>
+      </tr>`).join('')}</tbody>
+  </table>
+</body>
+</html>`;
+}
+
+function printRanking() {
+  const rows = _lastRankingRows.length ? _lastRankingRows : buildRankingRows();
+  if (rows.length < 2) {
+    alert('PDF/印刷するには、2名以上チェックしてください。');
+    return;
+  }
+  const win = window.open('', '_blank');
+  if (!win) {
+    alert('印刷画面を開けませんでした。ブラウザのポップアップ許可を確認してください。');
+    return;
+  }
+  win.document.open();
+  win.document.write(buildPrintableRankingHtml(rows));
+  win.document.close();
+  win.focus();
 }
 
 async function copyRankingTSV() {
