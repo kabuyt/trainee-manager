@@ -21,6 +21,8 @@
   .btn-green{background:#27ae60}
   .btn-green:hover{background:#229954}
   .btn-warn{background:#e67e22}
+  .btn-blue{background:#2563eb}
+  .btn-blue:hover{background:#1d4ed8}
 
   .stats{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap}
   .stat{background:#fff;padding:10px 16px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.08);font-size:14px}
@@ -62,6 +64,27 @@
   .modal h3{margin-bottom:10px;color:#102547}
   .modal textarea{width:100%;height:250px;font-family:monospace;font-size:11px;padding:8px;border:1px solid #ccc;border-radius:5px;resize:vertical}
   .modal .actions{text-align:right;margin-top:10px}
+  .ranking-modal{max-width:920px}
+  .ranking-summary{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 12px}
+  .ranking-pill{background:#eef2ff;color:#102547;border:1px solid #dbe3ff;border-radius:999px;padding:4px 10px;font-size:12px}
+  .ranking-podium{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:10px 0 14px}
+  .podium-card{border:1px solid #e5e7eb;border-radius:8px;padding:12px;background:#fff}
+  .podium-card.rank-1{background:#fff7d6;border-color:#f2c94c}
+  .podium-card.rank-2{background:#f3f4f6;border-color:#c8ced8}
+  .podium-card.rank-3{background:#fff1e6;border-color:#d99a5f}
+  .podium-rank{font-size:22px;font-weight:bold;color:#102547}
+  .podium-name{font-size:15px;font-weight:bold;margin-top:4px}
+  .podium-score{font-size:22px;font-weight:bold;color:#3DAE2B;margin-top:6px}
+  .ranking-table-wrap{overflow:auto;max-height:52vh;border:1px solid #e5e7eb;border-radius:8px}
+  .ranking-table th,.ranking-table td{padding:8px 10px}
+  .ranking-table .rank-cell{font-size:17px;font-weight:bold;text-align:center;color:#102547}
+  .ranking-table .rank-top{background:#fffdf2}
+  .row-select-cell{text-align:center;width:44px;min-width:44px}
+  .row-select-cell input{width:16px;height:16px}
+  @media(max-width:700px){
+    .ranking-podium{grid-template-columns:1fr}
+    .modal{width:96%;padding:14px}
+  }
 </style>
 </head>
 <body>
@@ -121,6 +144,9 @@
         <button class="btn" onclick="copyTSV()">📋 TSVコピー</button>
         <button class="btn btn-green" onclick="downloadCSV()">💾 CSV保存</button>
         <button class="btn btn-green" onclick="sendToSheets()">📤 Sheetsへ送信</button>
+        <button class="btn btn-blue" onclick="showRanking()">🏆 ランキング表示 <span id="ranking-selected-count">0</span></button>
+        <button class="btn" style="background:#607d8b" onclick="selectFilteredForRanking()">表示中を選択</button>
+        <button class="btn" style="background:#7f8c8d" onclick="clearRankingSelection()">選択解除</button>
         <button class="btn" style="background:#95a5a6" onclick="openSheetsSettings()">⚙</button>
         <button class="btn btn-warn" onclick="reload()">🔄</button>
       </span>
@@ -130,6 +156,7 @@
       <table id="results-table">
         <thead>
           <tr id="thead-row">
+            <th class="row-select-cell"><input type="checkbox" id="select-visible-ranking" onchange="toggleVisibleRankingSelection(this.checked)" aria-label="表示中の結果をまとめて選択"></th>
             <th>学生ID</th>
             <th>名前</th>
             <th>会社</th>
@@ -149,6 +176,19 @@
         <tbody id="rows"></tbody>
       </table>
     </div>
+  </div>
+</div>
+
+<!-- ランキング表示モーダル -->
+<div class="modal-bg" id="ranking-modal">
+  <div class="modal ranking-modal">
+    <h3>🏆 選択した受験者のランキング</h3>
+    <div id="ranking-content"></div>
+    <div class="actions">
+      <button class="btn" onclick="copyRankingTSV()">📋 ランキングTSVコピー</button>
+      <button class="btn btn-warn" onclick="document.getElementById('ranking-modal').classList.remove('show')">閉じる</button>
+    </div>
+    <p id="ranking-copy-status" style="font-size:12px;color:#27ae60;margin-top:8px"></p>
   </div>
 </div>
 
@@ -204,6 +244,8 @@
 <script>
 let _data = [];
 let _testDefs = {};
+let _rankingSelected = new Set();
+let _lastRankingRows = [];
 
 async function doLogin() {
   const email = document.getElementById('login-email').value;
@@ -288,6 +330,12 @@ function fillSelect(id, items) {
   sel.value = cur;
 }
 
+function escHtml(v) {
+  return String(v ?? '').replace(/[&<>"']/g, ch => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[ch]));
+}
+
 function getFiltered() {
   const fTest = document.getElementById('filter-test').value;
   const fClass = document.getElementById('filter-class').value;
@@ -338,6 +386,8 @@ function render() {
 
   const tbody = document.getElementById('rows');
   tbody.innerHTML = '';
+  const visibleIds = new Set(filtered.map(d => d.result_id));
+  _rankingSelected.forEach(id => { if (!_data.some(d => d.result_id === id)) _rankingSelected.delete(id); });
   filtered.forEach((d, i) => {
     const tr = document.createElement('tr');
     const tdef = _testDefs[d.test_name] || {};
@@ -352,6 +402,7 @@ function render() {
          <button class="btn-restore" onclick="restoreResult('${d.result_id}')" style="margin-left:4px">↶ 復元</button>`
       : `<button class="btn-exclude" onclick="excludeResult('${d.result_id}', '${(d.name||d.student_id).replace(/'/g,"\\'")}', '${d.test_name}')">🚫 誤受験</button>`;
     tr.innerHTML = `
+      <td class="row-select-cell"><input type="checkbox" class="ranking-row-select" value="${d.result_id}" ${_rankingSelected.has(d.result_id) ? 'checked' : ''} onchange="toggleRankingSelection('${d.result_id}', this.checked)" aria-label="${escHtml(d.name || d.name_romaji || d.student_id)}をランキング対象にする"></td>
       <td><a href="trainee.html?id=${d.trainee_id}">${d.student_id}</a></td>
       <td><a href="trainee.html?id=${d.trainee_id}">${d.name || d.name_romaji || '?'}</a></td>
       <td>${d.company || '-'}</td>
@@ -375,6 +426,164 @@ function render() {
     inp.addEventListener('change', onConvChange);
     inp.addEventListener('keydown', onConvKey);
   });
+  updateRankingSelectionUI(visibleIds);
+}
+
+function updateRankingSelectionUI(visibleIds) {
+  document.getElementById('ranking-selected-count').textContent = _rankingSelected.size;
+  const master = document.getElementById('select-visible-ranking');
+  if (master) {
+    const ids = visibleIds || new Set(getFiltered().map(d => d.result_id));
+    const selectable = [...ids].filter(id => {
+      const d = _data.find(x => x.result_id === id);
+      return d && !d.excluded;
+    });
+    const selectedCount = selectable.filter(id => _rankingSelected.has(id)).length;
+    master.checked = selectable.length > 0 && selectedCount === selectable.length;
+    master.indeterminate = selectedCount > 0 && selectedCount < selectable.length;
+  }
+}
+
+function toggleRankingSelection(resultId, checked) {
+  if (checked) _rankingSelected.add(resultId);
+  else _rankingSelected.delete(resultId);
+  updateRankingSelectionUI();
+}
+
+function toggleVisibleRankingSelection(checked) {
+  getFiltered().forEach(d => {
+    if (!d.excluded) {
+      if (checked) _rankingSelected.add(d.result_id);
+      else _rankingSelected.delete(d.result_id);
+    }
+  });
+  render();
+}
+
+function selectFilteredForRanking() {
+  getFiltered().forEach(d => { if (!d.excluded) _rankingSelected.add(d.result_id); });
+  render();
+}
+
+function clearRankingSelection() {
+  _rankingSelected.clear();
+  render();
+}
+
+function calcResultTotal(d) {
+  const maxMode = document.getElementById('filter-maxmode').value;
+  const tdef = _testDefs[d.test_name] || {};
+  const autoMax = (tdef.sections || ['goii','bunpo','chokkai']).length * 100;
+  const max = maxMode === '400' ? autoMax + 100 : autoMax;
+  const autoTotal = (d.score_vocab || 0) + (d.score_grammar || 0) + (d.score_listening || 0);
+  const total = maxMode === '400' ? autoTotal + (d.score_conversation || 0) : autoTotal;
+  return { total, max };
+}
+
+function buildRankingRows() {
+  const rows = [..._rankingSelected]
+    .map(id => _data.find(d => d.result_id === id))
+    .filter(d => d && !d.excluded)
+    .map(d => {
+      const score = calcResultTotal(d);
+      return { ...d, total: score.total, max: score.max };
+    })
+    .sort((a, b) => b.total - a.total || String(a.name || a.name_romaji).localeCompare(String(b.name || b.name_romaji), 'ja'));
+
+  let prevScore = null;
+  let prevRank = 0;
+  rows.forEach((row, idx) => {
+    row.rank = row.total === prevScore ? prevRank : idx + 1;
+    prevScore = row.total;
+    prevRank = row.rank;
+  });
+  return rows;
+}
+
+function showRanking() {
+  const rows = buildRankingRows();
+  _lastRankingRows = rows;
+  const content = document.getElementById('ranking-content');
+  document.getElementById('ranking-copy-status').textContent = '';
+  if (rows.length < 2) {
+    content.innerHTML = '<p style="color:#c0392b">ランキングを出すには、2名以上チェックしてください。</p>';
+    document.getElementById('ranking-modal').classList.add('show');
+    return;
+  }
+
+  const tests = [...new Set(rows.map(r => r.test_name))];
+  const companies = [...new Set(rows.map(r => r.company).filter(Boolean))];
+  const classes = [...new Set(rows.map(r => r.class_group).filter(Boolean))];
+  const dates = [...new Set(rows.map(r => r.test_date).filter(Boolean))];
+  const warning = tests.length > 1
+    ? '<div style="background:#fff3cd;border:1px solid #f1c40f;border-radius:6px;padding:8px 10px;margin-bottom:10px;font-size:13px">複数のテストが混ざっています。必要ならテストで絞ってから選択してください。</div>'
+    : '';
+  const podium = rows.filter(r => r.rank <= 3).map(r => `
+    <div class="podium-card rank-${r.rank}">
+      <div class="podium-rank">${r.rank}位</div>
+      <div class="podium-name">${escHtml(r.name || r.name_romaji || r.student_id)}</div>
+      <div class="mini">${escHtml(r.company || '-')} / ${escHtml(r.class_group || '-')}</div>
+      <div class="podium-score">${r.total}<span style="font-size:13px;color:#555">/${r.max}</span></div>
+    </div>
+  `).join('');
+
+  content.innerHTML = `
+    ${warning}
+    <div class="ranking-summary">
+      <span class="ranking-pill">${rows.length}名</span>
+      <span class="ranking-pill">${tests.length === 1 ? escHtml(tests[0]) : '複数テスト'}</span>
+      <span class="ranking-pill">${companies.length === 1 ? escHtml(companies[0]) : '会社: 複数/未指定'}</span>
+      <span class="ranking-pill">${classes.length === 1 ? escHtml(classes[0]) : 'クラス: 複数/未指定'}</span>
+      <span class="ranking-pill">${dates.length === 1 ? escHtml(dates[0]) : '受験日: 複数/未指定'}</span>
+    </div>
+    <div class="ranking-podium">${podium}</div>
+    <div class="ranking-table-wrap">
+      <table class="ranking-table">
+        <thead>
+          <tr>
+            <th>順位</th><th>名前</th><th>会社</th><th>クラス</th><th>受験日</th>
+            <th>語彙</th><th>文法</th><th>聴解</th><th>会話</th><th>合計</th><th>詳細</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map(r => `
+            <tr class="${r.rank <= 3 ? 'rank-top' : ''}">
+              <td class="rank-cell">${r.rank}</td>
+              <td>${escHtml(r.name || r.name_romaji || r.student_id)}</td>
+              <td>${escHtml(r.company || '-')}</td>
+              <td>${escHtml(r.class_group || '-')}</td>
+              <td>${escHtml(r.test_date || '-')}</td>
+              <td class="score">${r.score_vocab ?? '-'}</td>
+              <td class="score">${r.score_grammar ?? '-'}</td>
+              <td class="score">${r.score_listening ?? '-'}</td>
+              <td class="score">${r.score_conversation ?? '-'}</td>
+              <td class="score total">${r.total}/${r.max}</td>
+              <td><a href="test-result-detail.html?id=${r.result_id}" target="_blank">詳細</a></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+  document.getElementById('ranking-modal').classList.add('show');
+}
+
+async function copyRankingTSV() {
+  const rows = _lastRankingRows.length ? _lastRankingRows : buildRankingRows();
+  if (!rows.length) return;
+  const lines = [['順位','学生ID','名前','会社','クラス','テスト','受験日','語彙','文法','聴解','会話','合計','満点']];
+  rows.forEach(r => lines.push([
+    r.rank, r.student_id, r.name || r.name_romaji || '', r.company || '', r.class_group || '',
+    r.test_name, r.test_date || '', r.score_vocab ?? '', r.score_grammar ?? '',
+    r.score_listening ?? '', r.score_conversation ?? '', r.total, r.max
+  ]));
+  const text = lines.map(row => row.map(v => String(v).replace(/\t/g, ' ').replace(/\n/g, ' ')).join('\t')).join('\n');
+  try {
+    await navigator.clipboard.writeText(text);
+    document.getElementById('ranking-copy-status').textContent = 'ランキングをコピーしました。';
+  } catch (e) {
+    document.getElementById('ranking-copy-status').textContent = 'コピーできませんでした。表を選択してコピーしてください。';
+  }
 }
 
 async function onConvChange(e) {
