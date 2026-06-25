@@ -126,6 +126,11 @@
           <option value="">全部</option>
         </select>
       </label>
+      <label>送り出し:
+        <select id="filter-sender" onchange="render()">
+          <option value="">全部</option>
+        </select>
+      </label>
       <label>クラス:
         <select id="filter-class" onchange="render()">
           <option value="">全部</option>
@@ -279,7 +284,7 @@ async function doLogout() {
 
 async function reload() {
   const [trRes, tdRes, resRes] = await Promise.all([
-    supabase.from('trainees').select('id,student_id,name_katakana,name_romaji,class_group,company,photo_url'),
+    supabase.from('trainees').select('id,student_id,name_katakana,name_romaji,class_group,company,photo_url,organizations(name)'),
     supabase.from('test_definitions').select('id,display_name,sections,sort_order').order('sort_order'),
     supabase.from('test_results').select('id,trainee_id,test_name,test_date,score_vocab,score_grammar,score_listening,score_conversation,auto_scored,created_at,excluded,excluded_reason').order('created_at', { ascending: false })
   ]);
@@ -301,6 +306,7 @@ async function reload() {
       photo_url: t.photo_url || '',
       class_group: t.class_group || '',
       company: t.company || '',
+      sender: (t.organizations && t.organizations.name) || '',
       test_name: r.test_name,
       test_date: r.test_date,
       created_at: r.created_at,
@@ -318,9 +324,11 @@ async function reload() {
   const tests = [...new Set(_data.map(d => d.test_name))].sort();
   const classes = [...new Set(_data.map(d => d.class_group).filter(Boolean))].sort();
   const companies = [...new Set(_data.map(d => d.company).filter(Boolean))].sort();
+  const senders = [...new Set(_data.map(d => d.sender).filter(Boolean))].sort();
   fillSelect('filter-test', tests);
   fillSelect('filter-class', classes);
   fillSelect('filter-company', companies);
+  fillSelect('filter-sender', senders);
 
   render();
 }
@@ -355,6 +363,7 @@ function getFiltered() {
   const fTest = document.getElementById('filter-test').value;
   const fClass = document.getElementById('filter-class').value;
   const fCompany = document.getElementById('filter-company').value;
+  const fSender = document.getElementById('filter-sender').value;
   const fSearch = (document.getElementById('filter-search').value || '').toLowerCase();
   const fNoConv = document.getElementById('filter-noconv').checked;
   const fIncludeExcluded = document.getElementById('filter-include-excluded').checked;
@@ -363,7 +372,13 @@ function getFiltered() {
     if (fTest && d.test_name !== fTest) return false;
     if (fClass && d.class_group !== fClass) return false;
     if (fCompany && d.company !== fCompany) return false;
-    if (fSearch && !((d.student_id.toLowerCase().includes(fSearch)) || (d.name.toLowerCase().includes(fSearch)))) return false;
+    if (fSender && d.sender !== fSender) return false;
+    if (fSearch && !(
+      d.student_id.toLowerCase().includes(fSearch) ||
+      d.name.toLowerCase().includes(fSearch) ||
+      (d.company || '').toLowerCase().includes(fSearch) ||
+      (d.sender || '').toLowerCase().includes(fSearch)
+    )) return false;
     if (fNoConv && d.score_conversation !== null && d.score_conversation !== undefined) return false;
     return true;
   });
