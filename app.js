@@ -2498,18 +2498,6 @@ const STYLE_RULES = [
     desc: '常体（〜だ／〜である）に',
   },
   {
-    name: '・前改行なし',
-    detect: text => / ・/.test(text) || /[^>\n]・/.test(text.replace(/<br\s*\/?>/g, '\n').replace(/^.*?・/, '')),
-    fix: text => {
-      const parts = text.split('・');
-      if (parts.length <= 1) return text;
-      const cleaned = parts.map(p => p.replace(/(<br>)+\s*$/, '').replace(/\s+$/, ''));
-      const rest = cleaned.slice(1).join('<br>・');
-      return (cleaned[0] ? cleaned[0] + '・' : '・') + rest;
-    },
-    desc: '「・」の前で改行を入れる',
-  },
-  {
     name: '学習コメント文末句点',
     detect: (text, target) => isLearningCommentTarget(target) && hasMissingTerminalPeriod(text),
     fix: (text, target) => isLearningCommentTarget(target) ? addTerminalPeriodsToHtml(text) : text,
@@ -2528,7 +2516,6 @@ function htmlToStyleLines(html) {
     .replace(/<[^>]+>/g, '')
     .replace(/&nbsp;/g, ' ')
     .split(/\n+/)
-    .flatMap(line => line.split(/(?=・)/g))
     .map(line => line.trim())
     .filter(Boolean);
 }
