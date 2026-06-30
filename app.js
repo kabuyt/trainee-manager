@@ -1553,7 +1553,8 @@ function renderMonthComments(report) {
 
   // 日本語評価（未保存なら得点からの自動判定を使う）
   const autoJapanese = (window._autoJapaneseGrade && window._autoJapaneseGrade.label) || '';
-  setJapaneseEval((report && report.japanese_eval) || autoJapanese);
+  const savedJapanese = normalizeJapaneseEval((report && report.japanese_eval) || '');
+  setJapaneseEval(savedJapanese || autoJapanese);
 
   // 態度評価
   const attEl = document.getElementById('evalAttitude');
@@ -1893,9 +1894,14 @@ function setJapaneseEval(value) {
   if (desc) desc.textContent = val ? getJapaneseDesc(val) : '-';
 }
 
+function normalizeJapaneseEval(value) {
+  const val = String(value || '').trim();
+  return ['秀', '優', '良', '可', '不可'].includes(val) ? val : '';
+}
+
 function getJapaneseOverrideValue() {
   const sel = document.getElementById('evalJapanese');
-  const selected = sel ? (('value' in sel) ? sel.value : sel.textContent) : '';
+  const selected = normalizeJapaneseEval(sel ? (('value' in sel) ? sel.value : sel.textContent) : '');
   const auto = (window._autoJapaneseGrade && window._autoJapaneseGrade.label) || '';
   return selected && selected !== auto ? selected : null;
 }
