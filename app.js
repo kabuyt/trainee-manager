@@ -2498,15 +2498,18 @@ const STYLE_RULES = [
     desc: '常体（〜だ／〜である）に',
   },
   {
-    name: '学習コメント文末句点',
-    detect: (text, target) => isLearningCommentTarget(target) && hasMissingTerminalPeriod(text),
-    fix: (text, target) => isLearningCommentTarget(target) ? addTerminalPeriodsToHtml(text) : text,
-    desc: '学習状況詳細の文末に句点「。」を付ける',
+    name: 'コメント文末句点',
+    detect: (text, target) => isReportCommentTarget(target) && hasMissingTerminalPeriod(text),
+    fix: (text, target) => isReportCommentTarget(target) ? addTerminalPeriodsToHtml(text) : text,
+    desc: '学習状況詳細・生活状況詳細の文末に句点「。」を付ける',
   },
 ];
 
-function isLearningCommentTarget(target) {
-  return !!target && ['learnGood', 'learnBad', 'learnMeasure', 'learnImprove'].includes(target.id);
+function isReportCommentTarget(target) {
+  return !!target && [
+    'learnGood', 'learnBad', 'learnMeasure', 'learnImprove',
+    'lifeGood', 'lifeBad', 'lifeMeasure', 'lifeImprove',
+  ].includes(target.id);
 }
 
 function htmlToStyleLines(html) {
