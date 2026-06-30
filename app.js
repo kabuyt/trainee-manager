@@ -1015,9 +1015,13 @@ const MONTH_TEST_MAP_MARUGOTO = [
   { month: 4, test: 'marugoto_4', testLabel: 'L15-L18', scope: 'まるごと18課まで' },
 ];
 
+const oneMonthDelayedTests = Object.fromEntries(
+  MONTH_TEST_MAP_MINNA.map(m => [m.test, m.month + 1])
+);
+
 const TRAINEE_TEST_MONTH_OVERRIDES = {
-  BRN014: { test1: 2 },
-  BRN015: { test1: 2 },
+  BRN014: oneMonthDelayedTests,
+  BRN015: oneMonthDelayedTests,
 };
 
 function getTestMonthOverrides() {
