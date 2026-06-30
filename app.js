@@ -2508,6 +2508,12 @@ const STYLE_RULES = [
     desc: '常体（〜だ／〜である）に',
   },
   {
+    name: 'コメント行頭中黒',
+    detect: (text, target) => isReportCommentTarget(target) && hasMissingLeadingBullet(text),
+    fix: (text, target) => isReportCommentTarget(target) ? addLeadingBulletsToHtml(text) : text,
+    desc: '学習状況詳細・生活状況詳細の各行頭に「・」を付ける',
+  },
+  {
     name: 'コメント文末句点',
     detect: (text, target) => isReportCommentTarget(target) && hasMissingTerminalPeriod(text),
     fix: (text, target) => isReportCommentTarget(target) ? addTerminalPeriodsToHtml(text) : text,
@@ -2540,8 +2546,18 @@ function needsTerminalPeriod(line) {
   return !/[。！？!?）)]$/.test(s);
 }
 
+function needsLeadingBullet(line) {
+  const s = String(line || '').trim();
+  if (!s || s === '※特記事項なし') return false;
+  return !s.startsWith('・');
+}
+
 function hasMissingTerminalPeriod(html) {
   return htmlToStyleLines(html).some(needsTerminalPeriod);
+}
+
+function hasMissingLeadingBullet(html) {
+  return htmlToStyleLines(html).some(needsLeadingBullet);
 }
 
 function escapeHtmlText(s) {
@@ -2556,6 +2572,15 @@ function addTerminalPeriodsToHtml(html) {
   if (!lines.length) return html;
   return lines.map(line => {
     const fixed = needsTerminalPeriod(line) ? line + '。' : line;
+    return escapeHtmlText(fixed);
+  }).join('<br>');
+}
+
+function addLeadingBulletsToHtml(html) {
+  const lines = htmlToStyleLines(html);
+  if (!lines.length) return html;
+  return lines.map(line => {
+    const fixed = needsLeadingBullet(line) ? '・' + line : line;
     return escapeHtmlText(fixed);
   }).join('<br>');
 }
