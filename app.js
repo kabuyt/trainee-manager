@@ -1129,6 +1129,10 @@ function matchTest(row, map) {
   return row.test_name === map.test || row.test_name === map.testLabel;
 }
 
+function isTomboTrainee(t) {
+  return !!(t && String(t.supervising_org || '').includes('トンボ国際交流事業協同組合'));
+}
+
 // 会話スコアを DB に保存（報告書画面から呼ばれる）
 async function saveConversationScore(value) {
   const map = currentMonthMap().find(m => m.month === _currentMonth);
@@ -1179,6 +1183,7 @@ let _reportSections = {};
 let _reportClassResults = [];
 let _reportAllTestResults = [];
 let _reportMonthly = {};  // { month: row }
+let _reportStatsResults = [];
 let _currentMonth = 1;
 
 async function loadReport() {
@@ -1208,9 +1213,21 @@ async function loadReport() {
     ]);
     if (tErr) throw tErr;
 
-    // 同グループ（同じ company + class_group）のテスト結果 → 順位・受験者数 用
+    // 同グループのテスト結果 → 順位・受験者数 用
+    // トンボ国際交流事業協同組合はグループ会社として扱い、組合全体を母集団にする。
     let classResults = [];
-    if (trainee.company || trainee.class_group) {
+    if (isTomboTrainee(trainee)) {
+      const { data: orgTrainees } = await supabase
+        .from('trainees')
+        .select('id')
+        .eq('supervising_org', trainee.supervising_org);
+      if (orgTrainees && orgTrainees.length > 0) {
+        const ids = orgTrainees.map(t => t.id);
+        const { data: allResults } = await supabase
+          .from('test_results').select('*').in('trainee_id', ids);
+        classResults = allResults || [];
+      }
+    } else if (trainee.company || trainee.class_group) {
       let q = supabase.from('trainees').select('id');
       if (trainee.company) q = q.eq('company', trainee.company);
       if (trainee.class_group) q = q.eq('class_group', trainee.class_group);
@@ -1233,6 +1250,7 @@ async function loadReport() {
     _reportResults = (results || []).filter(r => !r.excluded);
     _reportClassResults = (classResults || []).filter(r => !r.excluded);
     _reportAllTestResults = (allTestResults || []).filter(r => !r.excluded);
+    _reportStatsResults = isTomboTrainee(trainee) ? _reportClassResults : _reportAllTestResults;
     _reportMonthly = {};
     (monthly || []).forEach(r => { _reportMonthly[r.month] = r; });
     _reportSections = {};
@@ -1386,10 +1404,10 @@ function renderMonthScores(result) {
       ? _reportClassResults.filter(r => matchTest(r, map))
       : _reportClassResults.filter(r => r.test_name === result.test_name);
     const sameTest = dedupeByTrainee(sameTestRaw);
-    // 全実習生（平均・偏差値 用）
+    // 平均・偏差値 用（通常は全実習生、トンボは組合全体）
     const sameTestGlobalRaw = map
-      ? _reportAllTestResults.filter(r => matchTest(r, map))
-      : _reportAllTestResults.filter(r => r.test_name === result.test_name);
+      ? _reportStatsResults.filter(r => matchTest(r, map))
+      : _reportStatsResults.filter(r => r.test_name === result.test_name);
     const sameTestGlobal = dedupeByTrainee(sameTestGlobalRaw);
     const stats = calcStats(sameTest, result, sameTestGlobal);
     document.getElementById('avgVocab').textContent = stats.avg.vocab;
