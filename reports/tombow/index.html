@@ -252,7 +252,7 @@ body { font-family: 'Noto Sans JP', sans-serif; background: #edf1f7; color: #1e2
 </div><!-- /main-content -->
 
 <script>
-const PASS_HASH = 'bb1f44d6f7d1d947b37adee5239b870d40cc43a7f3b1289519183f70e8dd8f77';
+const PASS_HASH = '8da9033090bcb8b20dc628838f44e0298c5abe7ae10a1f8a1f5398d32e47fc9e';
 async function sha256(text) {
   const encoded = new TextEncoder().encode(text);
   const buffer = await crypto.subtle.digest('SHA-256', encoded);
@@ -265,7 +265,7 @@ document.getElementById('authForm').addEventListener('submit', async (e) => {
   const err = document.getElementById('authError');
   const hash = await sha256(inp.value);
   if (hash === PASS_HASH) {
-    sessionStorage.setItem('auth_tombo', '1');
+    sessionStorage.setItem('auth_tombow', '1');
     document.getElementById('authOverlay').style.display = 'none';
     document.getElementById('mainContent').style.display = 'block';
   } else {
@@ -274,7 +274,7 @@ document.getElementById('authForm').addEventListener('submit', async (e) => {
     inp.value = ''; inp.focus();
   }
 });
-if (sessionStorage.getItem('auth_tombo') === '1') {
+if (sessionStorage.getItem('auth_tombow') === '1') {
   document.getElementById('authOverlay').style.display = 'none';
   document.getElementById('mainContent').style.display = 'block';
 } else {
@@ -302,7 +302,7 @@ async function downloadZip(files, zipName, btn) {
 }
 
 document.getElementById('bulkZipBtn').addEventListener('click', () => {
-  downloadZip(ALL_FILES, '教育報告書_tombo_202606.zip', document.getElementById('bulkZipBtn'));
+  downloadZip(ALL_FILES, '教育報告書_tombow_202606.zip', document.getElementById('bulkZipBtn'));
 });
 document.querySelectorAll('.btn-company-dl').forEach(btn => {
   btn.addEventListener('click', () => {
