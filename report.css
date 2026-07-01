@@ -1040,7 +1040,17 @@ body.no-trend #learnDetailSub {
   .chart-container, .weekly-log, .eval-row, .diagnosis-box,
   .identity, .score-hero { break-inside: avoid; }
 
-  .page-break-before { break-before: page; }
+  .page-break-before {
+    break-before: page;
+    position: relative;
+    top: 6mm;
+    margin-bottom: 8mm;
+  }
+  body.no-trend #learnDetailSub {
+    position: relative;
+    top: 6mm;
+    margin-bottom: 8mm;
+  }
 
   .report-footer { display: none; }
   .print-footer {
@@ -1172,7 +1182,18 @@ body.print-mode .mast-title .month-print {
 body.print-mode .report-footer { display: none; }
 body.print-mode .print-footer { display: none; }
 
-body.print-mode .page-break-before { break-before: page; page-break-before: always; }
+body.print-mode .page-break-before {
+  break-before: page;
+  page-break-before: always;
+  position: relative;
+  top: 6mm;
+  margin-bottom: 8mm;
+}
+body.print-mode.no-trend #learnDetailSub {
+  position: relative;
+  top: 6mm;
+  margin-bottom: 8mm;
+}
 body.print-mode .comment-block,
 body.print-mode .comment-grid,
 body.print-mode .score-table,
