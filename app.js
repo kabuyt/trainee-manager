@@ -1022,6 +1022,7 @@ const oneMonthDelayedTests = Object.fromEntries(
 const TRAINEE_TEST_MONTH_OVERRIDES = {
   BRN014: oneMonthDelayedTests,
   BRN015: oneMonthDelayedTests,
+  BRN021: { test2: 1 },
 };
 
 function getTestMonthOverrides() {
