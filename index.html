@@ -40,8 +40,8 @@
         </div>
         <div class="stat-card admin-only">
           <div class="stat-label">配布サイト</div>
-          <div class="stat-value" style="font-size:18px">3組合</div>
-          <div class="stat-sub">globalway / cic / worldbusiness</div>
+          <div class="stat-value" style="font-size:18px">5組合</div>
+          <div class="stat-sub">globalway / cic / worldbusiness / tombow / sanyotech</div>
         </div>
       </div>
 
@@ -55,6 +55,8 @@
           <a href="https://kabuyt.github.io/trainee-manager/reports/globalway/" target="_blank" class="qa-btn admin-only">📁 globalway DLサイト</a>
           <a href="https://kabuyt.github.io/trainee-manager/reports/cic/" target="_blank" class="qa-btn admin-only">📁 cic DLサイト</a>
           <a href="https://kabuyt.github.io/trainee-manager/reports/worldbusiness/" target="_blank" class="qa-btn admin-only">📁 worldbusiness DLサイト</a>
+          <a href="https://kabuyt.github.io/trainee-manager/reports/tombow/" target="_blank" class="qa-btn admin-only">📁 tombow DLサイト</a>
+          <a href="https://kabuyt.github.io/trainee-manager/reports/sanyotech/" target="_blank" class="qa-btn admin-only">📁 sanyotech DLサイト</a>
           <button class="qa-btn admin-only" onclick="showRegenInstructions()">🔄 配布サイト再生成手順</button>
         </div>
       </div>
@@ -154,8 +156,10 @@ python create_student_accounts.py --apply</pre>
 python bulk_pdf.py --kumiai globalway --auto-month --all --site --password globalway2026
 python bulk_pdf.py --kumiai cic --auto-month --all --site --password cic2026
 python bulk_pdf.py --kumiai worldbusiness --auto-month --all --site --password worldbusiness2026
-rm -rf reports/globalway reports/cic reports/worldbusiness
-cp -r reports_pdf/globalway reports_pdf/cic reports_pdf/worldbusiness reports/
+python bulk_pdf.py --kumiai tombow --auto-month --all --site --password tombow2026
+python bulk_pdf.py --kumiai sanyotech --auto-month --all --site --password sanyotech2026
+rm -rf reports/globalway reports/cic reports/worldbusiness reports/tombow reports/sanyotech
+cp -r reports_pdf/globalway reports_pdf/cic reports_pdf/worldbusiness reports_pdf/tombow reports_pdf/sanyotech reports/
 git add reports/ && git commit -m "reports: 月次更新" && git push</pre>
       <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
         <button onclick="navigator.clipboard.writeText(document.getElementById('regenCmd').textContent);this.textContent='✓ コピー済';" class="btn btn-secondary">📋 コピー</button>

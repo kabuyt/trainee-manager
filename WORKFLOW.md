@@ -12,6 +12,8 @@ brastech-reports と同方式の **静的サイト生成** を採用。
 | グローバルウェイ協同組合 | https://kabuyt.github.io/trainee-manager/reports/globalway/ | `globalway2026` |
 | CIC協同組合 | https://kabuyt.github.io/trainee-manager/reports/cic/ | `cic2026` |
 | ワールドビジネス協同組合 | https://kabuyt.github.io/trainee-manager/reports/worldbusiness/ | `worldbusiness2026` |
+| トンボ国際交流事業協同組合 | https://kabuyt.github.io/trainee-manager/reports/tombow/ | `tombow2026` |
+| 山陽テクノ協同組合 | https://kabuyt.github.io/trainee-manager/reports/sanyotech/ | `sanyotech2026` |
 
 ## 月次運用の3ステップ
 
@@ -31,7 +33,9 @@ cd C:\Users\kabuyamat\Desktop\trainee-manager
 # 全組合分を一気に生成（推奨）
 python bulk_pdf.py --kumiai globalway --auto-month --site --password globalway2026
 python bulk_pdf.py --kumiai cic --auto-month --site --password cic2026
-python bulk_pdf.py --kumiai hiroshimaworld --auto-month --site --password hiroshima2026
+python bulk_pdf.py --kumiai worldbusiness --auto-month --site --password worldbusiness2026
+python bulk_pdf.py --kumiai tombow --auto-month --site --password tombow2026
+python bulk_pdf.py --kumiai sanyotech --auto-month --site --password sanyotech2026
 ```
 
 **重要オプション**:
@@ -44,10 +48,12 @@ python bulk_pdf.py --kumiai hiroshimaworld --auto-month --site --password hirosh
 
 ```powershell
 # 既存のサイトを置き換え
-rm -rf reports/globalway reports/cic reports/hiroshimaworld
+rm -rf reports/globalway reports/cic reports/worldbusiness reports/tombow reports/sanyotech
 cp -r reports_pdf/globalway reports/
 cp -r reports_pdf/cic reports/
-cp -r reports_pdf/hiroshimaworld reports/
+cp -r reports_pdf/worldbusiness reports/
+cp -r reports_pdf/tombow reports/
+cp -r reports_pdf/sanyotech reports/
 
 git add reports/
 git commit -m "reports: 月次更新"
