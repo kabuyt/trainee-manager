@@ -818,6 +818,7 @@ body {
   color: var(--ink);
   flex: 1;
   min-height: 44px;
+  white-space: pre-wrap;
 }
 .comment-text[contenteditable="true"] {
   outline: none;
