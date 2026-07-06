@@ -2132,6 +2132,32 @@ function _diagGetExpected(ak, fid, idx) {
   return undefined;
 }
 
+function buildStableDiagnosisSummary(strongestSubject, weakestSubject, avgRate, seedHint = '') {
+  if (!strongestSubject || !weakestSubject) {
+    return '全体的には安定した理解度を保ち、学習進度は良好。';
+  }
+
+  const strong = strongestSubject.name;
+  const weak = weakestSubject.name;
+  const gap = Math.max(0, strongestSubject.rate - weakestSubject.rate);
+  const seedText = `${seedHint}:${strong}:${weak}:${Math.round(avgRate * 100)}`;
+  const seed = Array.from(seedText).reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
+  const variants = gap < 0.12
+    ? [
+        `各分野で大きな偏りはなく、${weak}の確認を重ねることで得点はさらに安定する。`,
+        `全体として理解は安定しており、${weak}を丁寧に復習するとより確実な得点につながる。`,
+        `${strong}を含めて基礎は概ね定着している。今後は${weak}の取りこぼしを減らしたい。`,
+      ]
+    : [
+        `${strong}では安定した理解が見られる。${weak}を補強すれば、全体の得点もさらに伸ばせる。`,
+        `${strong}は比較的よく定着している一方、${weak}にはまだ伸ばせる余地がある。`,
+        `${strong}を得点源にできている。次の課題は${weak}の復習量を増やし、弱点を小さくすること。`,
+        `${strong}の理解は良好。${weak}での取りこぼしを減らせば、より安定した成績が期待できる。`,
+      ];
+
+  return variants[seed % variants.length];
+}
+
 // まるごとテスト用のセクションラベル（block prefix → 表示名）
 const MARUGOTO_LABELS = {
   marugoto_1: {
@@ -2315,7 +2341,12 @@ function renderDiagnosis(diagArea, results) {
         overall = '全体的に非常に高い理解度を示しており、基礎が確実に定着している。';
       } else if (avgRate >= 0.75) {
         overall = strongestSubject && weakestSubject
-          ? `${strongestSubject.name}を中心に安定した理解が見られ、${weakestSubject.name}を補強すればさらに得点の安定が期待できる。`
+          ? buildStableDiagnosisSummary(
+              strongestSubject,
+              weakestSubject,
+              avgRate,
+              withAnswers.trainee_id || withAnswers.id || withAnswers.test_date || withAnswers.test_name
+            )
           : '全体的には安定した理解度を保ち、学習進度は良好。';
       } else if (avgRate >= 0.7) {
         if (weakSubjects.length === 1 && strongestSubject) {
