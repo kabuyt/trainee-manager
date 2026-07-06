@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>専門用語 進捗確認 | trainee-manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=13">
+  <style>
+    .progress-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px}
+    .progress-card{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:14px 16px;box-shadow:var(--shadow-sm)}
+    .progress-card b{display:block;color:var(--navy);font:700 26px/1 'Inter',sans-serif}
+    .progress-card span{font-size:12px;color:var(--ink-mute)}
+    .progress-toolbar{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:12px;display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+    .progress-toolbar select,.progress-toolbar input{border:1px solid var(--rule-2);border-radius:7px;padding:8px 10px;font-family:inherit}
+    .progress-toolbar input{min-width:240px;flex:1}
+    .progress-table-wrap{background:#fff;border:1px solid var(--rule);border-radius:10px;overflow:auto;box-shadow:var(--shadow-sm)}
+    .progress-table{width:100%;border-collapse:collapse;font-size:13px}
+    .progress-table th,.progress-table td{padding:10px;border-bottom:1px solid var(--rule);text-align:left;white-space:nowrap}
+    .progress-table th{background:var(--navy);color:#fff;position:sticky;top:0}
+    .meter{width:120px;height:8px;background:#edf1f6;border-radius:999px;overflow:hidden}
+    .meter span{display:block;height:100%;background:var(--green)}
+    .mini-muted{font-size:12px;color:var(--ink-mute)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>VIETNAM 教育管理</h1>
+      <nav>
+        <a href="index.html">ダッシュボード</a>
+        <a href="register.html">新規登録</a>
+        <a href="test-results.html">成績</a>
+        <a href="terminology-progress.html" class="active">専門用語</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <section class="term-hero">
+        <div>
+          <p class="term-kicker">専門用語 進捗確認</p>
+          <h2>キンレイ専門用語の学習状況</h2>
+          <p class="term-sub">実習生ごとの暗記進捗、要復習語数、確認テスト履歴を確認します。</p>
+        </div>
+      </section>
+
+      <div class="progress-summary">
+        <div class="progress-card"><b id="statStudents">0</b><span>対象実習生</span></div>
+        <div class="progress-card"><b id="statAvgLearned">0%</b><span>平均暗記率</span></div>
+        <div class="progress-card"><b id="statReviewTerms">0</b><span>要復習の合計</span></div>
+        <div class="progress-card"><b id="statQuizAvg">0%</b><span>確認テスト平均</span></div>
+      </div>
+
+      <div class="progress-toolbar">
+        <select id="filterCompany"><option value="">全企業</option></select>
+        <select id="filterClass"><option value="">全クラス</option></select>
+        <select id="filterOrg"><option value="">全送り出し機関</option></select>
+        <input type="search" id="filterSearch" placeholder="ID・名前で検索">
+        <button type="button" class="btn btn-secondary" id="reloadBtn">再読込</button>
+      </div>
+
+      <div id="loadingMsg" class="loading">読み込み中...</div>
+      <div class="progress-table-wrap hidden" id="tableWrap">
+        <table class="progress-table">
+          <thead>
+            <tr>
+              <th>学生ID</th>
+              <th>名前</th>
+              <th>企業</th>
+              <th>クラス</th>
+              <th>暗記率</th>
+              <th>覚えた</th>
+              <th>要復習</th>
+              <th>テスト平均</th>
+              <th>最終学習</th>
+            </tr>
+          </thead>
+          <tbody id="progressRows"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="auth.js?v=5"></script>
+  <script src="data/kinrei-vocab.js?v=1"></script>
+  <script src="terminology-progress.js?v=1"></script>
+</body>
+</html>
