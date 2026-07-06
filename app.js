@@ -2142,17 +2142,30 @@ function buildStableDiagnosisSummary(strongestSubject, weakestSubject, avgRate, 
   const gap = Math.max(0, strongestSubject.rate - weakestSubject.rate);
   const seedText = `${seedHint}:${strong}:${weak}:${Math.round(avgRate * 100)}`;
   const seed = Array.from(seedText).reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
-  const variants = gap < 0.12
+  const highVariants = [
+    `全体的に正答率が高く、学習内容はよく定着している。今後は${weak}の細かな取りこぼしを減らしたい。`,
+    `${strong}をはじめ、各分野で高い理解が見られる。${weak}を確認しておくと、さらに安定した結果につながる。`,
+    `基礎は十分に身についており、解答も安定している。次回は${weak}の精度をさらに高めたい。`,
+    `大きな弱点は見られず、学習は順調に進んでいる。${weak}は確認問題で定着を維持したい。`,
+  ];
+  const variants = avgRate >= 0.9
+    ? highVariants
+    : gap < 0.12
     ? [
-        `各分野で大きな偏りはなく、${weak}の確認を重ねることで得点はさらに安定する。`,
-        `全体として理解は安定しており、${weak}を丁寧に復習するとより確実な得点につながる。`,
-        `${strong}を含めて基礎は概ね定着している。今後は${weak}の取りこぼしを減らしたい。`,
+        `各分野で大きな偏りはなく、全体として落ち着いた結果である。${weak}は短い復習を重ねたい。`,
+        `理解のばらつきは小さく、学習内容は概ね整理できている。${weak}を確認すると得点がさらに安定する。`,
+        `${strong}だけに偏らず、全体的に基礎は身についている。今後は${weak}の小さなミスを減らしたい。`,
+        `大きく苦手な分野は見られない。次回に向けて、${weak}の問題形式に慣れておくとよい。`,
+        `正答の傾向は安定している。${weak}をもう一度確認し、解答の確実さを高めたい。`,
       ]
     : [
-        `${strong}では安定した理解が見られる。${weak}を補強すれば、全体の得点もさらに伸ばせる。`,
-        `${strong}は比較的よく定着している一方、${weak}にはまだ伸ばせる余地がある。`,
-        `${strong}を得点源にできている。次の課題は${weak}の復習量を増やし、弱点を小さくすること。`,
-        `${strong}の理解は良好。${weak}での取りこぼしを減らせば、より安定した成績が期待できる。`,
+        `${strong}は得点につながっている。${weak}は復習の優先度を上げ、苦手な形式を確認したい。`,
+        `${strong}で取れている分、${weak}の取りこぼしが全体の課題として残っている。`,
+        `理解できている部分は多いが、${weak}ではまだ正答に結びつかない問題がある。`,
+        `${strong}の定着は良好である。今後は${weak}を重点的に確認し、分野間の差を小さくしたい。`,
+        `${weak}に課題はあるものの、${strong}では学習の成果が出ている。復習の焦点を絞れば改善が見込める。`,
+        `全体としては良好な結果である。さらに伸ばすには、${weak}で迷いやすい問題を整理する必要がある。`,
+        `${strong}は比較的安定している。${weak}は例題を使って確認し、解答の精度を上げたい。`,
       ];
 
   return variants[seed % variants.length];
@@ -2338,14 +2351,19 @@ function renderDiagnosis(diagArea, results) {
       // 全体総評（1段落、常体）
       let overall = '';
       if (avgRate >= 0.9) {
-        overall = '全体的に非常に高い理解度を示しており、基礎が確実に定着している。';
+        overall = buildStableDiagnosisSummary(
+          strongestSubject,
+          weakestSubject,
+          avgRate,
+          withAnswers.trainee_id || withAnswers.id || new URLSearchParams(window.location.search).get('id') || withAnswers.test_date || withAnswers.test_name
+        );
       } else if (avgRate >= 0.75) {
         overall = strongestSubject && weakestSubject
           ? buildStableDiagnosisSummary(
               strongestSubject,
               weakestSubject,
               avgRate,
-              withAnswers.trainee_id || withAnswers.id || withAnswers.test_date || withAnswers.test_name
+              withAnswers.trainee_id || withAnswers.id || new URLSearchParams(window.location.search).get('id') || withAnswers.test_date || withAnswers.test_name
             )
           : '全体的には安定した理解度を保ち、学習進度は良好。';
       } else if (avgRate >= 0.7) {
