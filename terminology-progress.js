@@ -2,9 +2,11 @@ let progressState = {
   trainees: [],
   progress: [],
   quizResults: [],
+  imageResults: [],
   rows: [],
   totalTerms: 0,
   totalQuizSets: 0,
+  totalImageSets: 6,
 };
 
 function escProgress(value) {
@@ -47,7 +49,7 @@ async function loadProgressData() {
   const [traineeRes, progressRes, quizRes] = await Promise.all([
     supabase.from('trainees').select('id,student_id,name_katakana,name_romaji,company,class_group,organizations(name),status').order('student_id', { ascending: true, nullsFirst: false }),
     supabase.from('terminology_progress').select('trainee_id,term_id,status,correct_count,wrong_count,last_studied_at'),
-    supabase.from('terminology_quiz_results').select('trainee_id,score_rate,created_at,set_id').like('set_id', 'kinrei-2023%'),
+    supabase.from('terminology_quiz_results').select('trainee_id,score_rate,created_at,set_id').like('set_id', 'kinrei%'),
   ]);
 
   if (traineeRes.error) throw traineeRes.error;
@@ -55,7 +57,9 @@ async function loadProgressData() {
     .filter(t => (t.status || 'active') === 'active')
     .filter(isKinreiTrainee);
   progressState.progress = progressRes.error ? [] : (progressRes.data || []);
-  progressState.quizResults = quizRes.error ? [] : (quizRes.data || []);
+  const allQuizResults = quizRes.error ? [] : (quizRes.data || []);
+  progressState.quizResults = allQuizResults.filter(item => String(item.set_id || '').startsWith('kinrei-2023'));
+  progressState.imageResults = allQuizResults.filter(item => String(item.set_id || '').startsWith('kinrei-image-2023'));
   progressState.totalTerms = window.KINREI_VOCAB?.terms?.length || 297;
   progressState.totalQuizSets = Math.ceil(progressState.totalTerms / 10);
 
@@ -77,6 +81,11 @@ function buildRows() {
     if (!quizByTrainee[item.trainee_id]) quizByTrainee[item.trainee_id] = [];
     quizByTrainee[item.trainee_id].push(item);
   });
+  const imageByTrainee = {};
+  progressState.imageResults.forEach(item => {
+    if (!imageByTrainee[item.trainee_id]) imageByTrainee[item.trainee_id] = [];
+    imageByTrainee[item.trainee_id].push(item);
+  });
 
   progressState.rows = progressState.trainees.map(t => {
     const prog = progressByTrainee[t.id] || [];
@@ -88,6 +97,8 @@ function buildRows() {
       ? Math.round(quizzes.reduce((sum, q) => sum + Number(q.score_rate || 0), 0) / quizzes.length)
       : null;
     const completedSets = new Set(quizzes.map(q => q.set_id).filter(Boolean));
+    const imageQuizzes = imageByTrainee[t.id] || [];
+    const completedImageSets = new Set(imageQuizzes.map(q => q.set_id).filter(Boolean));
     return {
       id: t.id,
       student_id: t.student_id || '',
@@ -101,6 +112,8 @@ function buildRows() {
       quizAvg,
       quizCount: quizzes.length,
       quizSetCount: completedSets.size,
+      imageQuizCount: imageQuizzes.length,
+      imageSetCount: completedImageSets.size,
       lastStudy,
     };
   });
@@ -147,6 +160,7 @@ function renderRows() {
       <td>${row.learned} / ${progressState.totalTerms}</td>
       <td>${row.review}</td>
       <td>${row.quizSetCount} / ${progressState.totalQuizSets} <span class="mini-muted">${row.quizCount ? `受験${row.quizCount}回` : ''}</span></td>
+      <td>${row.imageSetCount} / ${progressState.totalImageSets} <span class="mini-muted">${row.imageQuizCount ? `受験${row.imageQuizCount}回` : ''}</span></td>
       <td>${row.quizAvg === null ? '-' : `${row.quizAvg}%`}</td>
       <td>${fmtDate(row.lastStudy)}</td>
     </tr>
