@@ -4,6 +4,7 @@ let progressState = {
   quizResults: [],
   rows: [],
   totalTerms: 0,
+  totalQuizSets: 0,
 };
 
 function escProgress(value) {
@@ -46,7 +47,7 @@ async function loadProgressData() {
   const [traineeRes, progressRes, quizRes] = await Promise.all([
     supabase.from('trainees').select('id,student_id,name_katakana,name_romaji,company,class_group,organizations(name),status').order('student_id', { ascending: true, nullsFirst: false }),
     supabase.from('terminology_progress').select('trainee_id,term_id,status,correct_count,wrong_count,last_studied_at'),
-    supabase.from('terminology_quiz_results').select('trainee_id,score_rate,created_at,set_id').eq('set_id', 'kinrei-2023'),
+    supabase.from('terminology_quiz_results').select('trainee_id,score_rate,created_at,set_id').like('set_id', 'kinrei-2023%'),
   ]);
 
   if (traineeRes.error) throw traineeRes.error;
@@ -56,6 +57,7 @@ async function loadProgressData() {
   progressState.progress = progressRes.error ? [] : (progressRes.data || []);
   progressState.quizResults = quizRes.error ? [] : (quizRes.data || []);
   progressState.totalTerms = window.KINREI_VOCAB?.terms?.length || 297;
+  progressState.totalQuizSets = Math.ceil(progressState.totalTerms / 10);
 
   buildRows();
   fillFilter('filterCompany', [...new Set(progressState.rows.map(row => row.company))]);
@@ -85,6 +87,7 @@ function buildRows() {
     const quizAvg = quizzes.length
       ? Math.round(quizzes.reduce((sum, q) => sum + Number(q.score_rate || 0), 0) / quizzes.length)
       : null;
+    const completedSets = new Set(quizzes.map(q => q.set_id).filter(Boolean));
     return {
       id: t.id,
       student_id: t.student_id || '',
@@ -97,6 +100,7 @@ function buildRows() {
       learnedRate: progressState.totalTerms ? Math.round((learned / progressState.totalTerms) * 100) : 0,
       quizAvg,
       quizCount: quizzes.length,
+      quizSetCount: completedSets.size,
       lastStudy,
     };
   });
@@ -142,7 +146,8 @@ function renderRows() {
       </td>
       <td>${row.learned} / ${progressState.totalTerms}</td>
       <td>${row.review}</td>
-      <td>${row.quizAvg === null ? '-' : `${row.quizAvg}%`} <span class="mini-muted">${row.quizCount ? `(${row.quizCount}回)` : ''}</span></td>
+      <td>${row.quizSetCount} / ${progressState.totalQuizSets} <span class="mini-muted">${row.quizCount ? `受験${row.quizCount}回` : ''}</span></td>
+      <td>${row.quizAvg === null ? '-' : `${row.quizAvg}%`}</td>
       <td>${fmtDate(row.lastStudy)}</td>
     </tr>
   `).join('');
