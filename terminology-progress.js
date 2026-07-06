@@ -19,6 +19,12 @@ function fmtDate(value) {
   return `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`;
 }
 
+function isKinreiTrainee(row) {
+  const company = String(row?.company || '').toLowerCase();
+  const group = String(row?.class_group || '').toLowerCase();
+  return company.includes('キンレイ') || company.includes('kinrei') || group.includes('キンレイ') || group.includes('kinrei');
+}
+
 function fillFilter(id, values) {
   const el = document.getElementById(id);
   const current = el.value;
@@ -44,7 +50,9 @@ async function loadProgressData() {
   ]);
 
   if (traineeRes.error) throw traineeRes.error;
-  progressState.trainees = (traineeRes.data || []).filter(t => (t.status || 'active') === 'active');
+  progressState.trainees = (traineeRes.data || [])
+    .filter(t => (t.status || 'active') === 'active')
+    .filter(isKinreiTrainee);
   progressState.progress = progressRes.error ? [] : (progressRes.data || []);
   progressState.quizResults = quizRes.error ? [] : (quizRes.data || []);
   progressState.totalTerms = window.KINREI_VOCAB?.terms?.length || 297;
