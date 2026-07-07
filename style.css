@@ -655,6 +655,92 @@ input:focus, select:focus, textarea:focus {
 
 .no-data { color: var(--ink-mute); font-size: 13px; }
 
+.terminology-detail {
+  margin: 22px 0 24px;
+  padding: 18px;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ffffff 0%, #f7fbf4 100%);
+  box-shadow: var(--shadow-sm);
+}
+.terminology-detail-muted {
+  background: var(--paper-2);
+}
+.terminology-detail-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.terminology-title { margin-bottom: 6px; }
+.terminology-detail-lead {
+  color: var(--ink-soft);
+  font-size: 13px;
+  line-height: 1.7;
+}
+.terminology-detail-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.term-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+.term-detail-card {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 14px;
+  min-height: 118px;
+}
+.term-detail-card span {
+  display: block;
+  color: var(--ink-mute);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  margin-bottom: 8px;
+}
+.term-detail-card strong {
+  display: block;
+  color: var(--navy);
+  font: 700 26px/1 'Inter', 'Noto Sans JP', sans-serif;
+  margin-bottom: 10px;
+}
+.term-detail-card small {
+  color: var(--ink-soft);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.term-detail-card.warn strong { color: var(--warn); }
+.term-progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #edf1f6;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.term-progress-bar i {
+  display: block;
+  height: 100%;
+  background: var(--green);
+  border-radius: inherit;
+}
+.term-progress-bar.final i { background: var(--navy-3); }
+.terminology-empty {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(255,255,255,.7);
+  color: var(--ink-mute);
+  font-size: 13px;
+}
+
 /* ============================================================
    Student ID badge
    ============================================================ */
@@ -1005,6 +1091,9 @@ input:focus, select:focus, textarea:focus {
   .form-grid { grid-template-columns: 1fr; }
   .login-card { margin: 30px 16px; padding: 24px 20px; }
   .detail-header-left { flex-direction: column; }
+  .terminology-detail-head { flex-direction: column; }
+  .terminology-detail-actions { justify-content: flex-start; }
+  .term-detail-grid { grid-template-columns: 1fr; }
   .dashboard-grid { grid-template-columns: 1fr 1fr; }
   .stat-card { padding: 12px 14px; }
   .stat-card .stat-value { font-size: 22px; }

@@ -725,6 +725,133 @@ async function registerTrainee() {
 }
 
 // ===== 実習生詳細 =====
+const TERMINOLOGY_TOTAL_QUIZ_SETS = 36;
+const TERMINOLOGY_FINAL_SET_ID = 'kinrei-final-2023';
+
+function safePercent(value) {
+  const num = Number(value);
+  if (!Number.isFinite(num)) return 0;
+  return Math.max(0, Math.min(100, Math.round(num)));
+}
+
+function latestByCreatedAt(items) {
+  return [...(items || [])].sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')))[0] || null;
+}
+
+function isKinreiTerminologyTarget(t) {
+  const company = String(t?.company || '').toLowerCase();
+  const group = String(t?.class_group || '').toLowerCase();
+  return company.includes('キンレイ') || company.includes('kinrei') || group.includes('キンレイ') || group.includes('kinrei');
+}
+
+function buildTerminologySummary(progressRows, quizRows) {
+  const totalTerms = window.KINREI_VOCAB?.terms?.length || window.KINREI_VOCAB?.set?.termCount || 297;
+  const progress = progressRows || [];
+  const quizItems = quizRows || [];
+  const learned = progress.filter(p => p.status === 'learned').length;
+  const review = progress.filter(p => p.status === 'review').length;
+  const touched = new Set(progress.map(p => p.term_id).filter(Boolean)).size;
+  const lastProgressAt = progress.map(p => p.last_studied_at).filter(Boolean).sort().pop() || '';
+  const standardQuiz = quizItems.filter(q => String(q.set_id || '').startsWith('kinrei-test-2023'));
+  const latestStandardBySet = new Map();
+  standardQuiz.forEach(item => {
+    const current = latestStandardBySet.get(item.set_id);
+    if (!current || String(item.created_at || '') > String(current.created_at || '')) {
+      latestStandardBySet.set(item.set_id, item);
+    }
+  });
+  const latestStandard = [...latestStandardBySet.values()];
+  const quizAvg = latestStandard.length
+    ? safePercent(latestStandard.reduce((sum, q) => sum + Number(q.score_rate || 0), 0) / latestStandard.length)
+    : null;
+  const finalResults = quizItems.filter(q => String(q.set_id || '') === TERMINOLOGY_FINAL_SET_ID);
+  const finalLatest = latestByCreatedAt(finalResults);
+  const lastQuizAt = quizItems.map(q => q.created_at).filter(Boolean).sort().pop() || '';
+  const lastStudy = [lastProgressAt, lastQuizAt].filter(Boolean).sort().pop() || '';
+
+  return {
+    totalTerms,
+    learned,
+    review,
+    touched,
+    learnedRate: totalTerms ? safePercent((learned / totalTerms) * 100) : 0,
+    quizSetCount: latestStandardBySet.size,
+    quizAttemptCount: standardQuiz.length,
+    quizAvg,
+    finalRate: finalLatest ? safePercent(finalLatest.score_rate) : null,
+    finalAttemptCount: finalResults.length,
+    finalLatest,
+    lastStudy,
+    hasAnyData: progress.length > 0 || quizItems.length > 0,
+  };
+}
+
+function renderTerminologyDetailCard(summary, trainee) {
+  const isTarget = isKinreiTerminologyTarget(trainee);
+  if (!isTarget && !summary.hasAnyData) {
+    return `
+      <div class="terminology-detail terminology-detail-muted">
+        <div class="terminology-detail-head">
+          <div>
+            <div class="section-title terminology-title">キンレイ専門用語</div>
+            <p class="terminology-detail-lead">この実習生は現在、キンレイ専門用語学習の対象外です。</p>
+          </div>
+          <a href="terminology-progress.html" class="btn btn-secondary btn-sm">全体一覧</a>
+        </div>
+      </div>
+    `;
+  }
+
+  const quizRate = safePercent((summary.quizSetCount / TERMINOLOGY_TOTAL_QUIZ_SETS) * 100);
+  const finalText = summary.finalRate === null ? '未受験' : `${summary.finalRate}%`;
+  const finalSub = summary.finalAttemptCount
+    ? `総合修了テスト ${summary.finalAttemptCount}回受験`
+    : '36回完了後に受験できます';
+
+  return `
+    <div class="terminology-detail">
+      <div class="terminology-detail-head">
+        <div>
+          <div class="section-title terminology-title">キンレイ専門用語</div>
+          <p class="terminology-detail-lead">ことば暗記・画像暗記・全36回テスト・総合修了テストの進捗です。</p>
+        </div>
+        <div class="terminology-detail-actions">
+          <a href="terminology-progress.html" class="btn btn-secondary btn-sm">全体一覧</a>
+          <a href="https://kabuyt.github.io/nihongo-test-1-4ka/terminology-login.html" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">学習ページ</a>
+        </div>
+      </div>
+
+      <div class="term-detail-grid">
+        <div class="term-detail-card">
+          <span>暗記率</span>
+          <strong>${summary.learnedRate}%</strong>
+          <div class="term-progress-bar"><i style="width:${summary.learnedRate}%"></i></div>
+          <small>覚えた ${summary.learned} / ${summary.totalTerms}語</small>
+        </div>
+        <div class="term-detail-card">
+          <span>テスト進捗</span>
+          <strong>${summary.quizSetCount} / ${TERMINOLOGY_TOTAL_QUIZ_SETS}</strong>
+          <div class="term-progress-bar"><i style="width:${quizRate}%"></i></div>
+          <small>${summary.quizAvg === null ? '平均 -' : `平均 ${summary.quizAvg}%`}・受験 ${summary.quizAttemptCount}回</small>
+        </div>
+        <div class="term-detail-card">
+          <span>総合修了テスト</span>
+          <strong>${finalText}</strong>
+          <div class="term-progress-bar final"><i style="width:${summary.finalRate === null ? 0 : summary.finalRate}%"></i></div>
+          <small>${finalSub}</small>
+        </div>
+        <div class="term-detail-card ${summary.review > 0 ? 'warn' : ''}">
+          <span>要復習</span>
+          <strong>${summary.review}</strong>
+          <small>学習済み ${summary.touched}語・最終学習 ${summary.lastStudy ? formatDate(summary.lastStudy) : '-'}</small>
+        </div>
+      </div>
+
+      ${summary.hasAnyData ? '' : '<p class="terminology-empty">まだ専門用語の学習データがありません。</p>'}
+    </div>
+  `;
+}
+
 async function loadTraineeDetail() {
   const id = new URLSearchParams(location.search).get('id');
   if (!id) {
@@ -733,20 +860,27 @@ async function loadTraineeDetail() {
   }
 
   try {
-    const [{ data: trainee, error: tErr }, { data: results, error: rErr }] = await Promise.all([
+    const [{ data: trainee, error: tErr }, { data: results }, progressRes, quizRes] = await Promise.all([
       supabase.from('trainees').select('*').eq('id', id).single(),
       supabase.from('test_results').select('*').eq('trainee_id', id).order('test_date', { ascending: false }),
+      supabase.from('terminology_progress').select('term_id,status,correct_count,wrong_count,last_studied_at').eq('trainee_id', id),
+      supabase.from('terminology_quiz_results').select('set_id,score_rate,correct_count,total_questions,created_at').eq('trainee_id', id).like('set_id', 'kinrei%'),
     ]);
 
     if (tErr) throw tErr;
 
-    renderTraineeDetail(trainee, results || []);
+    const terminologySummary = buildTerminologySummary(
+      progressRes.error ? [] : (progressRes.data || []),
+      quizRes.error ? [] : (quizRes.data || [])
+    );
+
+    renderTraineeDetail(trainee, results || [], terminologySummary);
   } catch (err) {
     document.getElementById('loadingMsg').textContent = '読み込みに失敗しました: ' + err.message;
   }
 }
 
-function renderTraineeDetail(t, results) {
+function renderTraineeDetail(t, results, terminologySummary) {
   const el = document.getElementById('traineeDetail');
 
   // 年齢計算
@@ -830,6 +964,8 @@ function renderTraineeDetail(t, results) {
         </div>
       </div>
     ` : ''}
+
+    ${renderTerminologyDetailCard(terminologySummary || buildTerminologySummary([], []), t)}
 
     <div class="section-title" style="margin-top:24px;display:flex;align-items:center;gap:8px">
       📝 備考・メモ
