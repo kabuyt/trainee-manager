@@ -738,18 +738,25 @@ function latestByCreatedAt(items) {
   return [...(items || [])].sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')))[0] || null;
 }
 
+function cutoffDate(days) {
+  const d = new Date();
+  d.setDate(d.getDate() - days);
+  return d;
+}
+
 function isKinreiTerminologyTarget(t) {
   const company = String(t?.company || '').toLowerCase();
   const group = String(t?.class_group || '').toLowerCase();
   return company.includes('キンレイ') || company.includes('kinrei') || group.includes('キンレイ') || group.includes('kinrei');
 }
 
-function buildTerminologySummary(progressRows, quizRows, imageProgressRows) {
+function buildTerminologySummary(progressRows, quizRows, imageProgressRows, sessionRows) {
   const totalTerms = window.KINREI_VOCAB?.terms?.length || window.KINREI_VOCAB?.set?.termCount || 297;
   const totalImages = window.KINREI_IMAGE_QUIZ?.items?.length || 60;
   const progress = progressRows || [];
   const imageProgress = imageProgressRows || [];
   const quizItems = quizRows || [];
+  const sessions = sessionRows || [];
   const learned = progress.filter(p => p.status === 'learned').length;
   const review = progress.filter(p => p.status === 'review').length;
   const imageLearned = imageProgress.filter(p => p.status === 'learned').length;
@@ -773,7 +780,10 @@ function buildTerminologySummary(progressRows, quizRows, imageProgressRows) {
   const finalResults = quizItems.filter(q => String(q.set_id || '') === TERMINOLOGY_FINAL_SET_ID);
   const finalLatest = latestByCreatedAt(finalResults);
   const lastQuizAt = quizItems.map(q => q.created_at).filter(Boolean).sort().pop() || '';
-  const lastStudy = [lastProgressAt, lastImageAt, lastQuizAt].filter(Boolean).sort().pop() || '';
+  const lastAccess = sessions.map(s => s.created_at).filter(Boolean).sort().pop() || '';
+  const sessions7 = sessions.filter(s => new Date(s.created_at).getTime() >= cutoffDate(7).getTime()).length;
+  const sessions30 = sessions.length;
+  const lastStudy = [lastProgressAt, lastImageAt, lastQuizAt, lastAccess].filter(Boolean).sort().pop() || '';
 
   return {
     totalTerms,
@@ -792,6 +802,9 @@ function buildTerminologySummary(progressRows, quizRows, imageProgressRows) {
     finalRate: finalLatest ? safePercent(finalLatest.score_rate) : null,
     finalAttemptCount: finalResults.length,
     finalLatest,
+    sessions7,
+    sessions30,
+    lastAccess,
     lastStudy,
     hasAnyData: progress.length > 0 || imageProgress.length > 0 || quizItems.length > 0,
   };
@@ -862,6 +875,11 @@ function renderTerminologyDetailCard(summary, trainee) {
           <strong>${summary.review + summary.imageReview}</strong>
           <small>ことば ${summary.review}・画像 ${summary.imageReview}・最終学習 ${summary.lastStudy ? formatDate(summary.lastStudy) : '-'}</small>
         </div>
+        <div class="term-detail-card">
+          <span>学習頻度</span>
+          <strong>${summary.sessions7}回</strong>
+          <small>直近7日。直近30日 ${summary.sessions30}回・最終アクセス ${summary.lastAccess ? formatDate(summary.lastAccess) : '-'}</small>
+        </div>
       </div>
 
       ${summary.hasAnyData ? '' : '<p class="terminology-empty">まだ専門用語の学習データがありません。</p>'}
@@ -877,12 +895,13 @@ async function loadTraineeDetail() {
   }
 
   try {
-    const [{ data: trainee, error: tErr }, { data: results }, progressRes, imageProgressRes, quizRes] = await Promise.all([
+    const [{ data: trainee, error: tErr }, { data: results }, progressRes, imageProgressRes, quizRes, sessionRes] = await Promise.all([
       supabase.from('trainees').select('*').eq('id', id).single(),
       supabase.from('test_results').select('*').eq('trainee_id', id).order('test_date', { ascending: false }),
       supabase.from('terminology_progress').select('term_id,status,correct_count,wrong_count,last_studied_at').eq('trainee_id', id),
       supabase.from('terminology_image_progress').select('image_id,status,last_studied_at').eq('trainee_id', id),
       supabase.from('terminology_quiz_results').select('set_id,score_rate,correct_count,total_questions,created_at').eq('trainee_id', id).like('set_id', 'kinrei%'),
+      supabase.from('terminology_study_sessions').select('created_at').eq('trainee_id', id).gte('created_at', cutoffDate(30).toISOString()),
     ]);
 
     if (tErr) throw tErr;
@@ -890,7 +909,8 @@ async function loadTraineeDetail() {
     const terminologySummary = buildTerminologySummary(
       progressRes.error ? [] : (progressRes.data || []),
       quizRes.error ? [] : (quizRes.data || []),
-      imageProgressRes.error ? [] : (imageProgressRes.data || [])
+      imageProgressRes.error ? [] : (imageProgressRes.data || []),
+      sessionRes.error ? [] : (sessionRes.data || [])
     );
 
     renderTraineeDetail(trainee, results || [], terminologySummary);
@@ -984,7 +1004,7 @@ function renderTraineeDetail(t, results, terminologySummary) {
       </div>
     ` : ''}
 
-    ${renderTerminologyDetailCard(terminologySummary || buildTerminologySummary([], [], []), t)}
+    ${renderTerminologyDetailCard(terminologySummary || buildTerminologySummary([], [], [], []), t)}
 
     <div class="section-title" style="margin-top:24px;display:flex;align-items:center;gap:8px">
       📝 備考・メモ

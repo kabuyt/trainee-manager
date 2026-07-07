@@ -4,6 +4,7 @@ let progressState = {
   imageProgress: [],
   quizResults: [],
   finalResults: [],
+  studySessions: [],
   rows: [],
   totalTerms: 0,
   totalImages: 0,
@@ -21,6 +22,12 @@ function fmtDate(value) {
   const d = new Date(value);
   if (Number.isNaN(d.getTime())) return value;
   return `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`;
+}
+
+function daysAgo(days) {
+  const d = new Date();
+  d.setDate(d.getDate() - days);
+  return d;
 }
 
 function isKinreiTrainee(row) {
@@ -47,11 +54,12 @@ async function loadProgressData() {
   document.getElementById('loadingMsg').classList.remove('hidden');
   document.getElementById('tableWrap').classList.add('hidden');
 
-  const [traineeRes, progressRes, imageProgressRes, quizRes] = await Promise.all([
+  const [traineeRes, progressRes, imageProgressRes, quizRes, sessionRes] = await Promise.all([
     supabase.from('trainees').select('id,student_id,name_katakana,name_romaji,company,class_group,organizations(name),status').order('student_id', { ascending: true, nullsFirst: false }),
     supabase.from('terminology_progress').select('trainee_id,term_id,status,correct_count,wrong_count,last_studied_at'),
     supabase.from('terminology_image_progress').select('trainee_id,image_id,status,last_studied_at'),
     supabase.from('terminology_quiz_results').select('trainee_id,score_rate,created_at,set_id').like('set_id', 'kinrei%'),
+    supabase.from('terminology_study_sessions').select('trainee_id,created_at').gte('created_at', daysAgo(30).toISOString()),
   ]);
 
   if (traineeRes.error) throw traineeRes.error;
@@ -60,6 +68,7 @@ async function loadProgressData() {
     .filter(isKinreiTrainee);
   progressState.progress = progressRes.error ? [] : (progressRes.data || []);
   progressState.imageProgress = imageProgressRes.error ? [] : (imageProgressRes.data || []);
+  progressState.studySessions = sessionRes.error ? [] : (sessionRes.data || []);
   const allQuizResults = quizRes.error ? [] : (quizRes.data || []);
   progressState.quizResults = allQuizResults.filter(item => String(item.set_id || '').startsWith('kinrei-test-2023'));
   progressState.finalResults = allQuizResults.filter(item => String(item.set_id || '') === 'kinrei-final-2023');
@@ -94,6 +103,12 @@ function buildRows() {
     if (!finalByTrainee[item.trainee_id]) finalByTrainee[item.trainee_id] = [];
     finalByTrainee[item.trainee_id].push(item);
   });
+  const sessionsByTrainee = {};
+  progressState.studySessions.forEach(item => {
+    if (!sessionsByTrainee[item.trainee_id]) sessionsByTrainee[item.trainee_id] = [];
+    sessionsByTrainee[item.trainee_id].push(item);
+  });
+  const cutoff7 = daysAgo(7).getTime();
   progressState.rows = progressState.trainees.map(t => {
     const prog = progressByTrainee[t.id] || [];
     const imgProg = imageProgressByTrainee[t.id] || [];
@@ -109,6 +124,10 @@ function buildRows() {
     const completedSets = new Set(quizzes.map(q => q.set_id).filter(Boolean));
     const finalResults = (finalByTrainee[t.id] || []).sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')));
     const finalLatest = finalResults[0] || null;
+    const sessions = sessionsByTrainee[t.id] || [];
+    const sessions7 = sessions.filter(s => new Date(s.created_at).getTime() >= cutoff7).length;
+    const sessions30 = sessions.length;
+    const lastAccess = sessions.map(s => s.created_at).filter(Boolean).sort().pop() || '';
     return {
       id: t.id,
       student_id: t.student_id || '',
@@ -127,7 +146,10 @@ function buildRows() {
       quizSetCount: completedSets.size,
       finalRate: finalLatest ? Number(finalLatest.score_rate || 0) : null,
       finalCount: finalResults.length,
-      lastStudy,
+      sessions7,
+      sessions30,
+      lastAccess,
+      lastStudy: [lastStudy, lastAccess].filter(Boolean).sort().pop() || '',
     };
   });
 }
@@ -152,11 +174,13 @@ function renderStats(rows) {
   const reviewTotal = rows.reduce((sum, row) => sum + row.review + row.imageReview, 0);
   const quizRows = rows.filter(row => row.quizAvg !== null);
   const quizAvg = quizRows.length ? Math.round(quizRows.reduce((sum, row) => sum + row.quizAvg, 0) / quizRows.length) : 0;
+  const active7 = rows.filter(row => row.sessions7 > 0).length;
   document.getElementById('statStudents').textContent = rows.length;
   document.getElementById('statAvgLearned').textContent = `${learnedAvg}%`;
   document.getElementById('statAvgImage').textContent = `${imageAvg}%`;
   document.getElementById('statReviewTerms').textContent = reviewTotal;
   document.getElementById('statQuizAvg').textContent = `${quizAvg}%`;
+  document.getElementById('statActive7').textContent = active7;
 }
 
 function renderRows() {
@@ -178,6 +202,7 @@ function renderRows() {
       <td>${row.quizSetCount} / ${progressState.totalQuizSets} <span class="mini-muted">${row.quizCount ? `受験${row.quizCount}回` : ''}</span></td>
       <td>${row.quizAvg === null ? '-' : `${row.quizAvg}%`}</td>
       <td>${row.finalRate === null ? '-' : `${row.finalRate}%`} <span class="mini-muted">${row.finalCount ? `受験${row.finalCount}回` : ''}</span></td>
+      <td>7日 ${row.sessions7}回 <span class="mini-muted">30日 ${row.sessions30}回</span></td>
       <td>${fmtDate(row.lastStudy)}</td>
     </tr>
   `).join('');
