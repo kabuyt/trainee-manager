@@ -744,14 +744,20 @@ function isKinreiTerminologyTarget(t) {
   return company.includes('キンレイ') || company.includes('kinrei') || group.includes('キンレイ') || group.includes('kinrei');
 }
 
-function buildTerminologySummary(progressRows, quizRows) {
+function buildTerminologySummary(progressRows, quizRows, imageProgressRows) {
   const totalTerms = window.KINREI_VOCAB?.terms?.length || window.KINREI_VOCAB?.set?.termCount || 297;
+  const totalImages = window.KINREI_IMAGE_QUIZ?.items?.length || 60;
   const progress = progressRows || [];
+  const imageProgress = imageProgressRows || [];
   const quizItems = quizRows || [];
   const learned = progress.filter(p => p.status === 'learned').length;
   const review = progress.filter(p => p.status === 'review').length;
+  const imageLearned = imageProgress.filter(p => p.status === 'learned').length;
+  const imageReview = imageProgress.filter(p => p.status === 'review').length;
   const touched = new Set(progress.map(p => p.term_id).filter(Boolean)).size;
+  const imageTouched = new Set(imageProgress.map(p => p.image_id).filter(Boolean)).size;
   const lastProgressAt = progress.map(p => p.last_studied_at).filter(Boolean).sort().pop() || '';
+  const lastImageAt = imageProgress.map(p => p.last_studied_at).filter(Boolean).sort().pop() || '';
   const standardQuiz = quizItems.filter(q => String(q.set_id || '').startsWith('kinrei-test-2023'));
   const latestStandardBySet = new Map();
   standardQuiz.forEach(item => {
@@ -767,14 +773,19 @@ function buildTerminologySummary(progressRows, quizRows) {
   const finalResults = quizItems.filter(q => String(q.set_id || '') === TERMINOLOGY_FINAL_SET_ID);
   const finalLatest = latestByCreatedAt(finalResults);
   const lastQuizAt = quizItems.map(q => q.created_at).filter(Boolean).sort().pop() || '';
-  const lastStudy = [lastProgressAt, lastQuizAt].filter(Boolean).sort().pop() || '';
+  const lastStudy = [lastProgressAt, lastImageAt, lastQuizAt].filter(Boolean).sort().pop() || '';
 
   return {
     totalTerms,
+    totalImages,
     learned,
     review,
+    imageLearned,
+    imageReview,
     touched,
+    imageTouched,
     learnedRate: totalTerms ? safePercent((learned / totalTerms) * 100) : 0,
+    imageLearnedRate: totalImages ? safePercent((imageLearned / totalImages) * 100) : 0,
     quizSetCount: latestStandardBySet.size,
     quizAttemptCount: standardQuiz.length,
     quizAvg,
@@ -782,7 +793,7 @@ function buildTerminologySummary(progressRows, quizRows) {
     finalAttemptCount: finalResults.length,
     finalLatest,
     lastStudy,
-    hasAnyData: progress.length > 0 || quizItems.length > 0,
+    hasAnyData: progress.length > 0 || imageProgress.length > 0 || quizItems.length > 0,
   };
 }
 
@@ -829,6 +840,12 @@ function renderTerminologyDetailCard(summary, trainee) {
           <small>覚えた ${summary.learned} / ${summary.totalTerms}語</small>
         </div>
         <div class="term-detail-card">
+          <span>画像暗記</span>
+          <strong>${summary.imageLearnedRate}%</strong>
+          <div class="term-progress-bar"><i style="width:${summary.imageLearnedRate}%"></i></div>
+          <small>覚えた ${summary.imageLearned} / ${summary.totalImages}枚・要復習 ${summary.imageReview}</small>
+        </div>
+        <div class="term-detail-card">
           <span>テスト進捗</span>
           <strong>${summary.quizSetCount} / ${TERMINOLOGY_TOTAL_QUIZ_SETS}</strong>
           <div class="term-progress-bar"><i style="width:${quizRate}%"></i></div>
@@ -842,8 +859,8 @@ function renderTerminologyDetailCard(summary, trainee) {
         </div>
         <div class="term-detail-card ${summary.review > 0 ? 'warn' : ''}">
           <span>要復習</span>
-          <strong>${summary.review}</strong>
-          <small>学習済み ${summary.touched}語・最終学習 ${summary.lastStudy ? formatDate(summary.lastStudy) : '-'}</small>
+          <strong>${summary.review + summary.imageReview}</strong>
+          <small>ことば ${summary.review}・画像 ${summary.imageReview}・最終学習 ${summary.lastStudy ? formatDate(summary.lastStudy) : '-'}</small>
         </div>
       </div>
 
@@ -860,10 +877,11 @@ async function loadTraineeDetail() {
   }
 
   try {
-    const [{ data: trainee, error: tErr }, { data: results }, progressRes, quizRes] = await Promise.all([
+    const [{ data: trainee, error: tErr }, { data: results }, progressRes, imageProgressRes, quizRes] = await Promise.all([
       supabase.from('trainees').select('*').eq('id', id).single(),
       supabase.from('test_results').select('*').eq('trainee_id', id).order('test_date', { ascending: false }),
       supabase.from('terminology_progress').select('term_id,status,correct_count,wrong_count,last_studied_at').eq('trainee_id', id),
+      supabase.from('terminology_image_progress').select('image_id,status,last_studied_at').eq('trainee_id', id),
       supabase.from('terminology_quiz_results').select('set_id,score_rate,correct_count,total_questions,created_at').eq('trainee_id', id).like('set_id', 'kinrei%'),
     ]);
 
@@ -871,7 +889,8 @@ async function loadTraineeDetail() {
 
     const terminologySummary = buildTerminologySummary(
       progressRes.error ? [] : (progressRes.data || []),
-      quizRes.error ? [] : (quizRes.data || [])
+      quizRes.error ? [] : (quizRes.data || []),
+      imageProgressRes.error ? [] : (imageProgressRes.data || [])
     );
 
     renderTraineeDetail(trainee, results || [], terminologySummary);
@@ -965,7 +984,7 @@ function renderTraineeDetail(t, results, terminologySummary) {
       </div>
     ` : ''}
 
-    ${renderTerminologyDetailCard(terminologySummary || buildTerminologySummary([], []), t)}
+    ${renderTerminologyDetailCard(terminologySummary || buildTerminologySummary([], [], []), t)}
 
     <div class="section-title" style="margin-top:24px;display:flex;align-items:center;gap:8px">
       📝 備考・メモ
