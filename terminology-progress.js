@@ -7,7 +7,7 @@ let progressState = {
   rows: [],
   totalTerms: 0,
   totalImages: 0,
-  totalQuizSets: 36,
+  totalQuizSets: 18,
 };
 
 function escProgress(value) {

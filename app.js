@@ -725,7 +725,7 @@ async function registerTrainee() {
 }
 
 // ===== 実習生詳細 =====
-const TERMINOLOGY_TOTAL_QUIZ_SETS = 36;
+const TERMINOLOGY_TOTAL_QUIZ_SETS = 18;
 const TERMINOLOGY_FINAL_SET_ID = 'kinrei-final-2023';
 
 function safePercent(value) {
@@ -817,14 +817,14 @@ function renderTerminologyDetailCard(summary, trainee) {
   const finalText = summary.finalRate === null ? '未受験' : `${summary.finalRate}%`;
   const finalSub = summary.finalAttemptCount
     ? `総合修了テスト ${summary.finalAttemptCount}回受験`
-    : '36回完了後に受験できます';
+    : `${TERMINOLOGY_TOTAL_QUIZ_SETS}回完了後に受験できます`;
 
   return `
     <div class="terminology-detail">
       <div class="terminology-detail-head">
         <div>
           <div class="section-title terminology-title">キンレイ専門用語</div>
-          <p class="terminology-detail-lead">ことば暗記・画像暗記・全36回テスト・総合修了テストの進捗です。</p>
+          <p class="terminology-detail-lead">専門用語暗記・20問ずつの小テスト・総合修了テストの進捗です。</p>
         </div>
         <div class="terminology-detail-actions">
           <a href="terminology-progress.html" class="btn btn-secondary btn-sm">全体一覧</a>
