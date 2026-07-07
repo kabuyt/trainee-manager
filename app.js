@@ -777,6 +777,12 @@ function buildTerminologySummary(progressRows, quizRows, imageProgressRows, sess
   const quizAvg = latestStandard.length
     ? safePercent(latestStandard.reduce((sum, q) => sum + Number(q.score_rate || 0), 0) / latestStandard.length)
     : null;
+  const perfectStandardSetCount = new Set(
+    standardQuiz
+      .filter(q => Number(q.score_rate || 0) >= 100)
+      .map(q => q.set_id)
+      .filter(Boolean)
+  ).size;
   const finalResults = quizItems.filter(q => String(q.set_id || '') === TERMINOLOGY_FINAL_SET_ID);
   const finalLatest = latestByCreatedAt(finalResults);
   const lastQuizAt = quizItems.map(q => q.created_at).filter(Boolean).sort().pop() || '';
@@ -796,7 +802,7 @@ function buildTerminologySummary(progressRows, quizRows, imageProgressRows, sess
     imageTouched,
     learnedRate: totalTerms ? safePercent((learned / totalTerms) * 100) : 0,
     imageLearnedRate: totalImages ? safePercent((imageLearned / totalImages) * 100) : 0,
-    quizSetCount: latestStandardBySet.size,
+    quizSetCount: perfectStandardSetCount,
     quizAttemptCount: standardQuiz.length,
     quizAvg,
     finalRate: finalLatest ? safePercent(finalLatest.score_rate) : null,
@@ -862,7 +868,7 @@ function renderTerminologyDetailCard(summary, trainee) {
           <span>テスト進捗</span>
           <strong>${summary.quizSetCount} / ${TERMINOLOGY_TOTAL_QUIZ_SETS}</strong>
           <div class="term-progress-bar"><i style="width:${quizRate}%"></i></div>
-          <small>${summary.quizAvg === null ? '平均 -' : `平均 ${summary.quizAvg}%`}・受験 ${summary.quizAttemptCount}回</small>
+          <small>100%完了・${summary.quizAvg === null ? '平均 -' : `平均 ${summary.quizAvg}%`}・受験 ${summary.quizAttemptCount}回</small>
         </div>
         <div class="term-detail-card">
           <span>総合修了テスト</span>

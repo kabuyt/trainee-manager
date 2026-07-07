@@ -121,7 +121,12 @@ function buildRows() {
     const quizAvg = quizzes.length
       ? Math.round(quizzes.reduce((sum, q) => sum + Number(q.score_rate || 0), 0) / quizzes.length)
       : null;
-    const completedSets = new Set(quizzes.map(q => q.set_id).filter(Boolean));
+    const completedSets = new Set(
+      quizzes
+        .filter(q => Number(q.score_rate || 0) >= 100)
+        .map(q => q.set_id)
+        .filter(Boolean)
+    );
     const finalResults = (finalByTrainee[t.id] || []).sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')));
     const finalLatest = finalResults[0] || null;
     const sessions = sessionsByTrainee[t.id] || [];
@@ -199,7 +204,7 @@ function renderRows() {
       <td>${row.learned} / ${progressState.totalTerms}</td>
       <td>${row.imageLearned} / ${progressState.totalImages} <span class="mini-muted">${row.imageLearnedRate}%</span></td>
       <td>${row.review + row.imageReview} <span class="mini-muted">ことば${row.review} / 画像${row.imageReview}</span></td>
-      <td>${row.quizSetCount} / ${progressState.totalQuizSets} <span class="mini-muted">${row.quizCount ? `受験${row.quizCount}回` : ''}</span></td>
+      <td>${row.quizSetCount} / ${progressState.totalQuizSets} <span class="mini-muted">${row.quizCount ? `100%完了・受験${row.quizCount}回` : ''}</span></td>
       <td>${row.quizAvg === null ? '-' : `${row.quizAvg}%`}</td>
       <td>${row.finalRate === null ? '-' : `${row.finalRate}%`} <span class="mini-muted">${row.finalCount ? `受験${row.finalCount}回` : ''}</span></td>
       <td>7日 ${row.sessions7}回 <span class="mini-muted">30日 ${row.sessions30}回</span></td>
