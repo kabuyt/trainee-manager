@@ -239,7 +239,10 @@
     </div>
   </div>
 
-  <div class="section-sub">週別活動</div>
+  <div class="section-sub" style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+    <span>週別活動</span>
+    <button type="button" class="btn btn-secondary no-print" style="font-size:11px;padding:4px 8px" onclick="copyWeeklyActivitiesFromStudent()">週別活動をコピー</button>
+  </div>
   <div class="weekly-log">
     <div class="week-row" id="week1">
       <div class="week-label">第1週</div>
@@ -337,7 +340,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="auth.js?v=5"></script>
-<script src="app.js?v=62"></script>
+<script src="app.js?v=71"></script>
 <script>
 // localStorage に classic 指定があれば classic ページへリダイレクト
 // ただし bulk=1（一括PDF出力中）は強制的にモダンを使う
@@ -373,6 +376,10 @@ document.addEventListener('paste', function(e) {
   if (!target || target.getAttribute('contenteditable') !== 'true') return;
   e.preventDefault();
   const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+  if (typeof insertPlainTextIntoEditable === 'function') {
+    insertPlainTextIntoEditable(target, text);
+    return;
+  }
   // execCommand は非推奨だが、contenteditable 内でテキスト挿入＋undo履歴維持に最適
   if (document.queryCommandSupported && document.queryCommandSupported('insertText')) {
     document.execCommand('insertText', false, text);

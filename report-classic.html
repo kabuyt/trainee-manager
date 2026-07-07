@@ -166,7 +166,10 @@
     </div>
   </div>
 
-  <div class="section-sub">週別活動</div>
+  <div class="section-sub" style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+    <span>週別活動</span>
+    <button type="button" class="btn btn-secondary no-print" style="font-size:11px;padding:4px 8px" onclick="copyWeeklyActivitiesFromStudent()">週別活動をコピー</button>
+  </div>
   <div class="weekly-log">
     <div class="week-row" id="week1">
       <div class="week-label">第1週</div>
@@ -248,7 +251,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="auth.js?v=5"></script>
-<script src="app.js?v=36"></script>
+<script src="app.js?v=71"></script>
 <script>
   (async function() {
     const auth = await checkAuth();
@@ -263,6 +266,10 @@
     if (!target || target.getAttribute('contenteditable') !== 'true') return;
     e.preventDefault();
     const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+    if (typeof insertPlainTextIntoEditable === 'function') {
+      insertPlainTextIntoEditable(target, text);
+      return;
+    }
     if (document.queryCommandSupported && document.queryCommandSupported('insertText')) {
       document.execCommand('insertText', false, text);
     } else {

@@ -191,7 +191,9 @@ function applyFilters() {
     filtered = filtered.filter(t =>
       (t.name_romaji || '').toLowerCase().includes(q) ||
       (t.name_katakana || '').includes(q) ||
-      (t.company || '').toLowerCase().includes(q)
+      (t.company || '').toLowerCase().includes(q) ||
+      (t.class_group || '').toLowerCase().includes(q) ||
+      (t.notes || '').toLowerCase().includes(q)
     );
   }
   if (orgId) {
@@ -399,7 +401,9 @@ function getFilteredTrainees() {
     filtered = filtered.filter(t =>
       (t.name_romaji || '').toLowerCase().includes(q) ||
       (t.name_katakana || '').includes(q) ||
-      (t.company || '').toLowerCase().includes(q)
+      (t.company || '').toLowerCase().includes(q) ||
+      (t.class_group || '').toLowerCase().includes(q) ||
+      (t.notes || '').toLowerCase().includes(q)
     );
   }
   if (orgId) {
@@ -1776,6 +1780,161 @@ function renderMonthComments(report) {
   }
 }
 
+function normalizeSpreadsheetPasteText(text) {
+  let value = String(text || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  if (!value) return '';
+
+  const rows = value.split('\n');
+  const parsedRows = rows.map(row => {
+    const cells = [];
+    let cell = '';
+    let inQuotes = false;
+    for (let i = 0; i < row.length; i++) {
+      const ch = row[i];
+      const next = row[i + 1];
+      if (ch === '"' && next === '"') {
+        cell += '"';
+        i++;
+      } else if (ch === '"') {
+        inQuotes = !inQuotes;
+      } else if (ch === '\t' && !inQuotes) {
+        cells.push(cell);
+        cell = '';
+      } else {
+        cell += ch;
+      }
+    }
+    cells.push(cell);
+    return cells;
+  });
+
+  return parsedRows
+    .map(cells => cells.map(cell => {
+      let c = cell.trim();
+      if (c.length >= 2 && c.startsWith('"') && c.endsWith('"')) {
+        c = c.slice(1, -1).replace(/""/g, '"');
+      }
+      return c;
+    }).filter(Boolean).join('\n'))
+    .join('\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .replace(/[ \t]+\n/g, '\n')
+    .trim();
+}
+
+function insertPlainTextIntoEditable(target, text) {
+  const normalized = normalizeSpreadsheetPasteText(text);
+  if (!normalized) return;
+  const html = normalized.split('\n').map(line => escapeHtml(line)).join('<br>');
+  if (document.queryCommandSupported && document.queryCommandSupported('insertHTML')) {
+    document.execCommand('insertHTML', false, html);
+  } else if (document.queryCommandSupported && document.queryCommandSupported('insertText')) {
+    document.execCommand('insertText', false, normalized);
+  } else {
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount > 0) {
+      const range = sel.getRangeAt(0);
+      range.deleteContents();
+      range.insertNode(document.createTextNode(normalized));
+      range.collapse(false);
+    } else {
+      target.textContent += normalized;
+    }
+  }
+  target.dispatchEvent(new Event('input', { bubbles: true }));
+}
+
+function normalizeEditableHtml(html) {
+  return String(html || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/(?:\s|<br\s*\/?>|<div>\s*(?:<br\s*\/?>)?\s*<\/div>|<p>\s*(?:<br\s*\/?>)?\s*<\/p>)+$/gi, '')
+    .trim();
+}
+
+function isSessionExpiredError(error) {
+  const text = `${error?.message || ''} ${error?.details || ''} ${error?.hint || ''} ${error?.code || ''}`.toLowerCase();
+  return text.includes('session_expired')
+    || text.includes('row-level security')
+    || text.includes('violates row-level security')
+    || text.includes('policy')
+    || text.includes('jwt')
+    || text.includes('auth')
+    || text.includes('42501')
+    || text.includes('401')
+    || text.includes('403');
+}
+
+function getSaveErrorMessage(error) {
+  if (isSessionExpiredError(error)) {
+    return 'ログインの有効期限が切れている可能性があります。再ログインしてから保存してください。';
+  }
+  return error?.message || '保存に失敗しました。';
+}
+
+async function copyWeeklyActivitiesFromStudent() {
+  if (!_reportTrainee) return;
+
+  const sourceStudentId = prompt('コピー元の学生IDを入力してください（例: BRN008）');
+  if (!sourceStudentId) return;
+
+  const defaultMonth = String(_currentMonth || 1);
+  const monthText = prompt('コピー元の月を入力してください（例: 2）', defaultMonth);
+  if (!monthText) return;
+  const month = parseInt(String(monthText).replace(/[^\d]/g, ''), 10);
+  if (!month || month < 1 || month > 8) {
+    alert('月は1〜8の数字で入力してください。');
+    return;
+  }
+
+  const currentWeeks = [1, 2, 3, 4].map(n => {
+    const row = document.getElementById('week' + n);
+    const el = row ? row.querySelector('.comment-text') : null;
+    return el ? el.textContent.trim() : '';
+  }).filter(Boolean);
+  if (currentWeeks.length > 0 && !confirm('現在の週別活動を上書きします。よろしいですか？')) {
+    return;
+  }
+
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) throw new Error('SESSION_EXPIRED');
+
+    const { data: trainee, error: traineeError } = await supabase
+      .from('trainees')
+      .select('id,student_id,name_katakana')
+      .eq('student_id', sourceStudentId.trim().toUpperCase())
+      .maybeSingle();
+    if (traineeError) throw traineeError;
+    if (!trainee) {
+      alert('コピー元の学生IDが見つかりません。');
+      return;
+    }
+
+    const { data: report, error: reportError } = await supabase
+      .from('monthly_reports')
+      .select('week1,week2,week3,week4')
+      .eq('trainee_id', trainee.id)
+      .eq('month', month)
+      .maybeSingle();
+    if (reportError) throw reportError;
+    if (!report || ![report.week1, report.week2, report.week3, report.week4].some(Boolean)) {
+      alert('コピー元の週別活動が見つかりません。');
+      return;
+    }
+
+    [1, 2, 3, 4].forEach(n => {
+      const row = document.getElementById('week' + n);
+      const el = row ? row.querySelector('.comment-text') : null;
+      if (el) el.innerHTML = normalizeEditableHtml(report['week' + n] || '');
+    });
+    alert(`${trainee.student_id} ${month}ヶ月目の週別活動をコピーしました。保存ボタンで確定してください。`);
+  } catch (err) {
+    alert('週別活動のコピーに失敗しました: ' + getSaveErrorMessage(err));
+  }
+}
+
 async function saveReport() {
   if (!_reportTrainee) return;
   const btn = document.querySelector('.btn-save');
@@ -1788,13 +1947,13 @@ async function saveReport() {
     const el = document.getElementById(id);
     if (!el) return '※特記事項なし';
     const text = el.textContent.trim();
-    return text ? normalizeCommentHtml(el.innerHTML).trim() : '※特記事項なし';
+    return text ? normalizeEditableHtml(normalizeCommentHtml(el.innerHTML)) : '※特記事項なし';
   };
   const getWeek = (n) => {
     const row = document.getElementById('week' + n);
     if (!row) return '';
     const t = row.querySelector('.comment-text');
-    return t ? t.innerHTML.trim() : '';
+    return t ? normalizeEditableHtml(t.innerHTML) : '';
   };
 
   const data = {
@@ -1821,6 +1980,11 @@ async function saveReport() {
   };
 
   try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      throw new Error('SESSION_EXPIRED');
+    }
+
     let japaneseEvalSkipped = false;
     const { error } = await supabase.from('monthly_reports').upsert(data, {
       onConflict: 'trainee_id,month',
@@ -1850,7 +2014,7 @@ async function saveReport() {
     status.style.color = japaneseEvalSkipped ? '#d97706' : '#16a34a';
     setTimeout(() => { status.textContent = ''; }, 3000);
   } catch (err) {
-    status.textContent = '✗ 保存失敗: ' + err.message;
+    status.textContent = '✗ 保存失敗: ' + getSaveErrorMessage(err);
     status.style.color = '#dc2626';
   } finally {
     btn.disabled = false;
