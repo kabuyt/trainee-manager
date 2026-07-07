@@ -2,6 +2,7 @@ let progressState = {
   trainees: [],
   progress: [],
   quizResults: [],
+  finalResults: [],
   rows: [],
   totalTerms: 0,
   totalQuizSets: 36,
@@ -57,6 +58,7 @@ async function loadProgressData() {
   progressState.progress = progressRes.error ? [] : (progressRes.data || []);
   const allQuizResults = quizRes.error ? [] : (quizRes.data || []);
   progressState.quizResults = allQuizResults.filter(item => String(item.set_id || '').startsWith('kinrei-test-2023'));
+  progressState.finalResults = allQuizResults.filter(item => String(item.set_id || '') === 'kinrei-final-2023');
   progressState.totalTerms = window.KINREI_VOCAB?.terms?.length || 297;
 
   buildRows();
@@ -77,6 +79,11 @@ function buildRows() {
     if (!quizByTrainee[item.trainee_id]) quizByTrainee[item.trainee_id] = [];
     quizByTrainee[item.trainee_id].push(item);
   });
+  const finalByTrainee = {};
+  progressState.finalResults.forEach(item => {
+    if (!finalByTrainee[item.trainee_id]) finalByTrainee[item.trainee_id] = [];
+    finalByTrainee[item.trainee_id].push(item);
+  });
   progressState.rows = progressState.trainees.map(t => {
     const prog = progressByTrainee[t.id] || [];
     const learned = prog.filter(p => p.status === 'learned').length;
@@ -87,6 +94,8 @@ function buildRows() {
       ? Math.round(quizzes.reduce((sum, q) => sum + Number(q.score_rate || 0), 0) / quizzes.length)
       : null;
     const completedSets = new Set(quizzes.map(q => q.set_id).filter(Boolean));
+    const finalResults = (finalByTrainee[t.id] || []).sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')));
+    const finalLatest = finalResults[0] || null;
     return {
       id: t.id,
       student_id: t.student_id || '',
@@ -100,6 +109,8 @@ function buildRows() {
       quizAvg,
       quizCount: quizzes.length,
       quizSetCount: completedSets.size,
+      finalRate: finalLatest ? Number(finalLatest.score_rate || 0) : null,
+      finalCount: finalResults.length,
       lastStudy,
     };
   });
@@ -147,6 +158,7 @@ function renderRows() {
       <td>${row.review}</td>
       <td>${row.quizSetCount} / ${progressState.totalQuizSets} <span class="mini-muted">${row.quizCount ? `受験${row.quizCount}回` : ''}</span></td>
       <td>${row.quizAvg === null ? '-' : `${row.quizAvg}%`}</td>
+      <td>${row.finalRate === null ? '-' : `${row.finalRate}%`} <span class="mini-muted">${row.finalCount ? `受験${row.finalCount}回` : ''}</span></td>
       <td>${fmtDate(row.lastStudy)}</td>
     </tr>
   `).join('');
