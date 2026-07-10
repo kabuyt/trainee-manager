@@ -23,6 +23,9 @@
     .meter{width:120px;height:8px;background:#edf1f6;border-radius:999px;overflow:hidden}
     .meter span{display:block;height:100%;background:var(--green)}
     .mini-muted{font-size:12px;color:var(--ink-mute)}
+    .unlock-btn{border:0;border-radius:999px;background:#1a5276;color:#fff;padding:7px 12px;font-weight:700;cursor:pointer}
+    .unlock-btn.unlocked{background:#27ae60}
+    .unlock-btn:hover{filter:brightness(.95)}
   </style>
 </head>
 <body>
@@ -80,6 +83,7 @@
               <th>要復習</th>
               <th>テスト進捗</th>
               <th>テスト平均</th>
+              <th>総合開放</th>
               <th>総合修了</th>
               <th>学習頻度</th>
               <th>最終学習</th>
@@ -96,6 +100,6 @@
   <script src="auth.js?v=5"></script>
   <script src="data/kinrei-vocab.js?v=1"></script>
   <script src="data/kinrei-image-quiz.js?v=1"></script>
-  <script src="terminology-progress.js?v=9"></script>
+  <script src="terminology-progress.js?v=10"></script>
 </body>
 </html>

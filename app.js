@@ -754,7 +754,7 @@ function isKinreiTerminologyTarget(t) {
   return company.includes('キンレイ') || company.includes('kinrei') || group.includes('キンレイ') || group.includes('kinrei');
 }
 
-function buildTerminologySummary(progressRows, quizRows, imageProgressRows, sessionRows) {
+function buildTerminologySummary(progressRows, quizRows, imageProgressRows, sessionRows, finalUnlockRows = []) {
   const totalTerms = window.KINREI_VOCAB?.terms?.length || window.KINREI_VOCAB?.set?.termCount || 297;
   const totalImages = window.KINREI_IMAGE_QUIZ?.items?.length || 60;
   const progress = progressRows || [];
@@ -789,6 +789,7 @@ function buildTerminologySummary(progressRows, quizRows, imageProgressRows, sess
   ).size;
   const finalResults = quizItems.filter(q => String(q.set_id || '') === TERMINOLOGY_FINAL_SET_ID);
   const finalLatest = latestByCreatedAt(finalResults);
+  const finalUnlock = (finalUnlockRows || []).find(row => String(row.test_set_id || '') === TERMINOLOGY_FINAL_SET_ID);
   const lastQuizAt = quizItems.map(q => q.created_at).filter(Boolean).sort().pop() || '';
   const lastAccess = sessions.map(s => s.created_at).filter(Boolean).sort().pop() || '';
   const sessions7 = sessions.filter(s => new Date(s.created_at).getTime() >= cutoffDate(7).getTime()).length;
@@ -809,6 +810,8 @@ function buildTerminologySummary(progressRows, quizRows, imageProgressRows, sess
     quizSetCount: perfectStandardSetCount,
     quizAttemptCount: standardQuiz.length,
     quizAvg,
+    finalUnlocked: Boolean(finalUnlock?.is_unlocked),
+    finalUnlockedAt: finalUnlock?.unlocked_at || '',
     finalRate: finalLatest ? safePercent(finalLatest.score_rate) : null,
     finalAttemptCount: finalResults.length,
     finalLatest,
@@ -840,7 +843,9 @@ function renderTerminologyDetailCard(summary, trainee) {
   const finalText = summary.finalRate === null ? '未受験' : `${summary.finalRate}%`;
   const finalSub = summary.finalAttemptCount
     ? `総合修了テスト ${summary.finalAttemptCount}回受験`
-    : `${TERMINOLOGY_TOTAL_QUIZ_SETS}回完了後に受験できます`;
+    : summary.finalUnlocked
+      ? '管理者が開放済みです'
+      : `${TERMINOLOGY_TOTAL_QUIZ_SETS}回完了後、管理者が立会い時に開放します`;
 
   return `
     <div class="terminology-detail">
@@ -905,13 +910,14 @@ async function loadTraineeDetail() {
   }
 
   try {
-    const [{ data: trainee, error: tErr }, { data: results }, progressRes, imageProgressRes, quizRes, sessionRes] = await Promise.all([
+    const [{ data: trainee, error: tErr }, { data: results }, progressRes, imageProgressRes, quizRes, sessionRes, finalUnlockRes] = await Promise.all([
       supabase.from('trainees').select('*').eq('id', id).single(),
       supabase.from('test_results').select('*').eq('trainee_id', id).order('test_date', { ascending: false }),
       supabase.from('terminology_progress').select('term_id,status,correct_count,wrong_count,last_studied_at').eq('trainee_id', id),
       supabase.from('terminology_image_progress').select('image_id,status,last_studied_at').eq('trainee_id', id),
       supabase.from('terminology_quiz_results').select('set_id,score_rate,correct_count,total_questions,created_at').eq('trainee_id', id).like('set_id', 'kinrei%'),
       supabase.from('terminology_study_sessions').select('created_at').eq('trainee_id', id).gte('created_at', cutoffDate(30).toISOString()),
+      supabase.from('terminology_final_unlocks').select('test_set_id,is_unlocked,unlocked_at').eq('trainee_id', id).eq('test_set_id', TERMINOLOGY_FINAL_SET_ID),
     ]);
 
     if (tErr) throw tErr;
@@ -920,7 +926,8 @@ async function loadTraineeDetail() {
       progressRes.error ? [] : (progressRes.data || []),
       quizRes.error ? [] : (quizRes.data || []),
       imageProgressRes.error ? [] : (imageProgressRes.data || []),
-      sessionRes.error ? [] : (sessionRes.data || [])
+      sessionRes.error ? [] : (sessionRes.data || []),
+      finalUnlockRes.error ? [] : (finalUnlockRes.data || [])
     );
 
     renderTraineeDetail(trainee, results || [], terminologySummary);
@@ -1014,7 +1021,7 @@ function renderTraineeDetail(t, results, terminologySummary) {
       </div>
     ` : ''}
 
-    ${renderTerminologyDetailCard(terminologySummary || buildTerminologySummary([], [], [], []), t)}
+    ${renderTerminologyDetailCard(terminologySummary || buildTerminologySummary([], [], [], [], []), t)}
 
     <div class="section-title" style="margin-top:24px;display:flex;align-items:center;gap:8px">
       📝 備考・メモ

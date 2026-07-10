@@ -4,12 +4,16 @@ let progressState = {
   imageProgress: [],
   quizResults: [],
   finalResults: [],
+  finalUnlocks: [],
   studySessions: [],
   rows: [],
   totalTerms: 0,
   totalImages: 0,
   totalQuizSets: 18,
+  finalUnlocksReady: true,
 };
+
+const FINAL_TEST_SET_ID = 'kinrei-final-2023';
 
 function escProgress(value) {
   return String(value ?? '').replace(/[&<>"']/g, ch => ({
@@ -54,12 +58,13 @@ async function loadProgressData() {
   document.getElementById('loadingMsg').classList.remove('hidden');
   document.getElementById('tableWrap').classList.add('hidden');
 
-  const [traineeRes, progressRes, imageProgressRes, quizRes, sessionRes] = await Promise.all([
+  const [traineeRes, progressRes, imageProgressRes, quizRes, sessionRes, finalUnlockRes] = await Promise.all([
     supabase.from('trainees').select('id,student_id,name_katakana,name_romaji,company,class_group,organizations(name),status').order('student_id', { ascending: true, nullsFirst: false }),
     supabase.from('terminology_progress').select('trainee_id,term_id,status,correct_count,wrong_count,last_studied_at'),
     supabase.from('terminology_image_progress').select('trainee_id,image_id,status,last_studied_at'),
     supabase.from('terminology_quiz_results').select('trainee_id,score_rate,created_at,set_id').like('set_id', 'kinrei%'),
     supabase.from('terminology_study_sessions').select('trainee_id,created_at').gte('created_at', daysAgo(30).toISOString()),
+    supabase.from('terminology_final_unlocks').select('trainee_id,is_unlocked,unlocked_at,test_set_id').eq('test_set_id', FINAL_TEST_SET_ID),
   ]);
 
   if (traineeRes.error) throw traineeRes.error;
@@ -69,9 +74,11 @@ async function loadProgressData() {
   progressState.progress = progressRes.error ? [] : (progressRes.data || []);
   progressState.imageProgress = imageProgressRes.error ? [] : (imageProgressRes.data || []);
   progressState.studySessions = sessionRes.error ? [] : (sessionRes.data || []);
+  progressState.finalUnlocksReady = !finalUnlockRes.error;
+  progressState.finalUnlocks = finalUnlockRes.error ? [] : (finalUnlockRes.data || []);
   const allQuizResults = quizRes.error ? [] : (quizRes.data || []);
   progressState.quizResults = allQuizResults.filter(item => String(item.set_id || '').startsWith('kinrei-test-2023'));
-  progressState.finalResults = allQuizResults.filter(item => String(item.set_id || '') === 'kinrei-final-2023');
+  progressState.finalResults = allQuizResults.filter(item => String(item.set_id || '') === FINAL_TEST_SET_ID);
   progressState.totalTerms = window.KINREI_VOCAB?.terms?.length || 297;
   progressState.totalImages = window.KINREI_IMAGE_QUIZ?.items?.length || 60;
 
@@ -103,6 +110,10 @@ function buildRows() {
     if (!finalByTrainee[item.trainee_id]) finalByTrainee[item.trainee_id] = [];
     finalByTrainee[item.trainee_id].push(item);
   });
+  const finalUnlockByTrainee = {};
+  progressState.finalUnlocks.forEach(item => {
+    finalUnlockByTrainee[item.trainee_id] = item;
+  });
   const sessionsByTrainee = {};
   progressState.studySessions.forEach(item => {
     if (!sessionsByTrainee[item.trainee_id]) sessionsByTrainee[item.trainee_id] = [];
@@ -129,6 +140,7 @@ function buildRows() {
     );
     const finalResults = (finalByTrainee[t.id] || []).sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')));
     const finalLatest = finalResults[0] || null;
+    const finalUnlock = finalUnlockByTrainee[t.id] || null;
     const sessions = sessionsByTrainee[t.id] || [];
     const sessions7 = sessions.filter(s => new Date(s.created_at).getTime() >= cutoff7).length;
     const sessions30 = sessions.length;
@@ -149,6 +161,8 @@ function buildRows() {
       quizAvg,
       quizCount: quizzes.length,
       quizSetCount: completedSets.size,
+      finalUnlocked: Boolean(finalUnlock?.is_unlocked),
+      finalUnlockedAt: finalUnlock?.unlocked_at || '',
       finalRate: finalLatest ? Number(finalLatest.score_rate || 0) : null,
       finalCount: finalResults.length,
       sessions7,
@@ -157,6 +171,23 @@ function buildRows() {
       lastStudy: [lastStudy, lastAccess].filter(Boolean).sort().pop() || '',
     };
   });
+}
+
+function finalUnlockButton(row) {
+  if (!progressState.finalUnlocksReady) {
+    return '<span class="mini-muted">SQL未設定</span>';
+  }
+  if (row.finalCount) {
+    return `<span class="mini-muted">受験済み</span>`;
+  }
+  const canUnlock = row.quizSetCount >= progressState.totalQuizSets;
+  if (!canUnlock) {
+    return '<span class="mini-muted">小テスト未完了</span>';
+  }
+  const label = row.finalUnlocked ? '開放中' : '開放する';
+  const cls = row.finalUnlocked ? 'unlock-btn unlocked' : 'unlock-btn';
+  const next = row.finalUnlocked ? 'false' : 'true';
+  return `<button type="button" class="${cls}" data-trainee-id="${escProgress(row.id)}" data-unlocked="${next}">${label}</button>`;
 }
 
 function getFilteredRows() {
@@ -206,6 +237,7 @@ function renderRows() {
       <td>${row.review + row.imageReview} <span class="mini-muted">ことば${row.review} / 画像${row.imageReview}</span></td>
       <td>${row.quizSetCount} / ${progressState.totalQuizSets} <span class="mini-muted">${row.quizCount ? `100%完了・受験${row.quizCount}回` : ''}</span></td>
       <td>${row.quizAvg === null ? '-' : `${row.quizAvg}%`}</td>
+      <td>${finalUnlockButton(row)}</td>
       <td>${row.finalRate === null ? '-' : `${row.finalRate}%`} <span class="mini-muted">${row.finalCount ? `受験${row.finalCount}回` : ''}</span></td>
       <td>7日 ${row.sessions7}回 <span class="mini-muted">30日 ${row.sessions30}回</span></td>
       <td>${fmtDate(row.lastStudy)}</td>
@@ -213,6 +245,31 @@ function renderRows() {
   `).join('');
   document.getElementById('loadingMsg').classList.add('hidden');
   document.getElementById('tableWrap').classList.remove('hidden');
+  document.querySelectorAll('.unlock-btn').forEach(button => {
+    button.addEventListener('click', () => setFinalUnlock(button.dataset.traineeId, button.dataset.unlocked === 'true'));
+  });
+}
+
+async function setFinalUnlock(traineeId, isUnlocked) {
+  if (!isAdmin()) {
+    alert('総合修了テストの開放は管理者のみ操作できます。');
+    return;
+  }
+  const profile = getCurrentProfile();
+  const now = new Date().toISOString();
+  const { error } = await supabase.from('terminology_final_unlocks').upsert({
+    trainee_id: traineeId,
+    test_set_id: FINAL_TEST_SET_ID,
+    is_unlocked: isUnlocked,
+    unlocked_by: profile?.id || null,
+    unlocked_at: isUnlocked ? now : null,
+    updated_at: now,
+  }, { onConflict: 'trainee_id,test_set_id' });
+  if (error) {
+    alert(`開放状態の更新に失敗しました: ${error.message}`);
+    return;
+  }
+  await loadProgressData();
 }
 
 function setupProgressEvents() {
