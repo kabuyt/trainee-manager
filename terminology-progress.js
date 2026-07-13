@@ -180,14 +180,11 @@ function finalUnlockButton(row) {
   if (row.finalCount) {
     return `<span class="mini-muted">受験済み</span>`;
   }
-  const canUnlock = row.quizSetCount >= progressState.totalQuizSets;
-  if (!canUnlock) {
-    return '<span class="mini-muted">小テスト未完了</span>';
-  }
   const label = row.finalUnlocked ? '開放中' : '開放する';
   const cls = row.finalUnlocked ? 'unlock-btn unlocked' : 'unlock-btn';
   const next = row.finalUnlocked ? 'false' : 'true';
-  return `<button type="button" class="${cls}" data-trainee-id="${escProgress(row.id)}" data-unlocked="${next}">${label}</button>`;
+  const note = row.quizSetCount < progressState.totalQuizSets ? `<span class="mini-muted">小テスト ${row.quizSetCount}/${progressState.totalQuizSets}</span>` : '';
+  return `<button type="button" class="${cls}" data-trainee-id="${escProgress(row.id)}" data-unlocked="${next}">${label}</button>${note}`;
 }
 
 function getFilteredRows() {
