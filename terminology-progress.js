@@ -34,6 +34,14 @@ function daysAgo(days) {
   return d;
 }
 
+function fmtStudyDuration(seconds) {
+  const totalMinutes = Math.max(0, Math.round(Number(seconds || 0) / 60));
+  if (totalMinutes < 60) return `${totalMinutes}分`;
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  return `${hours}時間${minutes}分`;
+}
+
 function isKinreiTrainee(row) {
   const company = String(row?.company || '').toLowerCase();
   const group = String(row?.class_group || '').toLowerCase();
@@ -63,7 +71,7 @@ async function loadProgressData() {
     supabase.from('terminology_progress').select('trainee_id,term_id,status,correct_count,wrong_count,last_studied_at'),
     supabase.from('terminology_image_progress').select('trainee_id,image_id,status,last_studied_at'),
     supabase.from('terminology_quiz_results').select('trainee_id,score_rate,created_at,set_id').like('set_id', 'kinrei%'),
-    supabase.from('terminology_study_sessions').select('trainee_id,created_at').gte('created_at', daysAgo(30).toISOString()),
+    supabase.from('terminology_study_sessions').select('trainee_id,created_at,duration_seconds,last_seen_at'),
     supabase.from('terminology_final_unlocks').select('trainee_id,is_unlocked,unlocked_at,test_set_id').eq('test_set_id', FINAL_TEST_SET_ID),
   ]);
 
@@ -143,8 +151,13 @@ function buildRows() {
     const finalUnlock = finalUnlockByTrainee[t.id] || null;
     const sessions = sessionsByTrainee[t.id] || [];
     const sessions7 = sessions.filter(s => new Date(s.created_at).getTime() >= cutoff7).length;
-    const sessions30 = sessions.length;
-    const lastAccess = sessions.map(s => s.created_at).filter(Boolean).sort().pop() || '';
+    const cutoff30 = daysAgo(30).getTime();
+    const sessions30 = sessions.filter(s => new Date(s.created_at).getTime() >= cutoff30).length;
+    const totalStudySeconds = sessions.reduce((sum, s) => sum + Number(s.duration_seconds || 0), 0);
+    const studySeconds30 = sessions
+      .filter(s => new Date(s.created_at).getTime() >= cutoff30)
+      .reduce((sum, s) => sum + Number(s.duration_seconds || 0), 0);
+    const lastAccess = sessions.map(s => s.last_seen_at || s.created_at).filter(Boolean).sort().pop() || '';
     return {
       id: t.id,
       student_id: t.student_id || '',
@@ -165,6 +178,8 @@ function buildRows() {
       finalUnlockedAt: finalUnlock?.unlocked_at || '',
       finalRate: finalLatest ? Number(finalLatest.score_rate || 0) : null,
       finalCount: finalResults.length,
+      totalStudySeconds,
+      studySeconds30,
       sessions7,
       sessions30,
       lastAccess,
@@ -208,12 +223,14 @@ function renderStats(rows) {
   const quizRows = rows.filter(row => row.quizAvg !== null);
   const quizAvg = quizRows.length ? Math.round(quizRows.reduce((sum, row) => sum + row.quizAvg, 0) / quizRows.length) : 0;
   const active7 = rows.filter(row => row.sessions7 > 0).length;
+  const totalStudySeconds = rows.reduce((sum, row) => sum + row.totalStudySeconds, 0);
   document.getElementById('statStudents').textContent = rows.length;
   document.getElementById('statAvgLearned').textContent = `${learnedAvg}%`;
   document.getElementById('statAvgImage').textContent = `${imageAvg}%`;
   document.getElementById('statReviewTerms').textContent = reviewTotal;
   document.getElementById('statQuizAvg').textContent = `${quizAvg}%`;
   document.getElementById('statActive7').textContent = active7;
+  document.getElementById('statStudyTime').textContent = fmtStudyDuration(totalStudySeconds);
 }
 
 function renderRows() {
@@ -236,6 +253,7 @@ function renderRows() {
       <td>${row.quizAvg === null ? '-' : `${row.quizAvg}%`}</td>
       <td>${finalUnlockButton(row)}</td>
       <td>${row.finalRate === null ? '-' : `${row.finalRate}%`} <span class="mini-muted">${row.finalCount ? `受験${row.finalCount}回` : ''}</span></td>
+      <td>${fmtStudyDuration(row.totalStudySeconds)} <span class="mini-muted">30日 ${fmtStudyDuration(row.studySeconds30)}</span></td>
       <td>7日 ${row.sessions7}回 <span class="mini-muted">30日 ${row.sessions30}回</span></td>
       <td>${fmtDate(row.lastStudy)}</td>
     </tr>

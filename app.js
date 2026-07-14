@@ -748,6 +748,14 @@ function cutoffDate(days) {
   return d;
 }
 
+function formatStudyDuration(seconds) {
+  const totalMinutes = Math.max(0, Math.round(Number(seconds || 0) / 60));
+  if (totalMinutes < 60) return totalMinutes + '分';
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  return hours + '時間' + minutes + '分';
+}
+
 function isKinreiTerminologyTarget(t) {
   const company = String(t?.company || '').toLowerCase();
   const group = String(t?.class_group || '').toLowerCase();
@@ -791,9 +799,10 @@ function buildTerminologySummary(progressRows, quizRows, imageProgressRows, sess
   const finalLatest = latestByCreatedAt(finalResults);
   const finalUnlock = (finalUnlockRows || []).find(row => String(row.test_set_id || '') === TERMINOLOGY_FINAL_SET_ID);
   const lastQuizAt = quizItems.map(q => q.created_at).filter(Boolean).sort().pop() || '';
-  const lastAccess = sessions.map(s => s.created_at).filter(Boolean).sort().pop() || '';
+  const totalStudySeconds = sessions.reduce((sum, s) => sum + Number(s.duration_seconds || 0), 0);
+  const lastAccess = sessions.map(s => s.last_seen_at || s.created_at).filter(Boolean).sort().pop() || '';
   const sessions7 = sessions.filter(s => new Date(s.created_at).getTime() >= cutoffDate(7).getTime()).length;
-  const sessions30 = sessions.length;
+  const sessions30 = sessions.filter(s => new Date(s.created_at).getTime() >= cutoffDate(30).getTime()).length;
   const lastStudy = [lastProgressAt, lastImageAt, lastQuizAt, lastAccess].filter(Boolean).sort().pop() || '';
 
   return {
@@ -815,6 +824,7 @@ function buildTerminologySummary(progressRows, quizRows, imageProgressRows, sess
     finalRate: finalLatest ? safePercent(finalLatest.score_rate) : null,
     finalAttemptCount: finalResults.length,
     finalLatest,
+    totalStudySeconds,
     sessions7,
     sessions30,
     lastAccess,
@@ -892,8 +902,8 @@ function renderTerminologyDetailCard(summary, trainee) {
         </div>
         <div class="term-detail-card">
           <span>学習頻度</span>
-          <strong>${summary.sessions7}回</strong>
-          <small>直近7日。直近30日 ${summary.sessions30}回・最終アクセス ${summary.lastAccess ? formatDate(summary.lastAccess) : '-'}</small>
+          <strong>${formatStudyDuration(summary.totalStudySeconds)}</strong>
+          <small>総学習時間。直近7日 ${summary.sessions7}回・直近30日 ${summary.sessions30}回・最終アクセス ${summary.lastAccess ? formatDate(summary.lastAccess) : '-'}</small>
         </div>
       </div>
 
@@ -916,7 +926,7 @@ async function loadTraineeDetail() {
       supabase.from('terminology_progress').select('term_id,status,correct_count,wrong_count,last_studied_at').eq('trainee_id', id),
       supabase.from('terminology_image_progress').select('image_id,status,last_studied_at').eq('trainee_id', id),
       supabase.from('terminology_quiz_results').select('set_id,score_rate,correct_count,total_questions,created_at').eq('trainee_id', id).like('set_id', 'kinrei%'),
-      supabase.from('terminology_study_sessions').select('created_at').eq('trainee_id', id).gte('created_at', cutoffDate(30).toISOString()),
+      supabase.from('terminology_study_sessions').select('created_at,duration_seconds,last_seen_at').eq('trainee_id', id),
       supabase.from('terminology_final_unlocks').select('test_set_id,is_unlocked,unlocked_at').eq('trainee_id', id).eq('test_set_id', TERMINOLOGY_FINAL_SET_ID),
     ]);
 
