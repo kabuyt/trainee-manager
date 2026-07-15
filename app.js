@@ -1211,7 +1211,7 @@ const MONTH_TEST_MAP_MINNA = [
 
 // まるごとカリキュラム: 全18課を4回テストでカバー（5-8ヶ月目はテストなし）
 const MONTH_TEST_MAP_MARUGOTO = [
-  { month: 1, test: 'marugoto_1', testLabel: 'L1-L5',   scope: 'まるごと5課まで' },
+  { month: 1, test: 'marugoto_1', testLabel: 'L1-L9',   scope: 'まるごと9課まで' },
   { month: 2, test: 'marugoto_2', testLabel: 'L6-L10',  scope: 'まるごと10課まで' },
   { month: 3, test: 'marugoto_3', testLabel: 'L11-L14', scope: 'まるごと14課まで' },
   { month: 4, test: 'marugoto_4', testLabel: 'L15-L18', scope: 'まるごと18課まで' },
@@ -2435,7 +2435,8 @@ function _diagSectionLabel(testName, sid, sectionData) {
   if (fixed) return fixed;
   const baseSid = sid.replace(/_(ox|written)$/, '');
   const q = (sectionData?.questions || []).find(x => x?.id === sid || x?.id === baseSid);
-  const title = _diagStripHtml(q?.title_html || q?.title);
+  const rawTitle = String(q?.title_html || q?.title || '').split(/<div\b/i)[0];
+  const title = _diagStripHtml(rawTitle);
   if (!title) return sid;
   return title.replace(/^問題\s*\d+[．.、]?\s*/, '').replace(/＜.*$/, '').trim() || sid;
 }
@@ -2533,67 +2534,6 @@ function buildStableDiagnosisSummary(strongestSubject, weakestSubject, avgRate, 
   return variants[seed % variants.length];
 }
 
-// まるごとテスト用のセクションラベル（block prefix → 表示名）
-const MARUGOTO_LABELS = {
-  marugoto_1: {
-    v1: 'ひらがな単語の意味', v2: 'カタカナ単語の意味',
-    v3a: '漢字の読み方', v3b: '漢字の意味',
-    v4: 'ベトナム語→日本語訳', v5: '絵と言葉のマッチ',
-    g1: '助詞の使い方', g2: 'です/ます活用',
-    g3: '文の並び替え', g4: '文型・対話の理解',
-    l1: 'あいさつ・場面', l2: '教室の会話',
-    l3: '自己紹介・国・仕事', l4: '家族', l5: '好きなもの・食事',
-  },
-  // marugoto_2/3/4 は今後追加
-};
-
-// まるごとテストのセクション別正答率診断
-// answers_json は {qid: {selected, correct, points}} 形式（クライアント側で採点済み）
-function generateMarugotoSectionDiagnosis(answers, testName) {
-  if (!answers) return null;
-  const labels = MARUGOTO_LABELS[testName];
-  if (!labels) return null;
-
-  // qid prefix（v1, v3a, g1, l2 等）でグループ化
-  const groups = {};
-  for (const qid in answers) {
-    const a = answers[qid];
-    if (!a || typeof a !== 'object') continue;
-    const m = /^([vgl]\d+[a-z]?)/i.exec(qid);
-    if (!m) continue;
-    const prefix = m[1];
-    if (!groups[prefix]) groups[prefix] = { correct: 0, total: 0 };
-    groups[prefix].total++;
-    if (a.correct === true) groups[prefix].correct++;
-  }
-
-  // セクションタイプ別（v→goii, g→bunpo, l→chokkai）にまとめ
-  const bySecType = { goii: [], bunpo: [], chokkai: [] };
-  // 並び順を固定（labels の順番）
-  const orderedKeys = Object.keys(labels);
-  for (const prefix of orderedKeys) {
-    if (!groups[prefix]) continue;
-    const stype = prefix.startsWith('v') ? 'goii'
-                : prefix.startsWith('g') ? 'bunpo'
-                : prefix.startsWith('l') ? 'chokkai'
-                : null;
-    if (!stype) continue;
-    const { correct, total } = groups[prefix];
-    if (total === 0) continue;
-    bySecType[stype].push({
-      sid: prefix,
-      label: labels[prefix] || prefix,
-      correct, total,
-      rate: correct / total,
-    });
-  }
-  // 空のセクションは削除
-  for (const k in bySecType) {
-    if (bySecType[k].length === 0) delete bySecType[k];
-  }
-  return Object.keys(bySecType).length ? bySecType : null;
-}
-
 // セクション別の正答率ベース診断
 function generateSectionDiagnosis(answers, testName) {
   const sections = _reportSections[testName];
@@ -2608,7 +2548,9 @@ function generateSectionDiagnosis(answers, testName) {
       const rule = scoring_rules[sid];
       if (!rule || rule.method === 'manual') continue;
       const method = rule.method;
-      const sectionAk = (answer_key||{})[sid];
+      // Newer tests store one flat answer map for the whole section, while
+      // older fixtures nest answers under each block id. Support both.
+      const sectionAk = (answer_key||{})[sid] || answer_key || {};
       let correct=0, total=0;
       // bucket_sort は特殊
       if (method === 'bucket_sort') {
@@ -2665,13 +2607,10 @@ function renderDiagnosis(diagArea, results) {
     ? JSON.parse(withAnswers.answers_json)
     : withAnswers.answers_json;
 
-  // test_sections に採点ルールがあるテスト + marugoto_N は セクション別正答率ベースの診断（全体まとめ文章）
-  const isMarugoto = /^marugoto_\d+$/.test(withAnswers.test_name);
+  // test_sections の実データを使い、問題追加後も診断を自動追従させる。
   const hasSectionRules = !!_reportSections[withAnswers.test_name];
-  if (hasSectionRules || isMarugoto) {
-    const secDiag = isMarugoto
-      ? generateMarugotoSectionDiagnosis(answers, withAnswers.test_name)
-      : generateSectionDiagnosis(answers, withAnswers.test_name);
+  if (hasSectionRules) {
+    const secDiag = generateSectionDiagnosis(answers, withAnswers.test_name);
     if (secDiag) {
       const stypeJp = { goii:'語彙', bunpo:'文法', chokkai:'聴解' };
       const byType = {goii:{correct:0,total:0,weak:[],strong:[]}, bunpo:{correct:0,total:0,weak:[],strong:[]}, chokkai:{correct:0,total:0,weak:[],strong:[]}};
