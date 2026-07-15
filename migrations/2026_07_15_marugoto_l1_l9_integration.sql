@@ -51,7 +51,11 @@ BEGIN
           v_section.answer_key->v_rule.block_id->>v_field_id,
           v_section.answer_key->>v_field_id
         );
-        v_actual := p_answers->>v_field_id;
+        IF jsonb_typeof(p_answers->v_field_id) = 'object' THEN
+          v_actual := p_answers->v_field_id->>'selected';
+        ELSE
+          v_actual := p_answers->>v_field_id;
+        END IF;
 
         IF v_expected IS NULL THEN
           CONTINUE;
