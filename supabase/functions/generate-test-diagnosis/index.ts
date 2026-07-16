@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { assessBlock } from "./diagnosis-aggregation.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -24,35 +25,6 @@ function stripHtml(value: unknown) {
     .replace(/&nbsp;/g, " ")
     .replace(/\s+/g, " ")
     .trim();
-}
-
-function selectedValue(value: unknown) {
-  if (value && typeof value === "object" && !Array.isArray(value)) {
-    return (value as Record<string, unknown>).selected;
-  }
-  return value;
-}
-
-function normalize(value: unknown) {
-  return String(value ?? "").trim().replace(/✕/g, "×");
-}
-
-function expectedValue(answerKey: Record<string, unknown>, blockId: string, fieldId: string) {
-  const nested = answerKey?.[blockId];
-  if (nested && typeof nested === "object" && !Array.isArray(nested)) {
-    const value = (nested as Record<string, unknown>)[fieldId];
-    if (value !== undefined) return value;
-  }
-  return answerKey?.[fieldId];
-}
-
-function isCorrect(actual: unknown, expected: unknown) {
-  if (actual && typeof actual === "object" && !Array.isArray(actual)) {
-    const stored = (actual as Record<string, unknown>).correct;
-    if (typeof stored === "boolean") return stored;
-  }
-  const values = Array.isArray(expected) ? expected : [expected];
-  return values.some(value => normalize(selectedValue(actual)) === normalize(value));
 }
 
 function blockLabel(questions: Array<Record<string, unknown>>, blockId: string) {
@@ -159,7 +131,9 @@ async function handleRequest(request: Request) {
     .single();
   if (resultError || !result) return json({ error: "Test result not found" }, 404);
   if (result.excluded) return json({ error: "Excluded results cannot be diagnosed" }, 409);
-  if (!/^marugoto_[12]$/.test(result.test_name)) return json({ error: "AI diagnosis is enabled for Marugoto 1 and 2 only" }, 400);
+  if (!/^(marugoto_[12]|test[1-8])$/.test(result.test_name)) {
+    return json({ error: "AI diagnosis is not enabled for this test" }, 400);
+  }
   if (result.ai_diagnosis && !payload.force) {
     return json({
       cached: true,
@@ -177,7 +151,9 @@ async function handleRequest(request: Request) {
   if (sectionError || !sections?.length) return json({ error: "Scoring definition not found" }, 409);
 
   const answers = (result.answers_json || {}) as Record<string, unknown>;
-  const storedSummary = storedCorrectSummary(answers, sections);
+  const storedSummary = /^marugoto_[12]$/.test(result.test_name)
+    ? storedCorrectSummary(answers, sections)
+    : null;
   const sectionSummary = sections.map(section => {
     const saved = storedSummary?.find(summary => summary.sectionType === section.section_type);
     if (saved) {
@@ -194,19 +170,15 @@ async function handleRequest(request: Request) {
     }
     const blocks = Object.entries(section.scoring_rules || {}).map(([blockId, ruleValue]) => {
       const rule = ruleValue as Record<string, unknown>;
-      const fieldIds = Array.isArray(rule.field_ids) ? rule.field_ids as string[] : [];
-      let correct = 0;
-      for (const fieldId of fieldIds) {
-        const expected = expectedValue(section.answer_key || {}, blockId, fieldId);
-        if (expected !== undefined && isCorrect(answers[fieldId], expected)) correct += 1;
-      }
+      const blockAnswerKey = section.answer_key?.[blockId] ?? section.answer_key ?? {};
+      const assessment = assessBlock(rule, blockAnswerKey, answers);
       return {
         label: blockLabel(section.questions || [], blockId),
-        correct,
-        total: fieldIds.length,
-        rate: fieldIds.length ? Math.round((correct / fieldIds.length) * 100) : 0,
+        correct: assessment.correct,
+        total: assessment.total,
+        rate: assessment.total ? Math.round((assessment.correct / assessment.total) * 100) : 0,
       };
-    });
+    }).filter(block => block.total > 0);
     const correct = blocks.reduce((sum, block) => sum + block.correct, 0);
     const total = blocks.reduce((sum, block) => sum + block.total, 0);
     return {
@@ -221,8 +193,20 @@ async function handleRequest(request: Request) {
     };
   });
 
+  const testLabels: Record<string, string> = {
+    marugoto_1: "まるごとL1-L9総合",
+    marugoto_2: "まるごとL10-L18総合",
+    test1: "みんなの日本語 第1-4課",
+    test2: "みんなの日本語 第5-11課",
+    test3: "みんなの日本語 第12-18課",
+    test4: "みんなの日本語 第19-25課",
+    test5: "みんなの日本語 第26-33課",
+    test6: "みんなの日本語 第34-40課",
+    test7: "みんなの日本語 第41-45課",
+    test8: "みんなの日本語 第46-50課",
+  };
   const diagnosisInput = {
-    test: result.test_name === "marugoto_1" ? "まるごとL1-L9総合" : "まるごとL10-L18総合",
+    test: testLabels[result.test_name] || result.test_name,
     scores: {
       vocabulary: result.score_vocab,
       grammar: result.score_grammar,

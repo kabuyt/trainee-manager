@@ -2634,7 +2634,7 @@ function generateSectionDiagnosis(answers, testName) {
 }
 
 function _aiDiagnosisSupported(result) {
-  return !!result && /^marugoto_[12]$/.test(result.test_name || '');
+  return !!result && /^(marugoto_[12]|test[1-8])$/.test(result.test_name || '');
 }
 
 function _setDiagnosisHeading(text) {
