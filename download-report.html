@@ -108,7 +108,7 @@
     </div>
   </div>
 
-  <div class="section-header">診断コメント</div>
+  <div class="section-header" id="diagnosisHeading">傾向診断</div>
   <div class="diagnosis-box" id="diagnosisArea">-</div>
 
   <div class="section-header">成績推移</div>
@@ -170,7 +170,43 @@
 <script src="auth.js?v=5"></script>
 <script>
 // === 読み取り専用報告書ビューア ===
-const TEST_NAMES = ['第1-4課','第5-11課','第12-18課','第19-25課','第26-33課','第34-40課','第41-45課','第46-50課'];
+const MINNA_TESTS = [
+  { test: 'test1', label: '第1-4課', scope: 'みんなの日本語4課まで' },
+  { test: 'test2', label: '第5-11課', scope: 'みんなの日本語11課まで' },
+  { test: 'test3', label: '第12-18課', scope: 'みんなの日本語18課まで' },
+  { test: 'test4', label: '第19-25課', scope: 'みんなの日本語25課まで' },
+  { test: 'test5', label: '第26-33課', scope: 'みんなの日本語33課まで' },
+  { test: 'test6', label: '第34-40課', scope: 'みんなの日本語40課まで' },
+  { test: 'test7', label: '第41-45課', scope: 'みんなの日本語45課まで' },
+  { test: 'test8', label: '第46-50課', scope: 'みんなの日本語50課まで' },
+];
+const MARUGOTO_TESTS = [
+  { test: 'marugoto_1', label: 'L1-L9', scope: 'まるごと9課まで' },
+  { test: 'marugoto_2', label: 'L10-L18', scope: 'まるごと18課まで' },
+];
+
+function resultMatches(result, test) {
+  return !!result && !!test && (result.test_name === test.test || result.test_name === test.label);
+}
+
+function reportTestMap(trainee, results) {
+  const rows = results || [];
+  const hasMarugoto = trainee.curriculum === 'marugoto' ||
+    rows.some(r => MARUGOTO_TESTS.some(t => resultMatches(r, t)));
+  if (!hasMarugoto) return MINNA_TESTS;
+
+  let offset = 0;
+  MINNA_TESTS.forEach((test, index) => {
+    if (rows.some(r => resultMatches(r, test))) offset = Math.max(offset, index + 1);
+  });
+  return [...MINNA_TESTS.slice(0, offset), ...MARUGOTO_TESTS];
+}
+
+function escapeHtml(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
 const EVAL_MAP = {
   '秀': '大変優秀な成績', '優': '優秀な成績', '良': '良好な成績',
   '可': '基礎力の向上が必要', '不可': '基礎からの学習支援が必要'
@@ -245,11 +281,14 @@ function stddev(arr) {
     document.getElementById('photoArea').innerHTML = `<img src="${trainee.photo_url}" style="width:100%;height:100%;object-fit:cover;">`;
   }
 
-  // テスト成績（該当月）
-  const testName = TEST_NAMES[month - 1];
-  const currentResult = results?.find(r => r.test_name === testName);
+  const testMap = reportTestMap(trainee, results);
 
-  document.getElementById('scopeLabel').textContent = testName || '-';
+  // テスト成績（該当月）
+  const currentTest = testMap[month - 1];
+  const testName = currentTest?.test;
+  const currentResult = results?.find(r => resultMatches(r, currentTest));
+
+  document.getElementById('scopeLabel').textContent = currentTest?.scope || '-';
   if (currentResult) {
     const r = currentResult;
     document.getElementById('sVocab').textContent = r.score_vocab ?? '-';
@@ -264,7 +303,8 @@ function stddev(arr) {
     const { data: classTrainees } = await supabase.from('trainees').select('id').eq('class_group', trainee.class_group);
     if (classTrainees && classTrainees.length > 1) {
       const ids = classTrainees.map(ct => ct.id);
-      const { data: classResults } = await supabase.from('test_results').select('*').in('trainee_id', ids).eq('test_name', testName);
+      const acceptedNames = [currentTest.test, currentTest.label];
+      const { data: classResults } = await supabase.from('test_results').select('*').in('trainee_id', ids).in('test_name', acceptedNames);
 
       if (classResults && classResults.length > 0) {
         const fields = ['score_vocab', 'score_grammar', 'score_listening', 'score_conversation'];
@@ -299,18 +339,29 @@ function stddev(arr) {
         document.getElementById('evalJapaneseDesc').textContent = EVAL_MAP[grade] || '-';
       }
     }
+
+    if (r.ai_diagnosis) {
+      document.getElementById('diagnosisHeading').textContent = 'AI傾向診断';
+      document.getElementById('diagnosisArea').innerHTML =
+        `<div style="white-space:pre-line;line-height:1.75">${escapeHtml(r.ai_diagnosis)}</div>` +
+        '<div style="font-size:10px;color:#94a3b8;margin-top:6px">匿名化した答案集計を基に生成。最終確認は担当者が行います。</div>';
+    } else if (/^marugoto_[12]$/.test(r.test_name || '')) {
+      document.getElementById('diagnosisArea').textContent = '管理画面でAI傾向診断を生成すると、ここに表示されます。';
+    }
   }
 
-  // 成績推移テーブル（全8回）
+  // 成績推移テーブル
   const resultMap = {};
-  (results || []).forEach(r => { resultMap[r.test_name] = r; });
-  document.getElementById('trendBody').innerHTML = TEST_NAMES.map(label => {
-    const r = resultMap[label];
+  testMap.forEach(test => {
+    resultMap[test.test] = (results || []).find(r => resultMatches(r, test));
+  });
+  document.getElementById('trendBody').innerHTML = testMap.map(test => {
+    const r = resultMap[test.test];
     if (r) {
       const tot = (r.score_vocab ?? 0) + (r.score_grammar ?? 0) + (r.score_listening ?? 0) + (r.score_conversation ?? 0);
-      return `<tr><td class="row-label">${label}</td><td>${r.score_vocab ?? '-'}</td><td>${r.score_grammar ?? '-'}</td><td>${r.score_listening ?? '-'}</td><td>${r.score_conversation ?? '-'}</td><td class="total-cell">${tot}</td></tr>`;
+      return `<tr><td class="row-label">${test.label}</td><td>${r.score_vocab ?? '-'}</td><td>${r.score_grammar ?? '-'}</td><td>${r.score_listening ?? '-'}</td><td>${r.score_conversation ?? '-'}</td><td class="total-cell">${tot}</td></tr>`;
     }
-    return `<tr class="row-empty"><td class="row-label">${label}</td><td></td><td></td><td></td><td></td><td class="total-cell"></td></tr>`;
+    return `<tr class="row-empty"><td class="row-label">${test.label}</td><td></td><td></td><td></td><td></td><td class="total-cell"></td></tr>`;
   }).join('');
 
   // グラフ
@@ -319,12 +370,12 @@ function stddev(arr) {
     new Chart(ctx, {
       type: 'line',
       data: {
-        labels: TEST_NAMES,
+        labels: testMap.map(t => t.label),
         datasets: [
-          { label: '語彙', data: TEST_NAMES.map(l => resultMap[l]?.score_vocab ?? null), borderColor: '#e67e22', backgroundColor: '#e67e2233', tension: 0.3, spanGaps: true, borderWidth: 2, pointRadius: 4 },
-          { label: '文法', data: TEST_NAMES.map(l => resultMap[l]?.score_grammar ?? null), borderColor: '#2563eb', backgroundColor: '#2563eb33', tension: 0.3, spanGaps: true, borderWidth: 2, pointRadius: 4 },
-          { label: '聴解', data: TEST_NAMES.map(l => resultMap[l]?.score_listening ?? null), borderColor: '#16a34a', backgroundColor: '#16a34a33', tension: 0.3, spanGaps: true, borderWidth: 2, pointRadius: 4 },
-          { label: '会話', data: TEST_NAMES.map(l => resultMap[l]?.score_conversation ?? null), borderColor: '#9333ea', backgroundColor: '#9333ea33', tension: 0.3, spanGaps: true, borderWidth: 2, pointRadius: 4 },
+          { label: '語彙', data: testMap.map(t => resultMap[t.test]?.score_vocab ?? null), borderColor: '#e67e22', backgroundColor: '#e67e2233', tension: 0.3, spanGaps: true, borderWidth: 2, pointRadius: 4 },
+          { label: '文法', data: testMap.map(t => resultMap[t.test]?.score_grammar ?? null), borderColor: '#2563eb', backgroundColor: '#2563eb33', tension: 0.3, spanGaps: true, borderWidth: 2, pointRadius: 4 },
+          { label: '聴解', data: testMap.map(t => resultMap[t.test]?.score_listening ?? null), borderColor: '#16a34a', backgroundColor: '#16a34a33', tension: 0.3, spanGaps: true, borderWidth: 2, pointRadius: 4 },
+          { label: '会話', data: testMap.map(t => resultMap[t.test]?.score_conversation ?? null), borderColor: '#9333ea', backgroundColor: '#9333ea33', tension: 0.3, spanGaps: true, borderWidth: 2, pointRadius: 4 },
         ],
       },
       options: {

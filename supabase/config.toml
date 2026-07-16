@@ -1,0 +1,4 @@
+project_id = "ajmdpkwqyeyzemeoojwd"
+
+[functions.generate-test-diagnosis]
+verify_jwt = true

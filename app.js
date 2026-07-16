@@ -1209,12 +1209,10 @@ const MONTH_TEST_MAP_MINNA = [
   { month: 8, test: 'test8', testLabel: '第46-50課', scope: 'みんなの日本語50課まで' },
 ];
 
-// まるごとカリキュラム: 全18課を4回テストでカバー（5-8ヶ月目はテストなし）
+// まるごとカリキュラム
 const MONTH_TEST_MAP_MARUGOTO = [
   { month: 1, test: 'marugoto_1', testLabel: 'L1-L9',   scope: 'まるごと9課まで' },
-  { month: 2, test: 'marugoto_2', testLabel: 'L6-L10',  scope: 'まるごと10課まで' },
-  { month: 3, test: 'marugoto_3', testLabel: 'L11-L14', scope: 'まるごと14課まで' },
-  { month: 4, test: 'marugoto_4', testLabel: 'L15-L18', scope: 'まるごと18課まで' },
+  { month: 2, test: 'marugoto_2', testLabel: 'L10-L18', scope: 'まるごと18課まで' },
 ];
 
 const oneMonthDelayedTests = Object.fromEntries(
@@ -1283,8 +1281,8 @@ function getMarugotoOffset() {
 
 // 各月のカリキュラム情報を返す
 // - まるごと生 + 月 ≤ offset: minna（既送付の月1レポートを保護）
-// - まるごと生 + offset < 月 ≤ offset+4: marugoto_(月-offset)
-// - まるごと生 + offset+4 < 月: 卒業（テストなし）
+// - まるごと生 + offset < 月 ≤ offset+2: marugoto_(月-offset)
+// - まるごと生 + offset+2 < 月: 卒業（テストなし）
 // - みんな生: 月N の minna
 function getMonthInfo(monthNum) {
   if (isMarugotoTrainee()) {
@@ -1307,7 +1305,7 @@ function currentMonthMap() {
 }
 
 // 成績推移テーブル・グラフ用マップ:
-// - まるごと生: marugoto_1〜4 の4回分のみ（minna月や卒業月は除外）
+// - まるごと生: marugoto_1〜2 の2回分のみ（minna月や卒業月は除外）
 // - みんな生: minna 8回分
 function getTrendMap() {
   if (isMarugotoTrainee()) {
@@ -1461,7 +1459,7 @@ async function loadReport() {
       _reportSections[s.test_id][s.section_type] = { questions: s.questions, answer_key: s.answer_key, scoring_rules: s.scoring_rules };
     });
 
-    // curriculum に応じて月セレクタの選択肢を構築（marugoto は1-4、minna は1-8）
+    // curriculum に応じて月セレクタの選択肢を構築（marugoto は1-2、minna は1-8）
     const monthSelEl = document.getElementById('monthSelect');
     if (monthSelEl) {
       const months = currentMonthMap().map(m => m.month);
@@ -2451,6 +2449,9 @@ function _diagNormVi(s){
 
 // ルール別・単一フィールドの正誤判定
 function _diagIsCorrect(userVal, expected, method) {
+  if (userVal && typeof userVal === 'object' && !Array.isArray(userVal)) {
+    userVal = userVal.selected;
+  }
   if (expected === null || expected === undefined) return null;
   if (userVal === null || userVal === undefined || String(userVal).trim()==='') return false;
   const exps = Array.isArray(expected) ? expected : [expected];
@@ -2534,8 +2535,50 @@ function buildStableDiagnosisSummary(strongestSubject, weakestSubject, avgRate, 
   return variants[seed % variants.length];
 }
 
+function _diagStoredCorrectSections(answers, testName) {
+  if (!/^marugoto_[12]$/.test(testName || '')) return null;
+  const entries = Object.entries(answers || {}).filter(([, value]) =>
+    value && typeof value === 'object' && typeof value.correct === 'boolean'
+  );
+  if (!entries.length) return null;
+
+  const prefixBySection = { goii: 'v', bunpo: 'g', chokkai: 'l' };
+  const result = {};
+  for (const [sectionType, prefix] of Object.entries(prefixBySection)) {
+    const groups = {};
+    entries.forEach(([fieldId, value]) => {
+      const match = new RegExp(`^${prefix}(\\d+)`, 'i').exec(fieldId);
+      if (!match) return;
+      const groupId = `${prefix}${match[1]}`;
+      if (!groups[groupId]) groups[groupId] = [];
+      groups[groupId].push(value);
+    });
+    const sectionData = _reportSections[testName]?.[sectionType];
+    const currentBlockIds = Object.keys(sectionData?.scoring_rules || {});
+    const sectionResults = Object.keys(groups)
+      .sort((a, b) => Number(a.slice(1)) - Number(b.slice(1)))
+      .map((groupId, index) => {
+        const values = groups[groupId];
+        const correct = values.filter(value => value.correct).length;
+        const sid = currentBlockIds[index] || groupId;
+        return {
+          sid,
+          label: _diagSectionLabel(testName, sid, sectionData),
+          correct,
+          total: values.length,
+          rate: values.length ? correct / values.length : 0,
+        };
+      });
+    if (sectionResults.length) result[sectionType] = sectionResults;
+  }
+  return Object.keys(result).length ? result : null;
+}
+
 // セクション別の正答率ベース診断
 function generateSectionDiagnosis(answers, testName) {
+  const storedCorrect = _diagStoredCorrectSections(answers, testName);
+  if (storedCorrect) return storedCorrect;
+
   const sections = _reportSections[testName];
   if (!sections) return null;
   const bySecType = {};
@@ -2590,8 +2633,71 @@ function generateSectionDiagnosis(answers, testName) {
   return bySecType;
 }
 
+function _aiDiagnosisSupported(result) {
+  return !!result && /^marugoto_[12]$/.test(result.test_name || '');
+}
+
+function _setDiagnosisHeading(text) {
+  const heading = document.getElementById('diagnosisHeading');
+  if (heading) heading.textContent = text;
+}
+
+function _appendAiDiagnosisButton(diagArea, result, regenerate = false) {
+  if (!_aiDiagnosisSupported(result) || window._REPORT_READONLY || !isAdmin()) return;
+  const actions = document.createElement('div');
+  actions.className = 'no-print';
+  actions.style.cssText = 'margin-top:10px;padding-top:8px;border-top:1px solid #e2e8f0;display:flex;align-items:center;gap:8px;flex-wrap:wrap';
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.textContent = regenerate ? 'AI傾向診断を再生成' : 'AI傾向診断を生成';
+  button.style.cssText = 'border:1px solid #1a5276;background:#1a5276;color:#fff;border-radius:6px;padding:7px 12px;font-size:12px;font-weight:bold;cursor:pointer';
+  const status = document.createElement('span');
+  status.style.cssText = 'font-size:11px;color:#64748b';
+  button.addEventListener('click', async () => {
+    button.disabled = true;
+    button.style.opacity = '.65';
+    status.textContent = '答案の傾向を分析しています…';
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-test-diagnosis', {
+        body: { test_result_id: result.id, force: regenerate },
+      });
+      if (error) throw error;
+      if (!data?.diagnosis) throw new Error(data?.error || '診断文を取得できませんでした');
+      Object.assign(result, {
+        ai_diagnosis: data.diagnosis,
+        ai_diagnosis_json: data.structured,
+        ai_diagnosis_model: data.model,
+        ai_diagnosis_generated_at: data.generated_at,
+      });
+      renderDiagnosis(diagArea, _reportResults);
+    } catch (error) {
+      console.error('AI diagnosis error:', error);
+      status.textContent = '生成できませんでした。API設定または通信状態を確認してください。';
+      status.style.color = '#c0392b';
+      button.disabled = false;
+      button.style.opacity = '1';
+    }
+  });
+  actions.appendChild(button);
+  actions.appendChild(status);
+  diagArea.appendChild(actions);
+}
+
+function _renderSavedAiDiagnosis(diagArea, result) {
+  _setDiagnosisHeading('AI傾向診断');
+  const generated = result.ai_diagnosis_generated_at
+    ? new Date(result.ai_diagnosis_generated_at).toLocaleString('ja-JP')
+    : '';
+  diagArea.innerHTML = `
+    <div style="white-space:pre-line;line-height:1.75">${escapeHtml(result.ai_diagnosis)}</div>
+    <div style="font-size:10px;color:#94a3b8;margin-top:6px">匿名化した答案集計を基に生成${generated ? `・${escapeHtml(generated)}` : ''}。最終確認は担当者が行います。</div>
+  `;
+  _appendAiDiagnosisButton(diagArea, result, true);
+}
+
 function renderDiagnosis(diagArea, results) {
   if (!diagArea) return;
+  _setDiagnosisHeading('傾向診断');
 
   // 表示中の月に対応する answers_json があるテスト結果を探す
   const currentMap = currentMonthMap().find(m => m.month === _currentMonth);
@@ -2600,6 +2706,11 @@ function renderDiagnosis(diagArea, results) {
   );
   if (!withAnswers) {
     diagArea.innerHTML = '<span style="color:#aaa">回答データがまだありません。テスト受験後に診断が表示されます。</span>';
+    return;
+  }
+
+  if (_aiDiagnosisSupported(withAnswers) && withAnswers.ai_diagnosis) {
+    _renderSavedAiDiagnosis(diagArea, withAnswers);
     return;
   }
 
@@ -2765,6 +2876,7 @@ function renderDiagnosis(diagArea, results) {
       html += `<p style="font-size:10px;color:#94a3b8;margin:0">（${withAnswers.test_name} / ${withAnswers.test_date} の解答を基に分析・全体正答率 ${Math.round(avgRate*100)}%）</p>`;
       html += '</div>';
       diagArea.innerHTML = html;
+      _appendAiDiagnosisButton(diagArea, withAnswers);
       return;
     }
   }
@@ -2772,6 +2884,7 @@ function renderDiagnosis(diagArea, results) {
   const diagnosis = generateDiagnosis(answers, withAnswers.test_name);
   if (!diagnosis || diagnosis.length === 0) {
     diagArea.innerHTML = '<div style="color:#27ae60;font-weight:bold">特に問題のある文法項目はありませんでした。</div>';
+    _appendAiDiagnosisButton(diagArea, withAnswers);
     return;
   }
 
@@ -2814,6 +2927,7 @@ function renderDiagnosis(diagArea, results) {
   }
 
   diagArea.innerHTML = html;
+  _appendAiDiagnosisButton(diagArea, withAnswers);
 }
 
 // ===== ユーティリティ =====
