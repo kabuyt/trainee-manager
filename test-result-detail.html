@@ -255,18 +255,7 @@ function renderQuestionFieldRows(sectionType, fieldIds, ak, rule, method, isBloc
   const allowBinaryOverride = isBinaryManualOverrideQuestion(sectionType, parentQuestion || questionBlock);
   fieldIds.forEach((fid, idx) => {
     const userVal = userAnswers[fid];
-    // 配列ak対応（test1 旧形式）
-    let expected;
-    if (typeof ak === 'object' && !Array.isArray(ak) && ak !== null) {
-      expected = ak[fid];
-    } else if (Array.isArray(ak)) {
-      // index ベース（g1,g2等）
-      const m = fid.match(/(\d+)$/);
-      if (m) {
-        const i = parseInt(m[1], 10) - 1;
-        if (i >= 0 && i < ak.length) expected = ak[i];
-      }
-    }
+    const expected = resolveExpectedAnswer(ak, fid, idx);
 
     const isAnswered = userVal !== undefined && userVal !== '' && userVal !== null;
     const savedManual = manualScores && manualScores[fid];
@@ -302,6 +291,47 @@ function renderQuestionFieldRows(sectionType, fieldIds, ak, rule, method, isBloc
     </div>`;
   });
   return html;
+}
+
+function resolveExpectedAnswer(ak, fieldId, fieldIndex) {
+  let parsed = ak;
+  if (typeof parsed === 'string') {
+    try { parsed = JSON.parse(parsed); } catch (e) {}
+  }
+  if (parsed == null) return undefined;
+  if (typeof parsed !== 'object') return parsed;
+  if (!Array.isArray(parsed) && Object.prototype.hasOwnProperty.call(parsed, fieldId)) {
+    return parsed[fieldId];
+  }
+  const nested = findExpectedByFieldId(parsed, fieldId);
+  if (nested !== undefined) return nested;
+  if (Array.isArray(parsed)) {
+    const m = String(fieldId || '').match(/(\d+)$/);
+    const i = m ? parseInt(m[1], 10) - 1 : fieldIndex;
+    if (Number.isInteger(i) && i >= 0 && i < parsed.length) return parsed[i];
+  }
+  return undefined;
+}
+
+function findExpectedByFieldId(value, fieldId) {
+  if (!value || typeof value !== 'object') return undefined;
+  if (!Array.isArray(value) && Object.prototype.hasOwnProperty.call(value, fieldId)) {
+    return value[fieldId];
+  }
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const found = findExpectedByFieldId(item, fieldId);
+      if (found !== undefined) return found;
+    }
+    return undefined;
+  }
+  for (const key in value) {
+    const child = value[key];
+    if (!child || typeof child !== 'object') continue;
+    const found = findExpectedByFieldId(child, fieldId);
+    if (found !== undefined) return found;
+  }
+  return undefined;
 }
 
 // grading.js と同じロジックで個別fieldをマッチ判定
