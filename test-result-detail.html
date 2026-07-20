@@ -233,7 +233,18 @@ function renderQuestions(sectionType, questions, answerKey, scoringRules, userAn
       return;
     }
 
-    if (Array.isArray(q.sub_sections) && q.sub_sections.length) {
+    if (Array.isArray(q.parts) && q.parts.length) {
+      q.parts.forEach((part, index) => {
+        const partFieldIds = collectFieldIds(part);
+        const matchedBlockId = findScoringBlockIdForFields(scoringRules, partFieldIds, q.id, index);
+        const partRule = matchedBlockId ? (scoringRules[matchedBlockId] || {}) : {};
+        const partAk = matchedBlockId ? answerKey[matchedBlockId] : undefined;
+        const partMethod = partRule.method;
+        const partIsBlockLevel = blockLevelMethods.includes(partMethod);
+        html += `<div style="font-size:12px;font-weight:bold;color:#555;margin:8px 0 4px">${stripRuby(part.title || matchedBlockId || `${q.id}-${index + 1}`)}</div>`;
+        html += renderQuestionFieldRows(sectionType, partFieldIds, partAk, partRule, partMethod, partIsBlockLevel, part, userAnswers, manualScores, q);
+      });
+    } else if (Array.isArray(q.sub_sections) && q.sub_sections.length) {
       q.sub_sections.forEach(sub => {
         const subRule = scoringRules[sub.sub_id] || {};
         const subAk = answerKey[sub.sub_id];
@@ -248,6 +259,28 @@ function renderQuestions(sectionType, questions, answerKey, scoringRules, userAn
     html += `</div>`;
   });
   return html;
+}
+
+function findScoringBlockIdForFields(scoringRules, fieldIds, preferredPrefix, indexHint) {
+  const normalizedFields = [...new Set((fieldIds || []).filter(Boolean))].sort();
+  if (!normalizedFields.length) return null;
+  const keys = Object.keys(scoringRules || {});
+  const preferred = preferredPrefix
+    ? keys.filter(key => key === preferredPrefix || key.startsWith(preferredPrefix))
+    : keys;
+  const ordered = preferred.concat(keys.filter(key => !preferred.includes(key)));
+  for (const key of ordered) {
+    const ruleFields = [...new Set(((scoringRules[key] || {}).field_ids || []).filter(Boolean))].sort();
+    if (!ruleFields.length) continue;
+    if (ruleFields.length === normalizedFields.length && ruleFields.every((fid, idx) => fid === normalizedFields[idx])) {
+      return key;
+    }
+  }
+  if (preferredPrefix && Number.isInteger(indexHint)) {
+    const fallback = `${preferredPrefix}p${indexHint + 1}`;
+    if (scoringRules && scoringRules[fallback]) return fallback;
+  }
+  return null;
 }
 
 function renderQuestionFieldRows(sectionType, fieldIds, ak, rule, method, isBlockLevel, questionBlock, userAnswers, manualScores, parentQuestion) {
