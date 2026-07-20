@@ -55,6 +55,11 @@
   .manual-row .answer{background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 8px;min-height:32px;white-space:pre-wrap}
   .manual-blank{display:inline-block;background:#fff;border:1px solid #7fb3d5;border-radius:3px;padding:0 8px;color:#1a5276;font-weight:bold}
   .manual-row input{width:70px;padding:5px;border:1px solid #aaa;border-radius:4px;text-align:right}
+  .manual-binary{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+  .manual-binary button{padding:6px 10px;border:1px solid #bbb;border-radius:999px;background:#fff;color:#555;font-size:12px;cursor:pointer}
+  .manual-binary button.active-ok{background:#27ae60;border-color:#27ae60;color:#fff}
+  .manual-binary button.active-ng{background:#e74c3c;border-color:#e74c3c;color:#fff}
+  .manual-binary button.active-auto{background:#95a5a6;border-color:#95a5a6;color:#fff}
   .manual-save{display:flex;align-items:center;gap:10px;justify-content:flex-end;margin-top:12px}
   .manual-note{font-size:12px;color:#666;line-height:1.6}
   @media(max-width:640px){.manual-row{grid-template-columns:1fr}.manual-save{justify-content:flex-start;flex-wrap:wrap}}
@@ -80,6 +85,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
+<script src="test-result-detail-overrides.js?v=20260720-g2-binary"></script>
 <script>
 const params = new URLSearchParams(location.search);
 const RESULT_ID = params.get('id');
@@ -128,6 +134,10 @@ const RESULT_ID = params.get('id');
 function renderDetail(result, sections, testDef) {
   const t = result.trainees || {};
   const answers = result.answers_json || {};
+  const manualScores = manualScoresFromResult(result);
+  window._detailSections = sections || [];
+  window._detailTestDef = testDef || {};
+  window._detailAnswers = answers || {};
   const total = (result.score_vocab||0) + (result.score_grammar||0) + (result.score_listening||0);
   const max = (testDef.sections || ['goii','bunpo','chokkai']).length * 100;
 
@@ -180,7 +190,7 @@ function renderDetail(result, sections, testDef) {
   }
   sections.forEach(sec => {
     html += `<div class="card"><h2>${secNames[sec.section_type] || sec.section_type}</h2>`;
-    html += renderQuestions(sec.questions || [], sec.answer_key || {}, sec.scoring_rules || {}, answers);
+    html += renderQuestions(sec.section_type, sec.questions || [], sec.answer_key || {}, sec.scoring_rules || {}, answers, manualScores);
     html += `</div>`;
   });
 
@@ -193,9 +203,18 @@ function renderDetail(result, sections, testDef) {
 
   document.getElementById('content').innerHTML = html;
   updateManualTotals();
+  if (window.DetailOverrides && typeof window.DetailOverrides.init === 'function') {
+    window.DetailOverrides.init({
+      result,
+      sections: sections || [],
+      answers: answers || {},
+      testDef: testDef || {},
+      helpers: { stripRuby, escapeHtml, collectFieldIds, buildManualQuestionContext, manualScoresFromResult, manualTotals }
+    });
+  }
 }
 
-function renderQuestions(questions, answerKey, scoringRules, userAnswers) {
+function renderQuestions(sectionType, questions, answerKey, scoringRules, userAnswers, manualScores) {
   let html = '';
   questions.forEach(q => {
     html += `<div style="margin-top:14px"><div class="section-title">${stripRuby(q.title_html || q.id)}</div>`;
@@ -221,18 +240,19 @@ function renderQuestions(questions, answerKey, scoringRules, userAnswers) {
         const subMethod = subRule.method;
         const subIsBlockLevel = blockLevelMethods.includes(subMethod);
         html += `<div style="font-size:12px;font-weight:bold;color:#555;margin:8px 0 4px">${stripRuby(sub.sub_title || sub.sub_id)}</div>`;
-        html += renderQuestionFieldRows(collectFieldIds(sub), subAk, subRule, subMethod, subIsBlockLevel, sub, userAnswers);
+        html += renderQuestionFieldRows(sectionType, collectFieldIds(sub), subAk, subRule, subMethod, subIsBlockLevel, sub, userAnswers, manualScores, q);
       });
     } else {
-      html += renderQuestionFieldRows(collectFieldIds(q), ak, rule, method, isBlockLevel, q, userAnswers);
+      html += renderQuestionFieldRows(sectionType, collectFieldIds(q), ak, rule, method, isBlockLevel, q, userAnswers, manualScores, q);
     }
     html += `</div>`;
   });
   return html;
 }
 
-function renderQuestionFieldRows(fieldIds, ak, rule, method, isBlockLevel, questionBlock, userAnswers) {
+function renderQuestionFieldRows(sectionType, fieldIds, ak, rule, method, isBlockLevel, questionBlock, userAnswers, manualScores, parentQuestion) {
   let html = '';
+  const allowBinaryOverride = isBinaryManualOverrideQuestion(sectionType, parentQuestion || questionBlock);
   fieldIds.forEach((fid, idx) => {
     const userVal = userAnswers[fid];
     // 配列ak対応（test1 旧形式）
@@ -249,9 +269,16 @@ function renderQuestionFieldRows(fieldIds, ak, rule, method, isBlockLevel, quest
     }
 
     const isAnswered = userVal !== undefined && userVal !== '' && userVal !== null;
+    const savedManual = manualScores && manualScores[fid];
+    const hasBinaryOverride = allowBinaryOverride && savedManual && savedManual.input_mode === 'binary';
     let status = 'unanswered';
     let badge = '';
-    if (method === 'manual' || (questionBlock.grading === 'manual' && (!method || method === 'manual'))) {
+    if (hasBinaryOverride) {
+      const awarded = Number(savedManual.points || 0);
+      const maxPoints = Number(savedManual.max || rule.points_each || questionBlock.points_each || 0);
+      status = awarded >= maxPoints ? 'correct' : 'wrong';
+      badge = '<span class="badge-mn">手動採点</span>';
+    } else if (method === 'manual' || (questionBlock.grading === 'manual' && (!method || method === 'manual'))) {
       status = 'manual';
       badge = '<span class="badge-mn">先生採点</span>';
     } else if (isBlockLevel && expected === undefined) {
@@ -380,6 +407,12 @@ function manualTotals(scores) {
     totals[row.section_type] = (totals[row.section_type] || 0) + (Number(row.points) || 0);
   });
   return totals;
+}
+
+function isBinaryManualOverrideQuestion(sectionType, question) {
+  if (sectionType !== 'goii' || !question) return false;
+  const title = stripRuby(question.title_html || question.sub_title || '');
+  return title.includes('漢字をひらがなで書いてください');
 }
 
 function renderManualScoringPanel(result, items) {
