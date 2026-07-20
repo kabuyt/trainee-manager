@@ -238,7 +238,9 @@ function renderQuestions(sectionType, questions, answerKey, scoringRules, userAn
         const partFieldIds = collectFieldIds(part);
         const matchedBlockId = findScoringBlockIdForFields(scoringRules, partFieldIds, q.id, index);
         const partRule = matchedBlockId ? (scoringRules[matchedBlockId] || {}) : {};
-        const partAk = matchedBlockId ? answerKey[matchedBlockId] : undefined;
+        const partAk = matchedBlockId
+          ? normalizeExpectedByFieldIds(answerKey[matchedBlockId], partFieldIds)
+          : undefined;
         const partMethod = partRule.method;
         const partIsBlockLevel = blockLevelMethods.includes(partMethod);
         html += `<div style="font-size:12px;font-weight:bold;color:#555;margin:8px 0 4px">${stripRuby(part.title || matchedBlockId || `${q.id}-${index + 1}`)}</div>`;
@@ -281,6 +283,15 @@ function findScoringBlockIdForFields(scoringRules, fieldIds, preferredPrefix, in
     if (scoringRules && scoringRules[fallback]) return fallback;
   }
   return null;
+}
+
+function normalizeExpectedByFieldIds(expectedSource, fieldIds) {
+  if (!Array.isArray(expectedSource) || !Array.isArray(fieldIds)) return expectedSource;
+  const mapped = {};
+  fieldIds.forEach((fid, idx) => {
+    if (idx < expectedSource.length) mapped[fid] = expectedSource[idx];
+  });
+  return mapped;
 }
 
 function renderQuestionFieldRows(sectionType, fieldIds, ak, rule, method, isBlockLevel, questionBlock, userAnswers, manualScores, parentQuestion) {
