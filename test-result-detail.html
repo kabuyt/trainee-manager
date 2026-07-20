@@ -339,8 +339,11 @@ function resolveExpectedAnswer(ak, fieldId, fieldIndex) {
   const nested = findExpectedByFieldId(parsed, fieldId);
   if (nested !== undefined) return nested;
   if (Array.isArray(parsed)) {
+    if (Number.isInteger(fieldIndex) && fieldIndex >= 0 && fieldIndex < parsed.length) {
+      return parsed[fieldIndex];
+    }
     const m = String(fieldId || '').match(/(\d+)$/);
-    const i = m ? parseInt(m[1], 10) - 1 : fieldIndex;
+    const i = m ? parseInt(m[1], 10) - 1 : -1;
     if (Number.isInteger(i) && i >= 0 && i < parsed.length) return parsed[i];
   }
   return undefined;
