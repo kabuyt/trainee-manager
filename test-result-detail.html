@@ -85,7 +85,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
-<script src="test-result-detail-overrides.js?v=20260720-g2-binary"></script>
+<script src="test-result-detail-overrides.js?v=20260720-g2-bunpo-binary"></script>
 <script>
 const params = new URLSearchParams(location.search);
 const RESULT_ID = params.get('id');
@@ -410,9 +410,11 @@ function manualTotals(scores) {
 }
 
 function isBinaryManualOverrideQuestion(sectionType, question) {
-  if (sectionType !== 'goii' || !question) return false;
+  if (!question) return false;
   const title = stripRuby(question.title_html || question.sub_title || '');
-  return title.includes('漢字をひらがなで書いてください');
+  if (sectionType === 'goii') return title.includes('漢字をひらがなで書いてください');
+  if (sectionType === 'bunpo') return title.includes('正しい形を書いてください');
+  return false;
 }
 
 function renderManualScoringPanel(result, items) {
@@ -603,23 +605,28 @@ async function saveManualScores() {
   if (!r) return;
   const status = document.getElementById('manual-save-status');
   try {
-    const { scores, totals } = readManualScoreRows();
-    const previous = manualTotals(manualScoresFromResult(r));
+    const { scores } = readManualScoreRows();
+    const previousScores = manualScoresFromResult(r);
+    const merged = { ...previousScores, ...scores };
+    const previous = manualTotals(previousScores);
+    const mergedTotals = manualTotals(merged);
+    const savedVocab = Number(r.manual_score_vocab ?? previous.goii ?? 0);
     const savedGrammar = Number(r.manual_score_grammar ?? previous.bunpo ?? 0);
     const savedListening = Number(r.manual_score_listening ?? previous.chokkai ?? 0);
+    const baseVocab = Math.max(0, Number(r.score_vocab || 0) - savedVocab);
     const baseGrammar = Math.max(0, Number(r.score_grammar || 0) - savedGrammar);
     const baseListening = Math.max(0, Number(r.score_listening || 0) - savedListening);
-    const nextGrammar = baseGrammar + (totals.bunpo || 0);
-    const nextListening = baseListening + (totals.chokkai || 0);
 
     if (status) status.textContent = '保存中...';
     const { error } = await supabase.from('test_results')
       .update({
-        score_grammar: nextGrammar,
-        score_listening: nextListening,
-        manual_score_grammar: totals.bunpo || 0,
-        manual_score_listening: totals.chokkai || 0,
-        manual_scores_json: scores,
+        score_vocab: baseVocab + (mergedTotals.goii || 0),
+        score_grammar: baseGrammar + (mergedTotals.bunpo || 0),
+        score_listening: baseListening + (mergedTotals.chokkai || 0),
+        manual_score_vocab: mergedTotals.goii || 0,
+        manual_score_grammar: mergedTotals.bunpo || 0,
+        manual_score_listening: mergedTotals.chokkai || 0,
+        manual_scores_json: merged,
         manually_scored_at: new Date().toISOString(),
       })
       .eq('id', RESULT_ID);

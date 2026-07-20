@@ -3,13 +3,29 @@
 
   const state = {
     result: null,
-    items: [],
+    panels: [],
     helpers: null,
     savedScores: {},
     savedTotals: { goii: 0, bunpo: 0, chokkai: 0 },
   };
 
   const STYLE_ID = 'detail-overrides-style';
+  const TARGETS = [
+    {
+      key: 'goii-q2',
+      sectionType: 'goii',
+      titleNeedle: '漢字をひらがなで書いてください',
+      panelTitle: '語彙 問題2 手動判定',
+      sectionLabel: '語彙',
+    },
+    {
+      key: 'bunpo-q2',
+      sectionType: 'bunpo',
+      titleNeedle: '正しい形を書いてください',
+      panelTitle: '文法 問題2 手動判定',
+      sectionLabel: '文法',
+    }
+  ];
 
   function ensureStyles() {
     if (document.getElementById(STYLE_ID)) return;
@@ -35,106 +51,54 @@
     document.head.appendChild(style);
   }
 
-  function isTargetQuestion(sectionType, question, helpers) {
-    if (sectionType !== 'goii' || !question) return false;
+  function findTarget(sectionType, question, helpers) {
+    if (!question) return null;
     const title = helpers.stripRuby(question.title_html || question.sub_title || '');
-    return title.includes('漢字をひらがなで書いてください');
+    return TARGETS.find((target) => target.sectionType === sectionType && title.includes(target.titleNeedle)) || null;
   }
 
-  function buildItems(sections, answers, helpers) {
-    const items = [];
+  function buildPanels(sections, answers, helpers) {
+    const grouped = new Map(TARGETS.map((target) => [target.key, { ...target, items: [] }]));
     (sections || []).forEach((sec) => {
       const rules = sec.scoring_rules || {};
       (sec.questions || []).forEach((q) => {
-        if (!isTargetQuestion(sec.section_type, q, helpers)) return;
+        const target = findTarget(sec.section_type, q, helpers);
+        if (!target) return;
         const rule = rules[q.id] || {};
         const pointsEach = Number(rule.points_each || rule.points_per_field || q.points_each || 0);
         helpers.collectFieldIds(q).forEach((fid) => {
           const context = helpers.buildManualQuestionContext(q, q, fid);
-          items.push({
+          grouped.get(target.key).items.push({
             fieldId: fid,
             blockId: q.id,
             max: pointsEach,
             title: helpers.stripRuby(q.title_html || q.id),
             questionHtml: context.questionHtml,
             answer: answers[fid] ?? '',
+            sectionType: target.sectionType,
+            sectionLabel: target.sectionLabel,
           });
         });
       });
     });
-    return items;
+    return Array.from(grouped.values()).filter((panel) => panel.items.length);
   }
 
   function currentValue(fieldId, max) {
     const saved = state.savedScores[fieldId];
     if (!saved || saved.input_mode !== 'binary') return '';
     const points = Number(saved.points || 0);
-    if (points >= max) return String(max);
-    return '0';
+    return points >= max ? String(max) : '0';
   }
 
-  function renderPanel() {
-    const content = document.getElementById('content');
-    if (!content || !state.items.length) return;
-
-    const previousVocab = Number(state.result.manual_score_vocab ?? state.savedTotals.goii ?? 0);
-    const vocabBase = Math.max(0, Number(state.result.score_vocab || 0) - previousVocab);
-    const vocabMax = state.items.reduce((sum, item) => sum + item.max, 0);
-    const currentManual = state.items.reduce((sum, item) => {
-      const value = currentValue(item.fieldId, item.max);
-      return sum + (value === '' ? 0 : Number(value));
+  function updatePanelTotal(card) {
+    const total = Array.from(card.querySelectorAll('.detail-override-row')).reduce((sum, row) => {
+      return sum + Number(row.dataset.value || 0);
     }, 0);
-
-    const card = document.createElement('div');
-    card.className = 'card detail-override-panel';
-    card.id = 'detail-override-panel';
-    card.innerHTML = `
-      <h2>語彙 問題2 手動判定</h2>
-      <div class="detail-override-status">
-        この判定は既存の回答データを変えずに保存します。保存されるのは語彙の手動採点だけです。
-      </div>
-      <div class="detail-override-summary">
-        <span class="pill">語彙 自動点: ${vocabBase}</span>
-        <span class="pill">語彙 手動: <b id="detail-override-total">${currentManual}</b> / ${vocabMax}</span>
-      </div>
-      <div id="detail-override-list">
-        ${state.items.map((item) => {
-          const answer = item.answer === '' || item.answer === null || item.answer === undefined ? '(未回答)' : item.answer;
-          const value = currentValue(item.fieldId, item.max);
-          return `
-            <div class="detail-override-row" data-field="${state.helpers.escapeHtml(item.fieldId)}" data-max="${item.max}" data-value="${value}">
-              <div>
-                <div class="fid">${state.helpers.escapeHtml(item.fieldId)}</div>
-                <div style="font-size:11px;color:#777">語彙 / ${state.helpers.escapeHtml(item.blockId)}</div>
-              </div>
-              <div>
-                <div style="font-size:12px;color:#555;margin-bottom:4px">${state.helpers.escapeHtml(item.title)}</div>
-                <div class="question">${item.questionHtml || state.helpers.escapeHtml(item.fieldId)}</div>
-                <div class="answer">${state.helpers.escapeHtml(String(answer))}</div>
-              </div>
-              <div>
-                <div style="font-size:12px;color:#555;margin-bottom:6px">判定 / ${item.max}点</div>
-                <div class="detail-override-buttons">
-                  <button type="button" class="${value === String(item.max) ? 'active-ok' : ''}" data-choice="ok">正解</button>
-                  <button type="button" class="${value === '0' ? 'active-ng' : ''}" data-choice="ng">不正解</button>
-                  <button type="button" class="${value === '' ? 'active-auto' : ''}" data-choice="auto">自動</button>
-                </div>
-              </div>
-            </div>
-          `;
-        }).join('')}
-      </div>
-      <div class="detail-override-actions">
-        <span id="detail-override-status" class="detail-override-status"></span>
-        <button class="btn" type="button" id="detail-override-save">語彙判定を保存</button>
-      </div>
-    `;
-
-    const anchor = document.querySelector('.manual-panel') || content.firstElementChild;
-    if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(card, anchor.nextSibling);
-    else content.appendChild(card);
-
-    wirePanel(card);
+    const totalEl = card.querySelector('.detail-override-total');
+    if (totalEl) totalEl.textContent = total;
+    const status = card.querySelector('.detail-override-status-msg');
+    if (status) status.textContent = '';
   }
 
   function wirePanel(card) {
@@ -150,57 +114,132 @@
           if (choice === 'ok') btn.classList.add('active-ok');
           if (choice === 'ng') btn.classList.add('active-ng');
           if (choice === 'auto') btn.classList.add('active-auto');
-          updateTotal(card);
+          updatePanelTotal(card);
         });
       });
     });
 
-    card.querySelector('#detail-override-save').addEventListener('click', saveOverrides);
+    const saveBtn = card.querySelector('.detail-override-save');
+    if (saveBtn) saveBtn.addEventListener('click', () => saveOverrides(card));
   }
 
-  function updateTotal(card) {
-    const total = Array.from(card.querySelectorAll('.detail-override-row')).reduce((sum, row) => {
-      return sum + Number(row.dataset.value || 0);
-    }, 0);
-    const totalEl = card.querySelector('#detail-override-total');
-    if (totalEl) totalEl.textContent = total;
-    const status = card.querySelector('#detail-override-status');
-    if (status) status.textContent = '';
+  function renderPanels() {
+    const content = document.getElementById('content');
+    if (!content || !state.panels.length) return;
+    const anchor = document.querySelector('.manual-panel') || content.firstElementChild;
+
+    state.panels.forEach((panel) => {
+      const previousManual = Number(state.savedTotals[panel.sectionType] || 0);
+      const scoreField = panel.sectionType === 'goii' ? 'score_vocab' : 'score_grammar';
+      const baseScore = Math.max(0, Number(state.result[scoreField] || 0) - previousManual);
+      const maxScore = panel.items.reduce((sum, item) => sum + item.max, 0);
+      const currentManual = panel.items.reduce((sum, item) => {
+        const value = currentValue(item.fieldId, item.max);
+        return sum + (value === '' ? 0 : Number(value));
+      }, 0);
+
+      const card = document.createElement('div');
+      card.className = 'card detail-override-panel';
+      card.id = `detail-override-panel-${panel.key}`;
+      card.dataset.targetKey = panel.key;
+      card.innerHTML = `
+        <h2>${panel.panelTitle}</h2>
+        <div class="detail-override-status">
+          この採点は既存の回答データを変えずに保存します。保存されるのは${panel.sectionLabel}の手動採点だけです。
+        </div>
+        <div class="detail-override-summary">
+          <span class="pill">${panel.sectionLabel} 自動点: ${baseScore}</span>
+          <span class="pill">${panel.sectionLabel} 手動: <b class="detail-override-total">${currentManual}</b> / ${maxScore}</span>
+        </div>
+        <div class="detail-override-list">
+          ${panel.items.map((item) => {
+            const answer = item.answer === '' || item.answer === null || item.answer === undefined ? '(未回答)' : item.answer;
+            const value = currentValue(item.fieldId, item.max);
+            return `
+              <div class="detail-override-row" data-field="${state.helpers.escapeHtml(item.fieldId)}" data-max="${item.max}" data-value="${value}">
+                <div>
+                  <div class="fid">${state.helpers.escapeHtml(item.fieldId)}</div>
+                  <div style="font-size:11px;color:#777">${state.helpers.escapeHtml(item.sectionLabel)} / ${state.helpers.escapeHtml(item.blockId)}</div>
+                </div>
+                <div>
+                  <div style="font-size:12px;color:#555;margin-bottom:4px">${state.helpers.escapeHtml(item.title)}</div>
+                  <div class="question">${item.questionHtml || state.helpers.escapeHtml(item.fieldId)}</div>
+                  <div class="answer">${state.helpers.escapeHtml(String(answer))}</div>
+                </div>
+                <div>
+                  <div style="font-size:12px;color:#555;margin-bottom:6px">配点 / ${item.max}点</div>
+                  <div class="detail-override-buttons">
+                    <button type="button" class="${value === String(item.max) ? 'active-ok' : ''}" data-choice="ok">正解</button>
+                    <button type="button" class="${value === '0' ? 'active-ng' : ''}" data-choice="ng">不正解</button>
+                    <button type="button" class="${value === '' ? 'active-auto' : ''}" data-choice="auto">自動</button>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+        <div class="detail-override-actions">
+          <span class="detail-override-status-msg detail-override-status"></span>
+          <button class="btn detail-override-save" type="button">手動採点を保存</button>
+        </div>
+      `;
+
+      if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(card, anchor.nextSibling);
+      else content.appendChild(card);
+
+      wirePanel(card);
+    });
   }
 
-  async function saveOverrides() {
-    const card = document.getElementById('detail-override-panel');
+  function mergeScoresForPanel(card) {
+    const targetKey = card.dataset.targetKey;
+    const panel = state.panels.find((entry) => entry.key === targetKey);
+    const merged = { ...state.savedScores };
+    if (!panel) return merged;
+
+    card.querySelectorAll('.detail-override-row').forEach((row) => {
+      const fieldId = row.dataset.field;
+      const max = Number(row.dataset.max || 0);
+      const raw = row.dataset.value || '';
+      if (raw === '') {
+        if (merged[fieldId] && merged[fieldId].input_mode === 'binary') delete merged[fieldId];
+        return;
+      }
+      merged[fieldId] = {
+        section_type: panel.sectionType,
+        points: Number(raw),
+        max,
+        input_mode: 'binary',
+      };
+    });
+
+    return merged;
+  }
+
+  async function saveOverrides(card) {
     if (!card || !state.result) return;
+    const status = card.querySelector('.detail-override-status-msg');
 
-    const status = card.querySelector('#detail-override-status');
     try {
-      const merged = { ...state.savedScores };
-      card.querySelectorAll('.detail-override-row').forEach((row) => {
-        const fieldId = row.dataset.field;
-        const max = Number(row.dataset.max || 0);
-        const raw = row.dataset.value || '';
-        if (raw === '') {
-          if (merged[fieldId] && merged[fieldId].input_mode === 'binary') delete merged[fieldId];
-          return;
-        }
-        merged[fieldId] = {
-          section_type: 'goii',
-          points: Number(raw),
-          max,
-          input_mode: 'binary',
-        };
-      });
-
+      const merged = mergeScoresForPanel(card);
       const totals = state.helpers.manualTotals(merged);
-      const savedVocab = Number(state.result.manual_score_vocab ?? state.savedTotals.goii ?? 0);
-      const baseVocab = Math.max(0, Number(state.result.score_vocab || 0) - savedVocab);
-      const nextVocab = baseVocab + (totals.goii || 0);
+      const previousVocab = Number(state.result.manual_score_vocab ?? state.savedTotals.goii ?? 0);
+      const previousGrammar = Number(state.result.manual_score_grammar ?? state.savedTotals.bunpo ?? 0);
+      const previousListening = Number(state.result.manual_score_listening ?? state.savedTotals.chokkai ?? 0);
+
+      const baseVocab = Math.max(0, Number(state.result.score_vocab || 0) - previousVocab);
+      const baseGrammar = Math.max(0, Number(state.result.score_grammar || 0) - previousGrammar);
+      const baseListening = Math.max(0, Number(state.result.score_listening || 0) - previousListening);
 
       if (status) status.textContent = '保存中...';
       const { error } = await supabase.from('test_results')
         .update({
-          score_vocab: nextVocab,
+          score_vocab: baseVocab + (totals.goii || 0),
+          score_grammar: baseGrammar + (totals.bunpo || 0),
+          score_listening: baseListening + (totals.chokkai || 0),
           manual_score_vocab: totals.goii || 0,
+          manual_score_grammar: totals.bunpo || 0,
+          manual_score_listening: totals.chokkai || 0,
           manual_scores_json: merged,
           manually_scored_at: new Date().toISOString(),
         })
@@ -211,7 +250,7 @@
       location.reload();
     } catch (error) {
       if (status) status.textContent = '保存失敗: ' + error.message;
-      alert('語彙判定の保存に失敗しました: ' + error.message);
+      alert('手動採点の保存に失敗しました: ' + error.message);
     }
   }
 
@@ -223,9 +262,9 @@
       state.helpers = payload.helpers;
       state.savedScores = payload.helpers.manualScoresFromResult(payload.result);
       state.savedTotals = payload.helpers.manualTotals(state.savedScores);
-      state.items = buildItems(payload.sections || [], payload.answers || {}, payload.helpers);
-      if (!state.items.length) return;
-      renderPanel();
+      state.panels = buildPanels(payload.sections || [], payload.answers || {}, payload.helpers);
+      if (!state.panels.length) return;
+      renderPanels();
     }
   };
 })();
