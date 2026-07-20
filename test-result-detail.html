@@ -315,7 +315,7 @@ function renderQuestionFieldRows(sectionType, fieldIds, ak, rule, method, isBloc
       badge = ok ? '<span class="badge-ok">○</span>' : '<span class="badge-ng">×</span>';
     } else {
       status = 'manual';
-      badge = '<span class="badge-mn">要確認</span>';
+      badge = '<span class="badge-mn">自動判定外</span>';
     }
     html += `<div class="q-item ${status}">
       <div class="qlabel">${fid} ${badge}</div>
