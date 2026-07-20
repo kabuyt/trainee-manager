@@ -357,7 +357,7 @@ function collectManualScoringItems(sections, userAnswers) {
 
 function buildManualQuestionContext(parent, block, fieldId) {
   const related = findFieldContext(block, fieldId) || {};
-  let questionHtml = related.question || related.prompt || related.dialogue_html || block.sub_title || parent.instruction || '';
+  let questionHtml = related.label || related.question || related.prompt || related.sentence_html || related.dialogue_html || block.sub_title || parent.instruction || '';
   if (related.dialogue_html) {
     const escapedId = fieldId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     questionHtml = related.dialogue_html
