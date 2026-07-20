@@ -235,9 +235,12 @@ function renderQuestions(sectionType, questions, answerKey, scoringRules, userAn
 
     if (Array.isArray(q.parts) && q.parts.length) {
       q.parts.forEach((part, index) => {
-        const partFieldIds = collectFieldIds(part);
-        const matchedBlockId = findScoringBlockIdForFields(scoringRules, partFieldIds, q.id, index);
+        const partFieldIdsRaw = collectFieldIds(part);
+        const matchedBlockId = findScoringBlockIdForFields(scoringRules, partFieldIdsRaw, q.id, index);
         const partRule = matchedBlockId ? (scoringRules[matchedBlockId] || {}) : {};
+        const partFieldIds = Array.isArray(partRule.field_ids) && partRule.field_ids.length
+          ? partRule.field_ids.slice()
+          : partFieldIdsRaw;
         const partAk = matchedBlockId
           ? normalizeExpectedByFieldIds(answerKey[matchedBlockId], partFieldIds)
           : undefined;
