@@ -119,7 +119,7 @@
 
 ## 7. 採点ロジックの回帰テスト【必須運用】
 
-- `Webテスト_公開用/common/grading.test.js`（node で実行、現在129テスト）
+- `Webテスト_公開用/common/grading.test.js`（node で実行、現在180テスト）
 - **grading.js / framework.js / answer_keys / test_sections を変えたら push 前に必ず実行**
 - 実行: `cd Webテスト_公開用 && node common/grading.test.js`
 
@@ -131,19 +131,19 @@
 今日のバグ群の根本原因。会話点を別テーブル（例 `conversation_scores`）に分離すれば、
 この種の同居バグは原理的に起きなくなる。**大きめのリファクタ候補。**
 
-### ⚠ (2) test5〜test7 に grading.js 未実装の採点メソッドがある【公開前に要修正】
+### ⚠ (2) test6〜test7 に grading.js 未実装の採点メソッドがある【公開前に要修正】
 DB の `scoring_rules` にあるが `grading.js` の `METHOD_MAP` に無いメソッド:
 | テスト | 場所 | メソッド |
 |---|---|---|
-| test5 | chokkai c1 | `mixed_ox_manual` |
-| test5 | chokkai c3 | `mixed_text_select` |
 | test6 | bunpo b4 | `exact_match_mixed` |
 | test6 | chokkai c3 | `mixed_select_text` |
 | test7 | bunpo b2 | `multi_accept` |
 
 現状これらは採点時に「Unknown scoring method」で **スキップ（0点）** される。
-**幸い test5〜8 はまだ実受験ゼロ** なので実害は出ていないが、
-**公開する前に METHOD_MAP へ実装を追加する必要がある**（追加後 grading.test.js にカバレッジも足す）。
+**幸い test6〜8 はまだ実受験ゼロ** なので実害は出ていないが、公開前に対応が必要。
+対応方針: 新メソッドを実装するのではなく、**1問を複数ブロックに分割して既存メソッドだけで組む**
+（test5 の c1_ox/c1_text、c3_text/c3_sel 方式。ルールは `test_data/web_conversion_policy.md`）。
+※ test5 は 2026-07-24 の原文作り直しでこの問題を解消済み。
 
 ### ⚠ (3) DB採点キー（answer_key）の未完成部分
 test2〜8 は「DB再採点すると点が下がりうる」状態のものがある → **加点のみ運用**。
@@ -155,7 +155,21 @@ test2〜8 は「DB再採点すると点が下がりうる」状態のものが�
 
 ---
 
-## 9. 2026-07-24 に実施した修正
+## 9. 2026-07-24 test5 全面作り直し（原文照合版）
+
+- **語彙セクションを新設**し、test5 を「語彙＋文法＋聴解」の3セクションに（test_definitions 更新済み）。
+- 原文Word（語彙 .doc→docx変換／文法 ver2／聴解 第2版）と全問照合。ルビは w:ruby 対応のXML抽出で取得。
+- 解答Wordの丸付け（図形○）は PDF化＋目視で確定。**旧キーの誤り（文法b8 ×○×○ → 正 ×○○×）を修正**。
+- **聴解音声14ファイル（第2版）を Whisper で文字起こし**し、問題・解答との整合を全問確認
+  （記録: `test_data/test5_audio_transcript.txt`）。
+- 手動採点は 文法b2（作文 5点×4）と聴解c1の「どうしますか」記述（3点×3）のみ。他は全自動。
+- 聴解の短答記述（c3「〜かもしれません」、c7）は記述のまま flex_match 自動採点（表記ゆれ許容）。
+- 複合問題はブロック分割（c1_ox/c1_text、c3_text/c3_sel、c7_num/c7_noun/c7_verb）で
+  既存メソッドのみ使用 → 未実装メソッド問題を解消。
+- 差し替え・変換ルールは `test_data/web_conversion_policy.md` に固定（test6〜8 で使い回す）。
+- grading.test.js に test5 カバレッジ追加（計180テスト、全パス）。
+
+## 10. 2026-07-24 に実施した修正
 
 1. **語彙100点超えバグ** — override(g2/b2)が自動点に手動点を二重加算していた。
    自動点を控除してから手動点を足すよう修正（`test-result-detail-overrides.js`）。

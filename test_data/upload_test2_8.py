@@ -122,7 +122,7 @@ def main():
         'test2': ['goii', 'bunpo', 'chokkai'],
         'test3': ['goii', 'bunpo', 'chokkai'],
         'test4': ['goii', 'bunpo', 'chokkai'],
-        'test5': ['bunpo', 'chokkai'],
+        'test5': ['goii', 'bunpo', 'chokkai'],
         'test6': ['bunpo', 'chokkai'],
         'test7': ['bunpo', 'chokkai'],
         'test8': ['bunpo', 'chokkai'],
