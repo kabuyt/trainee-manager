@@ -85,7 +85,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
-<script src="test-result-detail-overrides.js?v=20260720-g2-bunpo-binary"></script>
+<script src="test-result-detail-overrides.js?v=20260724-no-double-count"></script>
 <script>
 const params = new URLSearchParams(location.search);
 const RESULT_ID = params.get('id');
@@ -209,7 +209,7 @@ function renderDetail(result, sections, testDef) {
       sections: sections || [],
       answers: answers || {},
       testDef: testDef || {},
-      helpers: { stripRuby, escapeHtml, collectFieldIds, buildManualQuestionContext, manualScoresFromResult, manualTotals }
+      helpers: { stripRuby, escapeHtml, collectFieldIds, buildManualQuestionContext, manualScoresFromResult, manualTotals, matchAnswer, resolveExpectedAnswer }
     });
   }
 }

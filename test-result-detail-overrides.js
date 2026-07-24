@@ -57,6 +57,19 @@
     return TARGETS.find((target) => target.sectionType === sectionType && title.includes(target.titleNeedle)) || null;
   }
 
+  // この問題は自動採点も走っている（g2 / b2 とも normalized_match）。
+  // 手動判定を「加算」してしまうと自動点と二重計上になるので、
+  // 手動判定した field の自動点を控除できるように保持しておく。
+  function autoPointsFor(fid, index, answerKey, blockId, rule, pointsEach, answers, helpers) {
+    if (typeof helpers.matchAnswer !== 'function' || typeof helpers.resolveExpectedAnswer !== 'function') return 0;
+    const ak = (answerKey && answerKey[blockId] !== undefined) ? answerKey[blockId] : answerKey;
+    const expected = helpers.resolveExpectedAnswer(ak, fid, index);
+    if (expected === undefined) return 0;
+    const userVal = answers[fid];
+    if (userVal === undefined || userVal === null || userVal === '') return 0;
+    return helpers.matchAnswer(userVal, expected, rule.method, rule) ? pointsEach : 0;
+  }
+
   function buildPanels(sections, answers, helpers) {
     const grouped = new Map(TARGETS.map((target) => [target.key, { ...target, items: [] }]));
     (sections || []).forEach((sec) => {
@@ -66,12 +79,13 @@
         if (!target) return;
         const rule = rules[q.id] || {};
         const pointsEach = Number(rule.points_each || rule.points_per_field || q.points_each || 0);
-        helpers.collectFieldIds(q).forEach((fid) => {
+        helpers.collectFieldIds(q).forEach((fid, index) => {
           const context = helpers.buildManualQuestionContext(q, q, fid);
           grouped.get(target.key).items.push({
             fieldId: fid,
             blockId: q.id,
             max: pointsEach,
+            autoPoints: autoPointsFor(fid, index, sec.answer_key, q.id, rule, pointsEach, answers, helpers),
             title: helpers.stripRuby(q.title_html || q.id),
             questionHtml: context.questionHtml,
             answer: answers[fid] ?? '',
@@ -82,6 +96,16 @@
       });
     });
     return Array.from(grouped.values()).filter((panel) => panel.items.length);
+  }
+
+  // 手動判定済み field の自動点合計（＝スコアから控除すべき分）をセクション別に集計
+  function autoDeductions(scores) {
+    const totals = { goii: 0, bunpo: 0, chokkai: 0 };
+    Object.values(scores || {}).forEach((row) => {
+      if (!row || row.input_mode !== 'binary' || !row.section_type) return;
+      totals[row.section_type] = (totals[row.section_type] || 0) + (Number(row.auto_points) || 0);
+    });
+    return totals;
   }
 
   function currentValue(fieldId, max) {
@@ -130,8 +154,14 @@
 
     state.panels.forEach((panel) => {
       const previousManual = Number(state.savedTotals[panel.sectionType] || 0);
+      const prevDeduct = autoDeductions(state.savedScores)[panel.sectionType] || 0;
       const scoreField = panel.sectionType === 'goii' ? 'score_vocab' : 'score_grammar';
-      const baseScore = Math.max(0, Number(state.result[scoreField] || 0) - previousManual);
+      // 手動判定に切り替えた field の自動点は控除して表示する
+      const panelAuto = panel.items.reduce((sum, item) => {
+        const overridden = currentValue(item.fieldId, item.max) !== '';
+        return sum + (overridden ? (Number(item.autoPoints) || 0) : 0);
+      }, 0);
+      const baseScore = Math.max(0, Number(state.result[scoreField] || 0) - previousManual + prevDeduct - panelAuto);
       const maxScore = panel.items.reduce((sum, item) => sum + item.max, 0);
       const currentManual = panel.items.reduce((sum, item) => {
         const value = currentValue(item.fieldId, item.max);
@@ -205,10 +235,12 @@
         if (merged[fieldId] && merged[fieldId].input_mode === 'binary') delete merged[fieldId];
         return;
       }
+      const item = panel.items.find((entry) => entry.fieldId === fieldId);
       merged[fieldId] = {
         section_type: panel.sectionType,
         points: Number(raw),
         max,
+        auto_points: Number(item && item.autoPoints) || 0,
         input_mode: 'binary',
       };
     });
@@ -227,16 +259,21 @@
       const previousGrammar = Number(state.result.manual_score_grammar ?? state.savedTotals.bunpo ?? 0);
       const previousListening = Number(state.result.manual_score_listening ?? state.savedTotals.chokkai ?? 0);
 
-      const baseVocab = Math.max(0, Number(state.result.score_vocab || 0) - previousVocab);
-      const baseGrammar = Math.max(0, Number(state.result.score_grammar || 0) - previousGrammar);
-      const baseListening = Math.max(0, Number(state.result.score_listening || 0) - previousListening);
+      // 前回控除した自動点を戻して「純粋な自動点」を復元 → 今回の控除を引く
+      // （auto_points を持たない旧データは控除0とみなす＝再保存で自動的に正常化される）
+      const prevDeduct = autoDeductions(state.savedScores);
+      const nextDeduct = autoDeductions(merged);
+
+      const baseVocab = Math.max(0, Number(state.result.score_vocab || 0) - previousVocab + (prevDeduct.goii || 0));
+      const baseGrammar = Math.max(0, Number(state.result.score_grammar || 0) - previousGrammar + (prevDeduct.bunpo || 0));
+      const baseListening = Math.max(0, Number(state.result.score_listening || 0) - previousListening + (prevDeduct.chokkai || 0));
 
       if (status) status.textContent = '保存中...';
       const { error } = await supabase.from('test_results')
         .update({
-          score_vocab: baseVocab + (totals.goii || 0),
-          score_grammar: baseGrammar + (totals.bunpo || 0),
-          score_listening: baseListening + (totals.chokkai || 0),
+          score_vocab: Math.max(0, baseVocab - (nextDeduct.goii || 0) + (totals.goii || 0)),
+          score_grammar: Math.max(0, baseGrammar - (nextDeduct.bunpo || 0) + (totals.bunpo || 0)),
+          score_listening: Math.max(0, baseListening - (nextDeduct.chokkai || 0) + (totals.chokkai || 0)),
           manual_score_vocab: totals.goii || 0,
           manual_score_grammar: totals.bunpo || 0,
           manual_score_listening: totals.chokkai || 0,
