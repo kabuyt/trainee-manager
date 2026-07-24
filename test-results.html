@@ -42,6 +42,8 @@
   .mini{font-size:12px;color:#777}
   .badge-auto{background:#27ae60;color:#fff;padding:2px 8px;border-radius:8px;font-size:11px}
   .badge-manual{background:#e67e22;color:#fff;padding:2px 8px;border-radius:8px;font-size:11px}
+  .badge-need{background:#e74c3c;color:#fff;padding:2px 8px;border-radius:8px;font-size:11px;font-weight:bold}
+  .badge-done{background:#27ae60;color:#fff;padding:2px 8px;border-radius:8px;font-size:11px}
   td a{color:#3DAE2B;text-decoration:none}
   td a:hover{text-decoration:underline}
   /* 除外行のスタイル */
@@ -140,6 +142,7 @@
         <input type="text" id="filter-search" oninput="render()" placeholder="ID/名前" style="width:140px">
       </label>
       <label style="font-size:12px"><input type="checkbox" id="filter-noconv" onchange="render()"> 会話未入力のみ</label>
+      <label style="font-size:12px"><input type="checkbox" id="filter-need-manual" onchange="render()"> 手動採点が必要のみ</label>
       <label style="font-size:12px"><input type="checkbox" id="filter-include-excluded" onchange="render()"> 除外済みも表示</label>
       <label style="font-size:12px">満点:
         <select id="filter-maxmode" onchange="render()">
@@ -177,7 +180,7 @@
             <th class="col-auto score">聴解</th>
             <th class="score">会話</th>
             <th class="score-total">合計</th>
-            <th class="col-auto">採点</th>
+            <th>手動採点</th>
             <th>詳細</th>
             <th>除外</th>
           </tr>
@@ -254,6 +257,7 @@
 <script>
 let _data = [];
 let _testDefs = {};
+let _manualTests = new Set();
 let _rankingSelected = new Set();
 let _lastRankingRows = [];
 
@@ -283,10 +287,11 @@ async function doLogout() {
 }
 
 async function reload() {
-  const [trRes, tdRes, resRes] = await Promise.all([
+  const [trRes, tdRes, resRes, secRes] = await Promise.all([
     supabase.from('trainees').select('id,student_id,name_katakana,name_romaji,class_group,company,photo_url,organizations(name)'),
     supabase.from('test_definitions').select('id,display_name,sections,sort_order').order('sort_order'),
-    supabase.from('test_results').select('id,trainee_id,test_name,test_date,score_vocab,score_grammar,score_listening,score_conversation,auto_scored,created_at,excluded,excluded_reason').order('created_at', { ascending: false })
+    supabase.from('test_results').select('id,trainee_id,test_name,test_date,score_vocab,score_grammar,score_listening,score_conversation,auto_scored,manually_scored_at,created_at,excluded,excluded_reason').order('created_at', { ascending: false }),
+    supabase.from('test_sections').select('test_id,scoring_rules')
   ]);
   if (trRes.error) { alert(trRes.error.message); return; }
 
@@ -294,6 +299,15 @@ async function reload() {
   (trRes.data||[]).forEach(t => { tmap[t.id] = t; });
   _testDefs = {};
   (tdRes.data||[]).forEach(d => { _testDefs[d.id] = d; });
+
+  // 手動採点ブロック（method='manual'）を持つテストIDの集合
+  _manualTests = new Set();
+  (secRes.data||[]).forEach(s => {
+    const rules = s.scoring_rules || {};
+    if (Object.values(rules).some(r => r && r.method === 'manual')) {
+      _manualTests.add(s.test_id);
+    }
+  });
 
   _data = (resRes.data||[]).map(r => {
     const t = tmap[r.trainee_id] || {};
@@ -315,6 +329,9 @@ async function reload() {
       score_listening: r.score_listening,
       score_conversation: r.score_conversation,
       auto_scored: r.auto_scored,
+      manually_scored_at: r.manually_scored_at,
+      manual_required: _manualTests.has(r.test_name),
+      manual_done: r.manually_scored_at != null,
       excluded: r.excluded === true,
       excluded_reason: r.excluded_reason || '',
     };
@@ -350,6 +367,13 @@ function escHtml(v) {
   }[ch]));
 }
 
+// 手動採点の状態セル
+function manualStatusCell(d) {
+  if (!d.manual_required) return '<span class="mini">—</span>';   // 自動採点のみのテスト
+  if (d.manual_done) return '<span class="badge-done">済</span>';
+  return '<span class="badge-need">要採点</span>';
+}
+
 function photoHtml(row, className) {
   const label = escHtml((row.name || row.name_romaji || row.student_id || '?').slice(0, 1));
   const alt = escHtml((row.name || row.name_romaji || row.student_id || '受験者') + 'の顔写真');
@@ -366,9 +390,11 @@ function getFiltered() {
   const fSender = document.getElementById('filter-sender').value;
   const fSearch = (document.getElementById('filter-search').value || '').toLowerCase();
   const fNoConv = document.getElementById('filter-noconv').checked;
+  const fNeedManual = document.getElementById('filter-need-manual').checked;
   const fIncludeExcluded = document.getElementById('filter-include-excluded').checked;
   return _data.filter(d => {
     if (!fIncludeExcluded && d.excluded) return false;
+    if (fNeedManual && !(d.manual_required && !d.manual_done)) return false;
     if (fTest && d.test_name !== fTest) return false;
     if (fClass && d.class_group !== fClass) return false;
     if (fCompany && d.company !== fCompany) return false;
@@ -402,6 +428,7 @@ function render() {
   const convCount = convScores.length;
   const convAvg = convCount === 0 ? 0 : Math.round(convScores.reduce((s,v)=>s+v,0)/convCount);
   const convMissing = totalCount - convCount;
+  const needManualCount = filtered.filter(d => d.manual_required && !d.manual_done).length;
   const totalsArr = filtered.map(d => (d.score_vocab||0)+(d.score_grammar||0)+(d.score_listening||0)+(maxMode==='400' ? (d.score_conversation||0) : 0));
   const tMax = totalsArr.length ? Math.max(...totalsArr) : 0;
   const tMin = totalsArr.length ? Math.min(...totalsArr) : 0;
@@ -412,6 +439,7 @@ function render() {
     <div class="stat"><b>${tMin}</b>最低</div>
     <div class="stat"><b>${convAvg}</b>会話平均（${convCount}件入力済）</div>
     ${convMissing > 0 ? `<div class="stat" style="background:#fff3cd"><b>${convMissing}</b>会話未入力</div>` : ''}
+    ${needManualCount > 0 ? `<div class="stat" style="background:#fdecea;cursor:pointer" title="クリックで絞り込み" onclick="document.getElementById('filter-need-manual').checked=true;render()"><b>${needManualCount}</b>手動採点が必要</div>` : ''}
   `;
 
   const tbody = document.getElementById('rows');
@@ -444,7 +472,7 @@ function render() {
       <td class="score col-auto">${d.score_listening ?? '-'}</td>
       <td class="score"><input type="number" min="0" max="100" class="conv-input" data-result-id="${d.result_id}" data-row="${i}" value="${convVal}" placeholder="-" style="width:64px;padding:5px 6px;text-align:center;border:1px solid #ddd;border-radius:4px;font-family:monospace;font-size:14px" ${d.excluded ? 'disabled' : ''}></td>
       <td class="score total">${total}/${max}</td>
-      <td class="col-auto">${d.auto_scored ? '<span class="badge-auto">自動</span>' : '<span class="badge-manual">手動</span>'}</td>
+      <td>${manualStatusCell(d)}</td>
       <td><a href="test-result-detail.html?id=${d.result_id}">→詳細</a></td>
       <td>${exclusionCell}</td>
     `;
@@ -785,7 +813,7 @@ async function restoreResult(rid) {
 }
 
 function rowsToTSV(filtered) {
-  const header = ['学生ID','名前','クラス','会社','テストID','テスト名','受験日','語彙','文法','聴解','会話','合計','最大','採点方式','提出日時'];
+  const header = ['学生ID','名前','クラス','会社','テストID','テスト名','受験日','語彙','文法','聴解','会話','合計','最大','手動採点','提出日時'];
   const rows = [header.join('\t')];
   filtered.forEach(d => {
     const tdef = _testDefs[d.test_name] || {};
@@ -798,7 +826,7 @@ function rowsToTSV(filtered) {
       d.test_date,
       d.score_vocab ?? '', d.score_grammar ?? '', d.score_listening ?? '', d.score_conversation ?? '',
       total, max,
-      d.auto_scored ? '自動' : '手動',
+      d.manual_required ? (d.manual_done ? '済' : '要採点') : '—',
       d.created_at || ''
     ].map(v => String(v).replace(/\t/g,' ').replace(/\n/g,' ')).join('\t'));
   });
