@@ -384,7 +384,7 @@
     "id": "b6",
     "type": "table_fill",
     "title_html": "<ruby>問題<rt>もんだい</rt></ruby>６．<ruby>過去形<rt>かこけい</rt></ruby>に<ruby>変<rt>か</rt></ruby>えてください　＜<ruby>各<rt>かく</rt></ruby>1<ruby>点<rt>てん</rt></ruby>×10<ruby>問<rt>とい</rt></ruby>＝10<ruby>点<rt>てん</rt></ruby>＞",
-    "instruction": "<span style=\"color:#e74c3c;font-weight:bold;font-size:15px\">Đổi sang thể quá khứ!（<ruby>過去形<rt>かこけい</rt></ruby>にする！）</span><br><ruby>例<rt>れい</rt></ruby>）<ruby>元気<rt>げんき</rt></ruby>（はい）→ <ruby>元気<rt>げんき</rt></ruby>でした　／　<ruby>元気<rt>げんき</rt></ruby>（いいえ）→ <ruby>元気<rt>げんき</rt></ruby>じゃありませんでした",
+    "instruction": "<span style=\"color:#e74c3c;font-weight:bold;font-size:15px\">Trả lời bằng thể quá khứ!!（<ruby>過去形<rt>かこけい</rt></ruby>で<ruby>答<rt>こた</rt></ruby>える！！）</span><br><ruby>例<rt>れい</rt></ruby>）<ruby>元気<rt>げんき</rt></ruby>（はい）→ <ruby>元気<rt>げんき</rt></ruby>でした　／　<ruby>元気<rt>げんき</rt></ruby>（いいえ）→ <ruby>元気<rt>げんき</rt></ruby>じゃありませんでした",
     "points_each": 1,
     "total_points": 10,
     "tables": [
