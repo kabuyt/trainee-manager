@@ -7,18 +7,53 @@
     "points_each": 2,
     "total_points": 10,
     "options_pool": [
-      { "value": "やけどをします", "label": "やけどをします" },
-      { "value": "あたまがいたい", "label": "<ruby>頭<rt>あたま</rt></ruby>が<ruby>痛<rt>いた</rt></ruby>い" },
-      { "value": "かゆい", "label": "かゆい" },
-      { "value": "しょくよくがありません", "label": "<ruby>食欲<rt>しょくよく</rt></ruby>がありません" },
-      { "value": "こっせつ", "label": "<ruby>骨折<rt>こっせつ</rt></ruby>" }
+      {
+        "value": "やけどをします",
+        "label": "やけどをします"
+      },
+      {
+        "value": "あたまがいたい",
+        "label": "<ruby>頭<rt>あたま</rt></ruby>が<ruby>痛<rt>いた</rt></ruby>い"
+      },
+      {
+        "value": "かゆい",
+        "label": "かゆい"
+      },
+      {
+        "value": "しょくよくがありません",
+        "label": "<ruby>食欲<rt>しょくよく</rt></ruby>がありません"
+      },
+      {
+        "value": "こっせつ",
+        "label": "<ruby>骨折<rt>こっせつ</rt></ruby>"
+      }
     ],
     "items": [
-      { "field_id": "g1_1", "label": "１）", "image_src": "images/goii/goii_mondai_001.jpeg" },
-      { "field_id": "g1_2", "label": "２）", "image_src": "images/goii/goii_mondai_002.jpeg" },
-      { "field_id": "g1_3", "label": "３）", "image_src": "images/goii/goii_mondai_003.jpeg" },
-      { "field_id": "g1_4", "label": "４）", "image_src": "images/goii/goii_mondai_004.png" },
-      { "field_id": "g1_5", "label": "５）", "image_src": "images/goii/goii_mondai_005.png" }
+      {
+        "field_id": "g1_1",
+        "label": "１）",
+        "image_src": "images/goii/goii_mondai_001.jpeg"
+      },
+      {
+        "field_id": "g1_2",
+        "label": "２）",
+        "image_src": "images/goii/goii_mondai_002.jpeg"
+      },
+      {
+        "field_id": "g1_3",
+        "label": "３）",
+        "image_src": "images/goii/goii_mondai_003.jpeg"
+      },
+      {
+        "field_id": "g1_4",
+        "label": "４）",
+        "image_src": "images/goii/goii_mondai_004.png"
+      },
+      {
+        "field_id": "g1_5",
+        "label": "５）",
+        "image_src": "images/goii/goii_mondai_005.png"
+      }
     ]
   },
   {
@@ -29,14 +64,35 @@
     "points_each": 1,
     "total_points": 3,
     "options_pool": [
-      { "value": "ぶたにく", "label": "ぶたにく（<ruby>豚肉<rt>ぶたにく</rt></ruby>）" },
-      { "value": "ぎゅうにく", "label": "ぎゅうにく（<ruby>牛肉<rt>ぎゅうにく</rt></ruby>）" },
-      { "value": "とりにく", "label": "とりにく（<ruby>鶏肉<rt>とりにく</rt></ruby>）" }
+      {
+        "value": "ぶたにく",
+        "label": "ぶたにく（<ruby>豚肉<rt>ぶたにく</rt></ruby>）"
+      },
+      {
+        "value": "ぎゅうにく",
+        "label": "ぎゅうにく（<ruby>牛肉<rt>ぎゅうにく</rt></ruby>）"
+      },
+      {
+        "value": "とりにく",
+        "label": "とりにく（<ruby>鶏肉<rt>とりにく</rt></ruby>）"
+      }
     ],
     "items": [
-      { "field_id": "g2_1", "label": "A", "image_src": "images/goii/goii_mondai_008.png" },
-      { "field_id": "g2_2", "label": "B", "image_src": "images/goii/goii_mondai_009.jpeg" },
-      { "field_id": "g2_3", "label": "C", "image_src": "images/goii/goii_mondai_010.png" }
+      {
+        "field_id": "g2_1",
+        "label": "A",
+        "image_src": "images/goii/goii_mondai_008.png"
+      },
+      {
+        "field_id": "g2_2",
+        "label": "B",
+        "image_src": "images/goii/goii_mondai_009.jpeg"
+      },
+      {
+        "field_id": "g2_3",
+        "label": "C",
+        "image_src": "images/goii/goii_mondai_010.png"
+      }
     ]
   },
   {
@@ -47,32 +103,100 @@
     "points_each": 3,
     "total_points": 24,
     "items": [
-      { "field_id": "g3_1", "label": "１）", "image_src": "images/goii/goii_mondai_011.jpeg", "input_type": "text" },
-      { "field_id": "g3_2", "label": "２）", "image_src": "images/goii/goii_mondai_012.png",  "input_type": "text" },
-      { "field_id": "g3_3", "label": "３）", "image_src": "images/goii/goii_mondai_013.png",  "input_type": "text" },
-      { "field_id": "g3_4", "label": "４）", "image_src": "images/goii/goii_mondai_014.png",  "input_type": "text" },
-      { "field_id": "g3_5", "label": "５）", "image_src": "images/goii/goii_mondai_015.jpeg", "input_type": "text" },
-      { "field_id": "g3_6", "label": "６）", "image_src": "images/goii/goii_mondai_016.png",  "input_type": "text" },
-      { "field_id": "g3_7", "label": "７）", "image_src": "images/goii/image17.jpeg",         "input_type": "text" },
-      { "field_id": "g3_8", "label": "８）", "image_src": "images/goii/image18.jpeg",         "input_type": "text" }
+      {
+        "field_id": "g3_1",
+        "label": "１）",
+        "image_src": "images/goii/goii_mondai_011.jpeg",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g3_2",
+        "label": "２）",
+        "image_src": "images/goii/goii_mondai_012.png",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g3_3",
+        "label": "３）",
+        "image_src": "images/goii/goii_mondai_013.png",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g3_4",
+        "label": "４）",
+        "image_src": "images/goii/goii_mondai_014.png",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g3_5",
+        "label": "５）",
+        "image_src": "images/goii/goii_mondai_015.jpeg",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g3_6",
+        "label": "６）",
+        "image_src": "images/goii/goii_mondai_016.png",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g3_7",
+        "label": "７）",
+        "image_src": "images/goii/image17.jpeg",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g3_8",
+        "label": "８）",
+        "image_src": "images/goii/image18.jpeg",
+        "input_type": "text"
+      }
     ]
   },
   {
     "id": "g4",
     "type": "table_fill",
     "title_html": "<ruby>問題<rt>もんだい</rt></ruby>４．<ruby>反対<rt>はんたい</rt></ruby>の<ruby>言葉<rt>ことば</rt></ruby>を<ruby>書<rt>か</rt></ruby>いてください。　＜<ruby>各<rt>かく</rt></ruby>1<ruby>点<rt>てん</rt></ruby>×7<ruby>問<rt>とい</rt></ruby>＝7<ruby>点<rt>てん</rt></ruby>＞",
-    "instruction": "<ruby>反対<rt>はんたい</rt></ruby>の<ruby>意味<rt>いみ</rt></ruby>の<ruby>言葉<rt>ことば</rt></ruby>をひらがなで<ruby>書<rt>か</rt></ruby>いてください。",
+    "instruction": "<span style=\"color:#e74c3c;font-weight:bold;font-size:15px\">Hãy viết từ TRÁI NGHĨA bằng Hiragana!（<ruby>反対<rt>はんたい</rt></ruby>の<ruby>言葉<rt>ことば</rt></ruby>を<ruby>書<rt>か</rt></ruby>く！）</span><br><ruby>反対<rt>はんたい</rt></ruby>の<ruby>意味<rt>いみ</rt></ruby>の<ruby>言葉<rt>ことば</rt></ruby>をひらがなで<ruby>書<rt>か</rt></ruby>いてください。",
     "points_each": 1,
     "total_points": 7,
     "example_html": "せまい　⇔　ひろい",
     "items": [
-      { "field_id": "g4_1", "label": "１）　<ruby>涼<rt>すず</rt></ruby>しい　⇔", "input_type": "text" },
-      { "field_id": "g4_2", "label": "２）　<ruby>重<rt>おも</rt></ruby>い　⇔", "input_type": "text" },
-      { "field_id": "g4_3", "label": "３）　<ruby>多<rt>おお</rt></ruby>い　⇔", "input_type": "text" },
-      { "field_id": "g4_4", "label": "４）　<ruby>遠<rt>とお</rt></ruby>い　⇔", "input_type": "text" },
-      { "field_id": "g4_5", "label": "５）　<ruby>長<rt>なが</rt></ruby>い　⇔", "input_type": "text" },
-      { "field_id": "g4_6", "label": "６）　<ruby>暗<rt>くら</rt></ruby>い　⇔", "input_type": "text" },
-      { "field_id": "g4_7", "label": "７）　<ruby>遅<rt>おそ</rt></ruby>い　⇔", "input_type": "text" }
+      {
+        "field_id": "g4_1",
+        "label": "１）　<ruby>涼<rt>すず</rt></ruby>しい　⇔",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g4_2",
+        "label": "２）　<ruby>重<rt>おも</rt></ruby>い　⇔",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g4_3",
+        "label": "３）　<ruby>多<rt>おお</rt></ruby>い　⇔",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g4_4",
+        "label": "４）　<ruby>遠<rt>とお</rt></ruby>い　⇔",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g4_5",
+        "label": "５）　<ruby>長<rt>なが</rt></ruby>い　⇔",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g4_6",
+        "label": "６）　<ruby>暗<rt>くら</rt></ruby>い　⇔",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g4_7",
+        "label": "７）　<ruby>遅<rt>おそ</rt></ruby>い　⇔",
+        "input_type": "text"
+      }
     ]
   },
   {
@@ -88,55 +212,130 @@
         "field_id": "g5_1",
         "question": "１）　<ruby>昨日<rt>きのう</rt></ruby>（　　）<ruby>日本<rt>にほん</rt></ruby><ruby>料理<rt>りょうり</rt></ruby>のレストランへ<ruby>行<rt>い</rt></ruby>きました。またい行きたいです。",
         "choices": [
-          { "value": "1", "label": "① いちばん" },
-          { "value": "2", "label": "② ずっと" },
-          { "value": "3", "label": "③ だけ" },
-          { "value": "4", "label": "④ はじめて" },
-          { "value": "5", "label": "⑤ よく" }
+          {
+            "value": "1",
+            "label": "① いちばん"
+          },
+          {
+            "value": "2",
+            "label": "② ずっと"
+          },
+          {
+            "value": "3",
+            "label": "③ だけ"
+          },
+          {
+            "value": "4",
+            "label": "④ はじめて"
+          },
+          {
+            "value": "5",
+            "label": "⑤ よく"
+          }
         ]
       },
       {
         "field_id": "g5_2",
         "question": "２）　いつも5<ruby>時<rt>じ</rt></ruby>に<ruby>仕事<rt>しごと</rt></ruby>が<ruby>終<rt>お</rt></ruby>わります。<ruby>今日<rt>きょう</rt></ruby>は、7<ruby>時<rt>じ</rt></ruby>まで（　　）します。",
         "choices": [
-          { "value": "1", "label": "① <ruby>美術<rt>びじゅつ</rt></ruby>" },
-          { "value": "2", "label": "② <ruby>心配<rt>しんぱい</rt></ruby>" },
-          { "value": "3", "label": "③ <ruby>残業<rt>ざんぎょう</rt></ruby>" },
-          { "value": "4", "label": "④ <ruby>電話<rt>でんわ</rt></ruby>" },
-          { "value": "5", "label": "⑤ <ruby>下痢<rt>げり</rt></ruby>" }
+          {
+            "value": "1",
+            "label": "① <ruby>美術<rt>びじゅつ</rt></ruby>"
+          },
+          {
+            "value": "2",
+            "label": "② <ruby>心配<rt>しんぱい</rt></ruby>"
+          },
+          {
+            "value": "3",
+            "label": "③ <ruby>残業<rt>ざんぎょう</rt></ruby>"
+          },
+          {
+            "value": "4",
+            "label": "④ <ruby>電話<rt>でんわ</rt></ruby>"
+          },
+          {
+            "value": "5",
+            "label": "⑤ <ruby>下痢<rt>げり</rt></ruby>"
+          }
         ]
       },
       {
         "field_id": "g5_3",
         "question": "３）　ここは（　　）ですから、あちらへ<ruby>行<rt>い</rt></ruby>ってください。",
         "choices": [
-          { "value": "1", "label": "① すっぱい" },
-          { "value": "2", "label": "② ゆっくり" },
-          { "value": "3", "label": "③ <ruby>欲<rt>ほ</rt></ruby>しい" },
-          { "value": "4", "label": "④ <ruby>危<rt>あぶ</rt></ruby>ない" },
-          { "value": "5", "label": "⑤ <ruby>大切<rt>たいせつ</rt></ruby>" }
+          {
+            "value": "1",
+            "label": "① すっぱい"
+          },
+          {
+            "value": "2",
+            "label": "② ゆっくり"
+          },
+          {
+            "value": "3",
+            "label": "③ <ruby>欲<rt>ほ</rt></ruby>しい"
+          },
+          {
+            "value": "4",
+            "label": "④ <ruby>危<rt>あぶ</rt></ruby>ない"
+          },
+          {
+            "value": "5",
+            "label": "⑤ <ruby>大切<rt>たいせつ</rt></ruby>"
+          }
         ]
       },
       {
         "field_id": "g5_4",
         "question": "４）　バスの（　　）を<ruby>見<rt>み</rt></ruby>てください。あと3<ruby>分<rt>ぷん</rt></ruby>でバスが<ruby>来<rt>き</rt></ruby>ますよ。",
         "choices": [
-          { "value": "1", "label": "① <ruby>時刻表<rt>じこくひょう</rt></ruby>" },
-          { "value": "2", "label": "② <ruby>運転手<rt>うんてんしゅ</rt></ruby>" },
-          { "value": "3", "label": "③ カタログ" },
-          { "value": "4", "label": "④ <ruby>定期券<rt>ていきけん</rt></ruby>" },
-          { "value": "5", "label": "⑤ <ruby>名前<rt>なまえ</rt></ruby>" }
+          {
+            "value": "1",
+            "label": "① <ruby>時刻表<rt>じこくひょう</rt></ruby>"
+          },
+          {
+            "value": "2",
+            "label": "② <ruby>運転手<rt>うんてんしゅ</rt></ruby>"
+          },
+          {
+            "value": "3",
+            "label": "③ カタログ"
+          },
+          {
+            "value": "4",
+            "label": "④ <ruby>定期券<rt>ていきけん</rt></ruby>"
+          },
+          {
+            "value": "5",
+            "label": "⑤ <ruby>名前<rt>なまえ</rt></ruby>"
+          }
         ]
       },
       {
         "field_id": "g5_5",
         "question": "５）　マイケル・ジョーダンはとても（　　）が<ruby>高<rt>たか</rt></ruby>い<ruby>人<rt>ひと</rt></ruby>です。198センチメートルです。",
         "choices": [
-          { "value": "1", "label": "① <ruby>足<rt>あし</rt></ruby>" },
-          { "value": "2", "label": "② <ruby>体<rt>からだ</rt></ruby>" },
-          { "value": "3", "label": "③ <ruby>骨<rt>ほね</rt></ruby>" },
-          { "value": "4", "label": "④ <ruby>耳<rt>みみ</rt></ruby>" },
-          { "value": "5", "label": "⑤ <ruby>背<rt>せ</rt></ruby>" }
+          {
+            "value": "1",
+            "label": "① <ruby>足<rt>あし</rt></ruby>"
+          },
+          {
+            "value": "2",
+            "label": "② <ruby>体<rt>からだ</rt></ruby>"
+          },
+          {
+            "value": "3",
+            "label": "③ <ruby>骨<rt>ほね</rt></ruby>"
+          },
+          {
+            "value": "4",
+            "label": "④ <ruby>耳<rt>みみ</rt></ruby>"
+          },
+          {
+            "value": "5",
+            "label": "⑤ <ruby>背<rt>せ</rt></ruby>"
+          }
         ]
       }
     ]
@@ -150,10 +349,27 @@
     "total_points": 8,
     "reference_html": "<p>A ティエンさん　B <ruby>雨<rt>あめ</rt></ruby>　C <ruby>銀行員<rt>ぎんこういん</rt></ruby>　D <ruby>佐藤<rt>さとう</rt></ruby>さん　E <ruby>秋<rt>あき</rt></ruby>　F <ruby>山田<rt>やまだ</rt></ruby>さん　G <ruby>警察署<rt>けいさつしょ</rt></ruby>　H <ruby>図書館<rt>としょかん</rt></ruby>　I くもり　J <ruby>春<rt>はる</rt></ruby>　K エンジニア　L <ruby>神社<rt>じんじゃ</rt></ruby>　M <ruby>雪<rt>ゆき</rt></ruby>　N <ruby>駅員<rt>えきいん</rt></ruby>　O <ruby>夏<rt>なつ</rt></ruby></p><p><ruby>例<rt>れい</rt></ruby>）　<ruby>名前<rt>なまえ</rt></ruby>：A, D, F</p>",
     "items": [
-      { "field_id": "g6_1", "label": "１）　<ruby>天気<rt>てんき</rt></ruby>", "input_type": "text", "placeholder": "例: B, I, M" },
-      { "field_id": "g6_2", "label": "２）　<ruby>季節<rt>きせつ</rt></ruby>", "input_type": "text" },
-      { "field_id": "g6_3", "label": "３）　<ruby>職業<rt>しょくぎょう</rt></ruby> (nghề nghiệp)", "input_type": "text" },
-      { "field_id": "g6_4", "label": "４）　<ruby>町<rt>まち</rt></ruby>の<ruby>中<rt>なか</rt></ruby>", "input_type": "text" }
+      {
+        "field_id": "g6_1",
+        "label": "１）　<ruby>天気<rt>てんき</rt></ruby>",
+        "input_type": "text",
+        "placeholder": "例: B, I, M"
+      },
+      {
+        "field_id": "g6_2",
+        "label": "２）　<ruby>季節<rt>きせつ</rt></ruby>",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g6_3",
+        "label": "３）　<ruby>職業<rt>しょくぎょう</rt></ruby> (nghề nghiệp)",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g6_4",
+        "label": "４）　<ruby>町<rt>まち</rt></ruby>の<ruby>中<rt>なか</rt></ruby>",
+        "input_type": "text"
+      }
     ]
   },
   {
@@ -164,25 +380,101 @@
     "points_each": 2,
     "total_points": 38,
     "items": [
-      { "field_id": "g7_1",  "label": "１．<ruby>砂<rt>さ</rt></ruby><ruby>糖<rt>とう</rt></ruby>", "input_type": "text" },
-      { "field_id": "g7_2",  "label": "２．<ruby>製<rt>せい</rt></ruby><ruby>品<rt>ひん</rt></ruby>", "input_type": "text" },
-      { "field_id": "g7_3",  "label": "３．<ruby>暗<rt>あん</rt></ruby><ruby>証<rt>しょう</rt></ruby><ruby>番<rt>ばん</rt></ruby><ruby>号<rt>ごう</rt></ruby>", "input_type": "text" },
-      { "field_id": "g7_4",  "label": "４．<ruby>社<rt>しゃ</rt></ruby><ruby>長<rt>ちょう</rt></ruby>", "input_type": "text" },
-      { "field_id": "g7_5",  "label": "５．<ruby>現<rt>げん</rt></ruby><ruby>金<rt>きん</rt></ruby>", "input_type": "text" },
-      { "field_id": "g7_6",  "label": "６．<ruby>使<rt>つか</rt></ruby>い<ruby>方<rt>かた</rt></ruby>", "input_type": "text" },
-      { "field_id": "g7_7",  "label": "７．<ruby>見<rt>み</rt></ruby>せます", "input_type": "text" },
-      { "field_id": "g7_8",  "label": "８．<ruby>答<rt>こた</rt></ruby>え", "input_type": "text" },
-      { "field_id": "g7_9",  "label": "９．<ruby>熱<rt>ねつ</rt></ruby>", "input_type": "text" },
-      { "field_id": "g7_10", "label": "１０．<ruby>保<rt>ほ</rt></ruby><ruby>険<rt>けん</rt></ruby><ruby>証<rt>しょう</rt></ruby>", "input_type": "text" },
-      { "field_id": "g7_11", "label": "１１．<ruby>覚<rt>おぼ</rt></ruby>えます", "input_type": "text" },
-      { "field_id": "g7_12", "label": "１２．<ruby>上着<rt>うわぎ</rt></ruby>", "input_type": "text" },
-      { "field_id": "g7_13", "label": "１３．<ruby>独<rt>どく</rt></ruby><ruby>身<rt>しん</rt></ruby>", "input_type": "text" },
-      { "field_id": "g7_14", "label": "１４．<ruby>置<rt>お</rt></ruby>きます", "input_type": "text" },
-      { "field_id": "g7_15", "label": "１５．<ruby>地<rt>ち</rt></ruby><ruby>図<rt>ず</rt></ruby>", "input_type": "text" },
-      { "field_id": "g7_16", "label": "１６．お<ruby>釣<rt>つ</rt></ruby>り", "input_type": "text" },
-      { "field_id": "g7_17", "label": "１７．<ruby>捨<rt>す</rt></ruby>てます", "input_type": "text" },
-      { "field_id": "g7_18", "label": "１８．<ruby>降<rt>お</rt></ruby>ります", "input_type": "text" },
-      { "field_id": "g7_19", "label": "１９．<ruby>急<rt>いそ</rt></ruby>ぎます", "input_type": "text" }
+      {
+        "field_id": "g7_1",
+        "label": "１．<ruby>砂<rt>さ</rt></ruby><ruby>糖<rt>とう</rt></ruby>",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g7_2",
+        "label": "２．<ruby>製<rt>せい</rt></ruby><ruby>品<rt>ひん</rt></ruby>",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g7_3",
+        "label": "３．<ruby>暗<rt>あん</rt></ruby><ruby>証<rt>しょう</rt></ruby><ruby>番<rt>ばん</rt></ruby><ruby>号<rt>ごう</rt></ruby>",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g7_4",
+        "label": "４．<ruby>社<rt>しゃ</rt></ruby><ruby>長<rt>ちょう</rt></ruby>",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g7_5",
+        "label": "５．<ruby>現<rt>げん</rt></ruby><ruby>金<rt>きん</rt></ruby>",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g7_6",
+        "label": "６．<ruby>使<rt>つか</rt></ruby>い<ruby>方<rt>かた</rt></ruby>",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g7_7",
+        "label": "７．<ruby>見<rt>み</rt></ruby>せます",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g7_8",
+        "label": "８．<ruby>答<rt>こた</rt></ruby>え",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g7_9",
+        "label": "９．<ruby>熱<rt>ねつ</rt></ruby>",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g7_10",
+        "label": "１０．<ruby>保<rt>ほ</rt></ruby><ruby>険<rt>けん</rt></ruby><ruby>証<rt>しょう</rt></ruby>",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g7_11",
+        "label": "１１．<ruby>覚<rt>おぼ</rt></ruby>えます",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g7_12",
+        "label": "１２．<ruby>上着<rt>うわぎ</rt></ruby>",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g7_13",
+        "label": "１３．<ruby>独<rt>どく</rt></ruby><ruby>身<rt>しん</rt></ruby>",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g7_14",
+        "label": "１４．<ruby>置<rt>お</rt></ruby>きます",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g7_15",
+        "label": "１５．<ruby>地<rt>ち</rt></ruby><ruby>図<rt>ず</rt></ruby>",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g7_16",
+        "label": "１６．お<ruby>釣<rt>つ</rt></ruby>り",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g7_17",
+        "label": "１７．<ruby>捨<rt>す</rt></ruby>てます",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g7_18",
+        "label": "１８．<ruby>降<rt>お</rt></ruby>ります",
+        "input_type": "text"
+      },
+      {
+        "field_id": "g7_19",
+        "label": "１９．<ruby>急<rt>いそ</rt></ruby>ぎます",
+        "input_type": "text"
+      }
     ]
   }
 ]
