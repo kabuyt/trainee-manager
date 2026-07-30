@@ -294,7 +294,7 @@ async function doLogout() {
 async function reload() {
   const [trRes, tdRes, resRes, secRes] = await Promise.all([
     supabase.from('trainees').select('id,student_id,name_katakana,name_romaji,class_group,company,supervising_org,photo_url,organizations(name)'),
-    supabase.from('test_definitions').select('id,display_name,sections,sort_order').order('sort_order'),
+    supabase.from('test_definitions').select('id,display_name,lesson_range,sections,sort_order').order('sort_order'),
     supabase.from('test_results').select('id,trainee_id,test_name,test_date,score_vocab,score_grammar,score_listening,score_conversation,auto_scored,manually_scored_at,created_at,excluded,excluded_reason').order('created_at', { ascending: false }),
     supabase.from('test_sections').select('test_id,scoring_rules')
   ]);
@@ -569,6 +569,18 @@ function clearRankingSelection() {
   render();
 }
 
+// test3 → 「3か月目（第12〜18課）」のような分かりやすい表記
+function friendlyTestName(testId) {
+  const d = _testDefs[testId] || {};
+  const m = /^test(\d+)$/.exec(testId || '');
+  if (m) {
+    const month = d.sort_order || parseInt(m[1], 10);
+    const range = d.lesson_range ? `（第${String(d.lesson_range).replace(/-/g, '〜')}課）` : '';
+    return `${month}か月目${range}`;
+  }
+  return d.display_name || testId;
+}
+
 function calcResultTotal(d) {
   const maxMode = document.getElementById('filter-maxmode').value;
   const tdef = _testDefs[d.test_name] || {};
@@ -631,7 +643,7 @@ function showRanking() {
     ${warning}
     <div class="ranking-summary">
       <span class="ranking-pill">${rows.length}名</span>
-      <span class="ranking-pill">${tests.length === 1 ? escHtml(tests[0]) : '複数テスト'}</span>
+      <span class="ranking-pill">${tests.length === 1 ? escHtml(friendlyTestName(tests[0])) : '複数テスト'}</span>
       <span class="ranking-pill">${companies.length === 1 ? escHtml(companies[0]) : '会社: 複数/未指定'}</span>
       <span class="ranking-pill">${classes.length === 1 ? escHtml(classes[0]) : 'クラス: 複数/未指定'}</span>
       <span class="ranking-pill">${dates.length === 1 ? escHtml(dates[0]) : '受験日: 複数/未指定'}</span>
@@ -676,7 +688,7 @@ function buildPrintableRankingHtml(rows) {
   const classes = [...new Set(rows.map(r => r.class_group).filter(Boolean))];
   const dates = [...new Set(rows.map(r => r.test_date).filter(Boolean))];
   const title = [
-    tests.length === 1 ? tests[0] : '複数テスト',
+    tests.length === 1 ? friendlyTestName(tests[0]) : '複数テスト',
     companies.length === 1 ? companies[0] : '',
     classes.length === 1 ? classes[0] : ''
   ].filter(Boolean).join(' / ');
