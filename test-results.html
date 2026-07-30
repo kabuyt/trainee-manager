@@ -123,6 +123,11 @@
           <option value="">全部</option>
         </select>
       </label>
+      <label>組合:
+        <select id="filter-kumiai" onchange="render()">
+          <option value="">全部</option>
+        </select>
+      </label>
       <label>会社:
         <select id="filter-company" onchange="render()">
           <option value="">全部</option>
@@ -288,7 +293,7 @@ async function doLogout() {
 
 async function reload() {
   const [trRes, tdRes, resRes, secRes] = await Promise.all([
-    supabase.from('trainees').select('id,student_id,name_katakana,name_romaji,class_group,company,photo_url,organizations(name)'),
+    supabase.from('trainees').select('id,student_id,name_katakana,name_romaji,class_group,company,supervising_org,photo_url,organizations(name)'),
     supabase.from('test_definitions').select('id,display_name,sections,sort_order').order('sort_order'),
     supabase.from('test_results').select('id,trainee_id,test_name,test_date,score_vocab,score_grammar,score_listening,score_conversation,auto_scored,manually_scored_at,created_at,excluded,excluded_reason').order('created_at', { ascending: false }),
     supabase.from('test_sections').select('test_id,scoring_rules')
@@ -320,6 +325,7 @@ async function reload() {
       photo_url: t.photo_url || '',
       class_group: t.class_group || '',
       company: t.company || '',
+      kumiai: t.supervising_org || '',
       sender: (t.organizations && t.organizations.name) || '',
       test_name: r.test_name,
       test_date: r.test_date,
@@ -341,12 +347,15 @@ async function reload() {
   const tests = [...new Set(_data.map(d => d.test_name))].sort();
   const classes = [...new Set(_data.map(d => d.class_group).filter(Boolean))].sort();
   const companies = [...new Set(_data.map(d => d.company).filter(Boolean))].sort();
+  const kumiais = [...new Set(_data.map(d => d.kumiai).filter(Boolean))].sort();
   const senders = [...new Set(_data.map(d => d.sender).filter(Boolean))].sort();
   fillSelect('filter-test', tests);
   fillSelect('filter-class', classes);
   fillSelect('filter-company', companies);
+  fillSelect('filter-kumiai', kumiais);
   fillSelect('filter-sender', senders);
 
+  restoreFilters();
   render();
 }
 
@@ -387,6 +396,7 @@ function getFiltered() {
   const fTest = document.getElementById('filter-test').value;
   const fClass = document.getElementById('filter-class').value;
   const fCompany = document.getElementById('filter-company').value;
+  const fKumiai = document.getElementById('filter-kumiai').value;
   const fSender = document.getElementById('filter-sender').value;
   const fSearch = (document.getElementById('filter-search').value || '').toLowerCase();
   const fNoConv = document.getElementById('filter-noconv').checked;
@@ -398,11 +408,13 @@ function getFiltered() {
     if (fTest && d.test_name !== fTest) return false;
     if (fClass && d.class_group !== fClass) return false;
     if (fCompany && d.company !== fCompany) return false;
+    if (fKumiai && d.kumiai !== fKumiai) return false;
     if (fSender && d.sender !== fSender) return false;
     if (fSearch && !(
       d.student_id.toLowerCase().includes(fSearch) ||
       d.name.toLowerCase().includes(fSearch) ||
       (d.company || '').toLowerCase().includes(fSearch) ||
+      (d.kumiai || '').toLowerCase().includes(fSearch) ||
       (d.sender || '').toLowerCase().includes(fSearch)
     )) return false;
     if (fNoConv && d.score_conversation !== null && d.score_conversation !== undefined) return false;
@@ -410,7 +422,36 @@ function getFiltered() {
   });
 }
 
+// ====== フィルタ状態の保存・復元（ページを離れても絞り込みを維持） ======
+const FILTER_STORE_KEY = 'testResultsFilters';
+const FILTER_SELECT_IDS = ['filter-test', 'filter-kumiai', 'filter-company', 'filter-sender', 'filter-class', 'filter-maxmode'];
+const FILTER_CHECK_IDS = ['filter-noconv', 'filter-need-manual', 'filter-include-excluded', 'mode-conv'];
+
+function saveFilters() {
+  const state = { search: document.getElementById('filter-search').value };
+  FILTER_SELECT_IDS.forEach(id => { state[id] = document.getElementById(id).value; });
+  FILTER_CHECK_IDS.forEach(id => { state[id] = document.getElementById(id).checked; });
+  try { localStorage.setItem(FILTER_STORE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+function restoreFilters() {
+  let state;
+  try { state = JSON.parse(localStorage.getItem(FILTER_STORE_KEY) || 'null'); } catch (e) {}
+  if (!state) return;
+  FILTER_SELECT_IDS.forEach(id => {
+    if (state[id] === undefined) return;
+    const sel = document.getElementById(id);
+    // 保存値がドロップダウンに存在する場合のみ復元（データが変わって消えた値は無視）
+    if ([...sel.options].some(o => o.value === state[id])) sel.value = state[id];
+  });
+  FILTER_CHECK_IDS.forEach(id => {
+    if (typeof state[id] === 'boolean') document.getElementById(id).checked = state[id];
+  });
+  if (typeof state.search === 'string') document.getElementById('filter-search').value = state.search;
+}
+
 function render() {
+  saveFilters();
   const filtered = getFiltered();
   const maxMode = document.getElementById('filter-maxmode').value; // '400' or '300'
   const convMode = document.getElementById('mode-conv').checked;
