@@ -53,6 +53,8 @@
   .manual-row .question{background:#eef6ff;border:1px solid #cfe3f6;border-radius:4px;padding:7px 8px;margin-bottom:6px;line-height:1.7}
   .manual-row .passage{background:#fff;border:1px solid #e5edf6;border-radius:4px;padding:8px;margin-bottom:6px;max-height:180px;overflow:auto;line-height:1.7}
   .manual-row .answer{background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 8px;min-height:32px;white-space:pre-wrap}
+  .manual-row .reference{background:#fff8e6;border:1px solid #f1d39a;border-radius:4px;padding:6px 8px;margin-bottom:6px;font-size:12px;color:#8a5a00;line-height:1.7}
+  .manual-row .reference b{color:#a25a00}
   .manual-blank{display:inline-block;background:#fff;border:1px solid #7fb3d5;border-radius:3px;padding:0 8px;color:#1a5276;font-weight:bold}
   .manual-row input{width:70px;padding:5px;border:1px solid #aaa;border-radius:4px;text-align:right}
   .manual-binary{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
@@ -406,6 +408,7 @@ function collectManualScoringItems(sections, userAnswers) {
             title: stripRuby(q.title_html || q.id),
             questionHtml: context.questionHtml,
             passageHtml: context.passageHtml,
+            reference: (rule.teacher_reference || {})[fid] || '',
             answer: userAnswers[fid] ?? '',
           });
         });
@@ -426,6 +429,7 @@ function collectManualScoringItems(sections, userAnswers) {
             title: stripRuby(q.title_html || sub.sub_title || sub.sub_id),
             questionHtml: context.questionHtml,
             passageHtml: context.passageHtml,
+            reference: (subRule.teacher_reference || {})[fid] || '',
             answer: userAnswers[fid] ?? '',
           });
         });
@@ -529,6 +533,7 @@ function renderManualScoringPanel(result, items) {
             <div style="font-size:12px;color:#555;margin-bottom:4px">${escapeHtml(item.title)}</div>
             ${item.passageHtml ? `<div class="passage">${item.passageHtml}</div>` : ''}
             <div class="question">${item.questionHtml || escapeHtml(item.fieldId)}</div>
+            ${item.reference ? `<div class="reference"><b>🔈 採点用（学生には見えません）:</b> ${escapeHtml(item.reference)}</div>` : ''}
             <div class="answer">${escapeHtml(String(answer))}</div>
           </div>
           <label style="font-size:12px;color:#555">点数 / ${item.max}<br>
