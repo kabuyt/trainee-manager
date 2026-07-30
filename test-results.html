@@ -123,6 +123,11 @@
           <option value="">全部</option>
         </select>
       </label>
+      <label>受験日:
+        <select id="filter-date" onchange="render()">
+          <option value="">全部</option>
+        </select>
+      </label>
       <label>組合:
         <select id="filter-kumiai" onchange="render()">
           <option value="">全部</option>
@@ -349,11 +354,13 @@ async function reload() {
   const companies = [...new Set(_data.map(d => d.company).filter(Boolean))].sort();
   const kumiais = [...new Set(_data.map(d => d.kumiai).filter(Boolean))].sort();
   const senders = [...new Set(_data.map(d => d.sender).filter(Boolean))].sort();
+  const dates = [...new Set(_data.map(d => d.test_date).filter(Boolean))].sort().reverse(); // 新しい日付が上
   fillSelect('filter-test', tests);
   fillSelect('filter-class', classes);
   fillSelect('filter-company', companies);
   fillSelect('filter-kumiai', kumiais);
   fillSelect('filter-sender', senders);
+  fillSelect('filter-date', dates);
 
   restoreFilters();
   render();
@@ -397,6 +404,7 @@ function getFiltered() {
   const fClass = document.getElementById('filter-class').value;
   const fCompany = document.getElementById('filter-company').value;
   const fKumiai = document.getElementById('filter-kumiai').value;
+  const fDate = document.getElementById('filter-date').value;
   const fSender = document.getElementById('filter-sender').value;
   const fSearch = (document.getElementById('filter-search').value || '').toLowerCase();
   const fNoConv = document.getElementById('filter-noconv').checked;
@@ -409,6 +417,7 @@ function getFiltered() {
     if (fClass && d.class_group !== fClass) return false;
     if (fCompany && d.company !== fCompany) return false;
     if (fKumiai && d.kumiai !== fKumiai) return false;
+    if (fDate && d.test_date !== fDate) return false;
     if (fSender && d.sender !== fSender) return false;
     if (fSearch && !(
       d.student_id.toLowerCase().includes(fSearch) ||
@@ -424,7 +433,7 @@ function getFiltered() {
 
 // ====== フィルタ状態の保存・復元（ページを離れても絞り込みを維持） ======
 const FILTER_STORE_KEY = 'testResultsFilters';
-const FILTER_SELECT_IDS = ['filter-test', 'filter-kumiai', 'filter-company', 'filter-sender', 'filter-class', 'filter-maxmode'];
+const FILTER_SELECT_IDS = ['filter-test', 'filter-date', 'filter-kumiai', 'filter-company', 'filter-sender', 'filter-class', 'filter-maxmode'];
 const FILTER_CHECK_IDS = ['filter-noconv', 'filter-need-manual', 'filter-include-excluded', 'mode-conv'];
 
 function saveFilters() {
