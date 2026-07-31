@@ -611,6 +611,7 @@ def main():
     # まず kumiai/company フィルタを適用
     pre_filtered = []
     for t in trainees:
+        if (t.get('status') or 'active') != 'active': continue
         if target_kumiai and t.get('supervising_org') != target_kumiai: continue
         if args.company and args.company not in (t.get('company') or ''): continue
         if any(ex in (t.get('company') or '') for ex in args.exclude_company): continue
@@ -637,10 +638,14 @@ def main():
         skipped_groups = []
         for t in pre_filtered:
             c = company_with_class(t)
-            if c not in company_to_month:
+            months = tested_months_by_trainee.get(t['id'], set())
+            if months:
+                m = max(months)
+            elif args.all and c in company_to_month:
+                m = company_to_month[c]
+            else:
                 skipped_groups.append(c)
                 continue
-            m = company_to_month[c]
             t['_assigned_month'] = m
             # --all 時はそのグループ全員を含める（未受験者も「未受験」表記で出力）
             if not args.all and m not in tested_months_by_trainee.get(t['id'], set()):
@@ -738,7 +743,8 @@ def main():
                 comp_dir = work_dir / c_safe
                 comp_dir.mkdir(parents=True, exist_ok=True)
                 site_files = []
-                company_month = arr[0].get('_assigned_month', args.month) if arr else args.month
+                company_months = sorted(set(t.get('_assigned_month', args.month) for t in arr))
+                company_month = company_months[0] if len(company_months) == 1 else '・'.join(str(m) for m in company_months)
                 for t in arr:
                     done += 1
                     sid = t.get('student_id', '?')
