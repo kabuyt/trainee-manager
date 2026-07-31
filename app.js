@@ -1225,6 +1225,13 @@ const TRAINEE_TEST_MONTH_OVERRIDES = {
   BRN021: { test2: 1 },
 };
 
+const MONTH3_TEST4_REPORT_STUDENTS = new Set(['BRN001', 'BRN002']);
+
+function isMonth3Test4ReportTrainee() {
+  const sid = _reportTrainee?.student_id;
+  return sid ? MONTH3_TEST4_REPORT_STUDENTS.has(sid) : false;
+}
+
 function getTestMonthOverrides() {
   const sid = _reportTrainee?.student_id;
   return sid ? (TRAINEE_TEST_MONTH_OVERRIDES[sid] || null) : null;
@@ -1285,6 +1292,12 @@ function getMarugotoOffset() {
 // - まるごと生 + offset+2 < 月: 卒業（テストなし）
 // - みんな生: 月N の minna
 function getMonthInfo(monthNum) {
+  if (isMonth3Test4ReportTrainee()) {
+    if (monthNum <= 2) return MONTH_TEST_MAP_MINNA.find(m => m.month === monthNum);
+    const source = MONTH_TEST_MAP_MINNA.find(m => m.month === monthNum + 1);
+    if (source) return { ...source, month: monthNum, shiftedFromMonth: source.month };
+    return { month: monthNum, test: null, testLabel: '-', scope: 'N/A' };
+  }
   if (isMarugotoTrainee()) {
     const offset = getMarugotoOffset();
     if (monthNum <= offset) {
@@ -1308,6 +1321,9 @@ function currentMonthMap() {
 // - まるごと生: marugoto_1〜2 の2回分のみ（minna月や卒業月は除外）
 // - みんな生: minna 8回分
 function getTrendMap() {
+  if (isMonth3Test4ReportTrainee()) {
+    return MONTH_TEST_MAP_MINNA.slice(0, 4);
+  }
   if (isMarugotoTrainee()) {
     const offset = getMarugotoOffset();
     return MONTH_TEST_MAP_MARUGOTO.map(m => ({
