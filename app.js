@@ -1711,6 +1711,81 @@ function normalizeCommentHtml(html) {
   return lines.map(escapeCommentText).join('<br>');
 }
 
+function htmlToPlainText(value) {
+  const raw = String(value || '');
+  if (typeof document === 'undefined') {
+    return raw.replace(/<[^>]+>/g, ' ');
+  }
+  const tmp = document.createElement('div');
+  tmp.innerHTML = raw;
+  return tmp.textContent || tmp.innerText || '';
+}
+
+function toHalfWidthDigits(value) {
+  return String(value || '').replace(/[０-９]/g, ch =>
+    String.fromCharCode(ch.charCodeAt(0) - 0xFEE0)
+  );
+}
+
+function extractLearnProgressFromWeek4(week4Html) {
+  const text = toHalfWidthDigits(htmlToPlainText(week4Html))
+    .replace(/[〜～－–—-]/g, '~')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (!text) return '';
+
+  const lessonMatches = [...text.matchAll(/(?:第\s*)?(?:(\d+)\s*~\s*)?(\d+)\s*課/g)];
+  let lesson = lessonMatches.length ? lessonMatches[lessonMatches.length - 1][2] : '';
+  if (!lesson) {
+    const m = text.match(/L\.?\s*(\d+)/i) || text.match(/Lesson\s+(\d+)/i);
+    lesson = m ? m[1] : '';
+  }
+  if (!lesson) return '';
+
+  return /みんなの日本語/.test(text) ? `みんなの日本語 ${lesson}課` : `第${lesson}課`;
+}
+
+function isBlankLearnProgress(value) {
+  const text = String(value || '').trim();
+  return !text || text === '-';
+}
+
+function setLearnProgressFromWeek4IfAuto(week4Html) {
+  const progEl = document.getElementById('learnProgress');
+  if (!progEl) return;
+  const current = progEl.textContent.trim();
+  if (!isBlankLearnProgress(current) && progEl.dataset.autoFilled !== '1') return;
+
+  const derived = extractLearnProgressFromWeek4(week4Html);
+  if (derived) {
+    progEl.textContent = derived;
+    progEl.dataset.autoFilled = '1';
+  } else if (progEl.dataset.autoFilled === '1') {
+    progEl.textContent = '-';
+  }
+}
+
+function bindLearnProgressAutoFill() {
+  const progEl = document.getElementById('learnProgress');
+  if (progEl && progEl.dataset.manualTrackerBound !== '1') {
+    progEl.addEventListener('input', () => {
+      progEl.dataset.autoFilled = '0';
+    });
+    progEl.dataset.manualTrackerBound = '1';
+  }
+
+  const week4TextEl = document.querySelector('#week4 .comment-text');
+  if (week4TextEl && week4TextEl.dataset.learnProgressAutoBound !== '1') {
+    week4TextEl.addEventListener('input', () => {
+      setLearnProgressFromWeek4IfAuto(week4TextEl.innerHTML);
+    });
+    week4TextEl.addEventListener('blur', () => {
+      setLearnProgressFromWeek4IfAuto(week4TextEl.innerHTML);
+    });
+    week4TextEl.dataset.learnProgressAutoBound = '1';
+  }
+}
+
 function renderMonthComments(report) {
   const fields = ['lifeGood','lifeBad','lifeMeasure','lifeImprove','lifePersonality',
                   'learnGood','learnBad','learnMeasure','learnImprove'];
@@ -1754,21 +1829,16 @@ function renderMonthComments(report) {
     }
   }
 
-  // 学習進捗: DB保存値があればそれを優先、なければ 第4週 から「第N課」を抽出
+  // 学習進捗: DB保存値があればそれを優先、なければ第4週から最終課を抽出
   const progEl = document.getElementById('learnProgress');
   if (progEl) {
     let progText = (report && report.learn_progress) || '';
-    if (!progText && report && report.week4) {
-      // 週4の内容から「第X課」「X課」「L.X」「Lesson X」「第X」等を抽出
-      const w4 = String(report.week4).replace(/<[^>]+>/g, ' ');
-      const m = w4.match(/第\s*(\d+)\s*課/) ||
-                w4.match(/(\d+)\s*課/) ||
-                w4.match(/L\.?\s*(\d+)/i) ||
-                w4.match(/Lesson\s+(\d+)/i);
-      if (m) progText = `第${m[1]}課`;
-    }
+    const autoText = !progText && report ? extractLearnProgressFromWeek4(report.week4) : '';
+    if (autoText) progText = autoText;
     progEl.textContent = progText || '-';
+    progEl.dataset.autoFilled = autoText ? '1' : '0';
   }
+  bindLearnProgressAutoFill();
 
   // 日本語評価（未保存なら得点からの自動判定を使う）
   const autoJapanese = (window._autoJapaneseGrade && window._autoJapaneseGrade.label) || '';
@@ -1970,6 +2040,21 @@ async function saveReport() {
     const t = row.querySelector('.comment-text');
     return t ? normalizeEditableHtml(t.innerHTML) : '';
   };
+  const week1 = getWeek(1);
+  const week2 = getWeek(2);
+  const week3 = getWeek(3);
+  const week4 = getWeek(4);
+  let learnProgress = document.getElementById('learnProgress').textContent.trim();
+  if (isBlankLearnProgress(learnProgress)) {
+    learnProgress = extractLearnProgressFromWeek4(week4) || '';
+    if (learnProgress) {
+      const progEl = document.getElementById('learnProgress');
+      if (progEl) {
+        progEl.textContent = learnProgress;
+        progEl.dataset.autoFilled = '1';
+      }
+    }
+  }
 
   const data = {
     trainee_id: _reportTrainee.id,
@@ -1977,7 +2062,7 @@ async function saveReport() {
     japanese_eval: getJapaneseOverrideValue(),
     attitude_eval: document.getElementById('evalAttitude').value,
     living_env: document.getElementById('learnEnv').value,
-    learn_progress: document.getElementById('learnProgress').textContent.trim(),
+    learn_progress: learnProgress,
     life_good: getHtml('lifeGood'),
     life_bad: getHtml('lifeBad'),
     life_measure: getHtml('lifeMeasure'),
@@ -1987,10 +2072,10 @@ async function saveReport() {
     learn_bad: getHtml('learnBad'),
     learn_measure: getHtml('learnMeasure'),
     learn_improve: getHtml('learnImprove'),
-    week1: getWeek(1),
-    week2: getWeek(2),
-    week3: getWeek(3),
-    week4: getWeek(4),
+    week1,
+    week2,
+    week3,
+    week4,
     updated_at: new Date().toISOString(),
   };
 
