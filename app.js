@@ -1345,6 +1345,83 @@ function matchTest(row, map) {
   return row.test_name === map.test || row.test_name === map.testLabel;
 }
 
+function getKnownTestMap(testName) {
+  const maps = MONTH_TEST_MAP_MINNA.concat(MONTH_TEST_MAP_MARUGOTO);
+  return maps.find(m => m.test === testName || m.testLabel === testName) || null;
+}
+
+function getReportTestLabel(rowOrName) {
+  const testName = typeof rowOrName === 'string' ? rowOrName : rowOrName?.test_name;
+  const known = getKnownTestMap(testName);
+  return known?.testLabel || testName || '-';
+}
+
+function getReportTestScope(rowOrName) {
+  const testName = typeof rowOrName === 'string' ? rowOrName : rowOrName?.test_name;
+  const known = getKnownTestMap(testName);
+  return known?.scope || '';
+}
+
+function getLatestResultPerTest() {
+  const latest = new Map();
+  (_reportResults || []).forEach(r => {
+    if (!r || !r.test_name) return;
+    const current = latest.get(r.test_name);
+    if (!current || (r.test_date || '') > (current.test_date || '')) latest.set(r.test_name, r);
+  });
+  const orderOf = (r) => {
+    const known = getKnownTestMap(r.test_name);
+    return known ? known.month : 999;
+  };
+  return Array.from(latest.values()).sort((a, b) => orderOf(a) - orderOf(b) || String(a.test_name).localeCompare(String(b.test_name)));
+}
+
+function resolveScoreResult(defaultMap) {
+  if (_scoreTestOverride) {
+    const selected = getLatestResultPerTest().find(r => r.test_name === _scoreTestOverride);
+    if (selected) return selected;
+  }
+  return _reportResults.find(r => matchTest(r, defaultMap));
+}
+
+function renderScoreTestSelector(defaultMap) {
+  const select = document.getElementById('scoreTestSelect');
+  const wrap = document.getElementById('scoreTestSelectWrap');
+  if (!select || !wrap) return;
+
+  const results = getLatestResultPerTest();
+  wrap.style.display = results.length > 1 ? '' : 'none';
+  if (results.length <= 1) {
+    _scoreTestOverride = null;
+    select.innerHTML = '';
+    return;
+  }
+
+  if (_scoreTestOverride && !results.some(r => r.test_name === _scoreTestOverride)) {
+    _scoreTestOverride = null;
+  }
+
+  const autoResult = _reportResults.find(r => matchTest(r, defaultMap));
+  const autoLabel = autoResult ? getReportTestLabel(autoResult) : (defaultMap?.testLabel || '-');
+  const options = [`<option value="">自動（${autoLabel}）</option>`]
+    .concat(results.map(r => `<option value="${escapeHtmlAttr(r.test_name)}">${escapeHtml(getReportTestLabel(r))}</option>`));
+  select.innerHTML = options.join('');
+  select.value = _scoreTestOverride || '';
+}
+
+function setScoreTestOverride(testName) {
+  _scoreTestOverride = testName || null;
+  switchMonth(_currentMonth);
+}
+
+function escapeHtmlAttr(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
 function isTomboTrainee(t) {
   return !!(t && String(t.supervising_org || '').includes('トンボ国際交流事業協同組合'));
 }
@@ -1401,6 +1478,7 @@ let _reportAllTestResults = [];
 let _reportMonthly = {};  // { month: row }
 let _reportStatsResults = [];
 let _currentMonth = 1;
+let _scoreTestOverride = null;
 
 async function loadReport() {
   const id = new URLSearchParams(location.search).get('id');
@@ -1575,9 +1653,12 @@ function switchMonth(month) {
   document.getElementById('scopeLabel').textContent = map.scope;
 
   // 該当月のテスト結果を表示
-  const result = _reportResults.find(r => matchTest(r, map));
+  renderScoreTestSelector(map);
+  const result = resolveScoreResult(map);
+  const scoreScope = result ? (getReportTestScope(result) || map.scope) : map.scope;
+  document.getElementById('scopeLabel').textContent = scoreScope;
   renderMonthScores(result);
-  renderDiagnosis(document.getElementById('diagnosisArea'), _reportResults);
+  renderDiagnosis(document.getElementById('diagnosisArea'), result ? [result] : _reportResults);
 
   // 該当月のコメントを表示
   renderMonthComments(_reportMonthly[month]);

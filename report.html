@@ -104,6 +104,10 @@
             <span class="scope-label">受験日</span>
             <span class="scope-val" id="rExamDate">-</span>
           </div>
+          <div class="scope-pair no-print" id="scoreTestSelectWrap" style="display:none">
+            <span class="scope-label">表示テスト</span>
+            <select id="scoreTestSelect" style="min-width:150px;padding:4px 8px;border:1px solid #d0d6dd;border-radius:6px;font:inherit;color:#102547;background:#fff"></select>
+          </div>
         </div>
         <div class="total-display">
           <span class="total-label">合計</span>
@@ -340,7 +344,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="auth.js?v=5"></script>
-<script src="app.js?v=79"></script>
+<script src="app.js?v=80"></script>
 <script>
 // localStorage に classic 指定があれば classic ページへリダイレクト
 // ただし bulk=1（一括PDF出力中）は強制的にモダンを使う
@@ -402,6 +406,12 @@ document.getElementById('monthSelect').addEventListener('change', function() {
   document.getElementById('monthPrint').textContent = this.value;
   if (typeof switchMonth === 'function') switchMonth(parseInt(this.value));
 });
+const scoreTestSelect = document.getElementById('scoreTestSelect');
+if (scoreTestSelect) {
+  scoreTestSelect.addEventListener('change', function() {
+    if (typeof setScoreTestOverride === 'function') setScoreTestOverride(this.value);
+  });
+}
 // 態度評価
 document.getElementById('evalAttitude').addEventListener('change', function() {
   document.getElementById('attitudePrint').textContent = this.value;
