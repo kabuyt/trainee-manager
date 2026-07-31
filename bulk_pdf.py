@@ -576,7 +576,7 @@ def main():
         'BRN002': month3_test4_tests,
         'BRN014': one_month_delayed_tests,
         'BRN015': one_month_delayed_tests,
-        'BRN021': {'test2': 1, '第5-11課': 1},
+        'BRN021': {'test2': 1, '第5-11課': 1, 'test3': 2, '第12-18課': 2},
     }
 
     print("📥 Supabase から実習生データ取得中...")
