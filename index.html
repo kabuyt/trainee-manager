@@ -155,14 +155,7 @@ python create_student_accounts.py --apply</pre>
       <h3 style="color:#102547;margin-bottom:14px">🔄 配布サイト再生成手順</h3>
       <p style="color:#4a5878;margin-bottom:14px;font-size:13.5px">PowerShell を開いて以下を実行してください:</p>
       <pre id="regenCmd" style="background:#0f1a2e;color:#3DAE2B;padding:16px;border-radius:8px;font-size:12px;overflow-x:auto;line-height:1.7">cd C:\Users\kabuyamat\Desktop\trainee-manager
-python bulk_pdf.py --kumiai globalway --auto-month --all --site --password globalway2026
-python bulk_pdf.py --kumiai cic --auto-month --all --site --password cic2026
-python bulk_pdf.py --kumiai worldbusiness --auto-month --all --site --password worldbusiness2026
-python bulk_pdf.py --kumiai tombow --auto-month --all --site --password tombow2026
-python bulk_pdf.py --kumiai sanyotech --auto-month --all --site --password sanyotech2026
-rm -rf reports/globalway reports/cic reports/worldbusiness reports/tombow reports/sanyotech
-cp -r reports_pdf/globalway reports_pdf/cic reports_pdf/worldbusiness reports_pdf/tombow reports_pdf/sanyotech reports/
-git add reports/ && git commit -m "reports: 月次更新" && git push</pre>
+powershell -ExecutionPolicy Bypass -File .\tools\update_reports.ps1</pre>
       <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
         <button onclick="navigator.clipboard.writeText(document.getElementById('regenCmd').textContent);this.textContent='✓ コピー済';" class="btn btn-secondary">📋 コピー</button>
         <button onclick="document.getElementById('regenModal').style.display='none'" class="btn btn-primary">閉じる</button>
