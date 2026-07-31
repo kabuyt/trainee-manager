@@ -1730,19 +1730,22 @@ function toHalfWidthDigits(value) {
 function extractLearnProgressFromWeek4(week4Html) {
   const text = toHalfWidthDigits(htmlToPlainText(week4Html))
     .replace(/[〜～－–—-]/g, '~')
-    .replace(/\s+/g, ' ')
     .trim();
   if (!text) return '';
 
-  const lessonMatches = [...text.matchAll(/(?:第\s*)?(?:(\d+)\s*~\s*)?(\d+)\s*課/g)];
+  const lines = text.split(/\n+/).map(line => line.replace(/\s+/g, ' ').trim()).filter(Boolean);
+  const minnaLine = lines.find(line => /みんなの日本語/.test(line));
+  const sourceText = (minnaLine || text).replace(/\s+/g, ' ');
+
+  const lessonMatches = [...sourceText.matchAll(/(?:第\s*)?(?:(\d+)\s*~\s*)?(\d+)\s*課/g)];
   let lesson = lessonMatches.length ? lessonMatches[lessonMatches.length - 1][2] : '';
   if (!lesson) {
-    const m = text.match(/L\.?\s*(\d+)/i) || text.match(/Lesson\s+(\d+)/i);
+    const m = sourceText.match(/L\.?\s*(\d+)/i) || sourceText.match(/Lesson\s+(\d+)/i);
     lesson = m ? m[1] : '';
   }
   if (!lesson) return '';
 
-  return /みんなの日本語/.test(text) ? `みんなの日本語 ${lesson}課` : `第${lesson}課`;
+  return minnaLine ? `みんなの日本語 ${lesson}課` : `第${lesson}課`;
 }
 
 function isBlankLearnProgress(value) {
