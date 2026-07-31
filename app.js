@@ -1753,13 +1753,20 @@ function isBlankLearnProgress(value) {
   return !text || text === '-';
 }
 
+function isAutoLearnProgressText(value) {
+  return /^\u307f\u3093\u306a\u306e\u65e5\u672c\u8a9e\s*\d+\u8ab2$/.test(String(value || '').trim()) ||
+    /^\u7b2c\s*\d+\u8ab2$/.test(String(value || '').trim());
+}
+
 function setLearnProgressFromWeek4IfAuto(week4Html) {
   const progEl = document.getElementById('learnProgress');
   if (!progEl) return;
   const current = progEl.textContent.trim();
-  if (!isBlankLearnProgress(current) && progEl.dataset.autoFilled !== '1') return;
-
   const derived = extractLearnProgressFromWeek4(week4Html);
+  if (!isBlankLearnProgress(current) && progEl.dataset.autoFilled !== '1') {
+    if (!derived || !isAutoLearnProgressText(current) || current === derived) return;
+  }
+
   if (derived) {
     progEl.textContent = derived;
     progEl.dataset.autoFilled = '1';
@@ -1836,8 +1843,10 @@ function renderMonthComments(report) {
   const progEl = document.getElementById('learnProgress');
   if (progEl) {
     let progText = (report && report.learn_progress) || '';
-    const autoText = !progText && report ? extractLearnProgressFromWeek4(report.week4) : '';
-    if (autoText) progText = autoText;
+    const autoText = report ? extractLearnProgressFromWeek4(report.week4) : '';
+    if (autoText && (!progText || (isAutoLearnProgressText(progText) && progText !== autoText))) {
+      progText = autoText;
+    }
     progEl.textContent = progText || '-';
     progEl.dataset.autoFilled = autoText ? '1' : '0';
   }
@@ -2048,8 +2057,9 @@ async function saveReport() {
   const week3 = getWeek(3);
   const week4 = getWeek(4);
   let learnProgress = document.getElementById('learnProgress').textContent.trim();
-  if (isBlankLearnProgress(learnProgress)) {
-    learnProgress = extractLearnProgressFromWeek4(week4) || '';
+  const derivedLearnProgress = extractLearnProgressFromWeek4(week4);
+  if (isBlankLearnProgress(learnProgress) || (derivedLearnProgress && isAutoLearnProgressText(learnProgress) && learnProgress !== derivedLearnProgress)) {
+    learnProgress = derivedLearnProgress || '';
     if (learnProgress) {
       const progEl = document.getElementById('learnProgress');
       if (progEl) {
