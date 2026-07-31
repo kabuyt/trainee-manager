@@ -21,7 +21,7 @@ OUT = os.path.join(os.path.dirname(__file__), 'login_cards.html')
 
 
 def get_token():
-    body = json.dumps({'email':'admin@trainee.local','password':'Xk9mPv3nQ7'}).encode('utf-8')
+    body = json.dumps({'email':'admin@trainee.local','password':'123456'}).encode('utf-8')
     req = urllib.request.Request(f'{URL}/auth/v1/token?grant_type=password', data=body, headers={'Content-Type':'application/json','apikey':ANON})
     with urllib.request.urlopen(req) as r:
         return json.loads(r.read())['access_token']

@@ -16,7 +16,7 @@ URL: https://supabase.com/dashboard/project/ajmdpkwqyeyzemeoojwd/auth/users
 
 | Email                | Password   |
 |----------------------|------------|
-| admin@trainee.local  | Xk9mPv3nQ7 |
+| admin@trainee.local  | 123456 |
 | vjc@trainee.local    | Rw4jLn8sY2 |
 | baraen@trainee.local | Ht6wBp1mK5 |
 | akane@trainee.local  | Qs3fNd7xW9 |
@@ -48,7 +48,7 @@ FROM auth.users u WHERE u.email = 'akane@trainee.local';
 
 | ID      | パスワード    | 教育機関 |
 |---------|------------|---------|
-| admin   | Xk9mPv3nQ7 | 管理者   |
+| admin   | 123456 | 管理者   |
 | vjc     | Rw4jLn8sY2 | VJC     |
 | baraen  | Ht6wBp1mK5 | BARAEN  |
 | akane   | Qs3fNd7xW9 | AKANE   |

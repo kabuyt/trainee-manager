@@ -71,17 +71,17 @@
     "points_each": 2,
     "total_points": 22,
     "items": [
-      { "field_id": "g2_1",  "label": "１）　ここに<ruby>自転車<rt>じてんしゃ</rt></ruby>をおかないでください。", "target": "自転車", "input_type": "text" },
-      { "field_id": "g2_2",  "label": "２）　<ruby>広島<rt>ひろしま</rt></ruby><ruby>県<rt>けん</rt></ruby>は<ruby>日本<rt>にほん</rt></ruby>の<ruby>西<rt>にし</rt></ruby>にあります。", "target": "県", "input_type": "text" },
-      { "field_id": "g2_3",  "label": "３）　<ruby>燃<rt>も</rt></ruby>えるゴミは<ruby>毎週<rt>まいしゅう</rt></ruby><ruby>火曜日<rt>かようび</rt></ruby>と<ruby>木<rt>もく</rt></ruby>ようびです。", "target": "木", "input_type": "text" },
-      { "field_id": "g2_4",  "label": "４）　<ruby>休<rt>やす</rt></ruby>みは10<ruby>時<rt>じ</rt></ruby>から10時<ruby>半<rt>はん</rt></ruby>までです。", "target": "休", "input_type": "text" },
-      { "field_id": "g2_5",  "label": "５）　<ruby>会社<rt>かいしゃ</rt></ruby>の<ruby>住所<rt>じゅうしょ</rt></ruby>を<ruby>知<rt>し</rt></ruby>っていますか。", "target": "会社", "input_type": "text" },
-      { "field_id": "g2_6",  "label": "６）　<ruby>毎日<rt>まいにち</rt></ruby><ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>みます。", "target": "毎日", "input_type": "text" },
-      { "field_id": "g2_7",  "label": "７）　まっすぐ<ruby>行<rt>い</rt></ruby>くと、<ruby>郵便局<rt>ゆうびんきょく</rt></ruby>があります。", "target": "郵便局", "input_type": "text" },
-      { "field_id": "g2_8",  "label": "８）　<ruby>左<rt>ひだり</rt></ruby>をよくみてください。", "target": "左", "input_type": "text" },
-      { "field_id": "g2_9",  "label": "９）　<ruby>食堂<rt>しょくどう</rt></ruby>はどこですか。", "target": "食堂", "input_type": "text" },
-      { "field_id": "g2_10", "label": "１０）　<ruby>来週<rt>らいしゅう</rt></ruby>はクリスマスです。", "target": "来週", "input_type": "text" },
-      { "field_id": "g2_11", "label": "１１）　<ruby>日本<rt>にほん</rt></ruby>で<ruby>仕事<rt>しごと</rt></ruby>します。", "target": "仕事", "input_type": "text" }
+      { "field_id": "g2_1",  "label": "１）　ここに自転車をおかないでください。", "target": "自転車", "input_type": "text" },
+      { "field_id": "g2_2",  "label": "２）　<ruby>広島<rt>ひろしま</rt></ruby>県は<ruby>日本<rt>にほん</rt></ruby>の<ruby>西<rt>にし</rt></ruby>にあります。", "target": "県", "input_type": "text" },
+      { "field_id": "g2_3",  "label": "３）　<ruby>燃<rt>も</rt></ruby>えるゴミは<ruby>毎週<rt>まいしゅう</rt></ruby><ruby>火曜日<rt>かようび</rt></ruby>と木ようびです。", "target": "木", "input_type": "text" },
+      { "field_id": "g2_4",  "label": "４）　休みは10<ruby>時<rt>じ</rt></ruby>から10時<ruby>半<rt>はん</rt></ruby>までです。", "target": "休", "input_type": "text" },
+      { "field_id": "g2_5",  "label": "５）　会社の<ruby>住所<rt>じゅうしょ</rt></ruby>を<ruby>知<rt>し</rt></ruby>っていますか。", "target": "会社", "input_type": "text" },
+      { "field_id": "g2_6",  "label": "６）　毎日<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>みます。", "target": "毎日", "input_type": "text" },
+      { "field_id": "g2_7",  "label": "７）　まっすぐ<ruby>行<rt>い</rt></ruby>くと、郵便局があります。", "target": "郵便局", "input_type": "text" },
+      { "field_id": "g2_8",  "label": "８）　左をよくみてください。", "target": "左", "input_type": "text" },
+      { "field_id": "g2_9",  "label": "９）　食堂はどこですか。", "target": "食堂", "input_type": "text" },
+      { "field_id": "g2_10", "label": "１０）　来週はクリスマスです。", "target": "来週", "input_type": "text" },
+      { "field_id": "g2_11", "label": "１１）　<ruby>日本<rt>にほん</rt></ruby>で仕事します。", "target": "仕事", "input_type": "text" }
     ]
   },
   {

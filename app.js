@@ -270,7 +270,7 @@ function renderTrainees(data) {
       <td>
         <a href="trainee.html?id=${t.id}" class="btn btn-sm btn-secondary">詳細</a>
         <a href="report.html?id=${t.id}" target="_blank" class="btn btn-sm btn-report" title="教育報告書を開く">📄 報告書</a>
-        <button onclick="deleteTrainee('${t.id}')" class="btn btn-sm btn-danger">削除</button>
+        ${isAdmin() ? `<button onclick="deleteTrainee('${t.id}')" class="btn btn-sm btn-danger">削除</button>` : ''}
       </td>
     </tr>
   `).join('');
@@ -553,6 +553,10 @@ ${cards}
 }
 
 async function deleteTrainee(id) {
+  if (!isAdmin()) {
+    alert('送り出し側アカウントでは削除できません。');
+    return;
+  }
   if (!confirm('この実習生を削除しますか？')) return;
 
   const { error } = await supabase
@@ -626,6 +630,10 @@ async function loadEditData() {
 
 // ===== 新規登録 / 更新 =====
 async function registerTrainee() {
+  if (!isAdmin()) {
+    alert('送り出し側アカウントでは実習生の登録・編集はできません。');
+    return;
+  }
   const btn = document.getElementById('submitBtn');
   const msgEl = document.getElementById('formMsg');
   btn.disabled = true;
@@ -750,10 +758,10 @@ function cutoffDate(days) {
 
 function formatStudyDuration(seconds) {
   const totalMinutes = Math.max(0, Math.round(Number(seconds || 0) / 60));
-  if (totalMinutes < 60) return totalMinutes + '分';
+  if (totalMinutes < 60) return `${totalMinutes}分`;
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
-  return hours + '時間' + minutes + '分';
+  return `${hours}時間${minutes}分`;
 }
 
 function isKinreiTerminologyTarget(t) {
@@ -973,7 +981,7 @@ function renderTraineeDetail(t, results, terminologySummary) {
       </div>
       <div class="detail-actions">
         <a href="report.html?id=${t.id}" class="btn btn-primary">報告書を作成</a>
-        <a href="register.html?edit=${t.id}" class="btn btn-secondary">編集</a>
+        ${isAdmin() ? `<a href="register.html?edit=${t.id}" class="btn btn-secondary">編集</a>` : ''}
       </div>
     </div>
 
@@ -1450,6 +1458,11 @@ async function saveConversationScore(value) {
     existing.score_conversation = value;
   } else {
     // 会話スコアだけの行を作成（他のスコアはNULL）
+    // test_name が無いまま insert すると、どのテストの成績か特定できない行が残る
+    if (!map.test) {
+      alert('この月に対応するテストが特定できないため、会話スコアを保存できません。');
+      return;
+    }
     const { data, error } = await supabase.from('test_results').insert({
       trainee_id: _reportTrainee.id,
       test_name: map.test,
@@ -2082,42 +2095,95 @@ function getSaveErrorMessage(error) {
   return error?.message || '保存に失敗しました。';
 }
 
+function setWeeklyCopyStatus(message, type = 'info') {
+  const status = document.getElementById('weeklyCopyStatus');
+  if (!status) return;
+  status.textContent = message || '';
+  status.style.color = type === 'error' ? '#c0392b' : type === 'success' ? '#27ae60' : '#4a5878';
+}
+
+function openWeeklyCopyModal() {
+  const modal = document.getElementById('weeklyCopyModal');
+  if (!modal) return;
+
+  const sourceEl = document.getElementById('weeklyCopySourceId');
+  const monthEl = document.getElementById('weeklyCopyMonth');
+  const overwriteEl = document.getElementById('weeklyCopyOverwrite');
+  const hasCurrentWeeks = [1, 2, 3, 4].some(n => {
+    const row = document.getElementById('week' + n);
+    const el = row ? row.querySelector('.comment-text') : null;
+    return !!(el && el.textContent.trim());
+  });
+
+  if (sourceEl) sourceEl.value = '';
+  if (monthEl) monthEl.value = String(_currentMonth || 1);
+  if (overwriteEl) overwriteEl.checked = !hasCurrentWeeks;
+  setWeeklyCopyStatus(hasCurrentWeeks ? '現在の週別活動が入っているため、上書きする場合はチェックしてください。' : '');
+  modal.style.display = 'flex';
+  if (sourceEl) sourceEl.focus();
+}
+
+function closeWeeklyCopyModal() {
+  const modal = document.getElementById('weeklyCopyModal');
+  if (!modal) return;
+  modal.style.display = 'none';
+  setWeeklyCopyStatus('');
+}
+
 async function copyWeeklyActivitiesFromStudent() {
   if (!_reportTrainee) return;
 
-  const sourceStudentId = prompt('コピー元の学生IDを入力してください（例: BRN008）');
-  if (!sourceStudentId) return;
+  const sourceEl = document.getElementById('weeklyCopySourceId');
+  const monthEl = document.getElementById('weeklyCopyMonth');
+  const overwriteEl = document.getElementById('weeklyCopyOverwrite');
+  const copyBtn = document.getElementById('weeklyCopySubmit');
+  const sourceStudentId = sourceEl ? sourceEl.value.trim().toUpperCase() : '';
+  const month = parseInt(String(monthEl ? monthEl.value : '').replace(/[^\d]/g, ''), 10);
 
-  const defaultMonth = String(_currentMonth || 1);
-  const monthText = prompt('コピー元の月を入力してください（例: 2）', defaultMonth);
-  if (!monthText) return;
-  const month = parseInt(String(monthText).replace(/[^\d]/g, ''), 10);
+  if (!sourceStudentId) {
+    setWeeklyCopyStatus('コピー元の学生IDを入力してください。', 'error');
+    if (sourceEl) sourceEl.focus();
+    return;
+  }
   if (!month || month < 1 || month > 8) {
-    alert('月は1〜8の数字で入力してください。');
+    setWeeklyCopyStatus('月は1から8の数字で入力してください。', 'error');
+    if (monthEl) monthEl.focus();
     return;
   }
 
-  const currentWeeks = [1, 2, 3, 4].map(n => {
+  const hasCurrentWeeks = [1, 2, 3, 4].some(n => {
     const row = document.getElementById('week' + n);
     const el = row ? row.querySelector('.comment-text') : null;
-    return el ? el.textContent.trim() : '';
-  }).filter(Boolean);
-  if (currentWeeks.length > 0 && !confirm('現在の週別活動を上書きします。よろしいですか？')) {
+    return !!(el && el.textContent.trim());
+  });
+  if (hasCurrentWeeks && overwriteEl && !overwriteEl.checked) {
+    setWeeklyCopyStatus('上書きする場合は確認チェックを入れてください。', 'error');
     return;
   }
+
+  if (copyBtn) {
+    copyBtn.disabled = true;
+    copyBtn.textContent = 'コピー中...';
+  }
+  setWeeklyCopyStatus('コピー元を確認しています...');
 
   try {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) throw new Error('SESSION_EXPIRED');
 
-    const { data: trainee, error: traineeError } = await supabase
+    let traineeQuery = supabase
       .from('trainees')
-      .select('id,student_id,name_katakana')
-      .eq('student_id', sourceStudentId.trim().toUpperCase())
-      .maybeSingle();
+      .select('id,student_id,name_katakana,organization_id')
+      .eq('student_id', sourceStudentId);
+    const profile = typeof getCurrentProfile === 'function' ? getCurrentProfile() : null;
+    if (!isAdmin() && profile?.organization_id) {
+      traineeQuery = traineeQuery.eq('organization_id', profile.organization_id);
+    }
+
+    const { data: trainee, error: traineeError } = await traineeQuery.maybeSingle();
     if (traineeError) throw traineeError;
     if (!trainee) {
-      alert('コピー元の学生IDが見つかりません。');
+      setWeeklyCopyStatus('コピー元の学生IDが見つかりません。送り出し側アカウントでは自社分のみコピーできます。', 'error');
       return;
     }
 
@@ -2129,7 +2195,7 @@ async function copyWeeklyActivitiesFromStudent() {
       .maybeSingle();
     if (reportError) throw reportError;
     if (!report || ![report.week1, report.week2, report.week3, report.week4].some(Boolean)) {
-      alert('コピー元の週別活動が見つかりません。');
+      setWeeklyCopyStatus('コピー元の週別活動が見つかりません。', 'error');
       return;
     }
 
@@ -2138,9 +2204,16 @@ async function copyWeeklyActivitiesFromStudent() {
       const el = row ? row.querySelector('.comment-text') : null;
       if (el) el.innerHTML = normalizeEditableHtml(report['week' + n] || '');
     });
-    alert(`${trainee.student_id} ${month}ヶ月目の週別活動をコピーしました。保存ボタンで確定してください。`);
+
+    setWeeklyCopyStatus(`${trainee.student_id} ${month}ヶ月目の週別活動をコピーしました。保存ボタンで確定してください。`, 'success');
+    setTimeout(() => closeWeeklyCopyModal(), 600);
   } catch (err) {
-    alert('週別活動のコピーに失敗しました: ' + getSaveErrorMessage(err));
+    setWeeklyCopyStatus('週別活動のコピーに失敗しました: ' + getSaveErrorMessage(err), 'error');
+  } finally {
+    if (copyBtn) {
+      copyBtn.disabled = false;
+      copyBtn.textContent = 'コピーする';
+    }
   }
 }
 

@@ -2,11 +2,15 @@ import argparse
 import json
 import re
 import sys
+import unicodedata
+import urllib.parse
+import urllib.request
 from pathlib import Path
 
 
 SECTIONS = ("goii", "bunpo", "chokkai")
 FIELD_KEY_RE = re.compile(r"^[a-z]\d+")
+SUPABASE_URL = "https://ajmdpkwqyeyzemeoojwd.supabase.co"
 
 
 def load_json(path):
@@ -107,6 +111,42 @@ def flatten_expected(value):
     return [str(value)]
 
 
+def normalize_for_shift(value):
+    text = str(value or "").strip().lower()
+    text = unicodedata.normalize("NFD", text)
+    text = "".join(ch for ch in text if unicodedata.category(ch) != "Mn")
+    text = text.replace("\u0111", "d").replace("\u0110", "d")
+    return re.sub(r"[。、，,\.\s]+", "", text)
+
+
+def strict_variants(value):
+    variants = []
+    for item in flatten_expected(value):
+        for part in re.split(r"[／/]", item):
+            normalized = normalize_for_shift(part)
+            if len(normalized) >= 2:
+                variants.append(normalized)
+    return variants
+
+
+def strict_match(actual, expected):
+    actual_variants = strict_variants(actual)
+    expected_variants = strict_variants(expected)
+    if not actual_variants or not expected_variants:
+        return False
+    return any(actual == expected for actual in actual_variants for expected in expected_variants)
+
+
+def get_expected_for_field(answer_key, field_id, index):
+    if isinstance(answer_key, list):
+        if 0 <= index < len(answer_key):
+            return answer_key[index]
+        return None
+    if isinstance(answer_key, dict):
+        return answer_key.get(field_id)
+    return None
+
+
 def warn_short_flex_answers(section_id, block_id, rule, answer_key, warnings):
     if rule.get("method") not in ("flex_match", "vietnamese_fuzzy"):
         return
@@ -138,6 +178,102 @@ def public_image_candidates(public_root, test_id, ref):
         public_root / ref_path,
         public_root / "common" / ref_path,
     ]
+
+
+def load_service_key(base_dir):
+    for env_path in (base_dir.parent / ".env.local", base_dir / ".env.local"):
+        if not env_path.exists():
+            continue
+        for line in env_path.read_text(encoding="utf-8", errors="ignore").splitlines():
+            if line.startswith("SUPABASE_SERVICE_KEY="):
+                return line.split("=", 1)[1].strip()
+    cache_path = base_dir / ".service_key.cache"
+    if cache_path.exists():
+        return cache_path.read_text(encoding="utf-8", errors="ignore").strip()
+    return ""
+
+
+def supabase_get(path, service_key):
+    request = urllib.request.Request(
+        f"{SUPABASE_URL}{path}",
+        headers={
+            "apikey": service_key,
+            "Authorization": f"Bearer {service_key}",
+        },
+    )
+    with urllib.request.urlopen(request) as response:
+        return json.loads(response.read().decode("utf-8"))
+
+
+def check_shift_suspicions(base_dir, test_id, answer_root, min_count):
+    service_key = load_service_key(base_dir)
+    if not service_key:
+        return [f"WARN {test_id}: shift-check skipped because Supabase service key was not found"]
+
+    select = urllib.parse.quote("id,answers_json", safe=",")
+    path = (
+        f"/rest/v1/test_results?test_name=eq.{test_id}"
+        f"&answers_json=not.is.null&select={select}&order=created_at.asc"
+    )
+    try:
+        submissions = supabase_get(path, service_key)
+    except Exception as exc:
+        return [f"WARN {test_id}: shift-check could not read test_results: {exc}"]
+
+    suspicious = {}
+    for row in submissions:
+        answers = row.get("answers_json") or {}
+        if not isinstance(answers, dict):
+            continue
+        for section_id in SECTIONS:
+            section = answer_root.get(section_id) or {}
+            answer_key = section.get("answer_key") or {}
+            scoring_rules = section.get("scoring_rules") or {}
+            for block_id, rule in scoring_rules.items():
+                if not isinstance(rule, dict):
+                    continue
+                field_ids = rule.get("field_ids") or []
+                if not isinstance(field_ids, list) or len(field_ids) < 2:
+                    continue
+
+                block_key = answer_key.get(block_id)
+                expected_by_field = []
+                for index, field_id in enumerate(field_ids):
+                    expected = get_expected_for_field(block_key, field_id, index)
+                    if expected is not None and strict_variants(expected):
+                        expected_by_field.append((field_id, expected))
+
+                for field_id, expected in expected_by_field:
+                    actual = answers.get(field_id)
+                    if actual in (None, "") or strict_match(actual, expected):
+                        continue
+                    for other_field, other_expected in expected_by_field:
+                        if other_field == field_id:
+                            continue
+                        if strict_match(actual, other_expected):
+                            key = (section_id, block_id, field_id, other_field)
+                            item = suspicious.setdefault(key, {"count": 0, "examples": []})
+                            item["count"] += 1
+                            if len(item["examples"]) < 2:
+                                item["examples"].append(str(actual))
+                            break
+
+    warnings = []
+    for (section_id, block_id, field_id, other_field), item in sorted(
+        suspicious.items(),
+        key=lambda pair: (-pair[1]["count"], pair[0]),
+    ):
+        if item["count"] < min_count:
+            continue
+        examples = ", ".join(item["examples"])
+        suffix = f" (examples: {examples})" if examples else ""
+        warnings.append(
+            f"WARN {test_id}/{section_id}/{block_id}: possible shifted answer key "
+            f"{field_id} may match {other_field} in {item['count']} submissions{suffix}"
+        )
+
+    warnings.append(f"OK {test_id}: shift-check scanned {len(submissions)} submissions")
+    return warnings
 
 
 def check_section(base_dir, public_root, test_id, section_id, answer_root, results):
@@ -234,7 +370,7 @@ def check_section(base_dir, public_root, test_id, section_id, answer_root, resul
     results.append(f"OK {test_id}/{section_id}: checked {len(question_blocks)} blocks")
 
 
-def check_test(base_dir, public_root, test_id):
+def check_test(base_dir, public_root, test_id, shift_check=False, shift_min_count=2):
     answer_path = base_dir / f"{test_id}_answer_keys.json"
     results = []
     if not answer_path.exists():
@@ -245,6 +381,8 @@ def check_test(base_dir, public_root, test_id):
         return [f"FAIL {test_id}: cannot parse answer key JSON: {exc}"]
     for section_id in SECTIONS:
         check_section(base_dir, public_root, test_id, section_id, answer_root, results)
+    if shift_check:
+        results.extend(check_shift_suspicions(base_dir, test_id, answer_root, shift_min_count))
     return results
 
 
@@ -262,6 +400,17 @@ def main():
     parser = argparse.ArgumentParser(description="Check test JSON consistency without modifying data.")
     parser.add_argument("tests", nargs="*", help="Example: test3 test4. Omit to check all tests.")
     parser.add_argument("--public-root", default=str(Path.home() / "Desktop" / "Webテスト_公開用"))
+    parser.add_argument(
+        "--shift-check",
+        action="store_true",
+        help="Also inspect stored submissions for answers that match a different field in the same block.",
+    )
+    parser.add_argument(
+        "--shift-min-count",
+        type=int,
+        default=2,
+        help="Minimum repeated shifted-answer pattern count to warn about.",
+    )
     args = parser.parse_args()
 
     base_dir = Path(__file__).resolve().parent
@@ -270,7 +419,7 @@ def main():
 
     all_results = []
     for test_id in tests:
-        all_results.extend(check_test(base_dir, public_root, test_id))
+        all_results.extend(check_test(base_dir, public_root, test_id, args.shift_check, args.shift_min_count))
 
     failures = [line for line in all_results if line.startswith("FAIL")]
     warnings = [line for line in all_results if line.startswith("WARN")]

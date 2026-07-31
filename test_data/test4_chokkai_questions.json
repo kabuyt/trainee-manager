@@ -77,6 +77,7 @@
       {
         "label": "① <ruby>問<rt>とい</rt></ruby>１",
         "audio_src": "audio/問題2-1.mp3",
+        "sentence_html": "きのうはいい{c2_1}ね。ラタナさんはどこか<ruby>行<rt>い</rt></ruby>った？<br>ええ、<ruby>鎌倉<rt>かまくら</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きました。とても{c2_2}でした。",
         "fields": [
           {
             "field_id": "c2_1",
@@ -93,6 +94,7 @@
       {
         "label": "② <ruby>問<rt>とい</rt></ruby>２",
         "audio_src": "audio/問題2-2.mp3",
+        "sentence_html": "<ruby>私<rt>わたし</rt></ruby>の<ruby>趣味<rt>しゅみ</rt></ruby>は<ruby>お菓子<rt>かし</rt></ruby>を<ruby>作<rt>つく</rt></ruby>ることです。いろいろなケーキを{c2_3}。<br><ruby>夢<rt>ゆめ</rt></ruby>は、フランスへ<ruby>お菓子<rt>かし</rt></ruby>の<ruby>勉強<rt>べんきょう</rt></ruby>に<ruby>行<rt>い</rt></ruby>くことです。<br>今はフランス<ruby>語<rt>ご</rt></ruby>を{c2_4}が、<br>フランスへ<ruby>行<rt>い</rt></ruby>く<ruby>前<rt>まえ</rt></ruby>に{c2_5}です。",
         "fields": [
           {
             "field_id": "c2_3",
@@ -122,7 +124,7 @@
     "total_points": 20,
     "parts": [
       {
-        "label": "Part 1（5<ruby>問<rt>とい</rt></ruby>）",
+        "title": "１<ruby>番<rt>ばん</rt></ruby>）　<ruby>正<rt>ただ</rt></ruby>しいものを<ruby>一<rt>ひと</rt></ruby>つ<ruby>選<rt>えら</rt></ruby>んでください。",
         "audio_src": "audio/問題3-1.mp3",
         "items": [
           {
@@ -203,7 +205,7 @@
         ]
       },
       {
-        "label": "Part 2（5<ruby>問<rt>とい</rt></ruby>）",
+        "title": "２<ruby>番<rt>ばん</rt></ruby>）　<ruby>山田<rt>やまだ</rt></ruby>さんは<ruby>何<rt>なに</rt></ruby>をしましたか。aかbか<ruby>選<rt>えら</rt></ruby>んでください。<br><ruby>例<rt>れい</rt></ruby>）　a　<ruby>本<rt>ほん</rt></ruby>を<ruby>買<rt>か</rt></ruby>いました。　　b　<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>みました。",
         "audio_src": "audio/問題3-2.mp3",
         "items": [
           {
@@ -300,7 +302,7 @@
         "label": "① <ruby>問<rt>とい</rt></ruby>１",
         "audio_src": "audio/問題4-1.mp3",
         "input_type": "radio",
-        "choices": [
+        "options": [
           {
             "value": "1",
             "label": "1. 1じかん"
@@ -324,7 +326,7 @@
         "label": "② <ruby>問<rt>とい</rt></ruby>２",
         "audio_src": "audio/問題4-2.mp3",
         "input_type": "radio",
-        "choices": [
+        "options": [
           {
             "value": "1",
             "label": "1. ボールペン"
@@ -348,7 +350,7 @@
         "label": "③ <ruby>問<rt>とい</rt></ruby>３",
         "audio_src": "audio/問題4-3.mp3",
         "input_type": "radio",
-        "choices": [
+        "options": [
           {
             "value": "1",
             "label": "1. ケーキ"
@@ -372,7 +374,7 @@
         "label": "④ <ruby>問<rt>とい</rt></ruby>４",
         "audio_src": "audio/問題4-4.mp3",
         "input_type": "radio",
-        "choices": [
+        "options": [
           {
             "value": "1",
             "label": "1. <ruby>冷<rt>つめ</rt></ruby>たいコーヒー"

@@ -10,7 +10,7 @@ SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 
 # まずadminとしてログインしてaccess tokenを取得
 ADMIN_EMAIL = 'admin@trainee.local'
-ADMIN_PASS = 'Xk9mPv3nQ7'
+ADMIN_PASS = '123456'
 
 def login():
     """Supabase Authでログインしてaccess tokenを取得"""

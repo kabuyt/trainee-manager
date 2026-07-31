@@ -11,7 +11,7 @@ SUPABASE_URL = 'https://ajmdpkwqyeyzemeoojwd.supabase.co'
 SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqbWRwa3dxeWV5emVtZW9vandkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMjIwMzAsImV4cCI6MjA5MDY5ODAzMH0.AfpGFcYvVrS25qTr9RTGWqsvWMKykU2QcXZPtiNxAqY'
 
 ADMIN_EMAIL = 'admin@trainee.local'
-ADMIN_PASS = 'Xk9mPv3nQ7'
+ADMIN_PASS = '123456'
 
 
 def login():

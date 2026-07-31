@@ -66,7 +66,8 @@ def g_exact_match(rule, ak, answers):
         else:
             expected = None
         if expected is None: continue
-        if normalize(answers.get(fid)) == normalize(expected):
+        expected_list = expected if isinstance(expected, list) else [expected]
+        if any(normalize(answers.get(fid)) == normalize(e) for e in expected_list):
             score += pts
     return score
 
@@ -83,10 +84,18 @@ def g_flex_match(rule, ak, answers):
     # separatorは複数文字対応（指定文字 + よく使う区切り記号）
     sep_pattern = '[' + re.escape(sep) + '、/,，]'
     score = 0
-    for fid in rule.get('field_ids', []):
-        expected = ak.get(fid) if isinstance(ak, dict) else None
+    for i, fid in enumerate(rule.get('field_ids', [])):
+        if isinstance(ak, dict):
+            expected = ak.get(fid)
+        elif isinstance(ak, list):
+            expected = ak[i] if i < len(ak) else None
+        else:
+            expected = None
         if expected is None: continue
-        exp_variants = [normalize(v, opts) for v in re.split(sep_pattern, str(expected))]
+        expected_values = expected if isinstance(expected, list) else [expected]
+        exp_variants = []
+        for e in expected_values:
+            exp_variants.extend(normalize(v, opts) for v in re.split(sep_pattern, str(e)))
         exp_variants = [v for v in exp_variants if v]
         actual = answers.get(fid) or ''
         act_variants = [normalize(v, opts) for v in re.split(sep_pattern, str(actual))]
@@ -121,7 +130,10 @@ def g_split_match(rule, ak, answers):
     for fid in rule.get('field_ids', []):
         expected = ak.get(fid) if isinstance(ak, dict) else None
         if expected is None: continue
-        variants = [normalize(v, opts) for v in str(expected).split(sep)]
+        expected_values = expected if isinstance(expected, list) else [expected]
+        variants = []
+        for e in expected_values:
+            variants.extend(normalize(v, opts) for v in str(e).split(sep))
         actN = normalize(answers.get(fid), opts)
         if not actN: continue
         if any(v == actN for v in variants):
@@ -320,12 +332,16 @@ METHOD_MAP = {
     'normalized_match': g_normalized_match,
     'split_match': g_split_match,
     'array_flex': g_flex_match,
+    'array_exact': g_exact_match,
     'radio_exact': g_radio_exact,
     'ox_match': g_ox_match,
     'phone_match': g_phone_match,
     'substring_match': g_substring_match,
     'multi_field_group': g_multi_field_group,
     'multi_field_match': g_multi_field_match,
+    'multi_field_exact': g_multi_field_match,
+    'multi_field_flex': g_flex_match,
+    'mixed_select_manual': g_exact_match,
     'pair_match': g_pair_match,
     'bucket_sort': g_bucket_sort,
     'unordered_tokens': g_unordered_tokens,
