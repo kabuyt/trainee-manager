@@ -244,7 +244,7 @@ function renderQuestions(sectionType, questions, answerKey, scoringRules, userAn
           ? partRule.field_ids.slice()
           : partFieldIdsRaw;
         const partAk = matchedBlockId
-          ? normalizeExpectedByFieldIds(answerKey[matchedBlockId], partFieldIds)
+          ? normalizeExpectedForFieldIds(answerKey[matchedBlockId], partFieldIds, partRule)
           : undefined;
         const partMethod = partRule.method;
         const partIsBlockLevel = blockLevelMethods.includes(partMethod);
@@ -254,14 +254,16 @@ function renderQuestions(sectionType, questions, answerKey, scoringRules, userAn
     } else if (Array.isArray(q.sub_sections) && q.sub_sections.length) {
       q.sub_sections.forEach(sub => {
         const subRule = scoringRules[sub.sub_id] || {};
-        const subAk = answerKey[sub.sub_id];
+        const subFieldIds = collectFieldIds(sub);
+        const subAk = normalizeExpectedForFieldIds(answerKey[sub.sub_id], subFieldIds, subRule);
         const subMethod = subRule.method;
         const subIsBlockLevel = blockLevelMethods.includes(subMethod);
         html += `<div style="font-size:12px;font-weight:bold;color:#555;margin:8px 0 4px">${stripRuby(sub.sub_title || sub.sub_id)}</div>`;
-        html += renderQuestionFieldRows(sectionType, collectFieldIds(sub), subAk, subRule, subMethod, subIsBlockLevel, sub, userAnswers, manualScores, q);
+        html += renderQuestionFieldRows(sectionType, subFieldIds, subAk, subRule, subMethod, subIsBlockLevel, sub, userAnswers, manualScores, q);
       });
     } else {
-      html += renderQuestionFieldRows(sectionType, collectFieldIds(q), ak, rule, method, isBlockLevel, q, userAnswers, manualScores, q);
+      const fieldIds = collectFieldIds(q);
+      html += renderQuestionFieldRows(sectionType, fieldIds, normalizeExpectedForFieldIds(ak, fieldIds, rule), rule, method, isBlockLevel, q, userAnswers, manualScores, q);
     }
     html += `</div>`;
   });
@@ -297,6 +299,19 @@ function normalizeExpectedByFieldIds(expectedSource, fieldIds) {
     if (idx < expectedSource.length) mapped[fid] = expectedSource[idx];
   });
   return mapped;
+}
+
+function normalizeExpectedForFieldIds(expectedSource, fieldIds, rule) {
+  if (rule && rule.method === 'pair_match' && Array.isArray(expectedSource) && Array.isArray(rule.items)) {
+    const mapped = {};
+    rule.items.forEach((pair, idx) => {
+      const expectedPair = expectedSource[idx] || {};
+      if (pair.a_field && Object.prototype.hasOwnProperty.call(expectedPair, 'a')) mapped[pair.a_field] = expectedPair.a;
+      if (pair.b_field && Object.prototype.hasOwnProperty.call(expectedPair, 'b')) mapped[pair.b_field] = expectedPair.b;
+    });
+    return mapped;
+  }
+  return normalizeExpectedByFieldIds(expectedSource, fieldIds);
 }
 
 function renderQuestionFieldRows(sectionType, fieldIds, ak, rule, method, isBlockLevel, questionBlock, userAnswers, manualScores, parentQuestion) {
