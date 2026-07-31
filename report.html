@@ -401,6 +401,20 @@ document.addEventListener('paste', function(e) {
   target.dispatchEvent(new Event('input', { bubbles: true }));
 });
 
+// Enter を Shift+Enter と同じ <br> 改行にする
+// （既定の <div> 分割は .comment-text の空行非表示CSSに隠されて改行が見えないため）
+document.addEventListener('keydown', function(e) {
+  if (e.key !== 'Enter' || e.shiftKey || e.isComposing) return;
+  const target = e.target;
+  if (!target || !target.classList || !target.classList.contains('comment-text')) return;
+  if (target.getAttribute('contenteditable') !== 'true') return;
+  e.preventDefault();
+  if (!document.execCommand('insertLineBreak')) {
+    document.execCommand('insertHTML', false, '<br>');
+  }
+  target.dispatchEvent(new Event('input', { bubbles: true }));
+});
+
 // 月切替
 document.getElementById('monthSelect').addEventListener('change', function() {
   document.getElementById('monthPrint').textContent = this.value;
