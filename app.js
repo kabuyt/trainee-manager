@@ -1322,7 +1322,8 @@ function currentMonthMap() {
 // - みんな生: minna 8回分
 function getTrendMap() {
   if (isMonth3Test4ReportTrainee()) {
-    return MONTH_TEST_MAP_MINNA.slice(0, 4);
+    // 他のみんな生と同じ8回分の枠で表示（4回分だけだと横軸が引き伸ばされる）
+    return MONTH_TEST_MAP_MINNA.slice();
   }
   if (isMarugotoTrainee()) {
     const offset = getMarugotoOffset();
@@ -1814,7 +1815,10 @@ function normalizeCommentHtml(html) {
 }
 
 function htmlToPlainText(value) {
-  const raw = String(value || '');
+  // textContent は <br> を改行にしないため、先に改行へ変換して行構造を保つ
+  const raw = String(value || '')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/(div|p|li)>/gi, '\n');
   if (typeof document === 'undefined') {
     return raw.replace(/<[^>]+>/g, ' ');
   }

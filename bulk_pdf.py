@@ -564,7 +564,16 @@ def main():
     for m_idx, suffix in enumerate(MONTH_TEST_NAMES, start=1):
         one_month_delayed_tests[f'test{m_idx}'] = m_idx + 1
         one_month_delayed_tests[f'第{suffix}課'] = m_idx + 1
+    # BRN001/BRN002 は 3ヶ月目報告書に test4 を表示する特例（app.js の MONTH3_TEST4_REPORT_STUDENTS と対応）
+    # → test4 以降は報告月が 1 つ前にずれる
+    month3_test4_tests = {}
+    for m_idx, suffix in enumerate(MONTH_TEST_NAMES, start=1):
+        if m_idx >= 4:
+            month3_test4_tests[f'test{m_idx}'] = m_idx - 1
+            month3_test4_tests[f'第{suffix}課'] = m_idx - 1
     TEST_MONTH_OVERRIDES = {
+        'BRN001': month3_test4_tests,
+        'BRN002': month3_test4_tests,
         'BRN014': one_month_delayed_tests,
         'BRN015': one_month_delayed_tests,
         'BRN021': {'test2': 1, '第5-11課': 1},
