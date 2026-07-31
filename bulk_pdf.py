@@ -477,7 +477,7 @@ document.querySelectorAll('.btn-company-dl').forEach(btn => {{
 def sb_get(path):
     url = f'{SUPABASE_URL}/rest/v1/' + urllib.parse.quote(path, safe='=&?*./%,_')
     req = urllib.request.Request(url, headers={
-        'apikey': ANON_KEY,
+        'apikey': SERVICE_KEY,
         'Authorization': f'Bearer {SERVICE_KEY}',
     })
     return json.loads(urllib.request.urlopen(req).read())
