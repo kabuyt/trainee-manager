@@ -2685,18 +2685,16 @@ function _appendAiDiagnosisButton(diagArea, result, regenerate = false) {
 
 function _renderSavedAiDiagnosis(diagArea, result) {
   _setDiagnosisHeading('AI傾向診断');
-  const generated = result.ai_diagnosis_generated_at
-    ? new Date(result.ai_diagnosis_generated_at).toLocaleString('ja-JP')
-    : '';
+  diagArea.classList.add('ai-diagnosis-box');
   diagArea.innerHTML = `
-    <div style="white-space:pre-line;line-height:1.75">${escapeHtml(result.ai_diagnosis)}</div>
-    <div style="font-size:10px;color:#94a3b8;margin-top:6px">匿名化した答案集計を基に生成${generated ? `・${escapeHtml(generated)}` : ''}。最終確認は担当者が行います。</div>
+    <div class="ai-diagnosis-text">${escapeHtml(result.ai_diagnosis)}</div>
   `;
   _appendAiDiagnosisButton(diagArea, result, true);
 }
 
 function renderDiagnosis(diagArea, results) {
   if (!diagArea) return;
+  diagArea.classList.remove('ai-diagnosis-box');
   _setDiagnosisHeading('傾向診断');
 
   // 表示中の月に対応する answers_json があるテスト結果を探す
