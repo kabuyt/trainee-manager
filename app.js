@@ -1837,10 +1837,11 @@ function extractLearnProgressFromWeek4(week4Html) {
 
   const lines = text.split(/\n+/).map(line => line.replace(/\s+/g, ' ').trim()).filter(Boolean);
   const minnaLine = [...lines].reverse().find(line => /みんなの日本語/.test(line));
+  const marugotoLine = [...lines].reverse().find(line => /まるごと/.test(line));
   const fallbackText = lines
     .filter(line => !/(数ドリル|いろどり生活の日本語)/.test(line))
     .join(' ');
-  const sourceText = (minnaLine || fallbackText).replace(/\s+/g, ' ');
+  const sourceText = (minnaLine || marugotoLine || fallbackText).replace(/\s+/g, ' ');
 
   const lessonMatches = [...sourceText.matchAll(/(?:第\s*)?(?:(\d+)\s*~\s*)?(\d+)\s*課/g)];
   let lesson = lessonMatches.length ? lessonMatches[lessonMatches.length - 1][2] : '';
@@ -1850,7 +1851,9 @@ function extractLearnProgressFromWeek4(week4Html) {
   }
   if (!lesson) return '';
 
-  return minnaLine ? `みんなの日本語 ${lesson}課` : `第${lesson}課`;
+  if (minnaLine) return `みんなの日本語 ${lesson}課`;
+  if (marugotoLine) return `まるごと ${lesson}課`;
+  return `第${lesson}課`;
 }
 
 function isBlankLearnProgress(value) {
