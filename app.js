@@ -1377,6 +1377,7 @@ function getLatestResultPerTest() {
 }
 
 function resolveScoreResult(defaultMap) {
+  if (_scoreTestOverride === SCORE_TEST_OVERRIDE_NONE) return null;
   if (_scoreTestOverride) {
     const selected = getLatestResultPerTest().find(r => r.test_name === _scoreTestOverride);
     if (selected) return selected;
@@ -1390,27 +1391,30 @@ function renderScoreTestSelector(defaultMap) {
   if (!select || !wrap) return;
 
   const results = getLatestResultPerTest();
-  wrap.style.display = results.length > 1 ? '' : 'none';
-  if (results.length <= 1) {
+  wrap.style.display = results.length > 0 ? '' : 'none';
+  if (results.length === 0) {
     _scoreTestOverride = null;
     select.innerHTML = '';
     return;
   }
 
-  if (_scoreTestOverride && !results.some(r => r.test_name === _scoreTestOverride)) {
+  if (_scoreTestOverride && _scoreTestOverride !== SCORE_TEST_OVERRIDE_NONE && !results.some(r => r.test_name === _scoreTestOverride)) {
     _scoreTestOverride = null;
   }
 
   const autoResult = _reportResults.find(r => matchTest(r, defaultMap));
   const autoLabel = autoResult ? getReportTestLabel(autoResult) : (defaultMap?.testLabel || '-');
-  const options = [`<option value="">自動（${autoLabel}）</option>`]
+  const options = [
+    `<option value="">自動（${autoLabel}）</option>`,
+    `<option value="${SCORE_TEST_OVERRIDE_NONE}">未実施のため</option>`
+  ]
     .concat(results.map(r => `<option value="${escapeHtmlAttr(r.test_name)}">${escapeHtml(getReportTestLabel(r))}</option>`));
   select.innerHTML = options.join('');
   select.value = _scoreTestOverride || '';
 }
 
 function setScoreTestOverride(testName) {
-  _scoreTestOverride = testName || null;
+  _scoreTestOverride = testName === SCORE_TEST_OVERRIDE_NONE ? SCORE_TEST_OVERRIDE_NONE : (testName || null);
   switchMonth(_currentMonth);
 }
 
@@ -1479,6 +1483,7 @@ let _reportMonthly = {};  // { month: row }
 let _reportStatsResults = [];
 let _currentMonth = 1;
 let _scoreTestOverride = null;
+const SCORE_TEST_OVERRIDE_NONE = '__none__';
 
 async function loadReport() {
   const id = new URLSearchParams(location.search).get('id');
