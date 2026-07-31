@@ -1836,8 +1836,11 @@ function extractLearnProgressFromWeek4(week4Html) {
   if (!text) return '';
 
   const lines = text.split(/\n+/).map(line => line.replace(/\s+/g, ' ').trim()).filter(Boolean);
-  const minnaLine = lines.find(line => /みんなの日本語/.test(line));
-  const sourceText = (minnaLine || text).replace(/\s+/g, ' ');
+  const minnaLine = [...lines].reverse().find(line => /みんなの日本語/.test(line));
+  const fallbackText = lines
+    .filter(line => !/数ドリル/.test(line))
+    .join(' ');
+  const sourceText = (minnaLine || fallbackText).replace(/\s+/g, ' ');
 
   const lessonMatches = [...sourceText.matchAll(/(?:第\s*)?(?:(\d+)\s*~\s*)?(\d+)\s*課/g)];
   let lesson = lessonMatches.length ? lessonMatches[lessonMatches.length - 1][2] : '';
