@@ -1838,7 +1838,7 @@ function extractLearnProgressFromWeek4(week4Html) {
   const lines = text.split(/\n+/).map(line => line.replace(/\s+/g, ' ').trim()).filter(Boolean);
   const minnaLine = [...lines].reverse().find(line => /みんなの日本語/.test(line));
   const fallbackText = lines
-    .filter(line => !/数ドリル/.test(line))
+    .filter(line => !/(数ドリル|いろどり生活の日本語)/.test(line))
     .join(' ');
   const sourceText = (minnaLine || fallbackText).replace(/\s+/g, ' ');
 
