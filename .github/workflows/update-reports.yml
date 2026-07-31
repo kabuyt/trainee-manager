@@ -1,0 +1,67 @@
+name: Update report distribution
+
+on:
+  workflow_dispatch:
+    inputs:
+      kumiai:
+        description: "Kumiai slugs: all or comma-separated slugs"
+        required: true
+        default: "all"
+      ymd:
+        description: "Distribution month YYYYMM, blank for current month"
+        required: false
+        default: ""
+      no_all:
+        description: "Exclude untested people instead of including all group members"
+        required: false
+        type: boolean
+        default: false
+      dry_run:
+        description: "Preview commands without generating, syncing, committing, or pushing"
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  update-reports:
+    runs-on: windows-latest
+    timeout-minutes: 120
+    env:
+      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Playwright
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install playwright
+          python -m playwright install chromium
+
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Generate and publish reports
+        shell: pwsh
+        run: |
+          $kumiaiInput = "${{ inputs.kumiai }}".Trim()
+          if ($kumiaiInput -eq "" -or $kumiaiInput -eq "all") {
+            $kumiai = @("globalway", "cic", "worldbusiness", "tombow", "sanyotech")
+          } else {
+            $kumiai = $kumiaiInput.Split(",") | ForEach-Object { $_.Trim() } | Where-Object { $_ }
+          }
+
+          $params = @{ Kumiai = $kumiai }
+          if ("${{ inputs.ymd }}") { $params.Ymd = "${{ inputs.ymd }}" }
+          if ("${{ inputs.no_all }}" -eq "true") { $params.NoAll = $true }
+          if ("${{ inputs.dry_run }}" -eq "true") { $params.DryRun = $true }
+
+          .\tools\update_reports.ps1 @params

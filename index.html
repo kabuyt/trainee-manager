@@ -151,14 +151,27 @@ python create_student_accounts.py --apply</pre>
 
   <!-- 再生成手順モーダル -->
   <div id="regenModal" style="display:none;position:fixed;inset:0;background:rgba(16,37,71,.5);z-index:1000;align-items:center;justify-content:center" onclick="if(event.target===this)this.style.display='none'">
-    <div style="background:#fff;max-width:560px;width:90%;border-radius:12px;padding:28px;box-shadow:0 4px 20px rgba(0,0,0,.2)">
-      <h3 style="color:#102547;margin-bottom:14px">🔄 配布サイト再生成手順</h3>
-      <p style="color:#4a5878;margin-bottom:14px;font-size:13.5px">PowerShell を開いて以下を実行してください:</p>
-      <pre id="regenCmd" style="background:#0f1a2e;color:#3DAE2B;padding:16px;border-radius:8px;font-size:12px;overflow-x:auto;line-height:1.7">cd C:\Users\kabuyamat\Desktop\trainee-manager
-powershell -ExecutionPolicy Bypass -File .\tools\update_reports.ps1</pre>
-      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
-        <button onclick="navigator.clipboard.writeText(document.getElementById('regenCmd').textContent);this.textContent='✓ コピー済';" class="btn btn-secondary">📋 コピー</button>
-        <button onclick="document.getElementById('regenModal').style.display='none'" class="btn btn-primary">閉じる</button>
+    <div style="background:#fff;max-width:620px;width:92%;border-radius:12px;padding:28px;box-shadow:0 4px 20px rgba(0,0,0,.2)">
+      <h3 style="color:#102547;margin-bottom:8px">&#x914D;&#x5E03;&#x30B5;&#x30A4;&#x30C8;&#x751F;&#x6210;</h3>
+      <p style="color:#4a5878;margin-bottom:16px;font-size:13.5px;line-height:1.7">&#x7D44;&#x5408;&#x3092;&#x9078;&#x3093;&#x3067;&#x751F;&#x6210;&#x3092;&#x958B;&#x59CB;&#x3057;&#x307E;&#x3059;&#x3002;PDF&#x751F;&#x6210;&#x3068;GitHub Pages&#x53CD;&#x6620;&#x306F;GitHub Actions&#x3067;&#x5B9F;&#x884C;&#x3055;&#x308C;&#x307E;&#x3059;&#x3002;</p>
+      <div style="display:grid;gap:12px;margin-bottom:14px">
+        <label style="font-size:13px;font-weight:700;color:#102547">&#x5BFE;&#x8C61;&#x7D44;&#x5408;</label>
+        <div id="reportKumiaiChoices" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;font-size:13px;color:#1e293b">
+          <label><input type="checkbox" value="globalway" checked> globalway</label>
+          <label><input type="checkbox" value="cic" checked> cic</label>
+          <label><input type="checkbox" value="worldbusiness" checked> worldbusiness</label>
+          <label><input type="checkbox" value="tombow" checked> tombow</label>
+          <label><input type="checkbox" value="sanyotech" checked> sanyotech</label>
+        </div>
+        <label style="font-size:13px;font-weight:700;color:#102547" for="reportYmd">&#x914D;&#x5E03;&#x6708; YYYYMM&#xFF08;&#x7A7A;&#x6B04;&#x306A;&#x3089;&#x4ECA;&#x6708;&#xFF09;</label>
+        <input id="reportYmd" inputmode="numeric" placeholder="202607" style="padding:8px 10px;border:1px solid #d0d6dd;border-radius:6px;font:inherit;max-width:160px">
+        <label style="font-size:13px;color:#1e293b"><input id="reportNoAll" type="checkbox"> &#x672A;&#x53D7;&#x9A13;&#x8005;&#x3092;&#x542B;&#x3081;&#x306A;&#x3044;</label>
+        <label style="font-size:13px;color:#1e293b"><input id="reportDryRun" type="checkbox"> Dry run&#xFF08;&#x751F;&#x6210;&#x30FB;commit&#x3057;&#x306A;&#x3044;&#xFF09;</label>
+      </div>
+      <div id="reportGenerateStatus" style="min-height:20px;font-size:12.5px;color:#4a5878;margin:10px 0"></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap">
+        <button onclick="document.getElementById('regenModal').style.display='none'" class="btn btn-secondary">&#x9589;&#x3058;&#x308B;</button>
+        <button id="reportGenerateButton" onclick="runReportGeneration()" class="btn btn-primary">&#x751F;&#x6210;&#x3092;&#x958B;&#x59CB;</button>
       </div>
     </div>
   </div>
@@ -169,10 +182,68 @@ powershell -ExecutionPolicy Bypass -File .\tools\update_reports.ps1</pre>
   <script src="app.js?v=72"></script>
   <script>
     function showRegenInstructions() {
-      document.getElementById('regenModal').style.display = 'flex';
+      const modal = document.getElementById('regenModal');
+      const status = document.getElementById('reportGenerateStatus');
+      if (status) status.textContent = '';
+      if (modal) modal.style.display = 'flex';
     }
 
-    // ===== ダッシュボード統計 =====
+    function getSelectedReportKumiai() {
+      return Array.from(document.querySelectorAll('#reportKumiaiChoices input[type="checkbox"]:checked'))
+        .map(el => el.value);
+    }
+
+    async function runReportGeneration() {
+      const status = document.getElementById('reportGenerateStatus');
+      const btn = document.getElementById('reportGenerateButton');
+      const kumiai = getSelectedReportKumiai();
+      const ymd = (document.getElementById('reportYmd')?.value || '').trim();
+      const noAll = !!document.getElementById('reportNoAll')?.checked;
+      const dryRun = !!document.getElementById('reportDryRun')?.checked;
+
+      if (!kumiai.length) {
+        if (status) status.textContent = '\u5bfe\u8c61\u7d44\u5408\u30921\u3064\u4ee5\u4e0a\u9078\u3093\u3067\u304f\u3060\u3055\u3044\u3002';
+        return;
+      }
+      if (ymd && !/^\d{6}$/.test(ymd)) {
+        if (status) status.textContent = '\u914d\u5e03\u6708\u306f YYYYMM \u3067\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044\u3002';
+        return;
+      }
+
+      try {
+        if (btn) {
+          btn.disabled = true;
+          btn.textContent = '\u8d77\u52d5\u4e2d...';
+        }
+        if (status) status.textContent = 'GitHub Actions \u3092\u8d77\u52d5\u3057\u3066\u3044\u307e\u3059...';
+
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) throw new Error('\u30ed\u30b0\u30a4\u30f3\u304c\u5207\u308c\u3066\u3044\u307e\u3059\u3002\u518d\u30ed\u30b0\u30a4\u30f3\u3057\u3066\u304f\u3060\u3055\u3044\u3002');
+
+        const res = await fetch(SUPABASE_URL + '/functions/v1/dispatch-report-update', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + session.access_token,
+            'apikey': SUPABASE_ANON_KEY,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ kumiai, ymd, no_all: noAll, dry_run: dryRun }),
+        });
+        const payload = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(payload.error || payload.details || '\u8d77\u52d5\u306b\u5931\u6557\u3057\u307e\u3057\u305f\u3002');
+
+        if (status) {
+          status.innerHTML = '\u751f\u6210\u30b8\u30e7\u30d6\u3092\u8d77\u52d5\u3057\u307e\u3057\u305f\u3002<a href="' + payload.actions_url + '" target="_blank" rel="noopener">GitHub Actions\u3067\u9032\u6357\u3092\u898b\u308b</a>';
+        }
+      } catch (err) {
+        if (status) status.textContent = '\u8d77\u52d5\u306b\u5931\u6557\u3057\u307e\u3057\u305f: ' + (err.message || err);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = '\u751f\u6210\u3092\u958b\u59cb';
+        }
+      }
+    }
     async function loadDashboardStats() {
       try {
         // 実習生総数
