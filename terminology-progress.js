@@ -13,7 +13,32 @@ let progressState = {
   finalUnlocksReady: true,
 };
 
-const FINAL_TEST_SET_ID = 'kinrei-final-2023';
+const TERM_APPS = {
+  kinrei: {
+    key: 'kinrei',
+    keywords: ['キンレイ', 'kinrei'],
+    vocabGlobal: 'KINREI_VOCAB',
+    imageGlobal: 'KINREI_IMAGE_QUIZ',
+    termPrefix: 'kinrei-',
+    imagePrefix: 'kinrei-',
+    quizPrefix: 'kinrei-test-2023',
+    totalQuizSets: 18,
+    finalSetId: 'kinrei-final-2023',
+    enableFinal: true,
+  },
+  oota: {
+    key: 'oota',
+    keywords: ['オオタ', 'oota', '株式会社オオタ'],
+    vocabGlobal: 'OOTA_VOCAB',
+    imageGlobal: 'OOTA_IMAGE_QUIZ',
+    termPrefix: 'oota-',
+    imagePrefix: 'oota-',
+    quizPrefix: 'oota-test-2026',
+    totalQuizSets: 3,
+    finalSetId: 'oota-final-2026',
+    enableFinal: false,
+  },
+};
 
 function escProgress(value) {
   return String(value ?? '').replace(/[&<>"']/g, ch => ({
@@ -42,10 +67,23 @@ function fmtStudyDuration(seconds) {
   return `${hours}時間${minutes}分`;
 }
 
-function isKinreiTrainee(row) {
+function getTermAppForTrainee(row) {
   const company = String(row?.company || '').toLowerCase();
   const group = String(row?.class_group || '').toLowerCase();
-  return company.includes('キンレイ') || company.includes('kinrei') || group.includes('キンレイ') || group.includes('kinrei');
+  return Object.values(TERM_APPS).find(app => app.keywords.some(keyword => {
+    const key = String(keyword).toLowerCase();
+    return company.includes(key) || group.includes(key);
+  })) || null;
+}
+
+function getTermCount(app) {
+  const vocab = window[app.vocabGlobal];
+  return vocab?.terms?.length || vocab?.set?.termCount || 0;
+}
+
+function getImageCount(app) {
+  const images = window[app.imageGlobal];
+  return images?.items?.length || 0;
 }
 
 function fillFilter(id, values) {
@@ -70,25 +108,23 @@ async function loadProgressData() {
     supabase.from('trainees').select('id,student_id,name_katakana,name_romaji,company,class_group,organizations(name),status').order('student_id', { ascending: true, nullsFirst: false }),
     supabase.from('terminology_progress').select('trainee_id,term_id,status,correct_count,wrong_count,last_studied_at'),
     supabase.from('terminology_image_progress').select('trainee_id,image_id,status,last_studied_at'),
-    supabase.from('terminology_quiz_results').select('trainee_id,score_rate,created_at,set_id').like('set_id', 'kinrei%'),
+    supabase.from('terminology_quiz_results').select('trainee_id,score_rate,created_at,set_id'),
     supabase.from('terminology_study_sessions').select('trainee_id,created_at,duration_seconds,last_seen_at'),
-    supabase.from('terminology_final_unlocks').select('trainee_id,is_unlocked,unlocked_at,test_set_id').eq('test_set_id', FINAL_TEST_SET_ID),
+    supabase.from('terminology_final_unlocks').select('trainee_id,is_unlocked,unlocked_at,test_set_id'),
   ]);
 
   if (traineeRes.error) throw traineeRes.error;
   progressState.trainees = (traineeRes.data || [])
     .filter(t => (t.status || 'active') === 'active')
-    .filter(isKinreiTrainee);
+    .filter(t => getTermAppForTrainee(t));
   progressState.progress = progressRes.error ? [] : (progressRes.data || []);
   progressState.imageProgress = imageProgressRes.error ? [] : (imageProgressRes.data || []);
   progressState.studySessions = sessionRes.error ? [] : (sessionRes.data || []);
   progressState.finalUnlocksReady = !finalUnlockRes.error;
   progressState.finalUnlocks = finalUnlockRes.error ? [] : (finalUnlockRes.data || []);
   const allQuizResults = quizRes.error ? [] : (quizRes.data || []);
-  progressState.quizResults = allQuizResults.filter(item => String(item.set_id || '').startsWith('kinrei-test-2023'));
-  progressState.finalResults = allQuizResults.filter(item => String(item.set_id || '') === FINAL_TEST_SET_ID);
-  progressState.totalTerms = window.KINREI_VOCAB?.terms?.length || 297;
-  progressState.totalImages = window.KINREI_IMAGE_QUIZ?.items?.length || 60;
+  progressState.quizResults = allQuizResults;
+  progressState.finalResults = allQuizResults;
 
   buildRows();
   fillFilter('filterCompany', [...new Set(progressState.rows.map(row => row.company))]);
@@ -120,7 +156,8 @@ function buildRows() {
   });
   const finalUnlockByTrainee = {};
   progressState.finalUnlocks.forEach(item => {
-    finalUnlockByTrainee[item.trainee_id] = item;
+    if (!finalUnlockByTrainee[item.trainee_id]) finalUnlockByTrainee[item.trainee_id] = [];
+    finalUnlockByTrainee[item.trainee_id].push(item);
   });
   const sessionsByTrainee = {};
   progressState.studySessions.forEach(item => {
@@ -129,14 +166,17 @@ function buildRows() {
   });
   const cutoff7 = daysAgo(7).getTime();
   progressState.rows = progressState.trainees.map(t => {
-    const prog = progressByTrainee[t.id] || [];
-    const imgProg = imageProgressByTrainee[t.id] || [];
+    const app = getTermAppForTrainee(t);
+    const totalTerms = getTermCount(app);
+    const totalImages = getImageCount(app);
+    const prog = (progressByTrainee[t.id] || []).filter(p => String(p.term_id || '').startsWith(app.termPrefix));
+    const imgProg = (imageProgressByTrainee[t.id] || []).filter(p => String(p.image_id || '').startsWith(app.imagePrefix));
     const learned = prog.filter(p => p.status === 'learned').length;
     const review = prog.filter(p => p.status === 'review').length;
     const imageLearned = imgProg.filter(p => p.status === 'learned').length;
     const imageReview = imgProg.filter(p => p.status === 'review').length;
     const lastStudy = [...prog, ...imgProg].map(p => p.last_studied_at).filter(Boolean).sort().pop() || '';
-    const quizzes = quizByTrainee[t.id] || [];
+    const quizzes = (quizByTrainee[t.id] || []).filter(q => String(q.set_id || '').startsWith(app.quizPrefix));
     const quizAvg = quizzes.length
       ? Math.round(quizzes.reduce((sum, q) => sum + Number(q.score_rate || 0), 0) / quizzes.length)
       : null;
@@ -146,9 +186,11 @@ function buildRows() {
         .map(q => q.set_id)
         .filter(Boolean)
     );
-    const finalResults = (finalByTrainee[t.id] || []).sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')));
+    const finalResults = app.enableFinal
+      ? (finalByTrainee[t.id] || []).filter(q => String(q.set_id || '') === app.finalSetId).sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')))
+      : [];
     const finalLatest = finalResults[0] || null;
-    const finalUnlock = finalUnlockByTrainee[t.id] || null;
+    const finalUnlock = app.enableFinal ? (finalUnlockByTrainee[t.id] || []).find(item => String(item.test_set_id || '') === app.finalSetId) : null;
     const sessions = sessionsByTrainee[t.id] || [];
     const sessions7 = sessions.filter(s => new Date(s.created_at).getTime() >= cutoff7).length;
     const cutoff30 = daysAgo(30).getTime();
@@ -160,6 +202,9 @@ function buildRows() {
     const lastAccess = sessions.map(s => s.last_seen_at || s.created_at).filter(Boolean).sort().pop() || '';
     return {
       id: t.id,
+      termAppKey: app.key,
+      finalSetId: app.finalSetId,
+      enableFinal: app.enableFinal,
       student_id: t.student_id || '',
       name: t.name_katakana || t.name_romaji || '',
       company: t.company || '',
@@ -169,8 +214,11 @@ function buildRows() {
       review,
       imageLearned,
       imageReview,
-      learnedRate: progressState.totalTerms ? Math.round((learned / progressState.totalTerms) * 100) : 0,
-      imageLearnedRate: progressState.totalImages ? Math.round((imageLearned / progressState.totalImages) * 100) : 0,
+      totalTerms,
+      totalImages,
+      totalQuizSets: app.totalQuizSets,
+      learnedRate: totalTerms ? Math.round((learned / totalTerms) * 100) : 0,
+      imageLearnedRate: totalImages ? Math.round((imageLearned / totalImages) * 100) : 0,
       quizAvg,
       quizCount: quizzes.length,
       quizSetCount: completedSets.size,
@@ -189,6 +237,9 @@ function buildRows() {
 }
 
 function finalUnlockButton(row) {
+  if (!row.enableFinal) {
+    return '<span class="mini-muted">対象外</span>';
+  }
   if (!progressState.finalUnlocksReady) {
     return '<span class="mini-muted">SQL未設定</span>';
   }
@@ -198,8 +249,8 @@ function finalUnlockButton(row) {
   const label = row.finalUnlocked ? '開放中' : '開放する';
   const cls = row.finalUnlocked ? 'unlock-btn unlocked' : 'unlock-btn';
   const next = row.finalUnlocked ? 'false' : 'true';
-  const note = row.quizSetCount < progressState.totalQuizSets ? `<span class="mini-muted">小テスト ${row.quizSetCount}/${progressState.totalQuizSets}</span>` : '';
-  return `<button type="button" class="${cls}" data-trainee-id="${escProgress(row.id)}" data-unlocked="${next}">${label}</button>${note}`;
+  const note = row.quizSetCount < row.totalQuizSets ? `<span class="mini-muted">小テスト ${row.quizSetCount}/${row.totalQuizSets}</span>` : '';
+  return `<button type="button" class="${cls}" data-trainee-id="${escProgress(row.id)}" data-final-set-id="${escProgress(row.finalSetId)}" data-unlocked="${next}">${label}</button>${note}`;
 }
 
 function getFilteredRows() {
@@ -218,7 +269,8 @@ function getFilteredRows() {
 
 function renderStats(rows) {
   const learnedAvg = rows.length ? Math.round(rows.reduce((sum, row) => sum + row.learnedRate, 0) / rows.length) : 0;
-  const imageAvg = rows.length ? Math.round(rows.reduce((sum, row) => sum + row.imageLearnedRate, 0) / rows.length) : 0;
+  const imageRows = rows.filter(row => row.totalImages > 0);
+  const imageAvg = imageRows.length ? Math.round(imageRows.reduce((sum, row) => sum + row.imageLearnedRate, 0) / imageRows.length) : 0;
   const reviewTotal = rows.reduce((sum, row) => sum + row.review + row.imageReview, 0);
   const quizRows = rows.filter(row => row.quizAvg !== null);
   const quizAvg = quizRows.length ? Math.round(quizRows.reduce((sum, row) => sum + row.quizAvg, 0) / quizRows.length) : 0;
@@ -246,10 +298,10 @@ function renderRows() {
         <div class="meter" title="${row.learnedRate}%"><span style="width:${row.learnedRate}%"></span></div>
         <div class="mini-muted">${row.learnedRate}%</div>
       </td>
-      <td>${row.learned} / ${progressState.totalTerms}</td>
-      <td>${row.imageLearned} / ${progressState.totalImages} <span class="mini-muted">${row.imageLearnedRate}%</span></td>
+      <td>${row.learned} / ${row.totalTerms}</td>
+      <td>${row.totalImages ? `${row.imageLearned} / ${row.totalImages} <span class="mini-muted">${row.imageLearnedRate}%</span>` : '<span class="mini-muted">対象外</span>'}</td>
       <td>${row.review + row.imageReview} <span class="mini-muted">ことば${row.review} / 画像${row.imageReview}</span></td>
-      <td>${row.quizSetCount} / ${progressState.totalQuizSets} <span class="mini-muted">${row.quizCount ? `100%完了・受験${row.quizCount}回` : ''}</span></td>
+      <td>${row.quizSetCount} / ${row.totalQuizSets} <span class="mini-muted">${row.quizCount ? `100%完了・受験${row.quizCount}回` : ''}</span></td>
       <td>${row.quizAvg === null ? '-' : `${row.quizAvg}%`}</td>
       <td>${finalUnlockButton(row)}</td>
       <td>${row.finalRate === null ? '-' : `${row.finalRate}%`} <span class="mini-muted">${row.finalCount ? `受験${row.finalCount}回` : ''}</span></td>
@@ -261,11 +313,11 @@ function renderRows() {
   document.getElementById('loadingMsg').classList.add('hidden');
   document.getElementById('tableWrap').classList.remove('hidden');
   document.querySelectorAll('.unlock-btn').forEach(button => {
-    button.addEventListener('click', () => setFinalUnlock(button.dataset.traineeId, button.dataset.unlocked === 'true'));
+    button.addEventListener('click', () => setFinalUnlock(button.dataset.traineeId, button.dataset.finalSetId, button.dataset.unlocked === 'true'));
   });
 }
 
-async function setFinalUnlock(traineeId, isUnlocked) {
+async function setFinalUnlock(traineeId, finalSetId, isUnlocked) {
   if (!isAdmin()) {
     alert('総合修了テストの開放は管理者のみ操作できます。');
     return;
@@ -274,7 +326,7 @@ async function setFinalUnlock(traineeId, isUnlocked) {
   const now = new Date().toISOString();
   const { error } = await supabase.from('terminology_final_unlocks').upsert({
     trainee_id: traineeId,
-    test_set_id: FINAL_TEST_SET_ID,
+    test_set_id: finalSetId,
     is_unlocked: isUnlocked,
     unlocked_by: profile?.id || null,
     unlocked_at: isUnlocked ? now : null,

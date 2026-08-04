@@ -737,8 +737,36 @@ async function registerTrainee() {
 }
 
 // ===== 実習生詳細 =====
-const TERMINOLOGY_TOTAL_QUIZ_SETS = 18;
-const TERMINOLOGY_FINAL_SET_ID = 'kinrei-final-2023';
+const TERMINOLOGY_APPS = {
+  kinrei: {
+    key: 'kinrei',
+    label: 'キンレイ専門用語',
+    keywords: ['キンレイ', 'kinrei'],
+    vocabGlobal: 'KINREI_VOCAB',
+    imageGlobal: 'KINREI_IMAGE_QUIZ',
+    termPrefix: 'kinrei-',
+    imagePrefix: 'kinrei-',
+    quizPrefix: 'kinrei-test-2023',
+    totalQuizSets: 18,
+    finalSetId: 'kinrei-final-2023',
+    enableFinal: true,
+    learnerUrl: 'https://kabuyt.github.io/nihongo-test-1-4ka/terminology-login.html',
+  },
+  oota: {
+    key: 'oota',
+    label: 'オオタ専門用語',
+    keywords: ['オオタ', 'oota', '株式会社オオタ'],
+    vocabGlobal: 'OOTA_VOCAB',
+    imageGlobal: 'OOTA_IMAGE_QUIZ',
+    termPrefix: 'oota-',
+    imagePrefix: 'oota-',
+    quizPrefix: 'oota-test-2026',
+    totalQuizSets: 3,
+    finalSetId: 'oota-final-2026',
+    enableFinal: false,
+    learnerUrl: 'https://kabuyt.github.io/nihongo-test-1-4ka/oota-terminology-login.html',
+  },
+};
 
 function safePercent(value) {
   const num = Number(value);
@@ -764,18 +792,23 @@ function formatStudyDuration(seconds) {
   return `${hours}時間${minutes}分`;
 }
 
-function isKinreiTerminologyTarget(t) {
+function getTerminologyAppForTrainee(t) {
   const company = String(t?.company || '').toLowerCase();
   const group = String(t?.class_group || '').toLowerCase();
-  return company.includes('キンレイ') || company.includes('kinrei') || group.includes('キンレイ') || group.includes('kinrei');
+  return Object.values(TERMINOLOGY_APPS).find(app => app.keywords.some(keyword => {
+    const key = String(keyword).toLowerCase();
+    return company.includes(key) || group.includes(key);
+  })) || null;
 }
 
-function buildTerminologySummary(progressRows, quizRows, imageProgressRows, sessionRows, finalUnlockRows = []) {
-  const totalTerms = window.KINREI_VOCAB?.terms?.length || window.KINREI_VOCAB?.set?.termCount || 297;
-  const totalImages = window.KINREI_IMAGE_QUIZ?.items?.length || 60;
-  const progress = progressRows || [];
-  const imageProgress = imageProgressRows || [];
-  const quizItems = quizRows || [];
+function buildTerminologySummary(progressRows, quizRows, imageProgressRows, sessionRows, finalUnlockRows = [], app = TERMINOLOGY_APPS.kinrei) {
+  const vocab = window[app.vocabGlobal];
+  const images = window[app.imageGlobal];
+  const totalTerms = vocab?.terms?.length || vocab?.set?.termCount || 0;
+  const totalImages = images?.items?.length || 0;
+  const progress = (progressRows || []).filter(p => String(p.term_id || '').startsWith(app.termPrefix));
+  const imageProgress = (imageProgressRows || []).filter(p => String(p.image_id || '').startsWith(app.imagePrefix));
+  const quizItems = (quizRows || []).filter(q => String(q.set_id || '').startsWith(app.quizPrefix) || String(q.set_id || '') === app.finalSetId);
   const sessions = sessionRows || [];
   const learned = progress.filter(p => p.status === 'learned').length;
   const review = progress.filter(p => p.status === 'review').length;
@@ -785,7 +818,7 @@ function buildTerminologySummary(progressRows, quizRows, imageProgressRows, sess
   const imageTouched = new Set(imageProgress.map(p => p.image_id).filter(Boolean)).size;
   const lastProgressAt = progress.map(p => p.last_studied_at).filter(Boolean).sort().pop() || '';
   const lastImageAt = imageProgress.map(p => p.last_studied_at).filter(Boolean).sort().pop() || '';
-  const standardQuiz = quizItems.filter(q => String(q.set_id || '').startsWith('kinrei-test-2023'));
+  const standardQuiz = quizItems.filter(q => String(q.set_id || '').startsWith(app.quizPrefix));
   const latestStandardBySet = new Map();
   standardQuiz.forEach(item => {
     const current = latestStandardBySet.get(item.set_id);
@@ -803,9 +836,9 @@ function buildTerminologySummary(progressRows, quizRows, imageProgressRows, sess
       .map(q => q.set_id)
       .filter(Boolean)
   ).size;
-  const finalResults = quizItems.filter(q => String(q.set_id || '') === TERMINOLOGY_FINAL_SET_ID);
+  const finalResults = app.enableFinal ? quizItems.filter(q => String(q.set_id || '') === app.finalSetId) : [];
   const finalLatest = latestByCreatedAt(finalResults);
-  const finalUnlock = (finalUnlockRows || []).find(row => String(row.test_set_id || '') === TERMINOLOGY_FINAL_SET_ID);
+  const finalUnlock = app.enableFinal ? (finalUnlockRows || []).find(row => String(row.test_set_id || '') === app.finalSetId) : null;
   const lastQuizAt = quizItems.map(q => q.created_at).filter(Boolean).sort().pop() || '';
   const totalStudySeconds = sessions.reduce((sum, s) => sum + Number(s.duration_seconds || 0), 0);
   const lastAccess = sessions.map(s => s.last_seen_at || s.created_at).filter(Boolean).sort().pop() || '';
@@ -816,6 +849,10 @@ function buildTerminologySummary(progressRows, quizRows, imageProgressRows, sess
   return {
     totalTerms,
     totalImages,
+    totalQuizSets: app.totalQuizSets,
+    appLabel: app.label,
+    learnerUrl: app.learnerUrl,
+    enableFinal: app.enableFinal,
     learned,
     review,
     imageLearned,
@@ -842,14 +879,15 @@ function buildTerminologySummary(progressRows, quizRows, imageProgressRows, sess
 }
 
 function renderTerminologyDetailCard(summary, trainee) {
-  const isTarget = isKinreiTerminologyTarget(trainee);
+  const app = getTerminologyAppForTrainee(trainee);
+  const isTarget = Boolean(app);
   if (!isTarget && !summary.hasAnyData) {
     return `
       <div class="terminology-detail terminology-detail-muted">
         <div class="terminology-detail-head">
           <div>
-            <div class="section-title terminology-title">キンレイ専門用語</div>
-            <p class="terminology-detail-lead">この実習生は現在、キンレイ専門用語学習の対象外です。</p>
+            <div class="section-title terminology-title">専門用語</div>
+            <p class="terminology-detail-lead">この実習生は現在、専門用語学習の対象外です。</p>
           </div>
           <a href="terminology-progress.html" class="btn btn-secondary btn-sm">全体一覧</a>
         </div>
@@ -857,24 +895,24 @@ function renderTerminologyDetailCard(summary, trainee) {
     `;
   }
 
-  const quizRate = safePercent((summary.quizSetCount / TERMINOLOGY_TOTAL_QUIZ_SETS) * 100);
+  const quizRate = safePercent((summary.quizSetCount / summary.totalQuizSets) * 100);
   const finalText = summary.finalRate === null ? '未受験' : `${summary.finalRate}%`;
   const finalSub = summary.finalAttemptCount
     ? `総合修了テスト ${summary.finalAttemptCount}回受験`
     : summary.finalUnlocked
       ? '管理者が開放済みです'
-      : `${TERMINOLOGY_TOTAL_QUIZ_SETS}回完了後、管理者が立会い時に開放します`;
+      : `${summary.totalQuizSets}回完了後、管理者が立会い時に開放します`;
 
   return `
     <div class="terminology-detail">
       <div class="terminology-detail-head">
         <div>
-          <div class="section-title terminology-title">キンレイ専門用語</div>
-          <p class="terminology-detail-lead">専門用語暗記・20問ずつの小テスト・総合修了テストの進捗です。</p>
+          <div class="section-title terminology-title">${escape(summary.appLabel || '専門用語')}</div>
+          <p class="terminology-detail-lead">専門用語暗記・20問ずつの小テスト${summary.enableFinal ? '・総合修了テスト' : ''}の進捗です。</p>
         </div>
         <div class="terminology-detail-actions">
           <a href="terminology-progress.html" class="btn btn-secondary btn-sm">全体一覧</a>
-          <a href="https://kabuyt.github.io/nihongo-test-1-4ka/terminology-login.html" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">学習ページ</a>
+          <a href="${escape(summary.learnerUrl || '#')}" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">学習ページ</a>
         </div>
       </div>
 
@@ -885,24 +923,28 @@ function renderTerminologyDetailCard(summary, trainee) {
           <div class="term-progress-bar"><i style="width:${summary.learnedRate}%"></i></div>
           <small>覚えた ${summary.learned} / ${summary.totalTerms}語</small>
         </div>
+        ${summary.totalImages ? `
         <div class="term-detail-card">
           <span>画像暗記</span>
           <strong>${summary.imageLearnedRate}%</strong>
           <div class="term-progress-bar"><i style="width:${summary.imageLearnedRate}%"></i></div>
           <small>覚えた ${summary.imageLearned} / ${summary.totalImages}枚・要復習 ${summary.imageReview}</small>
         </div>
+        ` : ''}
         <div class="term-detail-card">
           <span>テスト進捗</span>
-          <strong>${summary.quizSetCount} / ${TERMINOLOGY_TOTAL_QUIZ_SETS}</strong>
+          <strong>${summary.quizSetCount} / ${summary.totalQuizSets}</strong>
           <div class="term-progress-bar"><i style="width:${quizRate}%"></i></div>
           <small>100%完了・${summary.quizAvg === null ? '平均 -' : `平均 ${summary.quizAvg}%`}・受験 ${summary.quizAttemptCount}回</small>
         </div>
+        ${summary.enableFinal ? `
         <div class="term-detail-card">
           <span>総合修了テスト</span>
           <strong>${finalText}</strong>
           <div class="term-progress-bar final"><i style="width:${summary.finalRate === null ? 0 : summary.finalRate}%"></i></div>
           <small>${finalSub}</small>
         </div>
+        ` : ''}
         <div class="term-detail-card ${summary.review > 0 ? 'warn' : ''}">
           <span>要復習</span>
           <strong>${summary.review + summary.imageReview}</strong>
@@ -933,19 +975,21 @@ async function loadTraineeDetail() {
       supabase.from('test_results').select('*').eq('trainee_id', id).order('test_date', { ascending: false }),
       supabase.from('terminology_progress').select('term_id,status,correct_count,wrong_count,last_studied_at').eq('trainee_id', id),
       supabase.from('terminology_image_progress').select('image_id,status,last_studied_at').eq('trainee_id', id),
-      supabase.from('terminology_quiz_results').select('set_id,score_rate,correct_count,total_questions,created_at').eq('trainee_id', id).like('set_id', 'kinrei%'),
+      supabase.from('terminology_quiz_results').select('set_id,score_rate,correct_count,total_questions,created_at').eq('trainee_id', id),
       supabase.from('terminology_study_sessions').select('created_at,duration_seconds,last_seen_at').eq('trainee_id', id),
-      supabase.from('terminology_final_unlocks').select('test_set_id,is_unlocked,unlocked_at').eq('trainee_id', id).eq('test_set_id', TERMINOLOGY_FINAL_SET_ID),
+      supabase.from('terminology_final_unlocks').select('test_set_id,is_unlocked,unlocked_at').eq('trainee_id', id),
     ]);
 
     if (tErr) throw tErr;
 
+    const terminologyApp = getTerminologyAppForTrainee(trainee) || TERMINOLOGY_APPS.kinrei;
     const terminologySummary = buildTerminologySummary(
       progressRes.error ? [] : (progressRes.data || []),
       quizRes.error ? [] : (quizRes.data || []),
       imageProgressRes.error ? [] : (imageProgressRes.data || []),
       sessionRes.error ? [] : (sessionRes.data || []),
-      finalUnlockRes.error ? [] : (finalUnlockRes.data || [])
+      finalUnlockRes.error ? [] : (finalUnlockRes.data || []),
+      terminologyApp
     );
 
     renderTraineeDetail(trainee, results || [], terminologySummary);
