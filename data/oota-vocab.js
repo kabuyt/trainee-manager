@@ -342,7 +342,7 @@ window.OOTA_VOCAB = {
       "category": "塗装専門用語",
       "categoryKey": "paint",
       "no": 28,
-      "term": "ウオーターマーク",
+      "term": "ウォーターマーク",
       "kana": "",
       "meaningVi": "Dấu ngấn nước",
       "level": "basic"
