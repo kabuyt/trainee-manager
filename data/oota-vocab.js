@@ -5,7 +5,7 @@ window.OOTA_VOCAB = {
     "company": "株式会社オオタ",
     "language": "vi",
     "source": "オオタ専門用語ふりがな一覧（最新）.docx / 塗装汎用句（VN語訳あり）.pdf / ㈱オオタ塗装専門用語.pdf",
-    "termCount": 60,
+    "termCount": 70,
     "categories": [
       "塗装専門用語"
     ]
@@ -743,6 +743,136 @@ window.OOTA_VOCAB = {
       "meaningVi": "kiểm tra độ bền thời tiết",
       "level": "basic",
       "sourceNote": "塗装汎用句（VN語訳あり）.pdf"
+    },
+    {
+      "id": "oota-paint-061",
+      "setId": "oota-2026",
+      "company": "株式会社オオタ",
+      "category": "塗装専門用語",
+      "categoryKey": "paint",
+      "no": 61,
+      "term": "ウレタン・エポキシ等",
+      "kana": "",
+      "meaningVi": "Urethane, epoxy, v.v.",
+      "level": "basic",
+      "sourceNote": "塗装汎用句（VN語訳あり）.pdf / ㈱オオタ塗装専門用語.pdf"
+    },
+    {
+      "id": "oota-paint-062",
+      "setId": "oota-2026",
+      "company": "株式会社オオタ",
+      "category": "塗装専門用語",
+      "categoryKey": "paint",
+      "no": 62,
+      "term": "溶剤が主で粉体もある",
+      "kana": "",
+      "meaningVi": "Chủ yếu là dung môi và một phần bột",
+      "level": "basic",
+      "sourceNote": "塗装汎用句（VN語訳あり）.pdf / ㈱オオタ塗装専門用語.pdf"
+    },
+    {
+      "id": "oota-paint-063",
+      "setId": "oota-2026",
+      "company": "株式会社オオタ",
+      "category": "塗装専門用語",
+      "categoryKey": "paint",
+      "no": 63,
+      "term": "表記 100/100",
+      "kana": "",
+      "meaningVi": "kí hiệu 100/100",
+      "level": "basic",
+      "sourceNote": "塗装汎用句（VN語訳あり）.pdf / ㈱オオタ塗装専門用語.pdf"
+    },
+    {
+      "id": "oota-paint-064",
+      "setId": "oota-2026",
+      "company": "株式会社オオタ",
+      "category": "塗装専門用語",
+      "categoryKey": "paint",
+      "no": 64,
+      "term": "単位 mm",
+      "kana": "",
+      "meaningVi": "đơn vị mm",
+      "level": "basic",
+      "sourceNote": "塗装汎用句（VN語訳あり）.pdf / ㈱オオタ塗装専門用語.pdf"
+    },
+    {
+      "id": "oota-paint-065",
+      "setId": "oota-2026",
+      "company": "株式会社オオタ",
+      "category": "塗装専門用語",
+      "categoryKey": "paint",
+      "no": 65,
+      "term": "1h/サイクル数",
+      "kana": "",
+      "meaningVi": "1h / số lần lặp lại",
+      "level": "basic",
+      "sourceNote": "塗装汎用句（VN語訳あり）.pdf / ㈱オオタ塗装専門用語.pdf"
+    },
+    {
+      "id": "oota-paint-066",
+      "setId": "oota-2026",
+      "company": "株式会社オオタ",
+      "category": "塗装専門用語",
+      "categoryKey": "paint",
+      "no": 66,
+      "term": "単位 h",
+      "kana": "",
+      "meaningVi": "đơn vị h",
+      "level": "basic",
+      "sourceNote": "塗装汎用句（VN語訳あり）.pdf / ㈱オオタ塗装専門用語.pdf"
+    },
+    {
+      "id": "oota-paint-067",
+      "setId": "oota-2026",
+      "company": "株式会社オオタ",
+      "category": "塗装専門用語",
+      "categoryKey": "paint",
+      "no": 67,
+      "term": "単位は無い",
+      "kana": "",
+      "meaningVi": "không có đơn vị",
+      "level": "basic",
+      "sourceNote": "塗装汎用句（VN語訳あり）.pdf / ㈱オオタ塗装専門用語.pdf"
+    },
+    {
+      "id": "oota-paint-068",
+      "setId": "oota-2026",
+      "company": "株式会社オオタ",
+      "category": "塗装専門用語",
+      "categoryKey": "paint",
+      "no": 68,
+      "term": "JIS Z 1522準拠",
+      "kana": "",
+      "meaningVi": "JIS Z 1522 tiêu chuẩn",
+      "level": "basic",
+      "sourceNote": "塗装汎用句（VN語訳あり）.pdf / ㈱オオタ塗装専門用語.pdf"
+    },
+    {
+      "id": "oota-paint-069",
+      "setId": "oota-2026",
+      "company": "株式会社オオタ",
+      "category": "塗装専門用語",
+      "categoryKey": "paint",
+      "no": 69,
+      "term": "スピッド",
+      "kana": "",
+      "meaningVi": "Tốc độ",
+      "level": "basic",
+      "sourceNote": "塗装汎用句（VN語訳あり）.pdf / ㈱オオタ塗装専門用語.pdf"
+    },
+    {
+      "id": "oota-paint-070",
+      "setId": "oota-2026",
+      "company": "株式会社オオタ",
+      "category": "塗装専門用語",
+      "categoryKey": "paint",
+      "no": 70,
+      "term": "打痕",
+      "kana": "だこん",
+      "meaningVi": "vết giáp móp",
+      "level": "basic",
+      "sourceNote": "塗装汎用句（VN語訳あり）.pdf / ㈱オオタ塗装専門用語.pdf"
     }
   ]
 };
