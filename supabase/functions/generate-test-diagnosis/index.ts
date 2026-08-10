@@ -100,20 +100,27 @@ async function handleRequest(request: Request) {
   if (!supabaseUrl || !anonKey || !serviceRoleKey) return json({ error: "Supabase environment is incomplete" }, 500);
 
   const authorization = request.headers.get("Authorization") || "";
-  const userClient = createClient(supabaseUrl, anonKey, {
-    global: { headers: { Authorization: authorization } },
-  });
   const adminClient = createClient(supabaseUrl, serviceRoleKey);
 
-  const { data: userData, error: userError } = await userClient.auth.getUser();
-  if (userError || !userData.user) return json({ error: "Unauthorized" }, 401);
+  // service role key での直接呼び出しはサーバー側バッチ（VPSのcron）とみなして admin 扱いにする。
+  // service role key を持つ時点で全テーブルに全権があるため、これで権限が広がることはない。
+  const bearer = authorization.replace(/^Bearer\s+/i, "").trim();
+  const isServiceRole = bearer.length > 0 && bearer === serviceRoleKey;
 
-  const { data: profile } = await adminClient
-    .from("user_profiles")
-    .select("role")
-    .eq("id", userData.user.id)
-    .maybeSingle();
-  if (profile?.role !== "admin") return json({ error: "Admin access required" }, 403);
+  if (!isServiceRole) {
+    const userClient = createClient(supabaseUrl, anonKey, {
+      global: { headers: { Authorization: authorization } },
+    });
+    const { data: userData, error: userError } = await userClient.auth.getUser();
+    if (userError || !userData.user) return json({ error: "Unauthorized" }, 401);
+
+    const { data: profile } = await adminClient
+      .from("user_profiles")
+      .select("role")
+      .eq("id", userData.user.id)
+      .maybeSingle();
+    if (profile?.role !== "admin") return json({ error: "Admin access required" }, 403);
+  }
   if (!openaiApiKey) return json({ error: "OPENAI_API_KEY is not configured" }, 503);
 
   let payload: { test_result_id?: string; force?: boolean };
