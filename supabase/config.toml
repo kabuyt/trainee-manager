@@ -2,3 +2,6 @@ project_id = "ajmdpkwqyeyzemeoojwd"
 
 [functions.generate-test-diagnosis]
 verify_jwt = true
+
+[functions.create-student-accounts]
+verify_jwt = true
