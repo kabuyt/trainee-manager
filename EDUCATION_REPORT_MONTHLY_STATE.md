@@ -90,6 +90,8 @@ Last updated: 2026-08-30 (Asia/Ho_Chi_Minh)
 - VJC018: 1か月目と2か月目の別PDFを確認。
 - VJC019: 生成物に含まれないことを確認。
 - BRN035のみ通常倍率で3ページになったため、sanyotechを `--pdf-scale 0.9` で生成し、全5冊が2ページになった。
+- 公開: commit `407f591` を `main` へ反映。GitHub Pages上で globalway 19冊、tombow 8冊、sanyotech 5冊を確認。
+- 公開後確認: 掲載PDF 32/32冊がHTTP 200で取得可能。VJC019は0件、VJC018は1か月目・2か月目の2冊を確認。
 
 ## Failed approaches / 再発防止
 
