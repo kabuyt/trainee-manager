@@ -60,16 +60,15 @@ def _read_env(key):
 SERVICE_KEY = _read_env('SUPABASE_SERVICE_KEY')
 ANON_KEY = _read_env('SUPABASE_ANON_KEY') or 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqbWRwa3dxeWV5emVtZW9vandkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMjIwMzAsImV4cCI6MjA5MDY5ODAzMH0.AfpGFcYvVrS25qTr9RTGWqsvWMKykU2QcXZPtiNxAqY'
 
-if not SERVICE_KEY:
-    print("ERROR: SUPABASE_SERVICE_KEY を環境変数または .env.local に設定してください")
-    print("例: SUPABASE_SERVICE_KEY=sb_secret_xxx python bulk_pdf.py ...")
-    sys.exit(1)
-
-ADMIN_EMAIL = 'admin@trainee.local'
-ADMIN_PASS = os.environ.get('TRAINEE_ADMIN_PASS', '123456')
+ADMIN_EMAIL = _read_env('SUPABASE_ADMIN_EMAIL') or 'admin@trainee.local'
+ADMIN_PASS = _read_env('SUPABASE_ADMIN_PASSWORD') or os.environ.get('TRAINEE_ADMIN_PASS', '123456')
+_ADMIN_SESSION = None
 
 def get_admin_session():
     """admin としてログインしてセッションオブジェクトを取得"""
+    global _ADMIN_SESSION
+    if _ADMIN_SESSION:
+        return _ADMIN_SESSION
     url = f"{SUPABASE_URL}/auth/v1/token?grant_type=password"
     body = json.dumps({"email": ADMIN_EMAIL, "password": ADMIN_PASS}).encode('utf-8')
     req = urllib.request.Request(url, data=body, method='POST', headers={
@@ -77,7 +76,8 @@ def get_admin_session():
         'Content-Type': 'application/json',
     })
     try:
-        return json.loads(urllib.request.urlopen(req).read())
+        _ADMIN_SESSION = json.loads(urllib.request.urlopen(req).read())
+        return _ADMIN_SESSION
     except Exception as e:
         print(f"管理者ログイン失敗: {e}")
         sys.exit(1)
@@ -476,9 +476,10 @@ document.querySelectorAll('.btn-company-dl').forEach(btn => {{
 
 def sb_get(path):
     url = f'{SUPABASE_URL}/rest/v1/' + urllib.parse.quote(path, safe='=&?*./%,_')
+    access_token = SERVICE_KEY or get_admin_session()['access_token']
     req = urllib.request.Request(url, headers={
-        'apikey': SERVICE_KEY,
-        'Authorization': f'Bearer {SERVICE_KEY}',
+        'apikey': SERVICE_KEY or ANON_KEY,
+        'Authorization': f'Bearer {access_token}',
     })
     return json.loads(urllib.request.urlopen(req).read())
 
@@ -487,11 +488,13 @@ def start_local_server(port=8799):
     handler = http.server.SimpleHTTPRequestHandler
     # ログ出力を抑制
     handler.log_message = lambda *args, **kwargs: None
-    httpd = socketserver.TCPServer(("127.0.0.1", port), handler)
+    class ReusableTCPServer(socketserver.TCPServer):
+        allow_reuse_address = True
+    httpd = ReusableTCPServer(("127.0.0.1", port), handler)
     threading.Thread(target=httpd.serve_forever, daemon=True).start()
     return httpd, port
 
-def render_pdf(context, base_url, trainee_id, month, out_pdf):
+def render_pdf(context, base_url, trainee_id, month, out_pdf, scale=1.0):
     """report.html を開いて PDF 出力（Chrome 印刷エンジン使用）"""
     page = context.new_page()
     page.set_viewport_size({"width": 1100, "height": 1600})
@@ -525,6 +528,7 @@ def render_pdf(context, base_url, trainee_id, month, out_pdf):
         format="A4",
         print_background=True,
         prefer_css_page_size=True,
+        scale=scale,
         margin={"top": "0", "right": "0", "bottom": "0", "left": "0"},
     )
     page.close()
@@ -541,8 +545,16 @@ def main():
     ap.add_argument('--site', action='store_true', help='静的サイト用 index.html を生成（brastech-reports と同形式）')
     ap.add_argument('--password', help='静的サイトのパスワード（--site 指定時、省略時は無し）', default=None)
     ap.add_argument('--auto-month', action='store_true', help='各企業の最新受験月を自動判定して生成（--month は無視）')
+    ap.add_argument(
+        '--student-month', action='append', default=[], metavar='STUDENT_ID:MONTH',
+        help='対象者と報告月を明示指定（複数指定可。同じ人の別月も指定可）'
+    )
     ap.add_argument('--ymd', help='配布ページの年月（YYYYMM、省略時は当月）', default=None)
+    ap.add_argument('--pdf-scale', type=float, default=1.0, help='PDF印刷倍率 0.1～2.0（既定: 1.0）')
     args = ap.parse_args()
+
+    if not 0.1 <= args.pdf_scale <= 2.0:
+        ap.error('--pdf-scale は 0.1～2.0 で指定してください')
 
     try:
         from playwright.sync_api import sync_playwright
@@ -630,8 +642,50 @@ def main():
         print("該当する実習生がいません")
         sys.exit(0)
 
+    if args.student_month and args.auto_month:
+        ap.error('--student-month と --auto-month は同時に指定できません')
+
+    # 明示対象モード: 配布対象と月を履歴推測なしで固定する。
+    if args.student_month:
+        by_student_id = {t.get('student_id'): t for t in pre_filtered}
+        filtered = []
+        seen = set()
+        errors = []
+        for spec in args.student_month:
+            match = re.fullmatch(r'([^:]+):(\d+)', spec.strip())
+            if not match:
+                errors.append(f'形式不正: {spec}（STUDENT_ID:MONTH で指定）')
+                continue
+            student_id, month_text = match.groups()
+            month = int(month_text)
+            key = (student_id, month)
+            if not 1 <= month <= 8:
+                errors.append(f'月は1～8: {spec}')
+                continue
+            if key in seen:
+                errors.append(f'重複指定: {spec}')
+                continue
+            trainee = by_student_id.get(student_id)
+            if not trainee:
+                errors.append(f'対象組合・会社に在籍する実習生が見つからない: {student_id}')
+                continue
+            seen.add(key)
+            assigned = dict(trainee)
+            assigned['_assigned_month'] = month
+            filtered.append(assigned)
+
+        if errors:
+            for error in errors:
+                print(f'ERROR: {error}')
+            sys.exit(2)
+        if not filtered:
+            print('明示指定された対象者がいません')
+            sys.exit(0)
+        skipped_untested = 0
+        print(f'対象: {len(filtered)}冊（明示指定、{len(set(t["student_id"] for t in filtered))}名）')
+
     # auto-month: グループ（会社+期生）ごとに最新月を判定
-    if args.auto_month:
+    elif args.auto_month:
         # group_key (会社+期生) → 最新月（受験履歴があるグループのみ対象）
         company_to_month = {}
         for t in pre_filtered:
@@ -716,7 +770,13 @@ def main():
         })
 
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
+            launch_options = {'headless': True}
+            # ローカルの Playwright ブラウザが未配置でも、既存 Chrome で生成できる。
+            # GitHub Actions では install 済みの Playwright Chromium をそのまま使う。
+            local_chrome = Path('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
+            if local_chrome.exists():
+                launch_options['executable_path'] = str(local_chrome)
+            browser = p.chromium.launch(**launch_options)
             context = browser.new_context(viewport={"width": 1100, "height": 1600})
 
             # 3. add_init_script で全ページの読込前に session を localStorage 注入
@@ -766,7 +826,7 @@ def main():
                     out_pdf = comp_dir / pdf_name
                     print(f"  [{done}/{total}] {sid} {kata} → {c_safe}/{pdf_name} ({m}ヶ月目)")
                     try:
-                        render_pdf(context, base_url, t['id'], m, out_pdf)
+                        render_pdf(context, base_url, t['id'], m, out_pdf, scale=args.pdf_scale)
                         generated.append(out_pdf)
                         site_files.append({
                             'name_kata': kata_norm or '?',
