@@ -100,6 +100,7 @@ Last updated: 2026-08-30 (Asia/Ho_Chi_Minh)
 - 対応: `bulk_pdf.py --balanced-student BRN035` を追加し、対象者だけ学習状況から2ページ目へ送る。標準倍率1.0へ戻した。
 - 最終レイアウト: 1ページ目は基本情報・未受験成績・傾向診断、2ページ目は学習状況・週別活動・学習/生活コメント。A4・2ページで欠落、重なり、途中分断なし。
 - データ安全: Productionデータは更新せず、PDF生成と本人PDFの差し替えだけを行った。
+- 公開確認: commit `9ba9809`。GitHub Pagesの公開PDFがローカル修正版とSHA-256完全一致し、HTTP 200・936400 bytesを確認。
 - 失敗した方法: `balance-no-trend` を `body.print-mode` のみに指定するとChrome印刷メディアへ適用されず3ページになった。通常印刷メディアでも効く対象クラスへ修正した。
 
 ## Failed approaches / 再発防止
