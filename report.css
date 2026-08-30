@@ -942,6 +942,17 @@ body.no-trend #learnDetailSub {
   break-before: page !important;
   page-break-before: always !important;
 }
+body.no-trend.balance-no-trend .section-header.page-break-before {
+  break-before: page !important;
+  page-break-before: always !important;
+}
+body.no-trend.balance-no-trend #learnDetailSub {
+  break-before: auto !important;
+  page-break-before: auto !important;
+  position: static;
+  top: auto;
+  margin-bottom: 5px;
+}
 
 /* ===== Print ===== */
 @media print {
@@ -1224,6 +1235,19 @@ body.print-mode.no-trend #learnDetailSub {
   position: relative;
   top: 6mm;
   margin-bottom: 8mm;
+}
+/* 短い未受験報告書は、学習状況を2ページ目へ送ると上下の密度が整う。
+   bulk_pdf.py の --balanced-student で対象者だけに適用する。 */
+body.print-mode.no-trend.balance-no-trend .section-header.page-break-before {
+  break-before: page !important;
+  page-break-before: always !important;
+}
+body.print-mode.no-trend.balance-no-trend #learnDetailSub {
+  break-before: auto !important;
+  page-break-before: auto !important;
+  position: static;
+  top: auto;
+  margin-bottom: 5px;
 }
 body.print-mode .comment-block,
 body.print-mode .comment-grid,

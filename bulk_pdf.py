@@ -494,7 +494,7 @@ def start_local_server(port=8799):
     threading.Thread(target=httpd.serve_forever, daemon=True).start()
     return httpd, port
 
-def render_pdf(context, base_url, trainee_id, month, out_pdf, scale=1.0):
+def render_pdf(context, base_url, trainee_id, month, out_pdf, scale=1.0, balanced_no_trend=False):
     """report.html を開いて PDF 出力（Chrome 印刷エンジン使用）"""
     page = context.new_page()
     page.set_viewport_size({"width": 1100, "height": 1600})
@@ -521,6 +521,10 @@ def render_pdf(context, base_url, trainee_id, month, out_pdf, scale=1.0):
     # フォント読込待ち
     page.evaluate("() => document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()")
     page.wait_for_timeout(500)
+
+    # 未受験など内容が短い報告書を、学習状況から2ページ目へ送って密度を整える。
+    if balanced_no_trend:
+        page.evaluate("() => document.body.classList.add('balance-no-trend')")
 
     # PDF 出力（@page CSS が効くので margin は @page 側に任せる）
     page.pdf(
@@ -551,6 +555,10 @@ def main():
     )
     ap.add_argument('--ymd', help='配布ページの年月（YYYYMM、省略時は当月）', default=None)
     ap.add_argument('--pdf-scale', type=float, default=1.0, help='PDF印刷倍率 0.1～2.0（既定: 1.0）')
+    ap.add_argument(
+        '--balanced-student', action='append', default=[], metavar='STUDENT_ID',
+        help='短い未受験報告書を学習状況から2ページ目へ送る対象者（複数指定可）'
+    )
     args = ap.parse_args()
 
     if not 0.1 <= args.pdf_scale <= 2.0:
@@ -826,7 +834,11 @@ def main():
                     out_pdf = comp_dir / pdf_name
                     print(f"  [{done}/{total}] {sid} {kata} → {c_safe}/{pdf_name} ({m}ヶ月目)")
                     try:
-                        render_pdf(context, base_url, t['id'], m, out_pdf, scale=args.pdf_scale)
+                        render_pdf(
+                            context, base_url, t['id'], m, out_pdf,
+                            scale=args.pdf_scale,
+                            balanced_no_trend=sid in set(args.balanced_student),
+                        )
                         generated.append(out_pdf)
                         site_files.append({
                             'name_kata': kata_norm or '?',
