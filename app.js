@@ -1468,6 +1468,13 @@ function renderScoreTestSelector(defaultMap) {
 
 function setScoreTestOverride(testName) {
   _scoreTestOverride = testName === SCORE_TEST_OVERRIDE_NONE ? SCORE_TEST_OVERRIDE_NONE : (testName || null);
+  // 月別報告書に保存するまで、現在の画面内キャッシュにも選択を保持する。
+  // switchMonth() はこのキャッシュを正として再描画するため、選択直後に
+  // 自動判定へ戻ることを防げる。
+  _reportMonthly[_currentMonth] = {
+    ...(_reportMonthly[_currentMonth] || {}),
+    score_test_override: _scoreTestOverride,
+  };
   switchMonth(_currentMonth);
 }
 
@@ -1712,6 +1719,12 @@ function switchMonth(month) {
   const map = currentMonthMap().find(m => m.month === month);
   if (!map) return;
 
+  const monthly = _reportMonthly[month] || null;
+  const savedScoreOverride = monthly?.score_test_override;
+  _scoreTestOverride = savedScoreOverride === SCORE_TEST_OVERRIDE_NONE
+    ? SCORE_TEST_OVERRIDE_NONE
+    : (savedScoreOverride || null);
+
   // 試験範囲ラベル更新
   document.getElementById('scopeLabel').textContent = map.scope;
 
@@ -1724,7 +1737,7 @@ function switchMonth(month) {
   renderDiagnosis(document.getElementById('diagnosisArea'), result ? [result] : _reportResults);
 
   // 該当月のコメントを表示
-  renderMonthComments(_reportMonthly[month]);
+  renderMonthComments(monthly);
 
   // PDF/印刷ファイル名用 document.title を月変更に追従
   const kata = (document.getElementById('rNameKata') || {}).textContent || '';
@@ -2318,6 +2331,8 @@ async function saveReport() {
     week2,
     week3,
     week4,
+    // null は自動判定、__none__ は未実施、test名はその結果を表示する。
+    score_test_override: _scoreTestOverride || null,
     updated_at: new Date().toISOString(),
   };
 
@@ -2333,10 +2348,11 @@ async function saveReport() {
     });
     if (error) {
       // DB migration 未適用でも他の保存を止めない。
-      // monthly_reports.japanese_eval 追加後は通常の保存で自動的に保持される。
-      if (error.code === 'PGRST204' || String(error.message || '').includes('japanese_eval')) {
+      // 対象列の migration 適用後は通常の保存で自動的に保持される。
+      if (error.code === 'PGRST204' || /japanese_eval|score_test_override/.test(String(error.message || ''))) {
         const fallbackData = { ...data };
         delete fallbackData.japanese_eval;
+        delete fallbackData.score_test_override;
         const { error: fallbackError } = await supabase.from('monthly_reports').upsert(fallbackData, {
           onConflict: 'trainee_id,month',
         });
