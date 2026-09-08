@@ -106,6 +106,15 @@ def company_with_class(t):
     cg = (t.get('class_group') or '').strip()
     return f'{company} {cg}'.strip() if cg else company
 
+def sending_org_name(t):
+    """Return the sending organization joined from trainees.organization_id."""
+    organization = t.get('organizations')
+    if isinstance(organization, dict):
+        name = (organization.get('name') or '').strip()
+        if name:
+            return name
+    return '(送り出し未設定)'
+
 def generate_site_index(work_dir, kumiai_name, kumiai_slug, ymd, company_groups, password=None):
     """brastech-reports と同形式の静的サイト index.html を生成
     company_groups: list of dicts {name, month, files: [{name_kata, name_romaji, pdf_filename}], slug}
@@ -121,16 +130,60 @@ def generate_site_index(work_dir, kumiai_name, kumiai_slug, ymd, company_groups,
     zip_name = f"教育報告書_{kumiai_slug}_{ymd}.zip"
 
     pw_hash_block = ''
+    auth_html = ''
+    auth_js = ''
+    main_content_display = 'block'
     if password:
         import hashlib
         pw_hash = hashlib.sha256(password.encode()).hexdigest()
         pw_hash_block = f"const PASS_HASH = '{pw_hash}';"
+        main_content_display = 'none'
+        auth_html = """
+<!-- Password Gate -->
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-card">
+    <img src="logo.png" alt="GROP VIETNAM" class="auth-logo">
+    <h2>教育報告書ダウンロード</h2>
+    <p class="auth-sub">閲覧にはパスワードが必要です</p>
+    <form id="authForm">
+      <div class="auth-input-wrap">
+        <input type="password" class="auth-input" id="authPass" placeholder="パスワードを入力" autocomplete="off">
+        <button type="submit" class="auth-submit">認証</button>
+      </div>
+      <div class="auth-error" id="authError"></div>
+    </form>
+  </div>
+</div>
+"""
+        auth_js = f"""
+document.getElementById('authForm').addEventListener('submit', async (e) => {{
+  e.preventDefault();
+  const inp = document.getElementById('authPass');
+  const err = document.getElementById('authError');
+  const hash = await sha256(inp.value);
+  if (hash === PASS_HASH) {{
+    sessionStorage.setItem('auth_{kumiai_slug}', '1');
+    document.getElementById('authOverlay').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+  }} else {{
+    inp.classList.add('error'); err.textContent = 'パスワードが違います';
+    setTimeout(() => inp.classList.remove('error'), 400);
+    inp.value = ''; inp.focus();
+  }}
+}});
+if (sessionStorage.getItem('auth_{kumiai_slug}') === '1') {{
+  document.getElementById('authOverlay').style.display = 'none';
+  document.getElementById('mainContent').style.display = 'block';
+}} else {{
+  document.getElementById('authPass').focus();
+}}
+"""
 
     # 会社別セクション
     sections_html = ''
     for cg in company_groups:
         sec = f'<div class="section"><div class="section-title">{cg["name"]} <span class="section-month">{cg["month"]}ヶ月目</span></div>'
-        sec += f'<div class="company-actions"><button class="btn-company-dl" data-slug="{cg["slug"]}">📥 {cg["name"]} を一括DL (ZIP)</button></div>'
+        sec += f'<div class="company-actions"><button class="btn-company-dl" data-slug="{cg["slug"]}">📥 {cg.get("download_label", cg["name"])} を一括DL (ZIP)</button></div>'
         sec += '<div class="student-list">'
         for i, f in enumerate(cg['files']):
             href = f'{cg["slug"]}/{urllib.parse.quote(f["pdf_filename"])}'
@@ -147,8 +200,9 @@ def generate_site_index(work_dir, kumiai_name, kumiai_slug, ymd, company_groups,
     # 会社別ファイルリスト（per company ZIP用）
     company_files_json = {cg['slug']: [f"{cg['slug']}/{f['pdf_filename']}" for f in cg['files']] for cg in company_groups}
     company_files_js = json.dumps(company_files_json, ensure_ascii=False)
-    company_zip_names = {cg['slug']: f"教育報告書_{cg['name']}_{cg['month']}ヶ月目.zip" for cg in company_groups}
+    company_zip_names = {cg['slug']: f"教育報告書_{cg.get('download_label', cg['name'])}_{cg['month']}ヶ月目.zip" for cg in company_groups}
     company_zip_names_js = json.dumps(company_zip_names, ensure_ascii=False)
+    total_companies = len(set(cg.get('company_name', cg['name']) for cg in company_groups))
 
     html = f"""<!DOCTYPE html>
 <html lang="ja">
@@ -197,7 +251,7 @@ body {{ font-family: 'Noto Sans JP', sans-serif; background: #edf1f7; color: #1e
   25% {{ transform: translateX(-6px); }}
   75% {{ transform: translateX(6px); }}
 }}
-.main-content {{ display: none; }}
+.main-content {{ display: {main_content_display}; }}
 
 .header {{
   background: #102547; padding: 20px 32px;
@@ -299,21 +353,7 @@ body {{ font-family: 'Noto Sans JP', sans-serif; background: #edf1f7; color: #1e
 </head>
 <body>
 
-<!-- Password Gate -->
-<div class="auth-overlay" id="authOverlay">
-  <div class="auth-card">
-    <img src="logo.png" alt="GROP VIETNAM" class="auth-logo">
-    <h2>教育報告書ダウンロード</h2>
-    <p class="auth-sub">閲覧にはパスワードが必要です</p>
-    <form id="authForm">
-      <div class="auth-input-wrap">
-        <input type="password" class="auth-input" id="authPass" placeholder="パスワードを入力" autocomplete="off">
-        <button type="submit" class="auth-submit">認証</button>
-      </div>
-      <div class="auth-error" id="authError"></div>
-    </form>
-  </div>
-</div>
+{auth_html}
 
 <div class="main-content" id="mainContent">
 
@@ -333,16 +373,16 @@ body {{ font-family: 'Noto Sans JP', sans-serif; background: #edf1f7; color: #1e
     <div class="info">
       <div class="info-item">
         <div class="num">{total_count}</div>
-        <div class="label">名</div>
+        <div class="label">冊</div>
       </div>
       <div class="info-item">
-        <div class="num">{len(company_groups)}</div>
+        <div class="num">{total_companies}</div>
         <div class="label">社</div>
       </div>
     </div>
     <button class="btn-dl" id="bulkZipBtn">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      全{total_count}名 PDF一括ダウンロード（ZIP）
+      全{total_count}冊 PDF一括ダウンロード（ZIP）
     </button>
   </div>
 
@@ -411,27 +451,7 @@ async function sha256(text) {{
   return Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2, '0')).join('');
 }}
 
-document.getElementById('authForm').addEventListener('submit', async (e) => {{
-  e.preventDefault();
-  const inp = document.getElementById('authPass');
-  const err = document.getElementById('authError');
-  const hash = await sha256(inp.value);
-  if (hash === PASS_HASH) {{
-    sessionStorage.setItem('auth_{kumiai_slug}', '1');
-    document.getElementById('authOverlay').style.display = 'none';
-    document.getElementById('mainContent').style.display = 'block';
-  }} else {{
-    inp.classList.add('error'); err.textContent = 'パスワードが違います';
-    setTimeout(() => inp.classList.remove('error'), 400);
-    inp.value = ''; inp.focus();
-  }}
-}});
-if (sessionStorage.getItem('auth_{kumiai_slug}') === '1') {{
-  document.getElementById('authOverlay').style.display = 'none';
-  document.getElementById('mainContent').style.display = 'block';
-}} else {{
-  document.getElementById('authPass').focus();
-}}
+{auth_js}
 
 const ALL_FILES = {files_json};
 const COMPANY_FILES = {company_files_js};
@@ -494,7 +514,10 @@ def start_local_server(port=8799):
     threading.Thread(target=httpd.serve_forever, daemon=True).start()
     return httpd, port
 
-def render_pdf(context, base_url, trainee_id, month, out_pdf, scale=1.0, balanced_no_trend=False):
+def render_pdf(
+    context, base_url, trainee_id, month, out_pdf, scale=1.0,
+    balanced_no_trend=False, display_month=None,
+):
     """report.html を開いて PDF 出力（Chrome 印刷エンジン使用）"""
     page = context.new_page()
     page.set_viewport_size({"width": 1100, "height": 1600})
@@ -526,6 +549,20 @@ def render_pdf(context, base_url, trainee_id, month, out_pdf, scale=1.0, balance
     if balanced_no_trend:
         page.evaluate("() => document.body.classList.add('balance-no-trend')")
 
+    # 提出回と学習データの月が異なる特例では、データは source month のまま、
+    # PDF上の提出月表示とファイル名だけを明示した display month にする。
+    if display_month is not None and display_month != month:
+        page.evaluate("""
+            (displayMonth) => {
+                const monthPrint = document.getElementById('monthPrint');
+                if (monthPrint) monthPrint.textContent = String(displayMonth);
+                const name = (document.getElementById('rNameKata')?.textContent || '').trim();
+                if (name && name !== '-') {
+                    document.title = `教育報告書 ${displayMonth}ヶ月目 ${name}`;
+                }
+            }
+        """, display_month)
+
     # PDF 出力（@page CSS が効くので margin は @page 側に任せる）
     page.pdf(
         path=str(out_pdf),
@@ -552,6 +589,14 @@ def main():
     ap.add_argument(
         '--student-month', action='append', default=[], metavar='STUDENT_ID:MONTH',
         help='対象者と報告月を明示指定（複数指定可。同じ人の別月も指定可）'
+    )
+    ap.add_argument(
+        '--display-month', action='append', default=[], metavar='STUDENT_ID:MONTH',
+        help='PDF上の提出月だけを上書き（元データは --student-month の月を使用）'
+    )
+    ap.add_argument(
+        '--group-by-sender', action='store_true',
+        help='配布ページと出力フォルダを送り出し機関ごとに分ける'
     )
     ap.add_argument('--ymd', help='配布ページの年月（YYYYMM、省略時は当月）', default=None)
     ap.add_argument('--pdf-scale', type=float, default=1.0, help='PDF印刷倍率 0.1～2.0（既定: 1.0）')
@@ -600,7 +645,7 @@ def main():
     }
 
     print("📥 Supabase から実習生データ取得中...")
-    trainees = sb_get("trainees?select=*&order=student_id")
+    trainees = sb_get("trainees?select=*,organizations(name)&order=student_id")
 
     # 全テスト結果を取得（最新月判定 + 受験者判定で使う）
     print("📥 test_results を取得中...")
@@ -653,6 +698,27 @@ def main():
     if args.student_month and args.auto_month:
         ap.error('--student-month と --auto-month は同時に指定できません')
 
+    display_month_by_student = {}
+    display_errors = []
+    for spec in args.display_month:
+        match = re.fullmatch(r'([^:]+):(\d+)', spec.strip())
+        if not match:
+            display_errors.append(f'表示月の形式不正: {spec}（STUDENT_ID:MONTH で指定）')
+            continue
+        student_id, month_text = match.groups()
+        display_month = int(month_text)
+        if not 1 <= display_month <= 8:
+            display_errors.append(f'表示月は1～8: {spec}')
+            continue
+        if student_id in display_month_by_student:
+            display_errors.append(f'表示月の重複指定: {student_id}')
+            continue
+        display_month_by_student[student_id] = display_month
+    if display_errors:
+        for error in display_errors:
+            print(f'ERROR: {error}')
+        sys.exit(2)
+
     # 明示対象モード: 配布対象と月を履歴推測なしで固定する。
     if args.student_month:
         by_student_id = {t.get('student_id'): t for t in pre_filtered}
@@ -680,6 +746,7 @@ def main():
             seen.add(key)
             assigned = dict(trainee)
             assigned['_assigned_month'] = month
+            assigned['_display_month'] = display_month_by_student.get(student_id, month)
             filtered.append(assigned)
 
         if errors:
@@ -718,6 +785,7 @@ def main():
                 skipped_groups.append(c)
                 continue
             t['_assigned_month'] = m
+            t['_display_month'] = display_month_by_student.get(t.get('student_id'), m)
             # --all 時はそのグループ全員を含める（未受験者も「未受験」表記で出力）
             if not args.all and m not in tested_months_by_trainee.get(t['id'], set()):
                 continue
@@ -747,8 +815,16 @@ def main():
                 skipped_untested += 1
                 continue
             t['_assigned_month'] = args.month
+            t['_display_month'] = display_month_by_student.get(t.get('student_id'), args.month)
             filtered.append(t)
 
+    selected_student_ids = {t.get('student_id') for t in filtered}
+    unknown_display_ids = sorted(set(display_month_by_student) - selected_student_ids)
+    if unknown_display_ids:
+        print('ERROR: 表示月を指定した対象者が今回の生成対象にいません: ' + ', '.join(unknown_display_ids))
+        sys.exit(2)
+
+    if not args.student_month and not args.auto_month:
         if not filtered:
             print(f"該当する実習生がいません（未受験で除外: {skipped_untested}名）")
             print("→ テスト未受験者も含めたい場合は --all を追加してください")
@@ -799,10 +875,12 @@ def main():
             ymd = args.ymd or time.strftime('%Y%m')
             kumiai_slug_for_zip = args.kumiai or 'all'
 
-            # 会社+期生 でグループ化
+            # 会社+期生、必要なら送り出し機関でもグループ化
             by_company = defaultdict(list)
             for t in filtered:
-                by_company[company_with_class(t)].append(t)
+                company = company_with_class(t)
+                sender = sending_org_name(t) if args.group_by_sender else ''
+                by_company[(sender, company)].append(t)
 
             work_dir = output_dir / kumiai_slug_for_zip
             if work_dir.exists():
@@ -815,12 +893,19 @@ def main():
             site_company_data = {}
             total = len(filtered)
             done = 0
-            for company, arr in by_company.items():
-                c_safe = safe_filename(company)
+            for (sender, company), arr in by_company.items():
+                if args.group_by_sender:
+                    c_safe = f'{safe_filename(sender)}/{safe_filename(company)}'
+                    section_name = f'{sender}｜{company}'
+                    download_label = sender
+                else:
+                    c_safe = safe_filename(company)
+                    section_name = company
+                    download_label = company
                 comp_dir = work_dir / c_safe
                 comp_dir.mkdir(parents=True, exist_ok=True)
                 site_files = []
-                company_months = sorted(set(t.get('_assigned_month', args.month) for t in arr))
+                company_months = sorted(set(t.get('_display_month', t.get('_assigned_month', args.month)) for t in arr))
                 company_month = company_months[0] if len(company_months) == 1 else '・'.join(str(m) for m in company_months)
                 for t in arr:
                     done += 1
@@ -830,14 +915,17 @@ def main():
                     kata_norm = re.sub(r'[\s　]+', '・', kata)
                     kata_safe = safe_filename(kata_norm) or 'unknown'
                     m = t.get('_assigned_month', args.month)
-                    pdf_name = f"教育報告書 {m}ヶ月目 {kata_safe}.pdf"
+                    display_month = t.get('_display_month', m)
+                    pdf_name = f"教育報告書 {display_month}ヶ月目 {kata_safe}.pdf"
                     out_pdf = comp_dir / pdf_name
-                    print(f"  [{done}/{total}] {sid} {kata} → {c_safe}/{pdf_name} ({m}ヶ月目)")
+                    month_note = f'{m}ヶ月目データ → {display_month}ヶ月目表示' if display_month != m else f'{m}ヶ月目'
+                    print(f"  [{done}/{total}] {sid} {kata} → {c_safe}/{pdf_name} ({month_note})")
                     try:
                         render_pdf(
                             context, base_url, t['id'], m, out_pdf,
                             scale=args.pdf_scale,
                             balanced_no_trend=sid in set(args.balanced_student),
+                            display_month=display_month,
                         )
                         generated.append(out_pdf)
                         site_files.append({
@@ -848,8 +936,9 @@ def main():
                     except Exception as e:
                         print(f"    ✗ ERROR: {e}")
                 if site_files:
-                    site_company_data[company] = {
-                        'name': company, 'month': company_month,
+                    site_company_data[(sender, company)] = {
+                        'name': section_name, 'company_name': company,
+                        'download_label': download_label, 'month': company_month,
                         'slug': c_safe, 'files': site_files,
                     }
 
@@ -865,7 +954,7 @@ def main():
                 ymd, company_groups, password=args.password
             )
             print(f"✓ 静的サイト準備完了: {work_dir}/index.html")
-            print(f"  → このフォルダ全体を GitHub Pages にデプロイすればブラウザで閲覧可能")
+            print(f"  → このフォルダ全体を承認済みの配布先へデプロイしてください")
 
         # ZIP 化
         if not args.no_zip and generated:
