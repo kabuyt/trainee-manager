@@ -162,3 +162,12 @@ Codexへ次のように依頼する。
 - 公開PDFのSHA-256はCIC `363c7ba8326ddb1f0c50f432b108027cbac1376d5ba8e4ce5d08ccd30b1bb2dd`、山陽テクノVJC `52627fbbda313fc00effe73160b79b74fba330fbd97d1ab7dd563b2cfcf45d50`。公開管理画面 `app.js` は検証済みファイルと一致した。
 - Productionデータベースへの書き込みは0件。点数、コメント、報告月、配布対象を変更していない。GitHub Pagesも更新していない。
 - 復旧用バックアップ: `/opt/minna/backup/marugoto-progress-level-before-20260909`。
+
+## 2026年9月9日 山陽テクノ BRN035 一時保留
+
+- BRN035 ホー・モン・フイは、月間テスト実施後に改めて報告するため、山陽テクノ配布ページから一時的に除外した。
+- 配布ページの本人リンク、全件ZIP対象、BARAEN別ZIP対象から除外した。PDF本体とProductionデータは削除・変更していないため、後日再掲載できる。
+- 現在の掲載は3冊。BARAENはBRN036 カオ・ティ・トゥエット・ニー、BRN037 レ・ティ・トゥイの2冊、VJCはVJC018 グエン・ティ・チャンの1冊。
+- 公開先は `https://kanri.gropvietnam.com.vn/reports/sanyotech/` のみ。GitHub Pagesは更新していない。
+- 公開前の `index.html` は `/opt/minna/backup/sanyotech-hide-fui-before-20260909/index.html` に保持している。
+- 公開後確認: ログインは303で配布ページへ遷移し、一覧はHTTP 200。掲載リンク3件、フイの氏名・英字名・URL・ZIP配列への残存0件。公開HTMLのSHA-256は `1a87fd619359435928cdeb36b144cd1cebbcabd69943995aa750b19ae3861625`。

@@ -904,3 +904,49 @@ None.
 - Public report routing: PASS; unauthenticated CIC and Sanyotech report URLs redirect to their login pages.
 - Published PDF hashes: CIC VJC019 `363c7ba8326ddb1f0c50f432b108027cbac1376d5ba8e4ce5d08ccd30b1bb2dd`, Sanyotech VJC018 `52627fbbda313fc00effe73160b79b74fba330fbd97d1ab7dd563b2cfcf45d50`.
 - Safety: PASS; zero Production database writes and no GitHub Pages report change.
+
+## 2026-09-09 Sanyotech BRN035 temporary distribution hold
+
+### Goal
+
+Temporarily hide BRN035 ホー・モン・フイ from the Sanyotech distribution page until his test is complete, while retaining the PDF for later publication.
+
+### Definition of Done
+
+- BRN035 is absent from the visible list, the all-reports ZIP list, and the BARAEN ZIP list.
+- The remaining two BARAEN reports and one VJC report remain listed with valid links.
+- BRN035's PDF file and all Production data remain untouched.
+- Only the protected Sanyotech page changes; GitHub Pages remains unchanged.
+
+### Completed
+
+- Removed BRN035 from the public Sanyotech page and both ZIP manifests.
+- Updated the displayed total from four reports to three and renumbered the remaining BARAEN links.
+- Preserved the BRN035 PDF on the server for publication after the test.
+- Backed up the former public index at `/opt/minna/backup/sanyotech-hide-fui-before-20260909/index.html`.
+
+### Current
+
+Sanyotech now lists three reports: BARAEN BRN036 and BRN037, plus VJC VJC018. BRN035 is on hold.
+
+### Next
+
+After BRN035 completes the monthly test and the report is regenerated and checked, restore BRN035 to the visible list and both ZIP manifests.
+
+### Blockers
+
+None.
+
+### Failed approaches
+
+- The first manual one-line HTML replacement truncated the percent-encoded URL for BRN037. It was repaired before publication and all three retained links were re-compared with the original page.
+- The first authenticated curl check ran without network permission and returned status 000. It was rerun with network access and passed.
+
+### Last test result
+
+- Authentication: PASS; login returned 303 to the Sanyotech page and the authenticated page returned HTTP 200.
+- Listing: PASS; exactly three student links: BARAEN BRN036 and BRN037, plus VJC VJC018.
+- Hold check: PASS; BRN035 name, Latin name, encoded URL, `ALL_FILES`, and `COMPANY_FILES` references are absent.
+- Preservation: PASS; the BRN035 PDF remains on the protected server.
+- Published HTML SHA-256: `1a87fd619359435928cdeb36b144cd1cebbcabd69943995aa750b19ae3861625`.
+- Safety: PASS; zero database writes, zero PDF deletions, and no GitHub Pages change.
