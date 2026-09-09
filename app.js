@@ -1923,10 +1923,11 @@ function extractLearnProgressFromWeek4(week4Html) {
   const lines = text.split(/\n+/).map(line => line.replace(/\s+/g, ' ').trim()).filter(Boolean);
   const minnaLine = [...lines].reverse().find(line => /みんなの日本語/.test(line));
   const marugotoLine = [...lines].reverse().find(line => /まるごと/.test(line));
+  const irodoriLine = [...lines].reverse().find(line => /いろどり/.test(line));
   const fallbackText = lines
     .filter(line => !/(数ドリル|いろどり生活の日本語)/.test(line))
     .join(' ');
-  const sourceText = (minnaLine || marugotoLine || fallbackText).replace(/\s+/g, ' ');
+  const sourceText = (minnaLine || marugotoLine || irodoriLine || fallbackText).replace(/\s+/g, ' ');
 
   const lessonMatches = [...sourceText.matchAll(/(?:第\s*)?(?:(\d+)\s*~\s*)?(\d+)\s*課/g)];
   let lesson = lessonMatches.length ? lessonMatches[lessonMatches.length - 1][2] : '';
@@ -1937,7 +1938,12 @@ function extractLearnProgressFromWeek4(week4Html) {
   if (!lesson) return '';
 
   if (minnaLine) return `みんなの日本語 ${lesson}課`;
-  if (marugotoLine) return `まるごと ${lesson}課`;
+  if (marugotoLine) {
+    const levelMatch = sourceText.match(/(?:[（(]\s*)?(入門|初級)\s*([12])?(?:\s*[）)])?/);
+    const level = levelMatch ? `${levelMatch[1]}${levelMatch[2] || ''}` : '';
+    return `まるごと第${lesson}課${level ? `（${level}）` : ''}`;
+  }
+  if (irodoriLine) return `いろどり ${lesson}課`;
   return `第${lesson}課`;
 }
 
@@ -1948,6 +1954,7 @@ function isBlankLearnProgress(value) {
 
 function isAutoLearnProgressText(value) {
   return /^\u307f\u3093\u306a\u306e\u65e5\u672c\u8a9e\s*\d+\u8ab2$/.test(String(value || '').trim()) ||
+    /^\u307e\u308b\u3054\u3068\s*(?:\u7b2c\s*)?\d+\u8ab2\s*(?:[\uff08(](?:\u5165\u9580|\u521d\u7d1a)\s*[12]?[\uff09)])?$/.test(String(value || '').trim()) ||
     /^\u7b2c\s*\d+\u8ab2$/.test(String(value || '').trim());
 }
 

@@ -854,3 +854,53 @@ None.
 - Public publication: PASS; remote PDF hashes exactly match the verified local outputs.
 - CIC authenticated E2E: PASS; one login reaches the one-report page after publication.
 - Published hashes: CIC VJC019 `44fd83ffd2f584d9e4cbcbb5a831bb6bc954ea16b568bd5a35f445a3be701f77`, Sanyotech VJC018 `c8f985ac20e830180c7076b97cd421f805511ef2da40873e9172e4616068a5ac`.
+
+## 2026-09-09 Marugoto learning-progress level label
+
+### Goal
+
+Make Marugoto learning progress unambiguous by displaying the lesson together with its textbook level, for example `まるごと第6課（初級1）`.
+
+### Definition of Done
+
+- The latest Marugoto lesson and level are derived from the week-4 activity entry.
+- Legacy auto-generated values such as `まるごと6課` and `まるごと 6課 (初級)` are replaced by the precise current format when the weekly entry contains the level.
+- Existing Minna no Nihongo and Irodori progress behavior remains unchanged.
+- The two currently distributed Marugoto PDFs show `まるごと第6課（初級1）`, remain A4/two pages, and retain the six-part trend axis.
+- No Production database row or GitHub Pages report is changed.
+
+### Completed
+
+- Updated the Marugoto week-4 parser to preserve `入門1`, `入門2`, `初級1`, or `初級2` and include `第` in the rendered label.
+- Added legacy Marugoto auto-value recognition so an imprecise saved display value can be replaced from the current weekly activity without changing the database.
+- Preserved the Production-only Irodori branch in both the repository source and the deployed management code.
+- Deployed the management-page change and regenerated/published only CIC VJC019 month 2 and Sanyotech VJC018 displayed month 1.
+- Backed up the replaced management code and PDFs under `/opt/minna/backup/marugoto-progress-level-before-20260909`.
+
+### Current
+
+The management report and both active Marugoto distribution PDFs display `まるごと第6課（初級1）` from the week-4 entry. This is a display/rendering change; saved report data was not modified.
+
+### Next
+
+None.
+
+### Blockers
+
+None.
+
+### Failed approaches
+
+- The first implementation did not recognize spaces between `課` and an existing parenthetical level, so `まるごと 6課 (初級)` remained unchanged. The legacy-value matcher now accepts that spacing and the regenerated PDF verifies the correction.
+- Deploying the repository `app.js` wholesale would have removed a newer Production Irodori branch. The deployed file was built from the current Production copy with only this Marugoto change applied, and the Irodori branch was also brought into the repository source.
+
+### Last test result
+
+- Source validation: PASS; `node --check app.js`, deployed-file syntax check, and `git diff --check`.
+- Content: PASS; both PDFs contain `まるごと第6課（初級1）` and the original week-by-week entries.
+- PDF structure: PASS; both are A4, two pages, and all four pages were visually inspected without clipping, overlap, or broken layout.
+- Regression: PASS; six trend-axis labels remain visible, and Irodori/Minna branches remain present.
+- Public management asset: PASS; HTTP-served `app.js` SHA-256 matches the deployed verified file (`37fdc11f32b20aecc0fb7a6372da2a8eabdc3ffeca9053ac20f59f4f6796e05c`).
+- Public report routing: PASS; unauthenticated CIC and Sanyotech report URLs redirect to their login pages.
+- Published PDF hashes: CIC VJC019 `363c7ba8326ddb1f0c50f432b108027cbac1376d5ba8e4ce5d08ccd30b1bb2dd`, Sanyotech VJC018 `52627fbbda313fc00effe73160b79b74fba330fbd97d1ab7dd563b2cfcf45d50`.
+- Safety: PASS; zero Production database writes and no GitHub Pages report change.
