@@ -1267,6 +1267,17 @@ const MONTH_TEST_MAP_MARUGOTO = [
   { month: 2, test: 'marugoto_2', testLabel: 'L10-L18', scope: 'まるごと18課まで' },
 ];
 
+// まるごと成績推移は、未受験分も含めて6区分を固定表示する。
+// 月別報告書で選択できるテスト（上の2回）とは分離する。
+const TREND_TEST_MAP_MARUGOTO = [
+  { month: 1, test: 'marugoto_1', testLabel: '入門1 L1-9' },
+  { month: 2, test: 'marugoto_2', testLabel: '入門1 L10-18' },
+  { month: 3, test: 'marugoto_3', testLabel: '入門2 L1-9' },
+  { month: 4, test: 'marugoto_4', testLabel: '入門2 L10-18' },
+  { month: 5, test: 'marugoto_5', testLabel: '初級1 L1-9' },
+  { month: 6, test: 'marugoto_6', testLabel: '初級1 L10-18' },
+];
+
 const oneMonthDelayedTests = Object.fromEntries(
   MONTH_TEST_MAP_MINNA.map(m => [m.test, m.month + 1])
 );
@@ -1370,7 +1381,7 @@ function currentMonthMap() {
 }
 
 // 成績推移テーブル・グラフ用マップ:
-// - まるごと生: marugoto_1〜2 の2回分のみ（minna月や卒業月は除外）
+// - まるごと生: 入門1・入門2・初級1の全6区分（未受験分も横軸に残す）
 // - みんな生: minna 8回分
 function getTrendMap() {
   if (isMonth3Test4ReportTrainee()) {
@@ -1379,7 +1390,7 @@ function getTrendMap() {
   }
   if (isMarugotoTrainee()) {
     const offset = getMarugotoOffset();
-    return MONTH_TEST_MAP_MARUGOTO.map(m => ({
+    return TREND_TEST_MAP_MARUGOTO.map(m => ({
       ...m,
       month: m.month + offset, // 絶対月番号に変換
     }));
@@ -2481,7 +2492,7 @@ function renderTrendChart(results) {
   const ctx = document.getElementById('trendChart');
   if (!ctx) return;
 
-  // 各カリキュラムの全回分のラベルを固定（まるごと生は4回分のみ）
+  // 各カリキュラムの全回分のラベルを固定（まるごと生は6区分）
   const _map = getTrendMap();
   const labels = _map.map(m => m.testLabel);
   const resolved = _map.map(m => results.find(r => matchTest(r, m)) || null);

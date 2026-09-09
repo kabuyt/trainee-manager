@@ -1,6 +1,6 @@
 # Monthly Test Revamp — Project State
 
-Last updated: 2026-09-08 (Asia/Ho_Chi_Minh)
+Last updated: 2026-09-09 (Asia/Ho_Chi_Minh)
 
 This file is the source of truth for implementation progress. Every Codex work session must read it before making changes and update it before ending. A checked item means that implementation and the stated verification have both completed.
 
@@ -808,3 +808,49 @@ None.
 - Kyoritsu Kako reload: PASS; 10/10 name fields persisted, 5/5 photos present, 6/6 tests checked.
 - Chubu Kagaku reload: PASS; 10/10 name fields persisted, 5/5 photos present, 6/6 tests checked.
 - Safety scope: PASS; no deletion, score entry, result modification, or unrelated record change was performed.
+
+## 2026-09-09 Marugoto six-axis PDF alignment
+
+### Goal
+
+Remove the stretched appearance from distributed Marugoto score charts by using the same fixed six-part horizontal axis already present on the Production management report.
+
+### Definition of Done
+
+- The horizontal axis shows six fixed labels: 入門1 L1-9, 入門1 L10-18, 入門2 L1-9, 入門2 L10-18, 初級1 L1-9, and 初級1 L10-18.
+- Existing results stay in the first two positions and the four future positions remain empty.
+- Current CIC and Sanyotech Marugoto distribution PDFs remain A4 and two pages with no other content change.
+- No Production database row or GitHub Pages report is changed.
+
+### Completed
+
+- Found the source mismatch: the Production management `app.js` already had the fixed six-axis map, while the repository copy used by `bulk_pdf.py` still had only two Marugoto positions.
+- Added a report-trend-only six-entry Marugoto map to the repository source without changing monthly test selection or scoring.
+- Regenerated and published only VJC019's CIC month-2 PDF and VJC018's Sanyotech month-1 PDF, which intentionally uses month-2 source data.
+- Preserved the replaced public PDFs under `/opt/minna/backup/score-axis-before-20260909`.
+- Performed zero Production database writes and made no GitHub Pages report changes.
+
+### Current
+
+Both currently distributed Marugoto PDFs use the fixed six-part axis. Existing two-test scores occupy the first two positions and future positions remain empty.
+
+### Next
+
+None.
+
+### Blockers
+
+None.
+
+### Failed approaches
+
+- Relying on the Production management page as proof of PDF behavior missed that `bulk_pdf.py` uses the repository copy of `app.js`. Future graph changes must be verified against a newly generated PDF as well as the live management page.
+
+### Last test result
+
+- Source validation: PASS; `node --check app.js` and `git diff --check`.
+- PDF structure: PASS; both PDFs are A4, two pages, and unencrypted.
+- Visual QA: PASS; all four pages inspected with no clipping, overlap, missing section, or broken transition; all six axis labels fit.
+- Public publication: PASS; remote PDF hashes exactly match the verified local outputs.
+- CIC authenticated E2E: PASS; one login reaches the one-report page after publication.
+- Published hashes: CIC VJC019 `44fd83ffd2f584d9e4cbcbb5a831bb6bc954ea16b568bd5a35f445a3be701f77`, Sanyotech VJC018 `c8f985ac20e830180c7076b97cd421f805511ef2da40873e9172e4616068a5ac`.
