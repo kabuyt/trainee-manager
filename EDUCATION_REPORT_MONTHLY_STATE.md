@@ -1,6 +1,6 @@
 # 教育報告書 月次運用メモリ
 
-Last updated: 2026-09-09 (Asia/Ho_Chi_Minh)
+Last updated: 2026-09-10 (Asia/Ho_Chi_Minh)
 
 このファイルは、教育報告書の確認・PDF生成・組合配布ページ更新に関する継続作業の正とする。チャット履歴より、Production の現在値、現在のリポジトリ、そしてこのファイルを優先する。
 
@@ -171,3 +171,13 @@ Codexへ次のように依頼する。
 - 公開先は `https://kanri.gropvietnam.com.vn/reports/sanyotech/` のみ。GitHub Pagesは更新していない。
 - 公開前の `index.html` は `/opt/minna/backup/sanyotech-hide-fui-before-20260909/index.html` に保持している。
 - 公開後確認: ログインは303で配布ページへ遷移し、一覧はHTTP 200。掲載リンク3件、フイの氏名・英字名・URL・ZIP配列への残存0件。公開HTMLのSHA-256は `1a87fd619359435928cdeb36b144cd1cebbcabd69943995aa750b19ae3861625`。
+
+## 2026年9月10日 CIC配布ページのパスワード変更
+
+- CICだけの配布用パスワードを依頼された新しい値へ変更した。パスワード本文はこのリポジトリに記録しない。
+- ログインAPIのCIC設定と、CaddyのCIC用Cookieハッシュ2か所（管理ドメイン配下・従来パス配下）を同時に更新した。
+- Caddy設定を事前検証してから反映し、コンテナ再起動後も新設定が読み込まれることを確認した。ログインAPIとCaddyはともに稼働中。
+- 旧パスワードはエラー画面へ遷移し、新パスワードはCIC一覧へ遷移してHTTP 200。山陽テクノは既存パスワードのままHTTP 200で、回帰なし。
+- サーバー内比較で、CIC以外の組合設定が変更されていないことを確認した。
+- 復旧用バックアップ: `/opt/minna/backup/cic-password-before-20260910`。
+- Productionデータベース、PDF、配布対象、コメント、GitHub Pagesは変更していない。

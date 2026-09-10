@@ -950,3 +950,53 @@ None.
 - Preservation: PASS; the BRN035 PDF remains on the protected server.
 - Published HTML SHA-256: `1a87fd619359435928cdeb36b144cd1cebbcabd69943995aa750b19ae3861625`.
 - Safety: PASS; zero database writes, zero PDF deletions, and no GitHub Pages change.
+
+## 2026-09-10 CIC distribution password rotation
+
+### Goal
+
+Change only the CIC report-distribution password to the user-provided value and verify that authentication remains reliable.
+
+### Definition of Done
+
+- The previous CIC password is rejected.
+- The new CIC password reaches the protected report list in one login.
+- Both CIC cookie-validation routes use the new hash.
+- Other union passwords and report content remain unchanged.
+- The prior configuration is recoverable.
+
+### Completed
+
+- Updated the CIC entry in the report-login API configuration.
+- Updated both CIC cookie hashes in Caddy while preserving all non-CIC settings byte-for-byte.
+- Validated the candidate Caddy configuration, reloaded it, and restarted the Caddy container from the persistent host configuration.
+- Stored the prior API and Caddy configuration under `/opt/minna/backup/cic-password-before-20260910`.
+- Kept the plaintext password out of repository state files.
+
+### Current
+
+The new CIC password is active. The previous CIC password no longer authenticates. Other union authentication remains unchanged.
+
+### Next
+
+Use the new password in future CIC distribution emails.
+
+### Blockers
+
+None.
+
+### Failed approaches
+
+- Replacing the host Caddyfile by inode caused the already-running container's file bind mount to retain the prior inode. Reloading that mounted path therefore kept the old cookie hash. The validated candidate was loaded immediately, then the container was restarted from the updated persistent host file and re-tested.
+- An initial attempt to copy the complete organization-password file locally was rejected because it would expose unrelated union credentials. The final update and comparison ran entirely on the server and changed only the CIC record.
+
+### Last test result
+
+- Caddy validation: PASS.
+- Old CIC credential: PASS; redirected to the login error page.
+- New CIC credential: PASS; login redirected to the CIC list and the authenticated list returned HTTP 200.
+- Restart persistence: PASS; the same result remained after restarting Caddy.
+- Other-union regression: PASS; Sanyotech login and authenticated list returned HTTP 200 with its existing credential.
+- Configuration scope: PASS; server-side comparison confirmed that only CIC password data and its two Caddy hashes changed.
+- Services: PASS; report API active and Caddy container running.
+- Safety: PASS; no database, PDF, report-content, distribution-list, or GitHub Pages change.
