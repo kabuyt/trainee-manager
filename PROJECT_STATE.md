@@ -1012,6 +1012,7 @@ Allow interview reviewers to compare the candidate's selected behavior-test answ
 - Each answered question shows the scenario and all four choices in their original order.
 - Exactly one choice is marked `選択`; the other three are marked `未選択`.
 - The selected answer remains visually distinct and its existing behavior analysis remains unchanged.
+- The PDF appendix also shows all four choices without clipping, overlap, or an orphaned section heading.
 - Existing saved results work without a schema migration or data rewrite.
 - Production delivery and the actual management dialog are verified without modifying candidate answers.
 
@@ -1021,11 +1022,14 @@ Allow interview reviewers to compare the candidate's selected behavior-test answ
 - Updated the behavior-detail dialog to show the question, selected answer, and three unselected alternatives.
 - Added clear selected/unselected badges and responsive styling.
 - Added a regression test covering all six questions, choice ordering, one selected item, and three unselected items per question.
+- Updated the PDF appendix to show the four choices in a compact two-column layout, with the selected choice highlighted in green.
+- Expanded the question area to the available A4 landscape width so each candidate's six questions remain legible and fit with the section heading.
 - Deployed the display-only change to `https://kanri.gropvietnam.com.vn/interview/` after backing up the prior files at `/opt/minna/backup/behavior-all-choices-before-20260911`.
+- Backed up the pre-PDF release at `/opt/minna/backup/behavior-pdf-all-choices-before-20260911`.
 
 ### Current
 
-Production behavior-result dialogs show all choices for existing and future results. No answer or scoring logic changed.
+Production behavior-result dialogs and generated PDF appendices show all choices for existing and future results. No answer or scoring logic changed.
 
 ### Next
 
@@ -1039,11 +1043,13 @@ None.
 
 - The legacy server directory `/opt/minna/site/grvn-test/interview-manager` is not the canonical `kanri` URL source. Hash comparison identified `/opt/minna/site/grvn-kanri/interview` as the live directory before deployment, preventing a no-op or wrong-target release.
 - The Codex in-app browser did not have a management session. Read-only browser verification was completed in the existing authenticated Chrome profile instead; no login details were entered or changed.
+- The first A4 layout kept the former 195 mm question-column limit, causing the section heading to remain alone on the preceding page. The question rows now use the full printable width; the regenerated PDF keeps the heading with the first candidate and preserves one complete candidate card per page.
 
 ### Last test result
 
 - Logic regression: PASS; six questions, 24 total choices, six selected, and 18 unselected.
 - Syntax and diff checks: PASS; both repository and production-derived `app.js` pass `node --check`, and the repository diff passes `git diff --check`.
-- Production delivery: PASS; HTTP-served hashes match the deployed `app.js`, `style.css`, and `index.html`, with cache versions `app.js?v=72` and `style.css?v=51`.
+- Production delivery: PASS; HTTP-served hashes match the deployed `app.js`, `style.css`, and `index.html`, with cache versions `app.js?v=73` and `style.css?v=53`.
 - Production browser E2E: PASS; an existing read-only result displayed all six scenarios and 24 choices, with one selected and three unselected choices per question; zero browser console errors.
+- PDF render: PASS; a Chrome-generated A4 landscape PDF using the production print structure and final CSS shows all 24 choices per candidate, selected/unselected styling, complete questions and analyses, with no clipping or overlap. Both candidate pages were visually inspected after Poppler rendering.
 - Safety: PASS; zero database writes, migrations, answer changes, score changes, candidate changes, or test-submission actions.
