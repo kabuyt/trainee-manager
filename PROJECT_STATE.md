@@ -1,6 +1,6 @@
 # Monthly Test Revamp — Project State
 
-Last updated: 2026-09-09 (Asia/Ho_Chi_Minh)
+Last updated: 2026-09-11 (Asia/Ho_Chi_Minh)
 
 This file is the source of truth for implementation progress. Every Codex work session must read it before making changes and update it before ending. A checked item means that implementation and the stated verification have both completed.
 
@@ -1000,3 +1000,50 @@ None.
 - Configuration scope: PASS; server-side comparison confirmed that only CIC password data and its two Caddy hashes changed.
 - Services: PASS; report API active and Caddy container running.
 - Safety: PASS; no database, PDF, report-content, distribution-list, or GitHub Pages change.
+
+## 2026-09-11 Interview behavior-test full-choice review
+
+### Goal
+
+Allow interview reviewers to compare the candidate's selected behavior-test answer with every unselected option from the same question.
+
+### Definition of Done
+
+- Each answered question shows the scenario and all four choices in their original order.
+- Exactly one choice is marked `選択`; the other three are marked `未選択`.
+- The selected answer remains visually distinct and its existing behavior analysis remains unchanged.
+- Existing saved results work without a schema migration or data rewrite.
+- Production delivery and the actual management dialog are verified without modifying candidate answers.
+
+### Completed
+
+- Extended the result-view model to retain the selected choice ID and all four choice labels.
+- Updated the behavior-detail dialog to show the question, selected answer, and three unselected alternatives.
+- Added clear selected/unselected badges and responsive styling.
+- Added a regression test covering all six questions, choice ordering, one selected item, and three unselected items per question.
+- Deployed the display-only change to `https://kanri.gropvietnam.com.vn/interview/` after backing up the prior files at `/opt/minna/backup/behavior-all-choices-before-20260911`.
+
+### Current
+
+Production behavior-result dialogs show all choices for existing and future results. No answer or scoring logic changed.
+
+### Next
+
+None.
+
+### Blockers
+
+None.
+
+### Failed approaches
+
+- The legacy server directory `/opt/minna/site/grvn-test/interview-manager` is not the canonical `kanri` URL source. Hash comparison identified `/opt/minna/site/grvn-kanri/interview` as the live directory before deployment, preventing a no-op or wrong-target release.
+- The Codex in-app browser did not have a management session. Read-only browser verification was completed in the existing authenticated Chrome profile instead; no login details were entered or changed.
+
+### Last test result
+
+- Logic regression: PASS; six questions, 24 total choices, six selected, and 18 unselected.
+- Syntax and diff checks: PASS; both repository and production-derived `app.js` pass `node --check`, and the repository diff passes `git diff --check`.
+- Production delivery: PASS; HTTP-served hashes match the deployed `app.js`, `style.css`, and `index.html`, with cache versions `app.js?v=72` and `style.css?v=51`.
+- Production browser E2E: PASS; an existing read-only result displayed all six scenarios and 24 choices, with one selected and three unselected choices per question; zero browser console errors.
+- Safety: PASS; zero database writes, migrations, answer changes, score changes, candidate changes, or test-submission actions.
