@@ -1013,6 +1013,8 @@ Allow interview reviewers to compare the candidate's selected behavior-test answ
 - Exactly one choice is marked `選択`; the other three are marked `未選択`.
 - The selected answer remains visually distinct and its existing behavior analysis remains unchanged.
 - The PDF appendix also shows all four choices without clipping, overlap, or an orphaned section heading.
+- The PDF can continue at question boundaries so a whole candidate block does not leave a large unused area on page 2.
+- Each question is visually grouped with a border and internal separators instead of appearing as an undifferentiated text list.
 - Existing saved results work without a schema migration or data rewrite.
 - Production delivery and the actual management dialog are verified without modifying candidate answers.
 
@@ -1026,10 +1028,13 @@ Allow interview reviewers to compare the candidate's selected behavior-test answ
 - Expanded the question area to the available A4 landscape width so each candidate's six questions remain legible and fit with the section heading.
 - Deployed the display-only change to `https://kanri.gropvietnam.com.vn/interview/` after backing up the prior files at `/opt/minna/backup/behavior-all-choices-before-20260911`.
 - Backed up the pre-PDF release at `/opt/minna/backup/behavior-pdf-all-choices-before-20260911`.
+- Changed print pagination from candidate-card locking to question-level locking, allowing the next candidate's questions to use the remaining page space while keeping each question intact.
+- Added a blue candidate header, bordered question cards, a strong left rule, a question/choice divider, and a dashed analysis divider.
+- Deployed the refined PDF layout after backing up the prior production `style.css` and `index.html` at `/opt/minna/backup/behavior-pdf-layout-before-20260911`.
 
 ### Current
 
-Production behavior-result dialogs and generated PDF appendices show all choices for existing and future results. No answer or scoring logic changed.
+Production behavior-result dialogs and generated PDF appendices show all choices for existing and future results. The appendix now fills pages at question boundaries and visually separates each question. No answer or scoring logic changed.
 
 ### Next
 
@@ -1044,12 +1049,14 @@ None.
 - The legacy server directory `/opt/minna/site/grvn-test/interview-manager` is not the canonical `kanri` URL source. Hash comparison identified `/opt/minna/site/grvn-kanri/interview` as the live directory before deployment, preventing a no-op or wrong-target release.
 - The Codex in-app browser did not have a management session. Read-only browser verification was completed in the existing authenticated Chrome profile instead; no login details were entered or changed.
 - The first A4 layout kept the former 195 mm question-column limit, causing the section heading to remain alone on the preceding page. The question rows now use the full printable width; the regenerated PDF keeps the heading with the first candidate and preserves one complete candidate card per page.
+- Locking an entire candidate card against page breaks created a large blank area whenever all six questions did not fit. Pagination is now locked only within each individual question; candidate sections may continue onto the next page.
 
 ### Last test result
 
 - Logic regression: PASS; six questions, 24 total choices, six selected, and 18 unselected.
 - Syntax and diff checks: PASS; both repository and production-derived `app.js` pass `node --check`, and the repository diff passes `git diff --check`.
-- Production delivery: PASS; HTTP-served hashes match the deployed `app.js`, `style.css`, and `index.html`, with cache versions `app.js?v=73` and `style.css?v=53`.
+- Production delivery: PASS; server hashes match the verified `style.css` and `index.html`, and the public page serves cache versions `app.js?v=73` and `style.css?v=54`.
 - Production browser E2E: PASS; an existing read-only result displayed all six scenarios and 24 choices, with one selected and three unselected choices per question; zero browser console errors.
 - PDF render: PASS; a Chrome-generated A4 landscape PDF using the production print structure and final CSS shows all 24 choices per candidate, selected/unselected styling, complete questions and analyses, with no clipping or overlap. Both candidate pages were visually inspected after Poppler rendering.
+- PDF layout regression: PASS; a five-candidate A4 landscape fixture produced all five candidates and 30 questions. All behavior pages were visually inspected after Poppler rendering: page 2 is filled through question 5, every question remains intact, and no clipping or overlap was found.
 - Safety: PASS; zero database writes, migrations, answer changes, score changes, candidate changes, or test-submission actions.
