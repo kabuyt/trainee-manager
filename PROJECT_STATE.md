@@ -1010,8 +1010,8 @@ Allow interview reviewers to compare the candidate's selected behavior-test answ
 ### Definition of Done
 
 - Each answered question shows the scenario and all four choices in their original order.
-- Exactly one choice is marked `選択`; the other three are marked `未選択`.
-- The selected answer remains visually distinct and its existing behavior analysis remains unchanged.
+- Every answer is labeled by its original order as `選択肢1` through `選択肢4`; the redundant `選択` / `未選択` text is not shown.
+- A normal selected answer remains visually distinct in green, while an existing `要注意回答` choice uses the same red warning palette as its alert message; behavior analysis remains unchanged.
 - The PDF appendix also shows all four choices without clipping, overlap, or an orphaned section heading.
 - The PDF can continue at question boundaries so a whole candidate block does not leave a large unused area on page 2.
 - Each question is visually grouped with a border and internal separators instead of appearing as an undifferentiated text list.
@@ -1031,10 +1031,13 @@ Allow interview reviewers to compare the candidate's selected behavior-test answ
 - Changed print pagination from candidate-card locking to question-level locking, allowing the next candidate's questions to use the remaining page space while keeping each question intact.
 - Added a blue candidate header, bordered question cards, a strong left rule, a question/choice divider, and a dashed analysis divider.
 - Deployed the refined PDF layout after backing up the prior production `style.css` and `index.html` at `/opt/minna/backup/behavior-pdf-layout-before-20260911`.
+- Replaced selected/unselected badges in both the detail dialog and PDF appendix with neutral `選択肢1` through `選択肢4` labels; selection is now communicated by color.
+- Reused the existing high-risk answer definition (questions 2 and 4) so a selected `要注意回答` is red, matching the warning message, while ordinary selected answers remain green.
+- Deployed the label and warning-color update after backing up all three production display files at `/opt/minna/backup/behavior-choice-label-warning-before-20260911`.
 
 ### Current
 
-Production behavior-result dialogs and generated PDF appendices show all choices for existing and future results. The appendix now fills pages at question boundaries and visually separates each question. No answer or scoring logic changed.
+Production behavior-result dialogs and generated PDF appendices show all choices for existing and future results. Choices are numbered neutrally, ordinary selections are green, and existing high-risk selections are red. The appendix fills pages at question boundaries and visually separates each question. No answer or scoring logic changed.
 
 ### Next
 
@@ -1059,4 +1062,7 @@ None.
 - Production browser E2E: PASS; an existing read-only result displayed all six scenarios and 24 choices, with one selected and three unselected choices per question; zero browser console errors.
 - PDF render: PASS; a Chrome-generated A4 landscape PDF using the production print structure and final CSS shows all 24 choices per candidate, selected/unselected styling, complete questions and analyses, with no clipping or overlap. Both candidate pages were visually inspected after Poppler rendering.
 - PDF layout regression: PASS; a five-candidate A4 landscape fixture produced all five candidates and 30 questions. All behavior pages were visually inspected after Poppler rendering: page 2 is filled through question 5, every question remains intact, and no clipping or overlap was found.
+- Choice-label regression: PASS; all six questions produce four ordered `選択肢1` through `選択肢4` labels with no `選択` / `未選択` badge text, and exactly one selected class per question.
+- Warning-color regression: PASS; ordinary selected choices render green and existing high-risk selections render with the alert palette (`#c0392b` / `#fdf0ee`). The regenerated five-candidate PDF contains 30 questions and 120 choice labels; warning and normal selections were visually inspected with no clipping or overlap.
+- Production delivery: PASS; public HTML serves `app.js?v=74` and `style.css?v=55`; HTTP content contains the numbered labels, high-risk mapping, and warning-color overrides.
 - Safety: PASS; zero database writes, migrations, answer changes, score changes, candidate changes, or test-submission actions.
