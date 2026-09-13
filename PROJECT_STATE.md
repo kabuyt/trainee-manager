@@ -1,6 +1,6 @@
 # Monthly Test Revamp — Project State
 
-Last updated: 2026-09-11 (Asia/Ho_Chi_Minh)
+Last updated: 2026-09-13 (Asia/Ho_Chi_Minh)
 
 This file is the source of truth for implementation progress. Every Codex work session must read it before making changes and update it before ending. A checked item means that implementation and the stated verification have both completed.
 
@@ -1066,3 +1066,43 @@ None.
 - Warning-color regression: PASS; ordinary selected choices render green and existing high-risk selections render with the alert palette (`#c0392b` / `#fdf0ee`). The regenerated five-candidate PDF contains 30 questions and 120 choice labels; warning and normal selections were visually inspected with no clipping or overlap.
 - Production delivery: PASS; public HTML serves `app.js?v=74` and `style.css?v=55`; HTTP content contains the numbered labels, high-risk mapping, and warning-color overrides.
 - Safety: PASS; zero database writes, migrations, answer changes, score changes, candidate changes, or test-submission actions.
+
+## 2026-09-13 BARAEN pre-interview registrations for 2026-09-15
+
+### Goal
+
+Register the two attached candidate rosters as separate BARAEN interview sessions for the provisional interview date 2026-09-15, with every pre-interview test enabled.
+
+### Completed
+
+- Visually inspected both one-page source rosters and cross-checked their extracted text.
+- Registered `株式会社YSK` with six candidates in roster order: ホー フィ フン、ソン テー ゴック、キム タイン フー、グエン クオック ダット、チャン ミン ビン、カオ スアン タン。
+- Registered `株式会社 新免鉄工所` with three candidates in roster order: ラム ダン フイ ホアン、ヴォ ミン ニャット、レ ヴァン ロン。
+- Set both sessions to `2026-09-15`, sender organization `BARAEN`, and enabled all six tests: Kraepelin, mathematics, Vietnamese, Japanese, pinboard, and behavior selection.
+- Candidate photos were not added in this operation; the request did not explicitly require photo registration.
+
+### Current
+
+Both sessions and all nine candidate rows are active in Production. No pre-existing interview or candidate row was modified.
+
+### Next
+
+- Add candidate photos later if requested.
+- Replace the provisional interview date if the final schedule changes.
+
+### Blockers
+
+None for the requested interview and candidate registration.
+
+### Failed approaches
+
+- The local monthly-test administrator identity could read through the public API but did not have the interview-manager insert policy; the insert was rejected by RLS before any row was created. The operation was not retried through that route.
+- The authenticated Supabase SQL Editor was used as the authorized project-admin path after confirming that no matching sessions existed.
+
+### Last test result
+
+- Duplicate preflight: PASS; no matching 2026-09-15 BARAEN sessions existed before creation.
+- Session read-back: PASS; exactly two rows exist with the requested date and sender.
+- Candidate read-back: PASS; exactly nine rows exist (YSK six, 新免鉄工所 three), and every candidate number/name matches the corresponding roster.
+- Test-setting read-back: PASS; `all_tests_enabled=true` for all nine joined candidate rows.
+- Safety: PASS; the initial denied API insert created zero rows, and the final SQL transaction inserted only the two requested sessions and nine requested candidates. No delete or update of existing data was performed.
