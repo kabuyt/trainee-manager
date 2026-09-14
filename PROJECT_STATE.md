@@ -1157,3 +1157,47 @@ None.
 - Production-derived regression: PASS; the exact live-derived `app.js` passes syntax checking and the score-entry-order test.
 - Production delivery: PASS; public HTML serves `app.js?v=75` and `style.css?v=56`, contains the stable-order explanation, and the public asset hashes match the verified deployment artifacts.
 - Safety: PASS; database changes were limited to the guarded Shinmen interview date and its mismatched `test_settings.pinboard` flag. No candidate score, answer, photo, name, schema, or unrelated row was changed.
+
+## 2026-09-14 YSK candidate photo repair and Romanized names
+
+### Goal
+
+Repair the broken face photo for YSK candidate 5 and add the missing Romanized names to the YSK candidate records using the attached roster as the source of truth.
+
+### Definition of Done
+
+- YSK candidate 5 has the exact JPEG extracted from the supplied roster and the image data decodes successfully.
+- All six YSK candidates use the existing `Katakana / ROMAJI` name format.
+- Changes are limited to the YSK session and do not alter scores, answers, test settings, interview settings, or unrelated records.
+
+### Completed
+
+- Confirmed that candidate 5's stored photo data did not match the source image.
+- Replaced only YSK candidate 5's `memo` photo value with the exact source JPEG data URL.
+- Added Romanized names for all six YSK candidates from the supplied roster: `HO PHI HUNG`, `SON THE NGOC`, `KIM THANH PHU`, `NGUYEN QUOC DAT`, `TRAN MINH VINH`, and `CAO XUAN THANG`.
+- Preserved the existing Katakana names and joined each pair with the established ` / ` delimiter.
+
+### Current
+
+YSK candidate 5 (`チャン ミン ビン / TRAN MINH VINH`) now has a valid JPEG photo, and all six YSK candidates display both Katakana and Romanized names.
+
+### Next
+
+None.
+
+### Blockers
+
+None.
+
+### Failed approaches
+
+- The first SQL-editor photo replacement produced a 4,874-character data URL, one character short of the canonical 4,875-character source value. It was not accepted as complete. The second pass used deterministic prefix hashes and a full-string hash against the source Base64 before updating again.
+- A read-back attempt through the monthly-test administrator's public API session returned zero candidate rows because interview-manager RLS did not grant that identity access. The operation was not retried through that route; the authenticated Supabase project-admin path was used instead.
+
+### Last test result
+
+- Source-name check: PASS; all six Romanized names match the supplied YSK roster after diacritics are normalized to the existing uppercase ASCII convention.
+- Name update read-back: PASS; exactly six guarded YSK candidate rows returned the expected `Katakana / ROMAJI` values.
+- Photo data-length check: PASS; candidate 5 stores a 4,875-character JPEG data URL whose Base64 portion is 4,852 characters.
+- JPEG decode check: PASS; Supabase decoded the value to 3,637 bytes with JPEG header `ffd8ff` and footer `ffd9`, matching the source file size and format.
+- Safety: PASS; the photo update targeted only YSK candidate 5, and the name update targeted only YSK candidates 1-6. No scores, answers, settings, schema, deletes, or unrelated rows were changed.
