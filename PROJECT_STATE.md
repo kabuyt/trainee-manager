@@ -1124,6 +1124,7 @@ Move the BARAEN interview for `株式会社 新免鉄工所` from 2026-09-15 to 
 ### Completed
 
 - Updated interview session `a4974ded-9d3e-4696-becc-42002a6bd8bf` to `2026-09-16` with company, sender organization, and previous date guards.
+- The final read-back exposed a pre-existing `pinboard=false` value on the Shinmen session despite the original all-tests requirement. Compared the YSK session, then conditionally changed only Shinmen's `test_settings.pinboard` value to `true`.
 - Added a pure candidate-number sorter for the management score-entry table and kept `buildRows()` as the rank-sorted source for PDF and CSV output.
 - Added an on-screen note explaining that row order is fixed while ranks update after saves.
 - Added a regression test covering natural candidate-number order, source-array preservation, rank-value preservation, and rank-sorted print rendering.
@@ -1133,7 +1134,7 @@ Move the BARAEN interview for `株式会社 新免鉄工所` from 2026-09-15 to 
 
 ### Current
 
-The Shinmen session is scheduled for 2026-09-16. In Production, manual score saves still recalculate all ranks immediately, but the visible management rows stay in candidate-number order and no longer jump between entries. PDF and CSV remain rank ordered.
+The Shinmen session is scheduled for 2026-09-16 with all six tests enabled and all three candidate photos intact. In Production, manual score saves still recalculate all ranks immediately, but the visible management rows stay in candidate-number order and no longer jump between entries. PDF and CSV remain rank ordered.
 
 ### Next
 
@@ -1151,7 +1152,8 @@ None.
 ### Last test result
 
 - Interview-date read-back: PASS; one guarded row returned `株式会社 新免鉄工所 / 2026-09-16 / BARAEN`.
+- Session integrity read-back: PASS; Shinmen returns three candidates, three photos, and `all_tests_enabled=true` for Kraepelin, mathematics, Vietnamese, Japanese, pinboard, and behavior selection.
 - Source syntax and regression: PASS; `node --check interview-manager/app.js`, the new score-entry-order test, and the existing behavior-choice-detail test all pass.
 - Production-derived regression: PASS; the exact live-derived `app.js` passes syntax checking and the score-entry-order test.
 - Production delivery: PASS; public HTML serves `app.js?v=75` and `style.css?v=56`, contains the stable-order explanation, and the public asset hashes match the verified deployment artifacts.
-- Safety: PASS; only the guarded Shinmen interview date was updated in the database. No candidate score, answer, photo, name, test setting, schema, or unrelated row was changed.
+- Safety: PASS; database changes were limited to the guarded Shinmen interview date and its mismatched `test_settings.pinboard` flag. No candidate score, answer, photo, name, schema, or unrelated row was changed.
