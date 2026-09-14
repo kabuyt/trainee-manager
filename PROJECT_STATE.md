@@ -1,6 +1,6 @@
 # Monthly Test Revamp — Project State
 
-Last updated: 2026-09-13 (Asia/Ho_Chi_Minh)
+Last updated: 2026-09-14 (Asia/Ho_Chi_Minh)
 
 This file is the source of truth for implementation progress. Every Codex work session must read it before making changes and update it before ending. A checked item means that implementation and the stated verification have both completed.
 
@@ -1079,15 +1079,14 @@ Register the two attached candidate rosters as separate BARAEN interview session
 - Registered `株式会社YSK` with six candidates in roster order: ホー フィ フン、ソン テー ゴック、キム タイン フー、グエン クオック ダット、チャン ミン ビン、カオ スアン タン。
 - Registered `株式会社 新免鉄工所` with three candidates in roster order: ラム ダン フイ ホアン、ヴォ ミン ニャット、レ ヴァン ロン。
 - Set both sessions to `2026-09-15`, sender organization `BARAEN`, and enabled all six tests: Kraepelin, mathematics, Vietnamese, Japanese, pinboard, and behavior selection.
-- Candidate photos were not added in this operation; the request did not explicitly require photo registration.
+- Added the roster face photo to each of the nine candidates (YSK six, 新免鉄工所 three), matched by interview session and candidate number.
 
 ### Current
 
-Both sessions and all nine candidate rows are active in Production. No pre-existing interview or candidate row was modified.
+Both sessions and all nine candidate rows are active in Production with their face photos registered. Only the `memo` photo field and `updated_at` of these nine requested candidate rows were updated; names, interview settings, test settings, and all other rows were left unchanged.
 
 ### Next
 
-- Add candidate photos later if requested.
 - Replace the provisional interview date if the final schedule changes.
 
 ### Blockers
@@ -1105,4 +1104,5 @@ None for the requested interview and candidate registration.
 - Session read-back: PASS; exactly two rows exist with the requested date and sender.
 - Candidate read-back: PASS; exactly nine rows exist (YSK six, 新免鉄工所 three), and every candidate number/name matches the corresponding roster.
 - Test-setting read-back: PASS; `all_tests_enabled=true` for all nine joined candidate rows.
-- Safety: PASS; the initial denied API insert created zero rows, and the final SQL transaction inserted only the two requested sessions and nine requested candidates. No delete or update of existing data was performed.
+- Photo read-back: PASS; YSK reports `candidate_count=6`, `photo_count=6`, `photos_valid=true`; 新免鉄工所 reports `candidate_count=3`, `photo_count=3`, `photos_valid=true`. Each photo value has the JPEG data-URL prefix and exceeds 1,000 characters.
+- Safety: PASS; photo registration updated only the nine requested candidates' `memo` and `updated_at` fields. No delete, schema change, name change, interview-setting change, test-setting change, or unrelated-row update was performed.
