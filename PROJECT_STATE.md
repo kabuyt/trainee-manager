@@ -1201,3 +1201,56 @@ None.
 - Photo data-length check: PASS; candidate 5 stores a 4,875-character JPEG data URL whose Base64 portion is 4,852 characters.
 - JPEG decode check: PASS; Supabase decoded the value to 3,637 bytes with JPEG header `ffd8ff` and footer `ffd9`, matching the source file size and format.
 - Safety: PASS; the photo update targeted only YSK candidate 5, and the name update targeted only YSK candidates 1-6. No scores, answers, settings, schema, deletes, or unrelated rows were changed.
+
+## 2026-09-14 YSK interview date and editable interview dates
+
+### Goal
+
+Move the BARAEN interview for `株式会社YSK` to 2026-09-18 and allow GROP administrators to correct an existing interview date directly from the interview-management screen.
+
+### Definition of Done
+
+- Only the requested YSK interview date changes from 2026-09-15 to 2026-09-18.
+- The selected interview shows an editable native date field to GROP administrators.
+- Sender accounts see the interview date as read-only text.
+- A valid changed date is persisted to `interview_sessions.interview_date`; invalid input and save errors restore the prior date.
+- Current Production-only behavior-entry features remain intact.
+- Candidate scores, answers, photos, names, and unrelated interview settings remain unchanged.
+
+### Completed
+
+- Updated YSK session `f4932896-f89a-4372-bea6-f10719bbb5c7` from 2026-09-15 to 2026-09-18 with company, sender, ID, and previous-date guards.
+- Added an administrator-only date field beside the selected interview metadata and a read-only date display for sender accounts.
+- Added real calendar-date validation, same-date no-op behavior, saving-state disablement, database persistence, and rollback to the previous value when saving fails.
+- Added a regression test covering valid and invalid dates, leap years, administrator authorization, exact database payload and row ID, same-date no-op, successful state update, and error rollback.
+- Committed and pushed the source change as `2abef39` (`feat: allow interview date editing`).
+- Built the Production release from the current live files so the newer paper behavior-entry functionality was preserved.
+- Backed up the previous live files at `/opt/minna/backup/interview-date-edit-before-20260914` and deployed cache versions `app.js?v=76` and `style.css?v=57`.
+- After the user clarified that YSK will not take the pinboard test, restored YSK's intentionally disabled `pinboard=false` setting and verified the final row.
+
+### Current
+
+YSK is scheduled for 2026-09-18. Its pinboard test remains intentionally disabled. GROP administrators can now change an existing interview date from the selected-interview header; sender accounts can only view the date.
+
+### Next
+
+None.
+
+### Blockers
+
+None.
+
+### Failed approaches
+
+- The YSK `pinboard=false` setting was incorrectly treated as drift from the original all-tests registration request and was changed to `true`. The user clarified that they had manually disabled it because YSK will not take the pinboard test. It was immediately restored to `false` with a guarded single-row update. Future checks must treat a current manually changed test setting as intentional unless the user asks to restore it.
+- The repository interview manager is behind the Production-only paper behavior-entry branch. The repository files were not deployed wholesale; the release was derived from the current Production files and limited to the date-edit feature and cache version changes.
+
+### Last test result
+
+- Date read-back: PASS; exactly one guarded YSK row returned `株式会社YSK / 2026-09-18 / BARAEN`.
+- Final test-setting read-back: PASS; YSK returns `pinboard=false`; the other five test flags remain unchanged and enabled.
+- Date-edit regression: PASS for both repository source and the exact Production-derived artifact.
+- Existing regressions: PASS; score-entry-order and behavior-choice-detail tests still pass.
+- Syntax and diff checks: PASS; repository and Production-derived `app.js` pass `node --check`, and the scoped repository diff passes `git diff --check`.
+- Production delivery: PASS; public HTML serves `app.js?v=76` and `style.css?v=57`, contains the date field, and all three HTTP-served asset hashes match the locally verified deployment artifacts.
+- Safety: PASS; the final database state differs only by the requested YSK interview date. The temporary mistaken pinboard change was fully reverted. No scores, answers, photos, names, schema, deletes, or unrelated rows were changed.
