@@ -10,11 +10,14 @@
   - `test_attempt_sessions`へ途中回答、完了パート、現在パート、締切を保持する非破壊カラムを追加。
   - `get_monthly_attempt_progress` / `save_monthly_section_checkpoint` RPCを本番へ追加し、存在確認済み。
   - 受験ページを各パート保存、再開、完了済みロック、各50分のサーバー基準締切に対応し、本番配信を確認。
-- Current: 専用E2Eアカウントが本番から削除済みで、ログインを伴う本番ブラウザE2Eのみ未実施。
-- Next: 次の専用テスト受験者または再作成したE2Eアカウントで、語彙保存→再読込復元→文法保存→聴解保存→最終成績確認を一巡する。
-- Blockers: `.env.local`の専用E2E管理者資格情報が失効し、DB上にもメール名にE2Eを含む受験者が存在しない。実在受験者では検証しない。
-- Failed approaches: 失効したE2E管理者資格情報による一時アクセス付与（invalid_credentials）。実在データを代用する方法は安全上採用しない。
-- Last test result: 全選択式構造検証0 fail、採点182 tests passed、JS構文・diff check合格。本番DB RPC/カラム true/true/true、本番test5 r2三セクション公開・照合成功。
+  - 専用E2E受験者で、語彙50問保存→再読込復元→文法48問保存→再読込復元→聴解50問保存→最終提出を本番画面・本番DB経路で完走。
+  - E2E結果は語彙100・文法100・聴解100、revision 2、全自動採点、answers_json 148件。E2E結果2行はいずれも`excluded=true`として通常集計から除外済み。
+  - E2E中に判明した`common/auth.js`のデプロイ漏れを修正・再配信し、再試験で画面エラー0件を確認。
+- Current: 第5回の全選択式化・パート別保存・各50分制限は本番E2Eまで完了。
+- Next: 実運用後、各パートの実所要時間と未回答率を確認し、50分設定の短縮・延長が必要か判断する。
+- Blockers: なし。
+- Failed approaches: 旧E2E資格情報は失効。新規専用E2Eを作成。初回E2Eで`common/auth.js`配信漏れを検出し、同じ実行を繰り返さずデプロイ対象を修正した。最終確認で実在しない`is_submitted`列を参照したため、現行スキーマに合わせて検証項目を修正した。
+- Last test result: 本番ブラウザE2E合格。timer `Từ vựng: 50:01`、checkpoint完了順`goii → bunpo → chokkai`、再読込復元2回成功、最終100/100/100、148回答保存、ブラウザ/HTTPエラー0件。
 
 Last updated: 2026-09-14 (Asia/Ho_Chi_Minh)
 
