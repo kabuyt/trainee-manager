@@ -1106,3 +1106,52 @@ None for the requested interview and candidate registration.
 - Test-setting read-back: PASS; `all_tests_enabled=true` for all nine joined candidate rows.
 - Photo read-back: PASS; YSK reports `candidate_count=6`, `photo_count=6`, `photos_valid=true`; 新免鉄工所 reports `candidate_count=3`, `photo_count=3`, `photos_valid=true`. Each photo value has the JPEG data-URL prefix and exceeds 1,000 characters.
 - Safety: PASS; photo registration updated only the nine requested candidates' `memo` and `updated_at` fields. No delete, schema change, name change, interview-setting change, test-setting change, or unrelated-row update was performed.
+
+## 2026-09-14 Shinmen date correction and stable score entry order
+
+### Goal
+
+Move the BARAEN interview for `株式会社 新免鉄工所` from 2026-09-15 to 2026-09-16 and prevent manual Japanese-score entry from becoming difficult when recalculated rankings change after each save.
+
+### Definition of Done
+
+- Only the requested Shinmen interview date changes to 2026-09-16.
+- The management score-entry table keeps a stable candidate-number order while total and subject ranks continue to recalculate after each save.
+- Rank-sorted PDF and CSV output remain unchanged.
+- The Production-only behavior paper-entry and PDF display improvements are preserved.
+- Source tests and live delivery checks pass without changing candidate scores or test results.
+
+### Completed
+
+- Updated interview session `a4974ded-9d3e-4696-becc-42002a6bd8bf` to `2026-09-16` with company, sender organization, and previous date guards.
+- Added a pure candidate-number sorter for the management score-entry table and kept `buildRows()` as the rank-sorted source for PDF and CSV output.
+- Added an on-screen note explaining that row order is fixed while ranks update after saves.
+- Added a regression test covering natural candidate-number order, source-array preservation, rank-value preservation, and rank-sorted print rendering.
+- Committed and pushed the repository change as `f004487` (`fix: keep score entry rows stable`).
+- Built the live release from the current Production files, preserving the newer Production-only behavior paper-entry branch, and deployed cache versions `app.js?v=75` and `style.css?v=56`.
+- Backed up the previous live files at `/opt/minna/backup/score-entry-order-before-20260914`.
+
+### Current
+
+The Shinmen session is scheduled for 2026-09-16. In Production, manual score saves still recalculate all ranks immediately, but the visible management rows stay in candidate-number order and no longer jump between entries. PDF and CSV remain rank ordered.
+
+### Next
+
+None.
+
+### Blockers
+
+None.
+
+### Failed approaches
+
+- The public `kanri` deployment was newer than the repository copy (`app.js?v=74` versus repository `v=67`) and contains Production-only behavior paper-entry features. The repository files were not copied wholesale to Production; the release was rebuilt from the current live files with only the stable-order change applied.
+- The VPS does not have Node.js, so server-side syntax checking was unavailable. The exact deployment artifact passed local `node --check` and the regression test before upload, and its hashes were verified before and after installation.
+
+### Last test result
+
+- Interview-date read-back: PASS; one guarded row returned `株式会社 新免鉄工所 / 2026-09-16 / BARAEN`.
+- Source syntax and regression: PASS; `node --check interview-manager/app.js`, the new score-entry-order test, and the existing behavior-choice-detail test all pass.
+- Production-derived regression: PASS; the exact live-derived `app.js` passes syntax checking and the score-entry-order test.
+- Production delivery: PASS; public HTML serves `app.js?v=75` and `style.css?v=56`, contains the stable-order explanation, and the public asset hashes match the verified deployment artifacts.
+- Safety: PASS; only the guarded Shinmen interview date was updated in the database. No candidate score, answer, photo, name, test setting, schema, or unrelated row was changed.
