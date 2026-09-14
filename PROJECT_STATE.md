@@ -1,5 +1,21 @@
 # Monthly Test Revamp — Project State
 
+## 2026-09-14 — 第5回全選択式・パート別保存
+
+- Goal: 第5回を全選択式・全自動採点にし、語彙・文法・聴解を各50分、各パート終了時に本番DBへ保存する。
+- Definition of Done: test5の全回答欄が選択式、各100点自動採点、パート保存後に再読込して復元・完了済みパートをロック、最終的に従来どおり1件の成績として提出できる。
+- Completed:
+  - test5の148回答欄（語彙50・文法48・聴解50）を全選択式へ変換し、手動採点を0件にした。
+  - 本番test5を全3セクション同時にr1→r2へ公開。公開前バックアップ取得・公開後同一性検証済み。
+  - `test_attempt_sessions`へ途中回答、完了パート、現在パート、締切を保持する非破壊カラムを追加。
+  - `get_monthly_attempt_progress` / `save_monthly_section_checkpoint` RPCを本番へ追加し、存在確認済み。
+  - 受験ページを各パート保存、再開、完了済みロック、各50分のサーバー基準締切に対応し、本番配信を確認。
+- Current: 専用E2Eアカウントが本番から削除済みで、ログインを伴う本番ブラウザE2Eのみ未実施。
+- Next: 次の専用テスト受験者または再作成したE2Eアカウントで、語彙保存→再読込復元→文法保存→聴解保存→最終成績確認を一巡する。
+- Blockers: `.env.local`の専用E2E管理者資格情報が失効し、DB上にもメール名にE2Eを含む受験者が存在しない。実在受験者では検証しない。
+- Failed approaches: 失効したE2E管理者資格情報による一時アクセス付与（invalid_credentials）。実在データを代用する方法は安全上採用しない。
+- Last test result: 全選択式構造検証0 fail、採点182 tests passed、JS構文・diff check合格。本番DB RPC/カラム true/true/true、本番test5 r2三セクション公開・照合成功。
+
 Last updated: 2026-09-14 (Asia/Ho_Chi_Minh)
 
 This file is the source of truth for implementation progress. Every Codex work session must read it before making changes and update it before ending. A checked item means that implementation and the stated verification have both completed.
