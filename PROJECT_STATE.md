@@ -1,5 +1,20 @@
 # Monthly Test Revamp — Project State
 
+## 2026-09-15 — 行動選択結果PDFを候補者1人1ページ化
+
+- Goal: 事前テストPDFの行動選択結果を、候補者ごとに独立した1ページで表示する。
+- Definition of Done: 2人目以降の候補者は必ず新しいページから始まり、1人の候補者カードがページ途中で分割されない。本番へ既存表示を巻き戻さず配信される。
+- Completed:
+  - `.print-behavior-card + .print-behavior-card` に強制改ページを追加した。
+  - 候補者カードへ `break-inside: avoid-page` と旧ブラウザ互換の `page-break-inside: avoid` を追加した。
+  - 本番の現行CSS・HTMLを取得し、その現行版に差分だけを適用。CSSキャッシュ番号をv57→v58へ更新した。
+  - 配信前ファイルを `/opt/minna/backup/behavior-one-candidate-per-page-20260915/` に保存してから本番へ反映した。
+- Current: `https://kanri.gropvietnam.com.vn/interview/` のPDF印刷用CSSは候補者1人1ページ設定。
+- Next: 実データでPDFを印刷する際、プリンター設定をA4横・倍率100%として最終外観を確認する。
+- Blockers: なし。
+- Failed approaches: リポジトリ版と本番版にデザイン差分があるため、リポジトリのCSS全体を本番へ上書きせず、本番取得版へ対象差分だけを適用した。
+- Last test result: 行動選択肢回帰テスト合格、改ページCSS回帰テスト合格、`app.js`構文検査合格、配信CSS SHA-256一致。本番CSSに強制改ページ・カード分割禁止を確認。
+
 ## 2026-09-14 — 第5回全選択式・パート別保存
 
 - Goal: 第5回を全選択式・全自動採点にし、語彙・文法・聴解を各50分、各パート終了時に本番DBへ保存する。
@@ -19,7 +34,7 @@
 - Failed approaches: 旧E2E資格情報は失効。新規専用E2Eを作成。初回E2Eで`common/auth.js`配信漏れを検出し、同じ実行を繰り返さずデプロイ対象を修正した。最終確認で実在しない`is_submitted`列を参照したため、現行スキーマに合わせて検証項目を修正した。
 - Last test result: 本番ブラウザE2E合格。timer `Từ vựng: 50:01`、checkpoint完了順`goii → bunpo → chokkai`、再読込復元2回成功、最終100/100/100、148回答保存、ブラウザ/HTTPエラー0件。
 
-Last updated: 2026-09-14 (Asia/Ho_Chi_Minh)
+Last updated: 2026-09-15 (Asia/Ho_Chi_Minh)
 
 This file is the source of truth for implementation progress. Every Codex work session must read it before making changes and update it before ending. A checked item means that implementation and the stated verification have both completed.
 
