@@ -56,6 +56,13 @@ function isCustomer() {
 }
 
 /**
+ * 送り出し機関かどうか
+ */
+function isOrg() {
+  return _currentProfile && _currentProfile.role === 'org';
+}
+
+/**
  * ログアウト
  */
 async function logout() {
@@ -73,6 +80,11 @@ function setupAuthUI() {
   // admin-only 要素の表示制御（ヘッダー有無に関わらず実行）
   document.querySelectorAll('.admin-only').forEach(el => {
     el.style.display = isAdmin() ? '' : 'none';
+  });
+
+  // admin-org-only 要素の表示制御（admin または org のみ。customer・プロフィール無しは非表示）
+  document.querySelectorAll('.admin-org-only').forEach(el => {
+    el.style.display = (isAdmin() || isOrg()) ? '' : 'none';
   });
 
   const nav = document.querySelector('header nav');

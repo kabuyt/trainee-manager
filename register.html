@@ -15,7 +15,7 @@
       <h1>VIETNAM 教育管理</h1>
       <nav>
         <a href="index.html">🏠 ダッシュボード</a>
-        <a href="register.html" class="active admin-only">+ 新規登録</a>
+        <a href="register.html" class="active admin-org-only">+ 新規登録</a>
         <a href="test-results.html">📊 成績</a>
       </nav>
     </div>
@@ -135,14 +135,14 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
-  <script src="auth.js?v=4"></script>
-  <script src="app.js?v=72"></script>
+  <script src="auth.js?v=6"></script>
+  <script src="app.js?v=84"></script>
   <script>
     (async function() {
       const auth = await checkAuth();
       if (!auth) return;
-      if (!isAdmin()) {
-        alert('送り出し側アカウントでは実習生の登録・編集はできません。');
+      if (!isAdmin() && !isOrg()) {
+        alert('このアカウントでは実習生の登録・編集はできません。');
         location.href = 'index.html';
         return;
       }
@@ -162,6 +162,29 @@
             sel.appendChild(opt);
           });
         }
+      }
+
+      // 送り出し（org）は自組織に固定して disabled にする（値はフォームから取らず profile から強制する）
+      if (isOrg()) {
+        const profile = getCurrentProfile();
+        const group = document.getElementById('orgSelectGroup');
+        const sel = document.getElementById('orgSelect');
+        if (profile?.organization_id) {
+          const { data: org } = await supabase
+            .from('organizations')
+            .select('id,name')
+            .eq('id', profile.organization_id)
+            .single();
+          if (org) {
+            const opt = document.createElement('option');
+            opt.value = org.id;
+            opt.textContent = org.name;
+            opt.selected = true;
+            sel.appendChild(opt);
+          }
+        }
+        sel.disabled = true;
+        group.classList.remove('hidden');
       }
 
       // 編集モード: ?edit={id} があれば既存データを読み込む

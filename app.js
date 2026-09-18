@@ -596,6 +596,13 @@ async function loadEditData() {
     return;
   }
 
+  // 送り出し(org)は自組織の実習生のみ編集可（RLSでも守られるが明示ガード）
+  if (isOrg() && t.organization_id !== getCurrentProfile()?.organization_id) {
+    alert('このアカウントでは編集できない実習生です。');
+    window.location.href = 'index.html';
+    return;
+  }
+
   // 管理者なら学生IDフィールドを表示
   if (isAdmin()) {
     document.getElementById('studentIdGroup').classList.remove('hidden');
@@ -630,8 +637,8 @@ async function loadEditData() {
 
 // ===== 新規登録 / 更新 =====
 async function registerTrainee() {
-  if (!isAdmin()) {
-    alert('送り出し側アカウントでは実習生の登録・編集はできません。');
+  if (!isAdmin() && !isOrg()) {
+    alert('このアカウントでは実習生の登録・編集はできません。');
     return;
   }
   const btn = document.getElementById('submitBtn');
@@ -666,6 +673,11 @@ async function registerTrainee() {
       btn.textContent = '登録する';
       return;
     }
+  }
+
+  // 送り出し(org)は自組織のIDをprofileから強制する。orgSelectはdisabledのためフォーム値は信用しない
+  if (isOrg()) {
+    traineeData.organization_id = profile.organization_id;
   }
 
   try {
@@ -1025,7 +1037,7 @@ function renderTraineeDetail(t, results, terminologySummary) {
       </div>
       <div class="detail-actions">
         <a href="report.html?id=${t.id}" class="btn btn-primary">報告書を作成</a>
-        ${isAdmin() ? `<a href="register.html?edit=${t.id}" class="btn btn-secondary">編集</a>` : ''}
+        ${(isAdmin() || isOrg()) ? `<a href="register.html?edit=${t.id}" class="btn btn-secondary">編集</a>` : ''}
       </div>
     </div>
 

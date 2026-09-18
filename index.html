@@ -15,7 +15,7 @@
       <h1>VIETNAM 教育管理</h1>
       <nav>
         <a href="index.html" class="active">🏠 ダッシュボード</a>
-        <a href="register.html" class="admin-only">+ 新規登録</a>
+        <a href="register.html" class="admin-org-only">+ 新規登録</a>
         <a href="test-results.html">📊 成績</a>
         <a href="terminology-progress.html">専門用語</a>
         <a href="https://kabuyt.github.io/nihongo-test-1-4ka/test-admin.html" target="_blank" class="admin-only">🔓 テスト解放</a>
@@ -50,7 +50,7 @@
       <div class="quick-actions">
         <h3>⚡ クイックアクション</h3>
         <div class="quick-action-grid">
-          <a href="register.html" class="qa-btn primary admin-only">+ 新規実習生登録</a>
+          <a href="register.html" class="qa-btn primary admin-org-only">+ 新規実習生登録</a>
           <a href="test-results.html" class="qa-btn">📊 成績一覧（会話入力）</a>
           <a href="terminology-progress.html" class="qa-btn">専門用語 進捗確認</a>
           <button class="qa-btn" onclick="exportLoginCards()">📇 ログインカード出力</button>
@@ -188,8 +188,8 @@ python create_student_accounts.py --apply</pre>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
-  <script src="auth.js?v=5"></script>
-  <script src="app.js?v=72"></script>
+  <script src="auth.js?v=6"></script>
+  <script src="app.js?v=84"></script>
   <script>
     function showRegenInstructions() {
       const modal = document.getElementById('regenModal');
