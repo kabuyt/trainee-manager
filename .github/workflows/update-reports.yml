@@ -54,7 +54,7 @@ jobs:
         run: |
           $kumiaiInput = "${{ inputs.kumiai }}".Trim()
           if ($kumiaiInput -eq "" -or $kumiaiInput -eq "all") {
-            $kumiai = @("globalway", "cic", "worldbusiness", "tombow", "sanyotech")
+            $kumiai = @("globalway", "cic", "worldbusiness", "tombow", "sanyotech", "kansaigijutsu")
           } else {
             $kumiai = $kumiaiInput.Split(",") | ForEach-Object { $_.Trim() } | Where-Object { $_ }
           }

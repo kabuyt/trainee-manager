@@ -17,7 +17,7 @@ Playwright で Chrome の印刷PDFを直接生成する。
   python bulk_pdf.py --month 1                 # 全組合・全社
 
   # オプション
-  --kumiai SLUG     globalway / cic / worldbusiness / tombow / sanyotech (省略=全組合)
+  --kumiai SLUG     globalway / cic / worldbusiness / tombow / sanyotech / kansaigijutsu (省略=全組合)
   --month N         教育月 1-8 (省略=1)
   --company NAME    会社名フィルタ（部分一致）
   --output DIR      出力先（既定: ./reports_pdf/）
@@ -93,6 +93,7 @@ KUMIAI_NAME_FROM_SLUG = {
     'tombow': 'トンボ国際交流事業協同組合',
     'tombo': 'トンボ国際交流事業協同組合',
     'sanyotech': '山陽テクノ協同組合',
+    'kansaigijutsu': '協同組合関西技術協力センター',
 }
 
 def safe_filename(s):
@@ -576,7 +577,7 @@ def render_pdf(
 
 def main():
     ap = argparse.ArgumentParser(description="教育報告書 一括PDF生成（Playwright版）")
-    ap.add_argument('--kumiai', help='組合スラッグ: globalway / cic / worldbusiness / tombow / sanyotech', default=None)
+    ap.add_argument('--kumiai', help='組合スラッグ: globalway / cic / worldbusiness / tombow / sanyotech / kansaigijutsu', default=None)
     ap.add_argument('--month', type=int, default=1, help='教育月 1-8')
     ap.add_argument('--company', help='会社名フィルタ（部分一致）', default=None)
     ap.add_argument('--exclude-company', action='append', default=[], help='除外する会社名（部分一致、複数指定可）')

@@ -14,6 +14,7 @@ brastech-reports と同方式の **静的サイト生成** を採用。
 | ワールドビジネス協同組合 | https://kabuyt.github.io/trainee-manager/reports/worldbusiness/ | `worldbusiness2026` |
 | トンボ国際交流事業協同組合 | https://kabuyt.github.io/trainee-manager/reports/tombow/ | `tombow2026` |
 | 山陽テクノ協同組合 | https://kabuyt.github.io/trainee-manager/reports/sanyotech/ | `sanyotech2026` |
+| 協同組合関西技術協力センター | https://kabuyt.github.io/trainee-manager/reports/kansaigijutsu/ | `kansaigijutsu2026` |
 
 ## 月次運用の3ステップ
 
@@ -36,6 +37,7 @@ python bulk_pdf.py --kumiai cic --auto-month --site --password cic2026
 python bulk_pdf.py --kumiai worldbusiness --auto-month --site --password worldbusiness2026
 python bulk_pdf.py --kumiai tombow --auto-month --site --password tombow2026
 python bulk_pdf.py --kumiai sanyotech --auto-month --site --password sanyotech2026
+python bulk_pdf.py --kumiai kansaigijutsu --auto-month --site --password kansaigijutsu2026
 ```
 
 **重要オプション**:
@@ -48,12 +50,13 @@ python bulk_pdf.py --kumiai sanyotech --auto-month --site --password sanyotech20
 
 ```powershell
 # 既存のサイトを置き換え
-rm -rf reports/globalway reports/cic reports/worldbusiness reports/tombow reports/sanyotech
+rm -rf reports/globalway reports/cic reports/worldbusiness reports/tombow reports/sanyotech reports/kansaigijutsu
 cp -r reports_pdf/globalway reports/
 cp -r reports_pdf/cic reports/
 cp -r reports_pdf/worldbusiness reports/
 cp -r reports_pdf/tombow reports/
 cp -r reports_pdf/sanyotech reports/
+cp -r reports_pdf/kansaigijutsu reports/
 
 git add reports/
 git commit -m "reports: 月次更新"

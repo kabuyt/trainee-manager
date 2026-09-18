@@ -1,5 +1,5 @@
 param(
-  [string[]]$Kumiai = @("globalway", "cic", "worldbusiness", "tombow", "sanyotech"),
+  [string[]]$Kumiai = @("globalway", "cic", "worldbusiness", "tombow", "sanyotech", "kansaigijutsu"),
   [string]$Ymd = "",
   [string]$CommitMessage = "reports: 月次更新",
   [switch]$SkipGenerate,
@@ -20,6 +20,7 @@ $groups = @{
   worldbusiness = @{ Password = "worldbusiness2026" }
   tombow        = @{ Password = "tombow2026" }
   sanyotech     = @{ Password = "sanyotech2026" }
+  kansaigijutsu = @{ Password = "kansaigijutsu2026" }
 }
 
 function Invoke-Step {

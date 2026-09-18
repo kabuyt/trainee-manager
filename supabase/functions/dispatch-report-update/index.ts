@@ -11,7 +11,7 @@ const json = (body: unknown, status = 200) => new Response(JSON.stringify(body),
   headers: { ...corsHeaders, "Content-Type": "application/json; charset=utf-8" },
 });
 
-const allowedKumiai = new Set(["globalway", "cic", "worldbusiness", "tombow", "sanyotech"]);
+const allowedKumiai = new Set(["globalway", "cic", "worldbusiness", "tombow", "sanyotech", "kansaigijutsu"]);
 
 function parseKumiai(value: unknown) {
   const raw = Array.isArray(value) ? value : String(value || "all").split(",");
