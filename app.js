@@ -893,19 +893,8 @@ function buildTerminologySummary(progressRows, quizRows, imageProgressRows, sess
 function renderTerminologyDetailCard(summary, trainee) {
   const app = getTerminologyAppForTrainee(trainee);
   const isTarget = Boolean(app);
-  if (!isTarget && !summary.hasAnyData) {
-    return `
-      <div class="terminology-detail terminology-detail-muted">
-        <div class="terminology-detail-head">
-          <div>
-            <div class="section-title terminology-title">専門用語</div>
-            <p class="terminology-detail-lead">この実習生は現在、専門用語学習の対象外です。</p>
-          </div>
-          <a href="terminology-progress.html" class="btn btn-secondary btn-sm">全体一覧</a>
-        </div>
-      </div>
-    `;
-  }
+  // 対象外の実習生には専門用語の枠を出さない（企業ごとの専門用語ページができたら紐づける）
+  if (!isTarget && !summary.hasAnyData) return '';
 
   const quizRate = safePercent((summary.quizSetCount / summary.totalQuizSets) * 100);
   const finalText = summary.finalRate === null ? '未受験' : `${summary.finalRate}%`;
