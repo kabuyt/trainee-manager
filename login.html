@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>実習生管理は移転しました</title>
+<script>
+// 旧URL（kabuyt.github.io/trainee-manager/…）から新しい実習生管理（kanri）へ転送する（2026-10-06）
+(function () {
+  var base = 'https://kanri.gropvietnam.com.vn/';
+  var map = {
+    '': 'trainee/', 'index.html': 'trainee/', 'kumiai.html': 'trainee/', 'download.html': 'trainee/',
+    'login.html': 'login.html',
+    'trainee.html': 'trainee/trainee.html', 'register.html': 'trainee/register.html',
+    'report.html': 'trainee/report.html', 'report-classic.html': 'trainee/report.html',
+    'download-report.html': 'trainee/report.html',
+    'test-results.html': 'trainee/test-results.html', 'test-result-detail.html': 'trainee/test-result-detail.html',
+    'terminology-progress.html': 'trainee/terminology-progress.html'
+  };
+  var path = location.pathname.replace(/^\/trainee-manager\/?/, '');
+  var dest = map.hasOwnProperty(path) ? map[path] : '';
+  var keep = /\.html$/.test(dest) ? location.search + location.hash : '';
+  location.replace(base + dest + keep);
+})();
+</script>
+</head>
+<body style="font-family:sans-serif;padding:24px;line-height:1.7">
+<p>実習生管理は新しいURLに移転しました。自動で移動しない場合は、次のリンクを開いてください。<br>
+Trang quản lý thực tập sinh đã chuyển sang địa chỉ mới.</p>
+<p><a href="https://kanri.gropvietnam.com.vn/">https://kanri.gropvietnam.com.vn/</a></p>
+</body>
+</html>
