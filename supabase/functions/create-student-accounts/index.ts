@@ -62,6 +62,9 @@ async function handleRequest(request: Request) {
   const bearer = authorization.replace(/^Bearer\s+/i, "").trim();
   const isServiceRole = bearer.length > 0 && bearer === serviceRoleKey;
 
+  // 送り出し（role=org）は、自分の組織の実習生を学生IDで指定したときだけ作れる（2026-10-08）。
+  // 登録画面で保存した直後にその人のアカウントを作るため。一括作成（学生ID指定なし）は管理者だけ。
+  let orgScope: string | null = null;
   if (!isServiceRole) {
     const userClient = createClient(supabaseUrl, anonKey, {
       global: { headers: { Authorization: authorization } },
@@ -71,10 +74,14 @@ async function handleRequest(request: Request) {
 
     const { data: profile } = await adminClient
       .from("user_profiles")
-      .select("role")
+      .select("role,organization_id")
       .eq("id", userData.user.id)
       .maybeSingle();
-    if (profile?.role !== "admin") return json({ error: "Admin access required" }, 403);
+    if (profile?.role === "org" && profile.organization_id) {
+      orgScope = profile.organization_id as string;
+    } else if (profile?.role !== "admin") {
+      return json({ error: "Admin access required" }, 403);
+    }
   }
 
   let payload: { dry_run?: boolean; student_ids?: string[] };
@@ -87,6 +94,9 @@ async function handleRequest(request: Request) {
   const studentIdFilter = Array.isArray(payload.student_ids) && payload.student_ids.length
     ? new Set(payload.student_ids.map(id => String(id).trim().toUpperCase()).filter(Boolean))
     : null;
+  if (orgScope && (!studentIdFilter || studentIdFilter.size === 0)) {
+    return json({ error: "student_ids is required for organization accounts" }, 403);
+  }
 
   // 対象: auth_user_id 未設定 かつ 稼働中(status='active')の実習生のみ。
   // trainees.status は 2026_06_12_trainee_status_archive.sql で
@@ -96,12 +106,16 @@ async function handleRequest(request: Request) {
   // 稼働中として扱い、卒業・辞退・停止だけを除外する（アーカイブ済みは対象外の要件）。
   const { data: rows, error: fetchError } = await adminClient
     .from("trainees")
-    .select("id,student_id,name_katakana,birth_date,status,auth_user_id")
+    .select("id,student_id,name_katakana,birth_date,status,auth_user_id,organization_id")
     .is("auth_user_id", null)
     .or("status.eq.active,status.is.null");
   if (fetchError) return json({ error: "Failed to load trainees" }, 500);
 
   let candidates = (rows || []) as Trainee[];
+  if (orgScope) {
+    // 送り出しは自分の組織の実習生だけ
+    candidates = candidates.filter(t => (t as Trainee & { organization_id?: string }).organization_id === orgScope);
+  }
   if (studentIdFilter) {
     candidates = candidates.filter(t => t.student_id && studentIdFilter.has(t.student_id.toUpperCase()));
   }
